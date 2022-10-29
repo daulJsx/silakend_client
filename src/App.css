@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
+
+:root{
+  --font-family : font-family: 'Inter', sans-serif;
+  --bg-light: #f8f9fa;
+  --bg-white : #ffff;
+  --white:    #fff;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  --black:    #000;
+  --color-primary: #0963A2;
+  --bg-primary: #F5F7FC;
+  --radius: 0.5rem;
+  --transition: all 350ms ease;
+}
+* {
+   font-family: 'Poppins', sans-serif;
+}
+
+html{
+  scroll-behavior: smooth;
+}
+
+

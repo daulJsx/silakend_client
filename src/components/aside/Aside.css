@@ -1,0 +1,107 @@
+body {
+  background: var(--bg-primary);
+}
+
+.silakend {
+  transition: var(--transition);
+}
+
+.silakend:hover {
+  transform: scale(1.5, 1.5);
+}
+
+.polman-logo {
+  width: 1.8rem;
+  transform: translateY(-0.1rem);
+}
+
+a {
+  text-decoration: none;
+}
+
+a.side-menu {
+  transition: all 250ms ease-in-out;
+}
+
+a.side-menu:hover {
+  padding: 0.3rem 1rem 0.3rem 1rem;
+  color: var(--bg-white);
+  border-radius: 50px;
+  background-image: linear-gradient(
+    to bottom,
+    #0963a2,
+    #0c6db7,
+    #1777cd,
+    #2681e2,
+    #388af8
+  );
+  text-decoration: none;
+  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+  transform: scale(1.1, 1.1);
+}
+
+a.side-menu:active {
+  padding: 0.3rem 1rem 0.3rem 1rem;
+  color: var(--bg-white);
+  border-radius: 50px;
+  background-image: linear-gradient(
+    to bottom,
+    #0963a2,
+    #0c6db7,
+    #1777cd,
+    #2681e2,
+    #388af8
+  );
+  text-decoration: none;
+  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+  transform: scale(1.1, 1.1);
+}
+
+.sub-title {
+  letter-spacing: 0.5rem;
+  color: var(--gray-300);
+  font-size: 0.8rem;
+}
+
+.brand-icon {
+  color: var(--bg-white);
+}
+a.brand-icon:hover {
+  color: var(--bg-white);
+}
+
+.side-menu {
+  color: var(--gray-500);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.mobile-sidebar {
+  background: #12629f;
+  color: var(--gray-400);
+}
+
+.active {
+  padding: 0.3rem 1rem 0.3rem 1rem;
+  color: var(--bg-white);
+  border-radius: 50px;
+  background-image: linear-gradient(
+    to bottom,
+    #0963a2,
+    #0c6db7,
+    #1777cd,
+    #2681e2,
+    #388af8
+  );
+  text-decoration: none;
+  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+  transform: scale(1.1, 1.1);
+}
+
+.color-primary {
+  color: var(--color-primary);
+}
+
+a.user {
+  color: var(--color-primary);
+}

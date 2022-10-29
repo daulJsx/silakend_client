@@ -1,0 +1,26 @@
+.side-menu {
+  color: var(--gray-500);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.bc-icon {
+  background-image: linear-gradient(
+    to bottom,
+    #0963a2,
+    #297ab9,
+    #4091d0,
+    #55a9e7,
+    #6ac2ff
+  );
+  text-decoration: none;
+  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+  color: var(--bg-primary);
+  border-radius: 50px;
+  padding: 0.3rem 0.5rem 0.3rem 0.5rem;
+  margin-top: -0.3rem;
+}
+
+.navbar {
+  margin-top: 1.8rem;
+}

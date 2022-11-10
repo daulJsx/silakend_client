@@ -1,6 +1,5 @@
-.side-menu {
+.nav-text {
   color: var(--gray-500);
-  font-size: 0.8rem;
   font-weight: 600;
 }
 
@@ -23,4 +22,28 @@
 
 .navbar {
   margin-top: 1.8rem;
+}
+
+.sidebar-mobile {
+  max-width: 50%;
+  background: var(--bg-primary);
+}
+
+.button-toggle {
+  background-image: linear-gradient(
+    to bottom,
+    #0963a2,
+    #297ab9,
+    #4091d0,
+    #55a9e7,
+    #6ac2ff
+  );
+  text-decoration: none;
+  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+  color: var(--bg-primary);
+  border-radius: 50px;
+  border: none;
+}
+a.user {
+  color: var(--color-primary);
 }

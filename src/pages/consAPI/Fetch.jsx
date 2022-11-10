@@ -4,6 +4,7 @@ import axios from "axios";
 async function fetchData() {
   try {
     const response = await axios.get(
+      // "https://f58b-103-108-158-34.ngrok.io/api/users/"
       "https://jsonplaceholder.typicode.com/users"
     );
 

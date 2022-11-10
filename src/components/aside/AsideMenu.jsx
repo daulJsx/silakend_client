@@ -1,5 +1,6 @@
 import React from "react";
 
+// react-bootstrap
 import { Nav } from "react-bootstrap";
 
 // CSS
@@ -9,12 +10,10 @@ import "./../../App.css";
 export const AsideMenu = ({ icon, title }) => {
   return (
     <>
-      <Nav.Item>
-        <Nav.Link className="d-flex side-menu text-decoration-none">
-          <span className="fs-4"> {icon}</span>
-          <span className="ms-3 d-none d-sm-inline mt-2">{title}</span>
-        </Nav.Link>
-      </Nav.Item>
+      <div className=" d-flex">
+        <span className="fs-4"> {icon}</span>
+        <span className="ms-3 mt-2">{title}</span>
+      </div>
     </>
   );
 };

@@ -7,11 +7,14 @@ import { Container } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Button from "react-bootstrap/Button";
 
-import { RiDashboardFill } from "react-icons/ri";
+// icons
+import { GiHamburgerMenu } from "react-icons/gi";
 
 import "./navtop.css";
 
-export const NavTop = ({ name, ...props }) => {
+import { Aside } from "./../aside/Aside";
+
+export const NavTop = ({ bc, name, ...props }) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -23,9 +26,7 @@ export const NavTop = ({ name, ...props }) => {
         <Nav.Item className="mt-3">
           <Breadcrumb>
             <Breadcrumb.Item>
-              <div className="bc-icon">
-                <RiDashboardFill />
-              </div>
+              <div className="bc-icon">{bc}</div>
             </Breadcrumb.Item>
 
             <Breadcrumb.Item></Breadcrumb.Item>
@@ -34,24 +35,31 @@ export const NavTop = ({ name, ...props }) => {
 
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end gap-1">
-          <Navbar.Text className="side-menu">
+          <Navbar.Text className="nav-text">
             <span className="me-3">Signed in as:</span>
-            <a className="user" href="#login">
+            <a className="user text-decoration-none" href="#login">
               Mark Otto
             </a>
           </Navbar.Text>
-          <Navbar.Text className="d-lg-none d-xl-none d-md-none">
-            <Button variant="primary" onClick={handleShow} className="me-2">
-              {name}
+          <Navbar.Text className="d-block d-md-block d-sm-block d-lg-none">
+            <Button
+              variant="primary"
+              onClick={handleShow}
+              className="button-toggle me-2 ms-1"
+            >
+              <GiHamburgerMenu />
             </Button>
           </Navbar.Text>
-          <Offcanvas show={show} onHide={handleClose} {...props}>
-            <Offcanvas.Header closeButton>
-              <Offcanvas.Title>Offcanvas</Offcanvas.Title>
-            </Offcanvas.Header>
-            <Offcanvas.Body>
-              Some text as placeholder. In real life you can have the elements
-              you have chosen. Like, text, images, lists, etc.
+          <Offcanvas
+            show={show}
+            onHide={handleClose}
+            {...props}
+            responsive="lg"
+            className="sidebar-mobile d-xl-none d-lg-none"
+          >
+            <Offcanvas.Header closeButton></Offcanvas.Header>
+            <Offcanvas.Body className="px-4">
+              <Aside />
             </Offcanvas.Body>
           </Offcanvas>
         </Navbar.Collapse>
@@ -59,13 +67,3 @@ export const NavTop = ({ name, ...props }) => {
     </Navbar>
   );
 };
-
-function Example() {
-  return (
-    <>
-      {["end"].map((placement, idx) => (
-        <NavTop key={idx} placement={placement} name={placement} />
-      ))}
-    </>
-  );
-}

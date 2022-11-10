@@ -2,65 +2,21 @@ body {
   background: var(--bg-primary);
 }
 
+ul {
+  list-style: none;
+}
+
 .silakend {
   transition: var(--transition);
 }
 
 .silakend:hover {
-  transform: scale(1.5, 1.5);
+  transform: scale(1.2, 1.2);
 }
 
 .polman-logo {
   width: 1.8rem;
   transform: translateY(-0.1rem);
-}
-
-a {
-  text-decoration: none;
-}
-
-a.side-menu {
-  transition: all 250ms ease-in-out;
-}
-
-a.side-menu:hover {
-  padding: 0.3rem 1rem 0.3rem 1rem;
-  color: var(--bg-white);
-  border-radius: 50px;
-  background-image: linear-gradient(
-    to bottom,
-    #0963a2,
-    #0c6db7,
-    #1777cd,
-    #2681e2,
-    #388af8
-  );
-  text-decoration: none;
-  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
-  transform: scale(1.1, 1.1);
-}
-
-a.side-menu:active {
-  padding: 0.3rem 1rem 0.3rem 1rem;
-  color: var(--bg-white);
-  border-radius: 50px;
-  background-image: linear-gradient(
-    to bottom,
-    #0963a2,
-    #0c6db7,
-    #1777cd,
-    #2681e2,
-    #388af8
-  );
-  text-decoration: none;
-  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
-  transform: scale(1.1, 1.1);
-}
-
-.sub-title {
-  letter-spacing: 0.5rem;
-  color: var(--gray-300);
-  font-size: 0.8rem;
 }
 
 .brand-icon {
@@ -70,21 +26,18 @@ a.brand-icon:hover {
   color: var(--bg-white);
 }
 
+.color-primary {
+  color: var(--color-primary);
+}
+
 .side-menu {
-  color: var(--gray-500);
   font-size: 0.8rem;
   font-weight: 600;
+  transition: var(--transition);
 }
 
-.mobile-sidebar {
-  background: #12629f;
-  color: var(--gray-400);
-}
-
-.active {
-  padding: 0.3rem 1rem 0.3rem 1rem;
-  color: var(--bg-white);
-  border-radius: 50px;
+.side-menu:hover {
+  border-radius: 14px;
   background-image: linear-gradient(
     to bottom,
     #0963a2,
@@ -95,13 +48,29 @@ a.brand-icon:hover {
   );
   text-decoration: none;
   box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
-  transform: scale(1.1, 1.1);
+  transform: scale(1.05, 1.05);
 }
 
-.color-primary {
-  color: var(--color-primary);
+.nav-pills .side-menu .nav-link {
+  color: var(--bg-white);
+  border-radius: 14px;
+  background-image: linear-gradient(
+    to bottom,
+    #0963a2,
+    #0c6db7,
+    #1777cd,
+    #2681e2,
+    #388af8
+  );
+  text-decoration: none;
+  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+  transform: scale(1.05, 1.05);
 }
 
-a.user {
-  color: var(--color-primary);
+.nav-pills .side-menu .nav-link:not(.active) {
+  color: var(--gray-400);
+  text-decoration: none;
+  background: transparent;
+  box-shadow: none;
+  transform: scale(0.95, 0.95);
 }

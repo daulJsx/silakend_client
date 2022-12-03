@@ -2,10 +2,17 @@ import axios from "axios";
 
 // this is fetch function
 async function fetchData() {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${"EuFmXsx4Sou6uqeUBvBXNsKLcQdsriFPKsNdklYg"}`,
+    },
+  };
+
   try {
     const response = await axios.get(
-      // "https://f58b-103-108-158-34.ngrok.io/api/users/"
-      "https://jsonplaceholder.typicode.com/users"
+      "https://b37d-114-122-106-155.ap.ngrok.io/api/roles",
+      config
+      // "https://jsonplaceholder.typicode.com/users"
     );
 
     return response;

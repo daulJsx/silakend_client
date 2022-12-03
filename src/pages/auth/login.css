@@ -1,0 +1,95 @@
+.main-container {
+  margin: 0;
+  padding: 0;
+}
+.main-row {
+  margin: 0;
+  padding: 0;
+}
+
+.logo-side2 {
+  background: var(--bg-white);
+  box-shadow: 1px 1px 50px #e0e0e057, -1px -1px 50px #e0e0e057;
+  border-radius: 0 0 15px 0;
+}
+
+input[type="number"],
+input[type="password"] {
+  background-color: var(--bg-primary);
+  border-radius: 15px;
+  border: 1px solid var(--gray-400);
+}
+
+input[type="number"]:focus,
+input[type="password"]:focus {
+  border: 1px solid var(--color-primary);
+  box-shadow: 1px 1px 50px #0966a829, -1px -1px 50px #0966a82a;
+  cursor: text;
+}
+
+input[type="number"]:hover,
+input[type="password"]:hover {
+  border: 1px solid var(--color-primary);
+}
+
+.greeting {
+  color: var(--gray-primary);
+}
+
+label.label {
+  font-size: smaller;
+  position: absolute;
+  transform: translateX(1rem);
+}
+
+button.btn-submit {
+  background-image: linear-gradient(
+    to bottom,
+    #0963a2,
+    #0c6db7,
+    #1777cd,
+    #2681e2,
+    #388af8
+  );
+  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+  border-radius: 15px;
+  border: none;
+}
+
+button.btn-submit:hover {
+  background-image: linear-gradient(
+    to bottom,
+    #084a79,
+    #0b5e9e,
+    #166dba,
+    #2479d4,
+    #3380e3
+  );
+}
+
+.btn-text {
+  font-size: small;
+}
+
+.credential {
+  color: var(--gray-500);
+  font-size: small;
+}
+
+.--polman-logo {
+  width: 15rem;
+  margin-top: 7.6rem;
+}
+
+label {
+  color: var(--gray-500);
+  pointer-events: none;
+}
+
+.text-question {
+  color: var(--gray-500);
+}
+
+.form-group {
+  transition: var(--transition);
+}

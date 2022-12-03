@@ -1,3 +1,53 @@
 .card {
-  border: none;
+  box-shadow: rgba(145, 158, 171, 0.2) 0px 0px 2px 0px,
+    rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;
+  border-radius: 12px;
+  height: 100%;
+}
+th {
+  font-size: 14px;
+}
+
+thead {
+  background: var(--bg-primary);
+}
+
+.primary,
+.success,
+.warning,
+.info {
+  text-align: center;
+  font-size: 14px;
+}
+
+.primary {
+  background: #d1e9fc;
+  color: #061b64;
+}
+
+.primary-icon,
+.success-icon,
+.warning-icon,
+.info-icon {
+  background-color: rgba(255, 255, 255, 0.614);
+  box-shadow: 16px 16px 32px #94a5b39b, -16px -16px 32px #ffffff;
+  border-radius: 14px;
+  text-align: center;
+  padding: 0.3rem 0 0.5rem 0;
+}
+
+.success {
+  color: var(--bg-white);
+  background-color: #d0f2ff;
+  color: #04297a;
+}
+
+.warning {
+  background-color: #fff7cd;
+  color: #7a4f01;
+}
+
+.info {
+  background-color: #ffe7d9;
+  color: #7a0c2e;
 }

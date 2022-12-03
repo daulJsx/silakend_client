@@ -1,7 +1,5 @@
 import { React } from "react";
 
-import { NavLink, useLocation } from "react-router-dom";
-
 // React Bootstrap
 import { Nav } from "react-bootstrap";
 
@@ -29,70 +27,69 @@ import { FaBook } from "react-icons/fa";
 import polmanLogo from "./../../assets/polman.webp";
 
 export const Aside = () => {
-  const pathname = useLocation().pathname;
-
   return (
-    <>
-      <main>
-        <Nav className="nav nav-pills flex-column mb-5 mx-auto" as="ul">
-          {/* SIDEBAR BRAND START */}
-          <Nav.Item className="py-5 mx-auto" as="li">
-            <AsideBrand logo={polmanLogo} textBrand="SiLaKend" />
-          </Nav.Item>
-          {/* SIDEBAR BRAND END */}
+    <main>
+      <Nav variant="pills" className="flex-column mb-5 mx-auto" as="ul">
+        {/* SIDEBAR BRAND START */}
+        <AsideBrand logo={polmanLogo} textBrand="SiLaKend" />
+        {/* SIDEBAR BRAND END */}
 
-          {/* SIDEBAR MENU START */}
-          <div className="d-flex gap-3 flex-column gap-2 mx-auto ">
-            <Nav.Item className="side-menu" as="li">
-              <NavLink to={"/"} exact className="nav-link">
-                <AsideMenu icon={<RiDashboardFill />} title="Dashboard" />
-              </NavLink>
-            </Nav.Item>
+        {/* SIDEBAR MENU START */}
+        <div className="d-flex gap-3 flex-column gap-2 mx-auto ">
+          <AsideMenu icon={<RiDashboardFill />} title="Dashboard" link="/" />
 
-            {/* <Nav.Item className="side-menu">
-              <AsideMenu icon={<HiClipboardCopy />} title="Order Peminjaman" />
-            </Nav.Item>
+          <AsideMenu
+            icon={<HiClipboardCopy />}
+            title="Order Peminjaman"
+            link="/order-peminjaman"
+          />
 
-            <Nav.Item className="side-menu">
-              <AsideMenu icon={<FaListAlt />} title="Tugas Masuk" />
-            </Nav.Item>
+          <AsideMenu
+            icon={<FaListAlt />}
+            title="Tugas Masuk"
+            link="/tugas-masuk"
+          />
 
-            <Nav.Item className="side-menu">
-              <AsideMenu icon={<AiFillDashboard />} title="Edit KM Kendaraan" />
-            </Nav.Item>
+          <AsideMenu
+            icon={<AiFillDashboard />}
+            title="Edit KM Kendaraan"
+            link="/edit-km-kendaraan"
+          />
 
-            <Nav.Item className="side-menu">
-              <AsideMenu
-                icon={<BsCheckCircleFill />}
-                title="Validasi Order Masuk"
-              />
-            </Nav.Item>
+          <AsideMenu
+            icon={<BsCheckCircleFill />}
+            title="Validasi Order Masuk"
+            link="/validasi-order-masuk"
+          />
 
-            <Nav.Item className="side-menu">
-              <AsideMenu icon={<FaTools />} title="Perbaikan Kendaraan" />
-            </Nav.Item> */}
+          <AsideMenu
+            icon={<FaTools />}
+            title="Perbaikan Kendaraan"
+            link="/data-perbaikan-kendaraan"
+          />
 
-            <Nav.Item className="side-menu" as="li">
-              <NavLink to={"/users"} exact className="nav-link">
-                <AsideMenu icon={<HiUserGroup />} title="Data User" />
-              </NavLink>
-            </Nav.Item>
+          <AsideMenu
+            icon={<HiUserGroup />}
+            title="Data User"
+            link="/data-user"
+          />
 
-            {/* <Nav.Item className="side-menu">
-              <AsideMenu icon={<FaUserTie />} title="Data Pengemudi" />
-            </Nav.Item>
+          <AsideMenu
+            icon={<FaUserTie />}
+            title="Data Pengemudi"
+            link="/data-pengemudi"
+          />
 
-            <Nav.Item className="side-menu">
-              <AsideMenu icon={<AiFillCar />} title="Data Kendaraan" />
-            </Nav.Item>
+          <AsideMenu
+            icon={<AiFillCar />}
+            title="Data Kendaraan"
+            link="/data-kendaraan"
+          />
 
-            <Nav.Item className="side-menu">
-              <AsideMenu icon={<FaBook />} title="Laporan" />
-            </Nav.Item> */}
-          </div>
-          {/* SIDEBAR MENU END */}
-        </Nav>
-      </main>
-    </>
+          <AsideMenu icon={<FaBook />} title="Laporan" link="/laporan" />
+        </div>
+        {/* SIDEBAR MENU END */}
+      </Nav>
+    </main>
   );
 };

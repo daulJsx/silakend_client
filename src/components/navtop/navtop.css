@@ -3,6 +3,10 @@
   font-weight: 600;
 }
 
+a {
+  text-decoration: none;
+}
+
 .bc-icon {
   background-image: linear-gradient(
     to bottom,
@@ -44,6 +48,35 @@
   border-radius: 50px;
   border: none;
 }
-a.user {
+#dropdown-autoclose-true {
+  font-weight: 600;
   color: var(--color-primary);
+  background: none;
+  border: none;
+}
+
+.dropdown-body a.dropdown-item {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.3rem;
+  transition: var(--transition);
+  width: 90%;
+}
+
+.dropdown-body a.dropdown-item:hover {
+  color: var(--bg-white);
+  border-radius: 6px;
+  background-image: linear-gradient(
+    to bottom,
+    #0963a2,
+    #0c6db7,
+    #1777cd,
+    #2681e2,
+    #388af8
+  );
+}
+
+.dropdown-body {
+  border: none;
 }

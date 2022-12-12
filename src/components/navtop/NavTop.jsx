@@ -9,11 +9,13 @@ import { Container } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 
 // icons
 import { GiHamburgerMenu } from "react-icons/gi";
 import { HiOutlineLogout } from "react-icons/hi";
+
+// auth
+import { useSignOut } from "react-auth-kit";
 
 import "./navtop.css";
 
@@ -24,6 +26,7 @@ export const NavTop = ({ bc, name, ...props }) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const signOut = useSignOut();
 
   return (
     <Navbar className="navbar mb-4">
@@ -41,22 +44,24 @@ export const NavTop = ({ bc, name, ...props }) => {
 
         <Navbar.Collapse className="justify-content-end gap-1">
           <Navbar.Text className="nav-text d-flex align-items-center">
-            <span className="me-2">Signed in as:</span>
-
+            Signed in as:
             <Dropdown className="d-inline mx-2" align="end">
               <Dropdown.Toggle id="dropdown-autoclose-true">
-                User
+                {localStorage.getItem("username")}
               </Dropdown.Toggle>
 
               <Dropdown.Menu className="dropdown-body shadow-sm rounded">
+                {/* Sign Out Button */}
                 <NavLink
                   exact
                   to={"/silakend-login"}
-                  className="logout dropdown-item d-flex ms-2 "
+                  className="logout dropdown-item d-flex ms-2"
+                  onClick={() => signOut()}
                 >
                   Logout
                   <HiOutlineLogout className="logout-icon ms-2 fs-4" />
                 </NavLink>
+                {/* Sign Out Button */}
               </Dropdown.Menu>
             </Dropdown>
           </Navbar.Text>

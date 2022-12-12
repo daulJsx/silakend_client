@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 // react-auth-kit
 import { AuthProvider } from "react-auth-kit";
-// import { RequireAuth } from "react-auth-kit";
+import { RequireAuth } from "react-auth-kit";
 
 // CSS
 import "./App.css";
@@ -37,25 +37,87 @@ function App() {
       >
         <Router>
           <Routes>
-            {/* <Route
-              exact
+            <Route
               path="/"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <Dashboard />
                 </RequireAuth>
               }
-            /> */}
-            <Route exact path="/" element={<Dashboard />} />
-            <Route path="/data-user" element={<Users />} />
-            <Route path="/order-peminjaman" element={<Orders />} />
-            <Route path="/tugas-masuk" element={<TasksIn />} />
-            <Route path="/edit-km-kendaraan" element={<VehiclesKM />} />
-            <Route path="/validasi-order-masuk" element={<Validations />} />
-            <Route path="/data-perbaikan-kendaraan" element={<VehiclesRep />} />
-            <Route path="/data-pengemudi" element={<Drivers />} />
-            <Route path="/data-kendaraan" element={<Vehicles />} />
-            <Route path="/laporan" element={<Reports />} />
+            />
+
+            <Route
+              path="/data-user"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <Users />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/order-peminjaman"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <Orders />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/tugas-masuk"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <TasksIn />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/edit-km-kendaraan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <VehiclesKM />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/validasi-order-masuk"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <Validations />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/data-perbaikan-kendaraan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <VehiclesRep />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/data-pengemudi"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <Drivers />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/data-kendaraan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <Vehicles />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/laporan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <Reports />
+                </RequireAuth>
+              }
+            />
             <Route path="/silakend-login" element={<Login />} />
           </Routes>
         </Router>

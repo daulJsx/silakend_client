@@ -15,21 +15,18 @@
 
 input[type="number"],
 input[type="password"] {
-  background-color: var(--bg-primary);
-  border-radius: 15px;
-  border: 1px solid var(--gray-400);
+  background-color: var(--white);
 }
 
 input[type="number"]:focus,
 input[type="password"]:focus {
-  border: 1px solid var(--color-primary);
-  box-shadow: 1px 1px 50px #0966a829, -1px -1px 50px #0966a82a;
+  border: 2px solid var(--color-primary);
   cursor: text;
 }
 
 input[type="number"]:hover,
 input[type="password"]:hover {
-  border: 1px solid var(--color-primary);
+  border: 2px solid var(--color-primary);
 }
 
 .greeting {
@@ -67,8 +64,13 @@ button.btn-submit:hover {
   );
 }
 
-.btn-text {
-  font-size: small;
+.eye-icon {
+  float: right;
+  margin-right: 1rem;
+  margin-top: -2.8rem;
+  position: relative;
+  z-index: 2;
+  color: var(--color-primary);
 }
 
 .credential {

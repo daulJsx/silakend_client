@@ -4,13 +4,13 @@ import axios from "axios";
 async function fetchData() {
   const config = {
     headers: {
-      Authorization: `Bearer ${"EuFmXsx4Sou6uqeUBvBXNsKLcQdsriFPKsNdklYg"}`,
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   };
 
   try {
     const response = await axios.get(
-      "https://b37d-114-122-106-155.ap.ngrok.io/api/roles",
+      "https://8e78-114-5-208-18.ap.ngrok.io/api/users",
       config
       // "https://jsonplaceholder.typicode.com/users"
     );

@@ -2,15 +2,11 @@ import React from "react";
 
 // fetch data requirement
 // import { useQuery } from "react-query";
-// import Fetch from "./../consAPI/Fetch";
 
 // bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
-
-// React Notification
-import toast, { Toaster } from "react-hot-toast";
 
 // Components
 import { Aside } from "./../../components/aside/Aside";
@@ -28,75 +24,15 @@ import { FaUserClock } from "react-icons/fa";
 import { useIsAuthenticated } from "react-auth-kit";
 import { redirect } from "react-router-dom";
 
-// CSS
-import "./dash.css";
+// Custom Style
+import "../CustomStyles/dash.css";
 
-function Dashboard() {
+export const Dashboard = () => {
   const isAuthenticated = useIsAuthenticated();
 
-  // SHOW OFF!!!!
-  // if (isError) {
-  //   return <div>{error.message}</div>;
-  // } else if (isLoading) {
-  //   return <div>Loading...</div>;
-  // } else {
-  //   return (
-  //     <>
-  //       <Container fluid>
-  //         <Row>
-  //           {/* SIDEBAR */}
-  //           <Col
-  //             xs="auto"
-  //             className="sidebar d-none d-lg-block d-md-block d-xl-block d-flex min-vh-100 px-4"
-  //           >
-  //             <Aside />
-  //           </Col>
-  //           {/* SIDEBAR */}
-
-  //           <Col>
-  //             {/* NAVBAR */}
-  //             <Row>
-  //               <Col>
-  //                 {["end"].map((placement, idx) => (
-  //                   <NavTop key={idx} placement={placement} name={placement} />
-  //                 ))}
-  //               </Col>
-  //             </Row>
-  //             {/* NAVBAR */}
-  //             <Container fluid>
-  //               <Row>
-  //                 <Col>
-  //                   <main className="min-vh-100">
-  //                     <Card className="p-2">
-  //                       <Card.Body>This is dashboard</Card.Body>
-  //                     </Card>
-  //                   </main>
-  //                 </Col>
-  //               </Row>
-  //               <Row>
-  //                 <Col>
-  //                   <footer>
-  //                     <nav className="footer sticky-bottom text-center">
-  //                       this is footer
-  //                     </nav>
-  //                   </footer>
-  //                 </Col>
-  //               </Row>
-  //             </Container>
-  //           </Col>
-  //         </Row>
-  //       </Container>
-  //     </>
-  //   );
-  // }
   if (isAuthenticated()) {
-    toast.success(
-      "Berhasil Login! Selamat Datang ",
-      localStorage.getItem("username")
-    );
     return (
       <>
-        <Toaster position="top-right" />
         <Container fluid>
           <Row>
             <Col
@@ -315,6 +251,4 @@ function Dashboard() {
   } else {
     return redirect("/silakend-login");
   }
-}
-
-export default Dashboard;
+};

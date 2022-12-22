@@ -9,10 +9,12 @@ async function fetchJobUnit() {
   };
 
   try {
-    const response = await axios.get(
-      "https://8e78-114-5-208-18.ap.ngrok.io/api/jobunits",
-      config
-    );
+    const response = await axios
+      .get("http://silakend-server.xyz/api/jobunits", config)
+      .then((response) => {
+        const jobs = response.data;
+        return jobs;
+      });
 
     return response;
   } catch (error) {

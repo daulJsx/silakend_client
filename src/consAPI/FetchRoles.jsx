@@ -9,10 +9,12 @@ async function fetchRoles() {
   };
 
   try {
-    const response = await axios.get(
-      "https://8e78-114-5-208-18.ap.ngrok.io/api/roles",
-      config
-    );
+    const response = await axios
+      .get("http://silakend-server.xyz/api/roles", config)
+      .then((response) => {
+        const roles = response.data;
+        return roles;
+      });
 
     return response;
   } catch (error) {

@@ -8,6 +8,7 @@ import CSRFInput from "@ueaweb/laravel-react-csrf-input";
 
 // React Notification
 import toast, { Toaster } from "react-hot-toast";
+import swal from "sweetalert";
 
 // React-bootstrap
 import { Container, Row, Col } from "react-bootstrap";
@@ -32,47 +33,39 @@ export const Login = (props) => {
   const [formData, setFormData] = React.useState({ nip: "", password: "" });
   const navigate = useNavigate();
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (formData.nip && formData.password !== "") {
       try {
-        axios
-          .post(
-            "https://8e78-114-5-208-18.ap.ngrok.io/api/auth/login",
-            formData
-          )
-          .then((res) => {
-            if (res.data.status === "success") {
-              if (
-                signIn({
-                  token: res.data.content.access_token,
-                  expiresIn: 1000,
-                  tokenType: "Bearer",
-                  authState: res.data.authUserState,
+        await axios
+          .post("http://silakend-server.xyz/api/auth/login", formData)
+          .then((response) => {
+            if (response.data.msg === "Login successfully") {
+              signIn({
+                token: response.data.content.access_token,
+                expiresIn: 1000,
+                tokenType: "Bearer",
+                authState: response.data.authUserState,
+              });
+              // Redirect or do-something
 
-                  // refreshToken: res.data.refreshToken, // Only if using refreshToken feature
-                  // refreshTokenExpireIn: res.data.refreshTokenExpireIn, // Only if using refreshToken feature
-                })
-              ) {
-                // Only if using refreshToken feature
-                // Redirect or do-something
-                console.log(res.data.msg);
-                console.log(res.data.content.access_token);
-                localStorage.setItem("token", res.data.content.access_token);
-                localStorage.setItem("username", res.data.content.username);
-                navigate("/");
-              } else {
-                //Throw error
-                console.log(res.data.msg);
-                toast.error("NIP atau password tidak tersedia.");
-              }
-            } else {
-              console.log(res.data.msg);
-              toast.error("Server error.");
+              localStorage.setItem("token", response.data.content.access_token);
+              localStorage.setItem("username", response.data.content.username);
+              navigate("/");
+              swal({
+                title: "Berhasil Login!",
+                text: "Selamat datang " + localStorage.getItem("username"),
+                icon: "success",
+              });
             }
           });
-      } catch (error) {
-        toast.error("This didn't work.");
+      } catch (e) {
+        const error = swal(
+          "Ups!",
+          "NIP atau password yang dimasukkan tidak tersedia!",
+          "error"
+        );
+        throw error;
       }
     } else {
       toast("Harap Isi Kredensial Sebelum Melanjutkan!", {
@@ -96,17 +89,23 @@ export const Login = (props) => {
     <>
       <Toaster position="bottom-right" reverseOrder={false} />
       <Container fluid className="main-container">
-        <Row className="main-row min-vh-100">
-          <Col className="logo-side2 text-center d-none d-lg-block">
-            <img src={polmanLogo} alt="Polman Logo" className="--polman-logo" />
-            <div className="logo-text color-primary fs-4 fw-bold py-4 px-5">
-              Sistem Layanan Kendaraan <br /> Politeknik Manufaktur Bandung
+        <Row className="main-row min-vh-100 ">
+          <Col className="logo-side2 d-none d-lg-block">
+            <div className="d-flex flex-column align-items-center justify-content-center">
+              <img
+                src={polmanLogo}
+                alt="Polman Logo"
+                className="--polman-logo"
+              />
+              <div className="text-center color-primary fs-4 fw-bold py-4 px-5">
+                Sistem Layanan Kendaraan <br /> Politeknik Manufaktur Bandung
+              </div>
             </div>
           </Col>
-          <Col className="mt-3">
+          <Col>
             <Container className="mt-5">
               <Row>
-                <Col className="p-5">
+                <Col className="p-5 mt-4">
                   <div className="d-sm-block d-lg-none mb-3">
                     <img
                       src={polmanLogo}
@@ -135,7 +134,7 @@ export const Login = (props) => {
                         name="nip"
                         required
                         type={"number"}
-                        className="form-control"
+                        className="form-control form-login"
                         id="floatingInput"
                         placeholder="NIP"
                         onChange={(e) =>
@@ -153,7 +152,7 @@ export const Login = (props) => {
                         {...props}
                         required
                         name="password"
-                        className="form-control"
+                        className="form-control form-login"
                         id="floatingPassword"
                         placeholder="Password"
                         onChange={(e) =>

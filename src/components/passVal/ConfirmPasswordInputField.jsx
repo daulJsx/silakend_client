@@ -12,6 +12,7 @@ function ConfirmPasswordInputField({
   handlePasswordChange,
   confirmPasswordValue,
   confirmPasswordError,
+  isRequired,
 }) {
   // Show/ hide password value
   const [isVisible, setVisible] = useState(false);
@@ -21,10 +22,14 @@ function ConfirmPasswordInputField({
   };
   return (
     <Form.Group className="mb-3 form-floating">
-      <input
+      <Form.Control
+        style={{
+          backgroundColor: "#F5F7FC",
+          border: "none",
+        }}
         type={!isVisible ? "password" : "text"}
         {...props}
-        required
+        required={isRequired}
         class="form-control"
         id="ConfirmPassword"
         value={confirmPasswordValue}
@@ -32,7 +37,7 @@ function ConfirmPasswordInputField({
         onKeyUp={handleValidation}
         name="password_confirmation"
         placeholder="Password"
-        className="form-control"
+        className="form-control form-custom"
       />
       <label className="color-primary" htmlFor="ConfirmPassword">
         Konfirmasi Password

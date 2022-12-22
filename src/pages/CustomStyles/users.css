@@ -31,14 +31,23 @@ td {
 }
 
 .btn-edit {
-  background-image: linear-gradient(
-    to bottom,
-    #084a79,
-    #0b5e9e,
-    #166dba,
-    #2479d4,
-    #3380e3
-  );
-  border-radius: 10px;
-  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+  background: linear-gradient(145deg, #dfffff, #bbdae6);
+
+  color: #04297a;
+  border: none;
+}
+
+.btn-delete {
+  background: linear-gradient(145deg, #fff7e8, #e6d0c3);
+
+  color: #7a0c2e;
+  border: none;
+}
+
+.alert-custom {
+  border: none;
+}
+
+.alert-update-user {
+  transform: translateY(-2rem);
 }

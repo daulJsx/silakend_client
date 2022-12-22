@@ -46,8 +46,9 @@ a {
   text-decoration: none;
   box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
   color: var(--bg-primary);
-  border-radius: 50px;
+
   border: none;
+  cursor: pointer;
 }
 #dropdown-autoclose-true {
   font-weight: 600;
@@ -80,4 +81,11 @@ a {
 
 .dropdown-body {
   border: none;
+}
+
+.nav-item-end {
+  margin-top: -2.9rem;
+}
+.nav-item-start {
+  transform: translate(1rem, 0.6rem);
 }

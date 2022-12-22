@@ -70,8 +70,8 @@ export const Aside = () => {
 
           <AsideMenu
             icon={<HiUserGroup />}
-            title="Data User"
-            link="/data-user"
+            title="Data Pengguna"
+            link="/data-pengguna"
           />
 
           <AsideMenu

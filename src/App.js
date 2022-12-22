@@ -14,9 +14,15 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 // Pages
-import Dashboard from "./pages/dashboard/Dashboard";
-import Users from "./pages/users/Users";
-import { Orders } from "./pages/orders/Orders";
+import { Dashboard } from "./pages/Main/Dashboard";
+
+import { Users } from "./pages/Main/Users";
+import { CreateUser } from "./pages/CreatePages/CreateUser";
+import { UpdateUser } from "./pages/UpdatePages/UpdateUser";
+
+import { VehicleUsages } from "./pages/Main/VehicleUsages";
+import { CreateOrder } from "./pages/CreatePages/CreateOrder";
+
 import { TasksIn } from "./pages/tasks/TasksIn";
 import { VehiclesKM } from "./pages/vehiclesKM/VehiclesKM";
 import { Validations } from "./pages/validations/Validations";
@@ -47,7 +53,7 @@ function App() {
             />
 
             <Route
-              path="/data-user"
+              path="/data-pengguna"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <Users />
@@ -55,10 +61,35 @@ function App() {
               }
             />
             <Route
+              path="/data-pengguna/tambah-pengguna"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <CreateUser />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/edit-pengguna"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <UpdateUser />
+                </RequireAuth>
+              }
+            />
+
+            <Route
               path="/order-peminjaman"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
-                  <Orders />
+                  <VehicleUsages />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/order-peminjaman/buat-order"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <CreateOrder />
                 </RequireAuth>
               }
             />

@@ -13,20 +13,9 @@
   border-radius: 0 0 15px 0;
 }
 
-input[type="number"],
-input[type="password"] {
+input.form-login {
   background-color: var(--white);
-}
-
-input[type="number"]:focus,
-input[type="password"]:focus {
-  border: 2px solid var(--color-primary);
-  cursor: text;
-}
-
-input[type="number"]:hover,
-input[type="password"]:hover {
-  border: 2px solid var(--color-primary);
+  border: none;
 }
 
 .greeting {

@@ -13,6 +13,7 @@ function PasswordInputField({
   handlePasswordChange,
   passwordValue,
   passwordError,
+  isRequired,
 }) {
   // Show/ hide password value
   const [isVisible, setVisible] = useState(false);
@@ -23,17 +24,22 @@ function PasswordInputField({
 
   return (
     <Form.Group className="mb-3 form-floating">
-      <input
+      <Form.Control
+        style={{
+          backgroundColor: "#F5F7FC",
+          border: "none",
+        }}
         type={!isVisible ? "password" : "text"}
         {...props}
-        required
+        required={isRequired}
         name="password"
         class="form-control"
-        placeholder="Password"
         id="floatingPassword"
         onChange={handlePasswordChange}
         onKeyUp={handleValidation}
         value={passwordValue}
+        placeholder="Password"
+        className="form-control form-custom"
       />
       <label className="color-primary" htmlFor="floatingPassword">
         Password

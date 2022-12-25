@@ -21,9 +21,10 @@
 }
 
 .btn-add:hover {
-  background: var(--bg-primary);
-  outline: var(--color-primary);
+  background: var(--white);
+  outline: none;
   color: var(--color-primary);
+  box-shadow: none;
 }
 
 td {

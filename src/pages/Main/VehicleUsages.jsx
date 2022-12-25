@@ -121,95 +121,93 @@ export const VehicleUsages = () => {
                     <Col>
                       <main className="min-vh-100">
                         <Card>
-                          <Card.Body className="p-0">
-                            <Card.Title className="fs-3 p-4">
+                          <Card.Body>
+                            <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                              Data Order Peminjaman
                               <NavLink to={"/order-peminjaman/buat-order"}>
                                 <Button className="btn btn-add">
                                   Buat Order Baru
                                   <AiFillPlusCircle className="fs-3 ms-2" />
                                 </Button>
                               </NavLink>
-                              {/* Roles */}
                             </Card.Title>
-                            <div className="w-full">
-                              {/* <DataTable columns={columns} data={usersData} /> */}
-                              <Table borderless hover size="sm" responsive>
-                                <thead>
-                                  <tr>
-                                    <th>No</th>
-                                    <th>PEMINJAM</th>
-                                    <th>TANGGAL PINJAM</th>
-                                    <th>ALASAN PEMINJAMAN</th>
-                                    <th>KETERANGAN</th>
-                                    <th>DESTINASI</th>
-                                    <th>KATEGORI</th>
-                                    {/* <th>PENGEMUDI</th> */}
-                                    {/* <th>KENDARAAN</th> */}
-                                    <th>AKSI</th>
-                                    <th>Lihat Rincian</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {ordersData?.map((orders, index) => (
-                                    <tr>
-                                      <td key={orders.usage_id}>{index + 1}</td>
-                                      <td>{orders.user.name}</td>
-                                      <td>{orders.start_date}</td>
-                                      <td>{orders.usage_description}</td>
-                                      <td align="center">
-                                        <Badge
-                                          bg={
-                                            orders.status === "CANCELED"
-                                              ? "danger"
-                                              : orders.status === "WAITING"
-                                              ? "warning"
-                                              : "success"
-                                          }
-                                        >
-                                          {orders.status === "CANCELED"
-                                            ? "Batal"
-                                            : orders.status === "WAITING"
-                                            ? "Pending"
-                                            : "Selesai"}
-                                        </Badge>
-                                      </td>
-                                      <td>{orders.destination}</td>
-                                      <td>{orders.category.name}</td>
-                                      {/* <td>{orders.driver}</td> */}
-                                      {/* <td>{orders.vehicle}</td> */}
 
-                                      <td className="d-flex gap-1">
-                                        <NavLink to={"/edit-pengguna"}>
-                                          <Button className="btn btn-edit">
-                                            <AiFillEdit className="fs-6" />
-                                          </Button>
-                                        </NavLink>
-                                        <Button className="btn-danger btn-delete">
-                                          <FaTrashAlt className="fs-6" />
+                            <Table bordered hover responsive>
+                              <thead>
+                                <tr>
+                                  <th>No</th>
+                                  <th>PEMINJAM</th>
+                                  <th>TANGGAL PINJAM</th>
+                                  <th>ALASAN PEMINJAMAN</th>
+                                  <th>KETERANGAN</th>
+                                  <th>DESTINASI</th>
+                                  <th>KATEGORI</th>
+                                  {/* <th>PENGEMUDI</th> */}
+                                  {/* <th>KENDARAAN</th> */}
+                                  <th>AKSI</th>
+                                  <th>Lihat Rincian</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {ordersData?.map((orders, index) => (
+                                  <tr>
+                                    <td key={orders.usage_id}>{index + 1}</td>
+                                    <td>{orders.user.name}</td>
+                                    <td>{orders.start_date}</td>
+                                    <td>{orders.usage_description}</td>
+                                    <td align="center">
+                                      <Badge
+                                        bg={
+                                          orders.status === "CANCELED"
+                                            ? "danger"
+                                            : orders.status === "WAITING"
+                                            ? "warning"
+                                            : "success"
+                                        }
+                                      >
+                                        {orders.status === "CANCELED"
+                                          ? "Batal"
+                                          : orders.status === "WAITING"
+                                          ? "Pending"
+                                          : "Selesai"}
+                                      </Badge>
+                                    </td>
+                                    <td>{orders.destination}</td>
+                                    <td>{orders.category.name}</td>
+                                    {/* <td>{orders.driver}</td> */}
+                                    {/* <td>{orders.vehicle}</td> */}
+
+                                    <td className="d-flex gap-1">
+                                      <NavLink to={"/edit-pengguna"}>
+                                        <Button className="btn btn-edit">
+                                          <AiFillEdit className="fs-6" />
                                         </Button>
-                                      </td>
-                                      <td align="center">
-                                        <>
-                                          <Button
-                                            onClick={() => {
-                                              handleInfoOrder(orders.usage_id);
-                                            }}
-                                            className="btn-info"
-                                          >
-                                            <FaInfo className="fs-6" />
-                                          </Button>
-                                          <GetVechileUsagesById
-                                            currentOrder={currentOrder}
-                                            show={modalShow}
-                                            onHide={() => setModalShow(false)}
-                                          />
-                                        </>
-                                      </td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </Table>
-                            </div>
+                                      </NavLink>
+                                      <Button className="btn-danger btn-delete">
+                                        <FaTrashAlt className="fs-6" />
+                                      </Button>
+                                    </td>
+                                    <td align="center">
+                                      <>
+                                        <Button
+                                          onClick={() => {
+                                            handleInfoOrder(orders.usage_id);
+                                          }}
+                                          className="btn-info"
+                                        >
+                                          <FaInfo className="fs-6" />
+                                        </Button>
+                                        <GetVechileUsagesById
+                                          currentOrder={currentOrder}
+                                          show={modalShow}
+                                          onHide={() => setModalShow(false)}
+                                        />
+                                      </>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </Table>
                           </Card.Body>
                         </Card>
                       </main>

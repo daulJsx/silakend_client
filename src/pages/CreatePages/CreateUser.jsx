@@ -38,12 +38,14 @@ import { FaArrowLeft } from "react-icons/fa";
 import "../CustomStyles/formCustom.css";
 
 export const CreateUser = () => {
+  // Navigating
   const navigate = useNavigate();
 
   // Fetch job units and roles data
   const { data: jobsData } = useQuery("jobunits", FetchJobUnits);
   const { data: rolesData } = useQuery("roles", FetchRoles);
 
+  // Body for store
   const [userData, setUserData] = useState({
     nip: "",
     name: "",
@@ -55,15 +57,22 @@ export const CreateUser = () => {
     unit_id: "",
     role_id: "",
   });
-  const config = {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  };
 
-  // Post
-  const postData = async () => {
-    try {
-      console.log(userData);
-      if (userData == "") {
+  // Store new user data
+  const postNewUser = async () => {
+    const config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    };
+    if (
+      userData.nip ||
+      userData.name ||
+      userData.address ||
+      userData.phone ||
+      userData.email ||
+      userData.unit_id ||
+      userData.role_id !== ""
+    ) {
+      try {
         await axios
           .post("http://silakend-server.xyz/api/users/", userData, config)
           .then((response) => {
@@ -75,33 +84,24 @@ export const CreateUser = () => {
                 icon: "success",
                 button: "Tutup",
               });
-            } else {
-              swal({
-                title: "Ups!",
-                text: response.data.errors.email,
-                icon: "error",
-                button: "Tutup",
-              });
             }
           });
-      } else {
-        swal({
-          title: "Ups!",
-          text: "Harap isi semua data!",
-          icon: "warning",
+      } catch (error) {
+        const e = swal({
+          title: "Gagal!",
+          text: "Error harap dilaporkan!",
+          icon: "error",
           button: "Tutup",
         });
+        throw e;
       }
-    } catch (response) {
-      const error = swal({
-        title: "Gagal!",
-        text: "Email yang dimasukkan sudah tersedia",
-        icon: "error",
+    } else {
+      swal({
+        title: "Peringatan",
+        text: "Harap isi semua data!",
+        icon: "warning",
         button: "Tutup",
       });
-
-      redirect("/data-user/tambah-user");
-      throw error;
     }
   };
 
@@ -431,7 +431,7 @@ export const CreateUser = () => {
                         <Container>
                           <Button
                             className="btn-post"
-                            onClick={postData}
+                            onClick={postNewUser}
                             type="submit"
                           >
                             Tambah

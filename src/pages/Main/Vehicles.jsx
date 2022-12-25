@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
-import FetchUsers from "../../consAPI/FetchUsers";
+import FetchVehicles from "../../consAPI/FetchVehicles";
 
 // Secured the page
 import { useIsAuthenticated } from "react-auth-kit";
@@ -17,32 +17,32 @@ import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
-// icons
-import { HiUserGroup } from "react-icons/hi";
-import { AiFillPlusCircle } from "react-icons/ai";
-import { AiFillEdit } from "react-icons/ai";
-import { FaTrashAlt } from "react-icons/fa";
-
 // Components
 import { Aside } from "../../components/aside/Aside";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
+// Icons
+import { AiFillCar } from "react-icons/ai";
+import { AiFillPlusCircle } from "react-icons/ai";
+import { AiFillEdit } from "react-icons/ai";
+import { FaTrashAlt } from "react-icons/fa";
+
 // Functions
-import { GetUserById } from "../../functions/GetUserById";
-import { DeleteUser } from "../../consAPI/Delete/DeleteUser";
+import { GetVehicleById } from "../../functions/GetVehicleById";
+import { DeleteVehicle } from "../../consAPI/Delete/DeleteVehicle";
 
-// Custom Styles
-import "../CustomStyles/users.css";
+// CSS
+import "../CustomStyles/vechiles.css";
 
-export const Users = () => {
-  // Fetching users data
+export const Vehicles = () => {
+  // Fetching vehicles data
   const {
-    data: usersData,
+    data: vehiclesData,
     error,
     isLoading,
     isError,
-  } = useQuery(["users", 10], FetchUsers);
+  } = useQuery("vehicles", FetchVehicles);
 
   if (useIsAuthenticated()) {
     if (isError) {
@@ -66,7 +66,7 @@ export const Users = () => {
               {/* SIDEBAR */}
               <Col
                 xs="auto"
-                className="sidebar d-none d-xl-block d-flex min-vh-100 px-4"
+                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
               >
                 <Aside />
               </Col>
@@ -81,8 +81,8 @@ export const Users = () => {
                         key={idx}
                         placement={placement}
                         name={placement}
-                        bc={<HiUserGroup />}
-                        parentLink={"/data-pengguna"}
+                        bc={<AiFillCar />}
+                        parentLink={"/data-kendaraan"}
                       />
                     ))}
                   </Col>
@@ -95,52 +95,60 @@ export const Users = () => {
                         <Card>
                           <Card.Body>
                             <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                              Data Pengguna
-                              <NavLink to={"/data-pengguna/tambah-pengguna"}>
+                              Data Kendaraan Dinas
+                              <NavLink to={"/data-kendaraan/tambah-kendaraan"}>
                                 <Button className="btn btn-add">
-                                  Tambah Pengguna Baru
+                                  Tambah Kendaraan
                                   <AiFillPlusCircle className="fs-3 ms-2" />
                                 </Button>
                               </NavLink>
                             </Card.Title>
 
-                            <Table bordered responsive hover>
+                            <Table bordered hover responsive>
                               <thead>
                                 <tr>
-                                  <th>No.</th>
-                                  <th>NIP</th>
-                                  <th>NAMA</th>
-                                  <th>ALAMAT</th>
-                                  <th>EMAIL</th>
-                                  <th>UNIT KERJA</th>
+                                  <th>No</th>
+                                  <th>NAMA KENDARAAN</th>
+                                  <th>NO POLISI</th>
+                                  <th>JUMLAH KILOMETER TEMPUH</th>
+                                  <th>TAHUN PEMBUATAN</th>
+                                  <th>TANGGAL PAJAK</th>
+                                  <th>TANGGAL BERLAKU</th>
+                                  <th>KATEGORI</th>
                                   <th>AKSI</th>
                                 </tr>
                               </thead>
                               <tbody>
-                                {usersData?.map((users, index) => (
+                                {vehiclesData?.map((vehicles, index) => (
                                   <tr>
-                                    <td key={users.user_id}>{index + 1}</td>
-                                    <td>{users.nip}</td>
-                                    <td>{users.name}</td>
-                                    <td>{users.address}</td>
-                                    <td>{users.email}</td>
-                                    <td>{users.job_unit.name}</td>
+                                    <td key={vehicles.vehicle_id}>
+                                      {index + 1}
+                                    </td>
+                                    <td>{vehicles.name}</td>
+                                    <td>{vehicles.license_number}</td>
+                                    <td>{vehicles.distance_count} KM</td>
+                                    <td>{vehicles.year}</td>
+                                    <td>{vehicles.tax_date}</td>
+                                    <td>{vehicles.valid_date}</td>
+                                    <td>{vehicles.category.name}</td>
                                     <td className="d-flex gap-1">
                                       <NavLink
-                                        to={"/data-pengguna/edit-pengguna"}
+                                        to={"/data-kendaraan/edit-kendaraan"}
                                       >
                                         <Button
-                                          onClick={() => GetUserById(users)}
                                           className="btn btn-edit"
+                                          onClick={() =>
+                                            GetVehicleById(vehicles)
+                                          }
                                         >
                                           <AiFillEdit className="fs-6" />
                                         </Button>
                                       </NavLink>
                                       <Button
-                                        onClick={() =>
-                                          DeleteUser(users.user_id)
-                                        }
                                         className="btn-danger btn-delete"
+                                        onClick={() =>
+                                          DeleteVehicle(vehicles.vehicle_id)
+                                        }
                                       >
                                         <FaTrashAlt className="fs-6" />
                                       </Button>

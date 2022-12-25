@@ -23,12 +23,15 @@ import { UpdateUser } from "./pages/UpdatePages/UpdateUser";
 import { VehicleUsages } from "./pages/Main/VehicleUsages";
 import { CreateOrder } from "./pages/CreatePages/CreateOrder";
 
+import { Vehicles } from "./pages/Main/Vehicles";
+import { CreateVehicle } from "./pages/CreatePages/CreateVehicle";
+import { UpdateVehicle } from "./pages/UpdatePages/UpdateVehicle";
+
 import { TasksIn } from "./pages/tasks/TasksIn";
 import { VehiclesKM } from "./pages/vehiclesKM/VehiclesKM";
 import { Validations } from "./pages/validations/Validations";
 import { VehiclesRep } from "./pages/vehiclesRep/VehiclesRep";
 import { Drivers } from "./pages/drivers/Drivers";
-import { Vehicles } from "./pages/vehicles/Vehicles";
 import { Reports } from "./pages/reports/Reports";
 import { Login } from "./pages/auth/Login";
 
@@ -69,7 +72,7 @@ function App() {
               }
             />
             <Route
-              path="/edit-pengguna"
+              path="/data-pengguna/edit-pengguna"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <UpdateUser />
@@ -133,6 +136,7 @@ function App() {
                 </RequireAuth>
               }
             />
+
             <Route
               path="/data-kendaraan"
               element={
@@ -141,6 +145,23 @@ function App() {
                 </RequireAuth>
               }
             />
+            <Route
+              path="/data-kendaraan/tambah-kendaraan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <CreateVehicle />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/data-kendaraan/edit-kendaraan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <UpdateVehicle />
+                </RequireAuth>
+              }
+            />
+
             <Route
               path="/laporan"
               element={

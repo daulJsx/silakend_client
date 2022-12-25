@@ -1,5 +1,6 @@
-export function UseGetUserById(users) {
-  let { user_id, nip, name, address, phone, email, job_unit, role } = users;
+export function GetUserById(currentUser) {
+  let { user_id, nip, name, address, phone, email, job_unit, role } =
+    currentUser;
 
   localStorage.setItem("user_id", user_id);
   localStorage.setItem("nip", nip);

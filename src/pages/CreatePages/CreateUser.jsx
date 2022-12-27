@@ -70,7 +70,7 @@ export const CreateUser = () => {
       userData.phone ||
       userData.email ||
       userData.unit_id ||
-      userData.role_id !== ""
+      userData.role_id != ""
     ) {
       try {
         await axios

@@ -58,7 +58,7 @@ export const CreateVehicle = () => {
       vehicleData.valid_date ||
       vehicleData.license_number ||
       vehicleData.distance_count ||
-      vehicleData.vcategory_id !== ""
+      vehicleData.vcategory_id != ""
     ) {
       try {
         await axios
@@ -225,7 +225,7 @@ export const CreateVehicle = () => {
                                     className="color-primary"
                                     for="distance_count"
                                   >
-                                    Jumlah Kilometer Tempuh
+                                    Jumlah Kilometer Tempuh (Dalam satuan KM)
                                   </Form.Label>
                                 </Form.Group>
                               </Col>
@@ -265,7 +265,7 @@ export const CreateVehicle = () => {
                                     name="tax_date"
                                     type="date"
                                     id="tax_date"
-                                    placeholder="Nama Kendaraan"
+                                    placeholder="Waktu Pajak"
                                     onChange={(e) =>
                                       setVehicleData({
                                         ...vehicleData,
@@ -288,7 +288,7 @@ export const CreateVehicle = () => {
                                     name="valid_date"
                                     type="date"
                                     id="valid_date"
-                                    placeholder="Nama Kendaraan"
+                                    placeholder="Tanggal Berlaku"
                                     onChange={(e) =>
                                       setVehicleData({
                                         ...vehicleData,

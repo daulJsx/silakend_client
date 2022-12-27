@@ -1,10 +1,9 @@
 import React from "react";
-import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
 import Badge from "react-bootstrap/Badge";
 
-function GetVechileUsagesById(props) {
+function InfoVehicleUsage(props) {
   return (
     <Modal
       {...props}
@@ -135,4 +134,4 @@ function GetVechileUsagesById(props) {
   );
 }
 
-export default GetVechileUsagesById;
+export default InfoVehicleUsage;

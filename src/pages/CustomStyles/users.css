@@ -52,3 +52,7 @@ td {
 .alert-update-user {
   transform: translateY(-2rem);
 }
+
+.rolesList {
+  margin-left: -1.9rem;
+}

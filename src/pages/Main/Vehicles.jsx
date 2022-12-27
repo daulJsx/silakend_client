@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
+import axios from "axios";
 import FetchVehicles from "../../consAPI/FetchVehicles";
 
 // Secured the page
@@ -21,16 +22,18 @@ import Button from "react-bootstrap/Button";
 import { Aside } from "../../components/aside/Aside";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
+import InfoVehicle from "../../components/popup/InfoVehicle";
 
 // Icons
 import { AiFillCar } from "react-icons/ai";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
+import { FaInfo } from "react-icons/fa";
 
 // Functions
 import { GetVehicleById } from "../../functions/GetVehicleById";
-import { DeleteVehicle } from "../../consAPI/Delete/DeleteVehicle";
+import { DeleteVehicle } from "../../functions/Delete/DeleteVehicle";
 
 // CSS
 import "../CustomStyles/vechiles.css";
@@ -43,6 +46,31 @@ export const Vehicles = () => {
     isLoading,
     isError,
   } = useQuery("vehicles", FetchVehicles);
+
+  // Get Vehicle By Id
+  const [currentVehicle, setCurrentVehicle] = useState("");
+
+  //   Launch the pop up
+  const [modalShow, setModalShow] = useState(false);
+  const handleInfoVehicle = (vehicleId) => {
+    const config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    };
+
+    try {
+      const response = axios
+        .get(`http://silakend-server.xyz/api/vehicles/${vehicleId}`, config)
+        .then((res) => {
+          const vehicleById = res.data;
+          setCurrentVehicle(vehicleById);
+          setModalShow(true);
+        });
+
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (useIsAuthenticated()) {
     if (isError) {
@@ -66,7 +94,7 @@ export const Vehicles = () => {
               {/* SIDEBAR */}
               <Col
                 xs="auto"
-                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+                className="d-none d-lg-block d-flex min-vh-100 px-4"
               >
                 <Aside />
               </Col>
@@ -88,50 +116,45 @@ export const Vehicles = () => {
                   </Col>
                 </Row>
                 {/* NAVBAR */}
-                <Container fluid>
+                <main className="min-vh-100 px-2">
                   <Row>
                     <Col>
-                      <main className="min-vh-100">
-                        <Card>
-                          <Card.Body>
-                            <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                              Data Kendaraan Dinas
-                              <NavLink to={"/data-kendaraan/tambah-kendaraan"}>
-                                <Button className="btn btn-add">
-                                  Tambah Kendaraan
-                                  <AiFillPlusCircle className="fs-3 ms-2" />
-                                </Button>
-                              </NavLink>
-                            </Card.Title>
+                      <Card>
+                        <Card.Body>
+                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                            Data Kendaraan Dinas
+                            <NavLink to={"/data-kendaraan/tambah-kendaraan"}>
+                              <Button className="btn btn-add">
+                                Tambah Kendaraan
+                                <AiFillPlusCircle className="fs-3 ms-2" />
+                              </Button>
+                            </NavLink>
+                          </Card.Title>
 
-                            <Table bordered hover responsive>
-                              <thead>
+                          <Table bordered hover responsive>
+                            <thead>
+                              <tr>
+                                <th>No</th>
+                                <th>NAMA KENDARAAN</th>
+                                <th>NO POLISI</th>
+                                <th>TAHUN PEMBUATAN</th>
+                                <th>TANGGAL PAJAK</th>
+                                <th>KATEGORI</th>
+                                <th>AKSI</th>
+                                <th>RINCIAN</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {vehiclesData?.map((vehicles, index) => (
                                 <tr>
-                                  <th>No</th>
-                                  <th>NAMA KENDARAAN</th>
-                                  <th>NO POLISI</th>
-                                  <th>JUMLAH KILOMETER TEMPUH</th>
-                                  <th>TAHUN PEMBUATAN</th>
-                                  <th>TANGGAL PAJAK</th>
-                                  <th>TANGGAL BERLAKU</th>
-                                  <th>KATEGORI</th>
-                                  <th>AKSI</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {vehiclesData?.map((vehicles, index) => (
-                                  <tr>
-                                    <td key={vehicles.vehicle_id}>
-                                      {index + 1}
-                                    </td>
-                                    <td>{vehicles.name}</td>
-                                    <td>{vehicles.license_number}</td>
-                                    <td>{vehicles.distance_count} KM</td>
-                                    <td>{vehicles.year}</td>
-                                    <td>{vehicles.tax_date}</td>
-                                    <td>{vehicles.valid_date}</td>
-                                    <td>{vehicles.category.name}</td>
-                                    <td className="d-flex gap-1">
+                                  <td key={vehicles.vehicle_id}>{index + 1}</td>
+                                  <td>{vehicles.name}</td>
+                                  <td>{vehicles.license_number}</td>
+                                  <td>{vehicles.year}</td>
+                                  <td>{vehicles.tax_date}</td>
+                                  <td>{vehicles.category.name}</td>
+                                  <td>
+                                    <div className="d-flex gap-1">
                                       <NavLink
                                         to={"/data-kendaraan/edit-kendaraan"}
                                       >
@@ -152,22 +175,42 @@ export const Vehicles = () => {
                                       >
                                         <FaTrashAlt className="fs-6" />
                                       </Button>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </Table>
-                          </Card.Body>
-                        </Card>
-                      </main>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <>
+                                      <Button
+                                        onClick={() => {
+                                          handleInfoVehicle(
+                                            vehicles.vehicle_id
+                                          );
+                                        }}
+                                        className="btn-info"
+                                      >
+                                        <FaInfo className="fs-6" />
+                                      </Button>
+
+                                      <InfoVehicle
+                                        currentVehicle={currentVehicle}
+                                        show={modalShow}
+                                        onHide={() => setModalShow(false)}
+                                      />
+                                    </>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </Card.Body>
+                      </Card>
                     </Col>
                   </Row>
-                  <Row>
-                    <Col>
-                      <Footer />
-                    </Col>
-                  </Row>
-                </Container>
+                </main>
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </Container>

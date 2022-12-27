@@ -23,7 +23,7 @@ import Badge from "react-bootstrap/Badge";
 import { Aside } from "../../components/aside/Aside";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
-import GetVechileUsagesById from "../../components/popup/GetVechileUsagesById";
+import InfoVehicleUsage from "../../components/popup/InfoVehicleUsage";
 
 // Icons
 import { HiClipboardCopy } from "react-icons/hi";
@@ -44,15 +44,12 @@ export const VehicleUsages = () => {
     isError,
   } = useQuery("orders", FetchVehicleUsages);
 
+  // Get VU By ID
   const [currentOrder, setCurrentOrder] = useState("");
 
   //   Launch the pop up
   const [modalShow, setModalShow] = useState(false);
-
   const handleInfoOrder = (orderId) => {
-    // setCurrentOrder(orderId);
-    // setModalShow(true);
-
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
@@ -91,15 +88,12 @@ export const VehicleUsages = () => {
         <>
           <Container fluid>
             <Row>
-              {/* SIDEBAR */}
               <Col
                 xs="auto"
-                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+                className="d-none d-lg-block d-flex min-vh-100 px-4"
               >
                 <Aside />
               </Col>
-              {/* SIDEBAR */}
-
               <Col>
                 {/* NAVBAR */}
                 <Row>
@@ -110,74 +104,72 @@ export const VehicleUsages = () => {
                         placement={placement}
                         name={placement}
                         bc={<HiClipboardCopy />}
-                        parentLink={"/order-peminjaman"}
                       />
                     ))}
                   </Col>
                 </Row>
                 {/* NAVBAR */}
-                <Container fluid>
+
+                <main className="px-2 min-vh-100">
                   <Row>
                     <Col>
-                      <main className="min-vh-100">
-                        <Card>
-                          <Card.Body>
-                            <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                              Data Order Peminjaman
-                              <NavLink to={"/order-peminjaman/buat-order"}>
-                                <Button className="btn btn-add">
-                                  Buat Order Baru
-                                  <AiFillPlusCircle className="fs-3 ms-2" />
-                                </Button>
-                              </NavLink>
-                            </Card.Title>
+                      <Card>
+                        <Card.Body className="p-0">
+                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                            <span className="me-2">Data Order Peminjaman</span>
+                            <NavLink to={"/order-peminjaman/buat-order"}>
+                              <Button className="btn btn-add">
+                                Buat Order Baru
+                                <AiFillPlusCircle className="fs-3" />
+                              </Button>
+                            </NavLink>
+                          </Card.Title>
 
-                            <Table bordered hover responsive>
-                              <thead>
+                          <Table bordered hover responsive>
+                            <thead>
+                              <tr>
+                                <th>No</th>
+                                <th>PEMINJAM</th>
+                                <th>TANGGAL PINJAM</th>
+                                <th>ALASAN PEMINJAMAN</th>
+                                <th>KETERANGAN</th>
+
+                                {/* <th>PENGEMUDI</th> */}
+                                {/* <th>KENDARAAN</th> */}
+                                <th>AKSI</th>
+                                <th>RINCIAN</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {ordersData?.map((orders, index) => (
                                 <tr>
-                                  <th>No</th>
-                                  <th>PEMINJAM</th>
-                                  <th>TANGGAL PINJAM</th>
-                                  <th>ALASAN PEMINJAMAN</th>
-                                  <th>KETERANGAN</th>
-                                  <th>DESTINASI</th>
-                                  <th>KATEGORI</th>
-                                  {/* <th>PENGEMUDI</th> */}
-                                  {/* <th>KENDARAAN</th> */}
-                                  <th>AKSI</th>
-                                  <th>Lihat Rincian</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {ordersData?.map((orders, index) => (
-                                  <tr>
-                                    <td key={orders.usage_id}>{index + 1}</td>
-                                    <td>{orders.user.name}</td>
-                                    <td>{orders.start_date}</td>
-                                    <td>{orders.usage_description}</td>
-                                    <td align="center">
-                                      <Badge
-                                        bg={
-                                          orders.status === "CANCELED"
-                                            ? "danger"
-                                            : orders.status === "WAITING"
-                                            ? "warning"
-                                            : "success"
-                                        }
-                                      >
-                                        {orders.status === "CANCELED"
-                                          ? "Batal"
+                                  <td key={orders.usage_id}>{index + 1}</td>
+                                  <td>{orders.user.name}</td>
+                                  <td>{orders.start_date}</td>
+                                  <td>{orders.usage_description}</td>
+                                  <td>
+                                    <Badge
+                                      bg={
+                                        orders.status === "CANCELED"
+                                          ? "danger"
                                           : orders.status === "WAITING"
-                                          ? "Pending"
-                                          : "Selesai"}
-                                      </Badge>
-                                    </td>
-                                    <td>{orders.destination}</td>
-                                    <td>{orders.category.name}</td>
-                                    {/* <td>{orders.driver}</td> */}
-                                    {/* <td>{orders.vehicle}</td> */}
+                                          ? "warning"
+                                          : "success"
+                                      }
+                                    >
+                                      {orders.status === "CANCELED"
+                                        ? "Batal"
+                                        : orders.status === "WAITING"
+                                        ? "Pending"
+                                        : "Selesai"}
+                                    </Badge>
+                                  </td>
 
-                                    <td className="d-flex gap-1">
+                                  {/* <td>{orders.driver}</td> */}
+                                  {/* <td>{orders.vehicle}</td> */}
+
+                                  <td>
+                                    <div className="d-flex gap-1">
                                       <NavLink to={"/edit-pengguna"}>
                                         <Button className="btn btn-edit">
                                           <AiFillEdit className="fs-6" />
@@ -186,39 +178,40 @@ export const VehicleUsages = () => {
                                       <Button className="btn-danger btn-delete">
                                         <FaTrashAlt className="fs-6" />
                                       </Button>
-                                    </td>
-                                    <td align="center">
-                                      <>
-                                        <Button
-                                          onClick={() => {
-                                            handleInfoOrder(orders.usage_id);
-                                          }}
-                                          className="btn-info"
-                                        >
-                                          <FaInfo className="fs-6" />
-                                        </Button>
-                                        <GetVechileUsagesById
-                                          currentOrder={currentOrder}
-                                          show={modalShow}
-                                          onHide={() => setModalShow(false)}
-                                        />
-                                      </>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </Table>
-                          </Card.Body>
-                        </Card>
-                      </main>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <>
+                                      <Button
+                                        onClick={() => {
+                                          handleInfoOrder(orders.usage_id);
+                                        }}
+                                        className="btn-info"
+                                      >
+                                        <FaInfo className="fs-6" />
+                                      </Button>
+                                      <InfoVehicleUsage
+                                        currentOrder={currentOrder}
+                                        show={modalShow}
+                                        onHide={() => setModalShow(false)}
+                                      />
+                                    </>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </Card.Body>
+                      </Card>
                     </Col>
                   </Row>
-                  <Row>
-                    <Col>
-                      <Footer />
-                    </Col>
-                  </Row>
-                </Container>
+                </main>
+
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </Container>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
+import axios from "axios";
 import FetchUsers from "../../consAPI/FetchUsers";
 
 // Secured the page
@@ -22,15 +23,17 @@ import { HiUserGroup } from "react-icons/hi";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
+import { FaInfo } from "react-icons/fa";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
+import InfoUser from "../../components/popup/InfoUser";
 
 // Functions
 import { GetUserById } from "../../functions/GetUserById";
-import { DeleteUser } from "../../consAPI/Delete/DeleteUser";
+import { DeleteUser } from "../../functions/Delete/DeleteUser";
 
 // Custom Styles
 import "../CustomStyles/users.css";
@@ -43,6 +46,32 @@ export const Users = () => {
     isLoading,
     isError,
   } = useQuery(["users", 10], FetchUsers);
+
+  // Get User By Id
+  const [currentUser, setCurrentUser] = useState("");
+
+  //   Launch the pop up
+  const [modalShow, setModalShow] = useState(false);
+
+  const handleInfoUser = (userId) => {
+    const config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    };
+
+    try {
+      const response = axios
+        .get(`http://silakend-server.xyz/api/users/${userId}`, config)
+        .then((res) => {
+          const userById = res.data;
+          setCurrentUser(userById);
+          setModalShow(true);
+        });
+
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (useIsAuthenticated()) {
     if (isError) {
@@ -66,7 +95,7 @@ export const Users = () => {
               {/* SIDEBAR */}
               <Col
                 xs="auto"
-                className="sidebar d-none d-xl-block d-flex min-vh-100 px-4"
+                className="d-none d-lg-block d-flex min-vh-100 px-4"
               >
                 <Aside />
               </Col>
@@ -88,44 +117,42 @@ export const Users = () => {
                   </Col>
                 </Row>
                 {/* NAVBAR */}
-                <Container fluid>
+                <main className="min-vh-100 px-2">
                   <Row>
                     <Col>
-                      <main className="min-vh-100">
-                        <Card>
-                          <Card.Body>
-                            <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                              Data Pengguna
-                              <NavLink to={"/data-pengguna/tambah-pengguna"}>
-                                <Button className="btn btn-add">
-                                  Tambah Pengguna Baru
-                                  <AiFillPlusCircle className="fs-3 ms-2" />
-                                </Button>
-                              </NavLink>
-                            </Card.Title>
+                      <Card>
+                        <Card.Body className="p-0">
+                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                            Data Pengguna
+                            <NavLink to={"/data-pengguna/tambah-pengguna"}>
+                              <Button className="btn btn-add">
+                                Tambah Pengguna Baru
+                                <AiFillPlusCircle className="fs-3 ms-2" />
+                              </Button>
+                            </NavLink>
+                          </Card.Title>
 
-                            <Table bordered responsive hover>
-                              <thead>
+                          <Table bordered responsive hover>
+                            <thead>
+                              <tr>
+                                <th>No.</th>
+                                <th>NIP</th>
+                                <th>NAMA</th>
+                                <th>UNIT KERJA</th>
+                                <th>AKSI</th>
+                                <th>RINCIAN</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {usersData?.map((users, index) => (
                                 <tr>
-                                  <th>No.</th>
-                                  <th>NIP</th>
-                                  <th>NAMA</th>
-                                  <th>ALAMAT</th>
-                                  <th>EMAIL</th>
-                                  <th>UNIT KERJA</th>
-                                  <th>AKSI</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {usersData?.map((users, index) => (
-                                  <tr>
-                                    <td key={users.user_id}>{index + 1}</td>
-                                    <td>{users.nip}</td>
-                                    <td>{users.name}</td>
-                                    <td>{users.address}</td>
-                                    <td>{users.email}</td>
-                                    <td>{users.job_unit.name}</td>
-                                    <td className="d-flex gap-1">
+                                  <td key={users.user_id}>{index + 1}</td>
+                                  <td>{users.nip}</td>
+                                  <td>{users.name}</td>
+                                  <td>{users.job_unit.name}</td>
+                                  <td>
+                                    <div className="d-flex gap-1">
+                                      {" "}
                                       <NavLink
                                         to={"/data-pengguna/edit-pengguna"}
                                       >
@@ -144,22 +171,40 @@ export const Users = () => {
                                       >
                                         <FaTrashAlt className="fs-6" />
                                       </Button>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </Table>
-                          </Card.Body>
-                        </Card>
-                      </main>
+                                    </div>
+                                  </td>
+
+                                  <td>
+                                    <>
+                                      <Button
+                                        onClick={() => {
+                                          handleInfoUser(users.user_id);
+                                        }}
+                                        className="btn-info"
+                                      >
+                                        <FaInfo className="fs-6" />
+                                      </Button>
+                                      <InfoUser
+                                        currentUser={currentUser}
+                                        show={modalShow}
+                                        onHide={() => setModalShow(false)}
+                                      />
+                                    </>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </Card.Body>
+                      </Card>
                     </Col>
                   </Row>
-                  <Row>
-                    <Col>
-                      <Footer />
-                    </Col>
-                  </Row>
-                </Container>
+                </main>
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </Container>

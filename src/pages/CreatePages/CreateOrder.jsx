@@ -1,10 +1,10 @@
 import React from "react";
 
-// Axios
-import axios from "axios";
+// // Axios
+// import axios from "axios";
 
-// Fetch Requirements
-import { useQuery } from "react-query";
+// // Fetch Requirements
+// import { useQuery } from "react-query";
 
 // Secured the page
 import { useIsAuthenticated } from "react-auth-kit";

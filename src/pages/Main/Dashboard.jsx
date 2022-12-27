@@ -35,10 +35,7 @@ export const Dashboard = () => {
       <>
         <Container fluid>
           <Row>
-            <Col
-              xs="auto"
-              className="d-none d-lg-block d-md-block d-xl-block d-flex min-vh-100 px-4"
-            >
+            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
               <Aside />
             </Col>
             <Col>
@@ -57,7 +54,7 @@ export const Dashboard = () => {
               </Row>
               {/* NAVBAR */}
 
-              <main className="px-2 d-flex flex-column gap-4 mb-3">
+              <main className="px-2 d-flex flex-column gap-4 mb-3 min-vh-100">
                 <Row>
                   <Col>
                     <Card>

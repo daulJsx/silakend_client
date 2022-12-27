@@ -35,7 +35,7 @@ export async function DeleteVehicle(vehicleId) {
           }
         });
     } else {
-      swal("Data pengguna aman!");
+      swal("Data kendaraan aman!");
     }
   });
 }

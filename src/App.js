@@ -1,7 +1,7 @@
 import React from "react";
 
 // Routing between pages
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 
 // react-auth-kit
 import { AuthProvider } from "react-auth-kit";

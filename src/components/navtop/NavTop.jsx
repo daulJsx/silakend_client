@@ -41,7 +41,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
     };
 
     const logoutPost = await axios
-      .post("http://silakend-server.xyz/api/auth/logout", body, config)
+      .post("https://silakend-server.xyz/api/auth/logout", body, config)
       .then((response) => {
         if (response.data.status === "success") {
           swal({

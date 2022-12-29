@@ -27,7 +27,7 @@ import InfoVehicleUsage from "../../components/popup/InfoVehicleUsage";
 
 // Icons
 import { HiClipboardCopy } from "react-icons/hi";
-import { AiFillPlusCircle } from "react-icons/ai";
+import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import { FaInfo } from "react-icons/fa";
@@ -110,6 +110,19 @@ export const VehicleUsages = () => {
                 </Row>
                 {/* NAVBAR */}
 
+                <div className="container d-flex justify-content-end">
+                  <Row className="py-4 mb-2">
+                    <Col>
+                      <NavLink to={"/order-peminjaman/buat-order"}>
+                        <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                          Buat Order Baru
+                          <HiPlusSm className="fs-3" />
+                        </Button>
+                      </NavLink>
+                    </Col>
+                  </Row>
+                </div>
+
                 <main className="px-2 min-vh-100">
                   <Row>
                     <Col>
@@ -117,12 +130,6 @@ export const VehicleUsages = () => {
                         <Card.Body className="p-0">
                           <Card.Title className="fs-4 p-4 fw-semibold color-primary">
                             <span className="me-2">Data Order Peminjaman</span>
-                            <NavLink to={"/order-peminjaman/buat-order"}>
-                              <Button className="btn btn-add">
-                                Buat Order Baru
-                                <AiFillPlusCircle className="fs-3" />
-                              </Button>
-                            </NavLink>
                           </Card.Title>
 
                           <Table bordered hover responsive>

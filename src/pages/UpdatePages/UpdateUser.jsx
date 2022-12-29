@@ -118,34 +118,27 @@ export const UpdateUser = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        try {
-          const response = await axios
-            .put(`http://silakend-server.xyz/api/users/${userId}`, body, config)
-            .then((response) => {
+        const response = await axios
+          .put(`http://silakend-server.xyz/api/users/${userId}`, body, config)
+          .then((response) => {
+            if (response.status === 200) {
               navigate("/data-pengguna");
-              if (response.status === 200) {
-                swal({
-                  title: "Berhasil!",
-                  text: response.data.msg,
-                  icon: "success",
-                  button: "Tutup",
-                });
-                const jobs = response.data;
-                return jobs;
-              } else {
-                navigate("/data-pengguna/edit-pengguna");
-                swal({
-                  title: "Gagal!",
-                  text: response.data.msg,
-                  icon: "error",
-                  button: "Tutup",
-                });
-              }
-            });
-        } catch (e) {
-          const error = swal("Ups!", "Anda belum merubah apapun", "error");
-          throw error;
-        }
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: "Tutup",
+              });
+            } else {
+              swal({
+                title: "Gagal!",
+                text: response.data.msg,
+                icon: "error",
+                button: "Tutup",
+              });
+            }
+          });
+        return response;
       } else {
         swal("Data pengguna aman!");
       }

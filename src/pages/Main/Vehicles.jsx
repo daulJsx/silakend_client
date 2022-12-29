@@ -26,7 +26,7 @@ import InfoVehicle from "../../components/popup/InfoVehicle";
 
 // Icons
 import { AiFillCar } from "react-icons/ai";
-import { AiFillPlusCircle } from "react-icons/ai";
+import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import { FaInfo } from "react-icons/fa";
@@ -116,6 +116,20 @@ export const Vehicles = () => {
                   </Col>
                 </Row>
                 {/* NAVBAR */}
+
+                <div className="container d-flex justify-content-end">
+                  <Row className="py-4 mb-2">
+                    <Col>
+                      <NavLink to={"/data-kendaraan/tambah-kendaraan"}>
+                        <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                          Tambah Kendaraan
+                          <HiPlusSm className="fs-3" />
+                        </Button>
+                      </NavLink>
+                    </Col>
+                  </Row>
+                </div>
+
                 <main className="min-vh-100 px-2">
                   <Row>
                     <Col>
@@ -123,12 +137,6 @@ export const Vehicles = () => {
                         <Card.Body>
                           <Card.Title className="fs-4 p-4 fw-semibold color-primary">
                             Data Kendaraan Dinas
-                            <NavLink to={"/data-kendaraan/tambah-kendaraan"}>
-                              <Button className="btn btn-add">
-                                Tambah Kendaraan
-                                <AiFillPlusCircle className="fs-3 ms-2" />
-                              </Button>
-                            </NavLink>
                           </Card.Title>
 
                           <Table bordered hover responsive>

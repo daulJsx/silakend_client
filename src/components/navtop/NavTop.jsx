@@ -60,7 +60,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
 
   return (
     <div className="px-2">
-      <Navbar className="navbar mb-4">
+      <Navbar className="navbar">
         <Card className="w-100">
           <Card.Body>
             <Nav.Item className="nav-item-start">

@@ -20,7 +20,7 @@ import Button from "react-bootstrap/Button";
 
 // icons
 import { HiUserGroup } from "react-icons/hi";
-import { AiFillPlusCircle } from "react-icons/ai";
+import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import { FaInfo } from "react-icons/fa";
@@ -117,6 +117,20 @@ export const Users = () => {
                   </Col>
                 </Row>
                 {/* NAVBAR */}
+
+                <div className="container d-flex justify-content-end">
+                  <Row className="py-4 mb-2">
+                    <Col>
+                      <NavLink to={"/data-pengguna/tambah-pengguna"}>
+                        <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                          Tambah Pengguna Baru
+                          <HiPlusSm className="fs-3" />
+                        </Button>
+                      </NavLink>
+                    </Col>
+                  </Row>
+                </div>
+
                 <main className="min-vh-100 px-2">
                   <Row>
                     <Col>
@@ -124,12 +138,6 @@ export const Users = () => {
                         <Card.Body className="p-0">
                           <Card.Title className="fs-4 p-4 fw-semibold color-primary">
                             Data Pengguna
-                            <NavLink to={"/data-pengguna/tambah-pengguna"}>
-                              <Button className="btn btn-add">
-                                Tambah Pengguna Baru
-                                <AiFillPlusCircle className="fs-3 ms-2" />
-                              </Button>
-                            </NavLink>
                           </Card.Title>
 
                           <Table bordered responsive hover>

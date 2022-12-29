@@ -27,11 +27,12 @@ import { Vehicles } from "./pages/Main/Vehicles";
 import { CreateVehicle } from "./pages/CreatePages/CreateVehicle";
 import { UpdateVehicle } from "./pages/UpdatePages/UpdateVehicle";
 
+import { Drivers } from "./pages/Main/Drivers";
+
 import { TasksIn } from "./pages/tasks/TasksIn";
 import { VehiclesKM } from "./pages/vehiclesKM/VehiclesKM";
 import { Validations } from "./pages/validations/Validations";
 import { VehiclesRep } from "./pages/vehiclesRep/VehiclesRep";
-import { Drivers } from "./pages/drivers/Drivers";
 import { Reports } from "./pages/reports/Reports";
 import { Login } from "./pages/auth/Login";
 
@@ -46,6 +47,7 @@ function App() {
       >
         <Router>
           <Routes>
+            {/*----- START DASHBOARD PAGES---- */}
             <Route
               path="/"
               element={
@@ -54,7 +56,9 @@ function App() {
                 </RequireAuth>
               }
             />
+            {/*----- END DASHBOARD PAGES---- */}
 
+            {/*----- START USER PAGES---- */}
             <Route
               path="/data-pengguna"
               element={
@@ -79,7 +83,9 @@ function App() {
                 </RequireAuth>
               }
             />
+            {/*----- END USER PAGES---- */}
 
+            {/*----- START ORDER PAGES---- */}
             <Route
               path="/order-peminjaman"
               element={
@@ -96,6 +102,8 @@ function App() {
                 </RequireAuth>
               }
             />
+            {/*----- END ORDER PAGES---- */}
+
             <Route
               path="/tugas-masuk"
               element={
@@ -128,6 +136,8 @@ function App() {
                 </RequireAuth>
               }
             />
+
+            {/*----- START DRIVER PAGES---- */}
             <Route
               path="/data-pengemudi"
               element={
@@ -136,7 +146,9 @@ function App() {
                 </RequireAuth>
               }
             />
+            {/*----- END DRIVER PAGES---- */}
 
+            {/*----- START VEHICLE PAGES---- */}
             <Route
               path="/data-kendaraan"
               element={
@@ -161,6 +173,7 @@ function App() {
                 </RequireAuth>
               }
             />
+            {/*----- END VEHICLE PAGES---- */}
 
             <Route
               path="/laporan"
@@ -170,7 +183,10 @@ function App() {
                 </RequireAuth>
               }
             />
+
+            {/*----- START AUTH PAGES---- */}
             <Route path="/silakend-login" element={<Login />} />
+            {/*----- END AUTH PAGES---- */}
           </Routes>
         </Router>
       </AuthProvider>

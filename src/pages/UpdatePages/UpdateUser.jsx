@@ -79,7 +79,7 @@ export const UpdateUser = () => {
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
-    const getRoleByIdApi = `http://silakend-server.xyz/api/roles/${selectedRole}`;
+    const getRoleByIdApi = `https://silakend-server.xyz/api/roles/${selectedRole}`;
     const response = await axios
       .get(getRoleByIdApi, config)
       .then((response) => {

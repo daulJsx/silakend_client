@@ -35,7 +35,7 @@ function InfoVehicleUsage(props) {
                     >
                       <div className="ms-2 me-auto">
                         <div className="fw-bold">Peminjam</div>
-                        {order.user_id}
+                        {order.user.name}
                       </div>
                     </ListGroup.Item>
                     <ListGroup.Item
@@ -44,7 +44,7 @@ function InfoVehicleUsage(props) {
                     >
                       <div className="ms-2 me-auto">
                         <div className="fw-bold">Kendaraan</div>
-                        {order.vehicle_id}
+                        {order.vehicle.name}
                       </div>
                     </ListGroup.Item>
                     <ListGroup.Item
@@ -53,7 +53,7 @@ function InfoVehicleUsage(props) {
                     >
                       <div className="ms-2 me-auto">
                         <div className="fw-bold">Pengemudi</div>
-                        {order.driver_id}
+                        {order.driver.name}
                       </div>
                     </ListGroup.Item>
                     <ListGroup.Item

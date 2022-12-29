@@ -60,7 +60,7 @@ export const Users = () => {
 
     try {
       const response = axios
-        .get(`http://silakend-server.xyz/api/users/${userId}`, config)
+        .get(`https://silakend-server.xyz/api/users/${userId}`, config)
         .then((res) => {
           const userById = res.data;
           setCurrentUser(userById);
@@ -89,134 +89,127 @@ export const Users = () => {
       );
     } else {
       return (
-        <>
-          <Container fluid>
-            <Row>
-              {/* SIDEBAR */}
-              <Col
-                xs="auto"
-                className="d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <Aside />
-              </Col>
-              {/* SIDEBAR */}
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
+              <Aside />
+            </Col>
+            {/* SIDEBAR */}
 
-              <Col>
-                {/* NAVBAR */}
-                <Row>
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<HiUserGroup />}
+                      parentLink={"/data-pengguna"}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+
+              <div className="container d-flex justify-content-end">
+                <Row className="py-4 mb-2">
                   <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<HiUserGroup />}
-                        parentLink={"/data-pengguna"}
-                      />
-                    ))}
+                    <NavLink to={"/data-pengguna/tambah-pengguna"}>
+                      <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                        Tambah Pengguna Baru
+                        <HiPlusSm className="fs-3" />
+                      </Button>
+                    </NavLink>
                   </Col>
                 </Row>
-                {/* NAVBAR */}
+              </div>
 
-                <div className="container d-flex justify-content-end">
-                  <Row className="py-4 mb-2">
-                    <Col>
-                      <NavLink to={"/data-pengguna/tambah-pengguna"}>
-                        <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                          Tambah Pengguna Baru
-                          <HiPlusSm className="fs-3" />
-                        </Button>
-                      </NavLink>
-                    </Col>
-                  </Row>
-                </div>
+              <main className="min-vh-100 px-2">
+                <Row>
+                  <Col>
+                    <Card>
+                      <Card.Body className="p-0">
+                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                          Data Pengguna
+                        </Card.Title>
 
-                <main className="min-vh-100 px-2">
-                  <Row>
-                    <Col>
-                      <Card>
-                        <Card.Body className="p-0">
-                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            Data Pengguna
-                          </Card.Title>
-
-                          <Table bordered responsive hover>
-                            <thead>
+                        <Table bordered responsive hover>
+                          <thead>
+                            <tr>
+                              <th>No.</th>
+                              <th>NIP</th>
+                              <th>NAMA</th>
+                              <th>UNIT KERJA</th>
+                              <th>AKSI</th>
+                              <th>RINCIAN</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {usersData?.map((users, index) => (
                               <tr>
-                                <th>No.</th>
-                                <th>NIP</th>
-                                <th>NAMA</th>
-                                <th>UNIT KERJA</th>
-                                <th>AKSI</th>
-                                <th>RINCIAN</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {usersData?.map((users, index) => (
-                                <tr>
-                                  <td key={users.user_id}>{index + 1}</td>
-                                  <td>{users.nip}</td>
-                                  <td>{users.name}</td>
-                                  <td>{users.job_unit.name}</td>
-                                  <td>
-                                    <div className="d-flex gap-1">
-                                      {" "}
-                                      <NavLink
-                                        to={"/data-pengguna/edit-pengguna"}
-                                      >
-                                        <Button
-                                          onClick={() => GetUserById(users)}
-                                          className="btn btn-edit"
-                                        >
-                                          <AiFillEdit className="fs-6" />
-                                        </Button>
-                                      </NavLink>
+                                <td key={users.user_id}>{index + 1}</td>
+                                <td>{users.nip}</td>
+                                <td>{users.name}</td>
+                                <td>{users.job_unit.name}</td>
+                                <td>
+                                  <div className="d-flex gap-1">
+                                    {" "}
+                                    <NavLink
+                                      to={"/data-pengguna/edit-pengguna"}
+                                    >
                                       <Button
-                                        onClick={() =>
-                                          DeleteUser(users.user_id)
-                                        }
-                                        className="btn-danger btn-delete"
+                                        onClick={() => GetUserById(users)}
+                                        className="btn btn-edit"
                                       >
-                                        <FaTrashAlt className="fs-6" />
+                                        <AiFillEdit className="fs-6" />
                                       </Button>
-                                    </div>
-                                  </td>
+                                    </NavLink>
+                                    <Button
+                                      onClick={() => DeleteUser(users.user_id)}
+                                      className="btn-danger btn-delete"
+                                    >
+                                      <FaTrashAlt className="fs-6" />
+                                    </Button>
+                                  </div>
+                                </td>
 
-                                  <td>
-                                    <>
-                                      <Button
-                                        onClick={() => {
-                                          handleInfoUser(users.user_id);
-                                        }}
-                                        className="btn-info"
-                                      >
-                                        <FaInfo className="fs-6" />
-                                      </Button>
-                                      <InfoUser
-                                        currentUser={currentUser}
-                                        show={modalShow}
-                                        onHide={() => setModalShow(false)}
-                                      />
-                                    </>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </Table>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                </main>
-                <Row>
-                  <Col>
-                    <Footer />
+                                <td>
+                                  <>
+                                    <Button
+                                      onClick={() => {
+                                        handleInfoUser(users.user_id);
+                                      }}
+                                      className="btn-info"
+                                    >
+                                      <FaInfo className="fs-6" />
+                                    </Button>
+                                    <InfoUser
+                                      currentUser={currentUser}
+                                      show={modalShow}
+                                      onHide={() => setModalShow(false)}
+                                    />
+                                  </>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </Table>
+                      </Card.Body>
+                    </Card>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
-          </Container>
-        </>
+              </main>
+              <Row>
+                <Col>
+                  <Footer />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       );
     }
   } else {

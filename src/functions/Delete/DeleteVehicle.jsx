@@ -16,7 +16,7 @@ export async function DeleteVehicle(vehicleId) {
   }).then(async (willDelete) => {
     if (willDelete) {
       await axios
-        .delete(`http://silakend-server.xyz/api/vehicles/${vehicleId}`, config)
+        .delete(`https://silakend-server.xyz/api/vehicles/${vehicleId}`, config)
         .then((response) => {
           if (response.status === 200) {
             swal({

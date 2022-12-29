@@ -62,7 +62,7 @@ export const CreateVehicle = () => {
     ) {
       try {
         await axios
-          .post("http://silakend-server.xyz/api/vehicles", vehicleData, config)
+          .post("https://silakend-server.xyz/api/vehicles", vehicleData, config)
           .then((response) => {
             if (response.status === 200) {
               navigate("/data-kendaraan");

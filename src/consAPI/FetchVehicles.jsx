@@ -9,7 +9,7 @@ async function FetchVehicles() {
 
   try {
     const response = await axios
-      .get("http://silakend-server.xyz/api/vehicles", config)
+      .get("https://silakend-server.xyz/api/vehicles", config)
       .then((response) => {
         const vehicles = response.data;
         return vehicles;

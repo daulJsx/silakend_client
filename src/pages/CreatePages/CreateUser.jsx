@@ -74,7 +74,7 @@ export const CreateUser = () => {
     ) {
       try {
         await axios
-          .post("http://silakend-server.xyz/api/users/", userData, config)
+          .post("https://silakend-server.xyz/api/users/", userData, config)
           .then((response) => {
             if (response.status === 200) {
               navigate("/data-user");
@@ -216,7 +216,6 @@ export const CreateUser = () => {
                                       className="input form-custom"
                                       name="nip"
                                       type="number"
-                                      id="nip"
                                       placeholder="NIP"
                                       onChange={(e) =>
                                         setUserData({
@@ -225,10 +224,7 @@ export const CreateUser = () => {
                                         })
                                       }
                                     />
-                                    <Form.Label
-                                      className="color-primary"
-                                      for="nip"
-                                    >
+                                    <Form.Label className="color-primary">
                                       NIP
                                     </Form.Label>
                                   </Form.Group>
@@ -240,7 +236,6 @@ export const CreateUser = () => {
                                       className="input form-custom"
                                       name="email"
                                       type="email"
-                                      id="email"
                                       placeholder="Email"
                                       onChange={(e) =>
                                         setUserData({
@@ -249,10 +244,7 @@ export const CreateUser = () => {
                                         })
                                       }
                                     />
-                                    <Form.Label
-                                      className="color-primary"
-                                      for="email"
-                                    >
+                                    <Form.Label className="color-primary">
                                       Email
                                     </Form.Label>
                                   </Form.Group>
@@ -266,7 +258,6 @@ export const CreateUser = () => {
                                       className="input form-custom"
                                       name="name"
                                       type="text"
-                                      id="name"
                                       placeholder="Nama"
                                       onChange={(e) =>
                                         setUserData({
@@ -275,10 +266,7 @@ export const CreateUser = () => {
                                         })
                                       }
                                     />
-                                    <Form.Label
-                                      className="color-primary"
-                                      for="name"
-                                    >
+                                    <Form.Label className="color-primary">
                                       Nama
                                     </Form.Label>
                                   </Form.Group>
@@ -321,7 +309,6 @@ export const CreateUser = () => {
                                       className="input form-custom"
                                       name="phone"
                                       type="number"
-                                      id="phone"
                                       placeholder="Telepon"
                                       onChange={(e) =>
                                         setUserData({
@@ -330,10 +317,7 @@ export const CreateUser = () => {
                                         })
                                       }
                                     />
-                                    <Form.Label
-                                      className="color-primary"
-                                      for="phone"
-                                    >
+                                    <Form.Label className="color-primary">
                                       Telepon
                                     </Form.Label>
                                   </Form.Group>

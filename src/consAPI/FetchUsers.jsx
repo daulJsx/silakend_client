@@ -10,7 +10,7 @@ async function FetchUsers(key, limit) {
 
   try {
     const response = await axios
-      .get(`http://silakend-server.xyz/api/users?limit=${limit}`, config)
+      .get(`https://silakend-server.xyz/api/users?limit=${limit}`, config)
       .then((response) => {
         const users = response.data;
         return users;

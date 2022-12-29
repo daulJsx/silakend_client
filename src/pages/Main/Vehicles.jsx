@@ -35,9 +35,6 @@ import { FaInfo } from "react-icons/fa";
 import { GetVehicleById } from "../../functions/GetVehicleById";
 import { DeleteVehicle } from "../../functions/Delete/DeleteVehicle";
 
-// CSS
-import "../CustomStyles/vechiles.css";
-
 export const Vehicles = () => {
   // Fetching vehicles data
   const {
@@ -59,7 +56,7 @@ export const Vehicles = () => {
 
     try {
       const response = axios
-        .get(`http://silakend-server.xyz/api/vehicles/${vehicleId}`, config)
+        .get(`https://silakend-server.xyz/api/vehicles/${vehicleId}`, config)
         .then((res) => {
           const vehicleById = res.data;
           setCurrentVehicle(vehicleById);

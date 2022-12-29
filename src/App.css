@@ -94,6 +94,12 @@ html{
   border: none;
 }
 
+label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
 
 
 

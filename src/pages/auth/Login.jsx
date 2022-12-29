@@ -38,7 +38,7 @@ export const Login = (props) => {
     if (formData.nip && formData.password !== "") {
       try {
         await axios
-          .post("http://silakend-server.xyz/api/auth/login", formData)
+          .post("https://silakend-server.xyz/api/auth/login", formData)
           .then((response) => {
             if (response.data.msg === "Login successfully") {
               signIn({

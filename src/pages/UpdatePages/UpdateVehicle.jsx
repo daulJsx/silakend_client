@@ -83,7 +83,7 @@ export const UpdateVehicle = () => {
       if (willDelete) {
         try {
           const response = await axios
-            .put(`http://silakend-server.xyz/api/vehicles/${id}`, body, config)
+            .put(`https://silakend-server.xyz/api/vehicles/${id}`, body, config)
             .then((response) => {
               navigate("/data-kendaraan");
               if (response.status === 200) {

@@ -10,7 +10,7 @@ async function fetchRoles() {
 
   try {
     const response = await axios
-      .get("http://silakend-server.xyz/api/roles", config)
+      .get("https://silakend-server.xyz/api/roles", config)
       .then((response) => {
         const roles = response.data;
         return roles;

@@ -9,7 +9,7 @@ async function FetchVCategories() {
 
   try {
     const response = await axios
-      .get("http://silakend-server.xyz/api/vehiclecategories", config)
+      .get("https://silakend-server.xyz/api/vehiclecategories", config)
       .then((response) => {
         const vCategories = response.data;
         return vCategories;

@@ -32,9 +32,6 @@ import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import { FaInfo } from "react-icons/fa";
 
-// CSS
-import "../CustomStyles/vechiles.css";
-
 export const VehicleUsages = () => {
   // Fetching orders data
   const {
@@ -56,7 +53,7 @@ export const VehicleUsages = () => {
 
     try {
       const response = axios
-        .get(`http://silakend-server.xyz/api/vehicleusages/${orderId}`, config)
+        .get(`https://silakend-server.xyz/api/vehicleusages/${orderId}`, config)
         .then((res) => {
           const orderById = res.data;
           setCurrentOrder(orderById);

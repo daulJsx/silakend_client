@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // this is fetch function
-async function fetchJobUnit() {
+async function FetchUsageCat() {
   const config = {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -10,10 +10,10 @@ async function fetchJobUnit() {
 
   try {
     const response = await axios
-      .get("https://silakend-server.xyz/api/jobunits", config)
+      .get("https://silakend-server.xyz/api/usagecategories", config)
       .then((response) => {
-        const jobs = response.data;
-        return jobs;
+        const uC = response.data;
+        return uC;
       });
 
     return response;
@@ -22,4 +22,4 @@ async function fetchJobUnit() {
   }
 }
 
-export default fetchJobUnit;
+export default FetchUsageCat;

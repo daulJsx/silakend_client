@@ -119,7 +119,7 @@ export const UpdateUser = () => {
     }).then(async (willDelete) => {
       if (willDelete) {
         const response = await axios
-          .put(`http://silakend-server.xyz/api/users/${userId}`, body, config)
+          .put(`https://silakend-server.xyz/api/users/${userId}`, body, config)
           .then((response) => {
             if (response.status === 200) {
               navigate("/data-pengguna");

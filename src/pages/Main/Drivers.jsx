@@ -24,9 +24,6 @@ import { Footer } from "../../components/footer/Footer";
 import { FaUserTie } from "react-icons/fa";
 import { FaInfo } from "react-icons/fa";
 
-// CSS
-import "../CustomStyles/vechiles.css";
-
 export const Drivers = () => {
   // Fetching users as driver
   const {

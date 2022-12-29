@@ -5,12 +5,9 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import FetchUsers from "../../consAPI/FetchUsers";
 
-// Secured the page
-import { useIsAuthenticated } from "react-auth-kit";
-import { redirect } from "react-router-dom";
-
 // Navigating
 import { NavLink } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -73,7 +70,7 @@ export const Users = () => {
     }
   };
 
-  if (useIsAuthenticated()) {
+  if (localStorage.getItem("token")) {
     if (isError) {
       return <div>{error.message}</div>;
     } else if (isLoading) {
@@ -131,7 +128,7 @@ export const Users = () => {
                 <Row>
                   <Col>
                     <Card>
-                      <Card.Body className="p-0">
+                      <Card.Body>
                         <Card.Title className="fs-4 p-4 fw-semibold color-primary">
                           Data Pengguna
                         </Card.Title>
@@ -143,8 +140,8 @@ export const Users = () => {
                               <th>NIP</th>
                               <th>NAMA</th>
                               <th>UNIT KERJA</th>
-                              <th>AKSI</th>
-                              <th>RINCIAN</th>
+                              <th align="center">AKSI</th>
+                              <th align="center">RINCIAN</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -155,8 +152,7 @@ export const Users = () => {
                                 <td>{users.name}</td>
                                 <td>{users.job_unit.name}</td>
                                 <td>
-                                  <div className="d-flex gap-1">
-                                    {" "}
+                                  <div className="d-flex gap-1 justify-content-center">
                                     <NavLink
                                       to={"/data-pengguna/edit-pengguna"}
                                     >
@@ -176,13 +172,13 @@ export const Users = () => {
                                   </div>
                                 </td>
 
-                                <td>
+                                <td align="center">
                                   <>
                                     <Button
                                       onClick={() => {
                                         handleInfoUser(users.user_id);
                                       }}
-                                      className="btn-info"
+                                      className="btn-info btn-detail"
                                     >
                                       <FaInfo className="fs-6" />
                                     </Button>
@@ -213,6 +209,6 @@ export const Users = () => {
       );
     }
   } else {
-    return redirect("/silakend-login");
+    return <Navigate to="/silakend-login" />;
   }
 };

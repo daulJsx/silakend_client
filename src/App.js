@@ -48,59 +48,26 @@ function App() {
         <Router>
           <Routes>
             {/*----- START DASHBOARD PAGES---- */}
-            <Route
-              path="/"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <Dashboard />
-                </RequireAuth>
-              }
-            />
+            <Route path="/" element={<Dashboard />} />
             {/*----- END DASHBOARD PAGES---- */}
 
             {/*----- START USER PAGES---- */}
-            <Route
-              path="/data-pengguna"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <Users />
-                </RequireAuth>
-              }
-            />
+            <Route path="/data-pengguna" element={<Users />} />
             <Route
               path="/data-pengguna/tambah-pengguna"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <CreateUser />
-                </RequireAuth>
-              }
+              element={<CreateUser />}
             />
             <Route
               path="/data-pengguna/edit-pengguna"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <UpdateUser />
-                </RequireAuth>
-              }
+              element={<UpdateUser />}
             />
             {/*----- END USER PAGES---- */}
 
             {/*----- START ORDER PAGES---- */}
-            <Route
-              path="/order-peminjaman"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <VehicleUsages />
-                </RequireAuth>
-              }
-            />
+            <Route path="/order-peminjaman" element={<VehicleUsages />} />
             <Route
               path="/order-peminjaman/buat-order"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <CreateOrder />
-                </RequireAuth>
-              }
+              element={<CreateOrder />}
             />
             {/*----- END ORDER PAGES---- */}
 
@@ -138,40 +105,18 @@ function App() {
             />
 
             {/*----- START DRIVER PAGES---- */}
-            <Route
-              path="/data-pengemudi"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <Drivers />
-                </RequireAuth>
-              }
-            />
+            <Route path="/data-pengemudi" element={<Drivers />} />
             {/*----- END DRIVER PAGES---- */}
 
             {/*----- START VEHICLE PAGES---- */}
-            <Route
-              path="/data-kendaraan"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <Vehicles />
-                </RequireAuth>
-              }
-            />
+            <Route path="/data-kendaraan" element={<Vehicles />} />
             <Route
               path="/data-kendaraan/tambah-kendaraan"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <CreateVehicle />
-                </RequireAuth>
-              }
+              element={<CreateVehicle />}
             />
             <Route
               path="/data-kendaraan/edit-kendaraan"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <UpdateVehicle />
-                </RequireAuth>
-              }
+              element={<UpdateVehicle />}
             />
             {/*----- END VEHICLE PAGES---- */}
 

@@ -4,15 +4,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 
 function InfoVehicle(props) {
   return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      {/* <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter"></Modal.Title>
-      </Modal.Header> */}
+    <Modal {...props} size="lg">
       <Modal.Body
         closeButton
         style={{

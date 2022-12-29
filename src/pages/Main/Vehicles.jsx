@@ -5,12 +5,9 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import FetchVehicles from "../../consAPI/FetchVehicles";
 
-// Secured the page
-import { useIsAuthenticated } from "react-auth-kit";
-import { redirect } from "react-router-dom";
-
 // Navigating
 import { NavLink } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -69,7 +66,7 @@ export const Vehicles = () => {
     }
   };
 
-  if (useIsAuthenticated()) {
+  if (localStorage.getItem("token")) {
     if (isError) {
       return <div>{error.message}</div>;
     } else if (isLoading) {
@@ -145,8 +142,8 @@ export const Vehicles = () => {
                                 <th>TAHUN PEMBUATAN</th>
                                 <th>TANGGAL PAJAK</th>
                                 <th>KATEGORI</th>
-                                <th>AKSI</th>
-                                <th>RINCIAN</th>
+                                <th align="center">AKSI</th>
+                                <th align="center">RINCIAN</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -159,7 +156,7 @@ export const Vehicles = () => {
                                   <td>{vehicles.tax_date}</td>
                                   <td>{vehicles.category.name}</td>
                                   <td>
-                                    <div className="d-flex gap-1">
+                                    <div className="d-flex gap-1 justify-content-center">
                                       <NavLink
                                         to={"/data-kendaraan/edit-kendaraan"}
                                       >
@@ -182,7 +179,7 @@ export const Vehicles = () => {
                                       </Button>
                                     </div>
                                   </td>
-                                  <td>
+                                  <td align="center">
                                     <>
                                       <Button
                                         onClick={() => {
@@ -190,7 +187,7 @@ export const Vehicles = () => {
                                             vehicles.vehicle_id
                                           );
                                         }}
-                                        className="btn-info"
+                                        className="btn-info btn-detail"
                                       >
                                         <FaInfo className="fs-6" />
                                       </Button>
@@ -223,6 +220,6 @@ export const Vehicles = () => {
       );
     }
   } else {
-    return redirect("/silakend-login");
+    return <Navigate to="/silakend-login" />;
   }
 };

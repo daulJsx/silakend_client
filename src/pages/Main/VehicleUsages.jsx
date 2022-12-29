@@ -5,12 +5,9 @@ import { useQuery } from "react-query";
 import FetchVehicleUsages from "../../consAPI/FetchVehicleUsages";
 import axios from "axios";
 
-// Secured the page
-import { useIsAuthenticated } from "react-auth-kit";
-import { redirect } from "react-router-dom";
-
 // Navigating
 import { NavLink } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -66,7 +63,7 @@ export const VehicleUsages = () => {
     }
   };
 
-  if (useIsAuthenticated()) {
+  if (localStorage.getItem("token")) {
     if (isError) {
       return <div>{error.message}</div>;
     } else if (isLoading) {
@@ -124,7 +121,7 @@ export const VehicleUsages = () => {
                   <Row>
                     <Col>
                       <Card>
-                        <Card.Body className="p-0">
+                        <Card.Body>
                           <Card.Title className="fs-4 p-4 fw-semibold color-primary">
                             <span className="me-2">Data Order Peminjaman</span>
                           </Card.Title>
@@ -151,20 +148,35 @@ export const VehicleUsages = () => {
                                   <td>{orders.user.name}</td>
                                   <td>{orders.start_date}</td>
                                   <td>{orders.usage_description}</td>
-                                  <td>
+                                  <td align="center">
                                     <Badge
                                       bg={
-                                        orders.status === "CANCELED"
+                                        orders.status === "CANCELED" ||
+                                        orders.status === "REJECTED"
                                           ? "danger"
                                           : orders.status === "WAITING"
                                           ? "warning"
+                                          : orders.status === "READY"
+                                          ? "primary"
+                                          : orders.status === "APPROVED"
+                                          ? "info"
+                                          : orders.status === "PROGRESS"
+                                          ? "secondary"
                                           : "success"
                                       }
                                     >
                                       {orders.status === "CANCELED"
                                         ? "Batal"
+                                        : orders.status === "REJECTED"
+                                        ? "Ditolak"
                                         : orders.status === "WAITING"
-                                        ? "Pending"
+                                        ? "Verifying"
+                                        : orders.status === "READY"
+                                        ? "Siap berangkat"
+                                        : orders.status === "APPROVED"
+                                        ? "Disetujui"
+                                        : orders.status === "PROGRESS"
+                                        ? "Berlangsung"
                                         : "Selesai"}
                                     </Badge>
                                   </td>
@@ -173,24 +185,23 @@ export const VehicleUsages = () => {
                                   {/* <td>{orders.vehicle}</td> */}
 
                                   <td>
-                                    <div className="d-flex gap-1">
-                                      <NavLink to={"/edit-pengguna"}>
-                                        <Button className="btn btn-edit">
-                                          <AiFillEdit className="fs-6" />
-                                        </Button>
-                                      </NavLink>
+                                    <div className="d-flex gap-1 justify-content-center">
+                                      <Button className="btn btn-edit">
+                                        <AiFillEdit className="fs-6" />
+                                      </Button>
+
                                       <Button className="btn-danger btn-delete">
                                         <FaTrashAlt className="fs-6" />
                                       </Button>
                                     </div>
                                   </td>
-                                  <td>
+                                  <td align="center">
                                     <>
                                       <Button
                                         onClick={() => {
                                           handleInfoOrder(orders.usage_id);
                                         }}
-                                        className="btn-info"
+                                        className="btn btn-detail"
                                       >
                                         <FaInfo className="fs-6" />
                                       </Button>
@@ -223,6 +234,6 @@ export const VehicleUsages = () => {
       );
     }
   } else {
-    return redirect("/silakend-login");
+    return <Navigate to="/silakend-login" />;
   }
 };

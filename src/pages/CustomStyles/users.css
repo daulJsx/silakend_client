@@ -4,6 +4,10 @@
   padding: 0;
 }
 
+th {
+  text-align: center;
+}
+
 .btn-add {
   background-image: linear-gradient(
     to bottom,
@@ -35,6 +39,12 @@ td {
   background: linear-gradient(145deg, #dfffff, #bbdae6);
 
   color: #04297a;
+  border: none;
+}
+
+.btn-detail {
+  background: linear-gradient(145deg, #dfffff, #91dafc);
+  color: #25abf3;
   border: none;
 }
 

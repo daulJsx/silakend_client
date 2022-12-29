@@ -8,15 +8,12 @@ import { useQuery } from "react-query";
 import FetchJobUnits from "../../consAPI/FetchJobUnits";
 import FetchRoles from "../../consAPI/FetchRoles";
 
-// Secured the page
-import { useIsAuthenticated } from "react-auth-kit";
-import { redirect } from "react-router-dom";
-
 // React Notification
 import swal from "sweetalert";
 
 // Redirecting
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -166,7 +163,7 @@ export const CreateUser = () => {
       }
     }
   };
-  if (useIsAuthenticated()) {
+  if (localStorage.getItem("token")) {
     return (
       <Container fluid>
         <Row>
@@ -224,9 +221,7 @@ export const CreateUser = () => {
                                         })
                                       }
                                     />
-                                    <Form.Label className="color-primary">
-                                      NIP
-                                    </Form.Label>
+                                    <Form.Label>NIP</Form.Label>
                                   </Form.Group>
                                 </Col>
                                 <Col>
@@ -244,9 +239,7 @@ export const CreateUser = () => {
                                         })
                                       }
                                     />
-                                    <Form.Label className="color-primary">
-                                      Email
-                                    </Form.Label>
+                                    <Form.Label>Email</Form.Label>
                                   </Form.Group>
                                 </Col>
                               </Row>
@@ -266,9 +259,7 @@ export const CreateUser = () => {
                                         })
                                       }
                                     />
-                                    <Form.Label className="color-primary">
-                                      Nama
-                                    </Form.Label>
+                                    <Form.Label>Nama</Form.Label>
                                   </Form.Group>
                                 </Col>
                                 <Col>
@@ -317,9 +308,7 @@ export const CreateUser = () => {
                                         })
                                       }
                                     />
-                                    <Form.Label className="color-primary">
-                                      Telepon
-                                    </Form.Label>
+                                    <Form.Label>Telepon</Form.Label>
                                   </Form.Group>
                                 </Col>
                                 <Col>
@@ -384,10 +373,7 @@ export const CreateUser = () => {
                                       }
                                     ></textarea>
 
-                                    <Form.Label
-                                      className="color-primary"
-                                      for="address"
-                                    >
+                                    <Form.Label for="address">
                                       Alamat
                                     </Form.Label>
                                   </Form.Group>
@@ -437,6 +423,6 @@ export const CreateUser = () => {
       </Container>
     );
   } else {
-    return redirect("/silakend-login");
+    return <Navigate to="/silakend-login" />;
   }
 };

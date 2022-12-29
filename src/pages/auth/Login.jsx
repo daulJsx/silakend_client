@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import { useSignIn } from "react-auth-kit";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import CSRFInput from "@ueaweb/laravel-react-csrf-input";
+
+// get current user auth data
+import { useAuthUser } from "react-auth-kit";
 
 // React Notification
 import toast, { Toaster } from "react-hot-toast";
@@ -32,9 +34,11 @@ export const Login = (props) => {
   const signIn = useSignIn();
   const [formData, setFormData] = React.useState({ nip: "", password: "" });
   const navigate = useNavigate();
+  const auth = useAuthUser();
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    // perform login logic
     if (formData.nip && formData.password !== "") {
       try {
         await axios
@@ -45,16 +49,14 @@ export const Login = (props) => {
                 token: response.data.content.access_token,
                 expiresIn: 1000,
                 tokenType: "Bearer",
-                authState: response.data.authUserState,
+                authState: response.data,
               });
-              // Redirect or do-something
-
               localStorage.setItem("token", response.data.content.access_token);
-              localStorage.setItem("username", response.data.content.username);
+              // if login is successful, navigate to the dashboard
               navigate("/");
               swal({
                 title: "Berhasil Login!",
-                text: "Selamat datang " + localStorage.getItem("username"),
+                text: "Selamat datang " + auth().content.username,
                 icon: "success",
               });
             }
@@ -73,10 +75,6 @@ export const Login = (props) => {
       });
     }
   };
-
-  const myToken = document.head
-    .querySelector('meta[name="csrf-token"]')
-    .getAttribute("content");
 
   // Show/ hide password value
   const [isVisible, setVisible] = useState(false);
@@ -128,7 +126,6 @@ export const Login = (props) => {
                     className="mt-3 d-flex flex-column gap-4 py-4 mt-4"
                     onSubmit={onSubmit}
                   >
-                    <CSRFInput token={myToken} />
                     <Form.Group className="form-floating">
                       <input
                         name="nip"

@@ -2,12 +2,12 @@ import React, { useState } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
-import axios from "axios";
+
+// import axios from "axios";
 import FetchUsers from "../../consAPI/FetchUsers";
 
-// Secured the page
-import { useIsAuthenticated } from "react-auth-kit";
-import { redirect } from "react-router-dom";
+// Navigating
+import { Navigate } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -22,7 +22,6 @@ import { Footer } from "../../components/footer/Footer";
 
 // Icons
 import { FaUserTie } from "react-icons/fa";
-import { FaInfo } from "react-icons/fa";
 
 export const Drivers = () => {
   // Fetching users as driver
@@ -33,7 +32,7 @@ export const Drivers = () => {
     isError,
   } = useQuery(["users", 10], FetchUsers);
 
-  if (useIsAuthenticated()) {
+  if (localStorage.getItem("token")) {
     if (isError) {
       return <div>{error.message}</div>;
     } else if (isLoading) {
@@ -125,6 +124,6 @@ export const Drivers = () => {
       );
     }
   } else {
-    return redirect("/silakend-login");
+    return <Navigate to="/silakend-login" />;
   }
 };

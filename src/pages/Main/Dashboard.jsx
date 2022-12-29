@@ -20,17 +20,14 @@ import { AiFillDashboard } from "react-icons/ai";
 import { RiUserReceivedFill } from "react-icons/ri";
 import { FaUserClock } from "react-icons/fa";
 
-// Secured the page
-import { useIsAuthenticated } from "react-auth-kit";
-import { redirect } from "react-router-dom";
+// Navigating
+import { Navigate } from "react-router-dom";
 
 // Custom Style
 import "../CustomStyles/dash.css";
 
 export const Dashboard = () => {
-  const isAuthenticated = useIsAuthenticated();
-
-  if (isAuthenticated()) {
+  if (localStorage.getItem("token")) {
     return (
       <>
         <Container fluid>
@@ -246,6 +243,6 @@ export const Dashboard = () => {
       </>
     );
   } else {
-    return redirect("/silakend-login");
+    return <Navigate to="/silakend-login" />;
   }
 };

@@ -5,12 +5,9 @@ import axios from "axios";
 import FetchVCategories from "../../consAPI/FetchVCategories";
 import { useQuery } from "react-query";
 
-// Secured the page
-import { useIsAuthenticated } from "react-auth-kit";
-import { redirect } from "react-router-dom";
-
 // Redirecting
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -107,7 +104,7 @@ export const UpdateVehicle = () => {
     });
   };
 
-  if (useIsAuthenticated()) {
+  if (localStorage.getItem("token")) {
     return (
       <>
         <Container fluid>
@@ -325,6 +322,6 @@ export const UpdateVehicle = () => {
       </>
     );
   } else {
-    return redirect("/silakend-login");
+    return <Navigate to="/silakend-login" />;
   }
 };

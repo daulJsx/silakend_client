@@ -41,9 +41,7 @@ function PasswordInputField({
         placeholder="Password"
         className="form-control form-custom"
       />
-      <label className="color-primary" htmlFor="floatingPassword">
-        Password
-      </label>
+      <label htmlFor="floatingPassword">Password</label>
 
       <i className="eye-icon fs-5" onClick={toggle}>
         {isVisible ? <BsFillEyeFill /> : <BsFillEyeSlashFill />}

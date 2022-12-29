@@ -9,9 +9,8 @@ import FetchVehicles from "../../consAPI/FetchVehicles";
 import FetchUsers from "../../consAPI/FetchUsers";
 import FetchUsageCat from "../../consAPI/FetchUsageCat";
 
-// Secured the page
-import { useIsAuthenticated } from "react-auth-kit";
-import { redirect } from "react-router-dom";
+// Navigating
+import { Navigate } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -124,7 +123,7 @@ export const CreateOrder = () => {
     }
   };
 
-  if (useIsAuthenticated()) {
+  if (localStorage.getItem("token")) {
     return (
       <Container fluid>
         <Row>
@@ -641,6 +640,6 @@ export const CreateOrder = () => {
       </Container>
     );
   } else {
-    return redirect("/silakend-login");
+    return <Navigate to="/silakend-login" />;
   }
 };

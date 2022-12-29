@@ -5,12 +5,9 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import FetchRoles from "../../consAPI/FetchRoles";
 
-// Secured the page
-import { useIsAuthenticated } from "react-auth-kit";
-import { redirect } from "react-router-dom";
-
 // Redirecting
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 // Icons
 import { RiCloseFill } from "react-icons/ri";
@@ -210,7 +207,7 @@ export const UpdateUser = () => {
     }
   };
 
-  if (useIsAuthenticated()) {
+  if (localStorage.getItem("token")) {
     return (
       <Container fluid>
         <Row>
@@ -548,6 +545,6 @@ export const UpdateUser = () => {
       </Container>
     );
   } else {
-    redirect("/silakend-login");
+    return <Navigate to="/silakend-login" />;
   }
 };

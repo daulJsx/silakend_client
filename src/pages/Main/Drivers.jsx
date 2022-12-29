@@ -13,7 +13,6 @@ import { Navigate } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
 
 // Components
 import { Aside } from "../../components/aside/Aside";

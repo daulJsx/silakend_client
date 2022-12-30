@@ -21,7 +21,8 @@ function ConfirmPasswordInputField({
     setVisible(!isVisible);
   };
   return (
-    <Form.Group className="mb-3 form-floating">
+    <>
+      <Form.Label>Konfirmasi Password</Form.Label>
       <Form.Control
         style={{
           backgroundColor: "#F5F7FC",
@@ -36,15 +37,14 @@ function ConfirmPasswordInputField({
         onChange={handlePasswordChange}
         onKeyUp={handleValidation}
         name="password_confirmation"
-        placeholder="Password"
-        className="form-control form-custom"
+        className="form-control input form-custom"
       />
-      <label htmlFor="ConfirmPassword">Konfirmasi Password</label>
+
       <i className="eye-icon fs-5" onClick={toggle}>
         {isVisible ? <BsFillEyeFill /> : <BsFillEyeSlashFill />}
       </i>
       <p className="text-danger">{confirmPasswordError}</p>
-    </Form.Group>
+    </>
   );
 }
 

@@ -111,7 +111,7 @@ export const Users = () => {
               </Row>
               {/* NAVBAR */}
 
-              <div className="container d-flex justify-content-end">
+              <div className="me-1 d-flex justify-content-end">
                 <Row className="py-4 mb-2">
                   <Col>
                     <NavLink to={"/data-pengguna/tambah-pengguna"}>

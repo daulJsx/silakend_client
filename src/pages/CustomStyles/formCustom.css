@@ -1,6 +1,7 @@
 input.input.form-custom {
   background: var(--bg-primary);
   border: none;
+  padding: 1rem;
 }
 
 textarea.textarea-custom {

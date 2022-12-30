@@ -153,12 +153,12 @@ export const CreateOrder = () => {
               </Col>
             </Row>
             {/* NAVBAR */}
-            <main className="min-vh-100 px-2">
+            <main className="min-vh-100 px-2 mt-4">
               <Row>
                 <Col>
                   <Card>
-                    <Card.Title className="fs-4 color-primary p-4">
-                      Silahkan Tambahkan Order Baru Disini
+                    <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                      Silahkan Ajukan Peminjaman Kendaraan Dinas Disini
                     </Card.Title>
                     <Card.Body>
                       <Form.Group className="mb-3">

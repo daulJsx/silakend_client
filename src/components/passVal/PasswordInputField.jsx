@@ -23,7 +23,8 @@ function PasswordInputField({
   };
 
   return (
-    <Form.Group className="mb-3 form-floating">
+    <>
+      <Form.Label>Password</Form.Label>
       <Form.Control
         style={{
           backgroundColor: "#F5F7FC",
@@ -38,16 +39,14 @@ function PasswordInputField({
         onChange={handlePasswordChange}
         onKeyUp={handleValidation}
         value={passwordValue}
-        placeholder="Password"
-        className="form-control form-custom"
+        className="input form-custom"
       />
-      <label htmlFor="floatingPassword">Password</label>
 
       <i className="eye-icon fs-5" onClick={toggle}>
         {isVisible ? <BsFillEyeFill /> : <BsFillEyeSlashFill />}
       </i>
       <p className="text-danger">{passwordError}</p>
-    </Form.Group>
+    </>
   );
 }
 

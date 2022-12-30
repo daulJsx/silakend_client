@@ -105,12 +105,15 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                 </Dropdown>
               </Navbar.Text>
 
-              <Button
-                className="button-toggle btn-lg d-block d-md-block d-sm-block d-lg-none"
-                onClick={handleShow}
-              >
-                <GiHamburgerMenu className="fs-4" />
-              </Button>
+              <Nav.Item className="d-block d-lg-none">
+                <Button
+                  className="button-toggle"
+                  size="lg"
+                  onClick={handleShow}
+                >
+                  <GiHamburgerMenu />
+                </Button>
+              </Nav.Item>
 
               <Offcanvas
                 show={show}

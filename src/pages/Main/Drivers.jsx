@@ -75,7 +75,7 @@ export const Drivers = () => {
                   </Col>
                 </Row>
                 {/* NAVBAR */}
-                <main className="min-vh-100 px-2">
+                <main className="min-vh-100 px-2 mt-4">
                   <Row>
                     <Col>
                       <Card>

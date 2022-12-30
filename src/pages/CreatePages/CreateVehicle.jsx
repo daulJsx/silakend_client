@@ -14,6 +14,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { InputGroup } from "react-bootstrap";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -121,96 +122,70 @@ export const CreateVehicle = () => {
                 </Col>
               </Row>
               {/* NAVBAR */}
-              <Container fluid>
+              <main className="min-vh-10 px-2 mt-4">
                 <Row>
                   <Col>
-                    <main className="min-vh-100">
-                      <Card>
-                        <Card.Body>
-                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            Silahkan Tambahkan Data Kendaraan Dinas Baru Disini
-                          </Card.Title>
+                    <Card>
+                      <Card.Body>
+                        <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                          Silahkan Tambah Data Kendaraan Dinas Baru Disini
+                        </Card.Title>
 
-                          <Container>
-                            <Row>
-                              <Col>
-                                <Form.Group className="mb-3 form-floating">
+                        <Container>
+                          <Row>
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Nama Kendaraan</Form.Label>
+                                <Form.Control
+                                  required
+                                  className="input form-custom"
+                                  type="text"
+                                  onChange={(e) =>
+                                    setVehicleData({
+                                      ...vehicleData,
+                                      name: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
+
+                              <Form.Group className="mb-3">
+                                <Form.Label>Nomor Polisi</Form.Label>
+                                <Form.Control
+                                  required
+                                  className="input form-custom"
+                                  type="text"
+                                  onChange={(e) =>
+                                    setVehicleData({
+                                      ...vehicleData,
+                                      license_number: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
+
+                              <Form.Group className="mb-3">
+                                <Form.Label>Tahun Pembuatan</Form.Label>
+                                <Form.Control
+                                  required
+                                  className="input form-custom"
+                                  type="text"
+                                  onChange={(e) =>
+                                    setVehicleData({
+                                      ...vehicleData,
+                                      year: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
+
+                              <Form.Group className="mb-3">
+                                <Form.Label>Jumlah Kilometer Tempuh</Form.Label>
+                                <InputGroup>
                                   <Form.Control
                                     required
                                     className="input form-custom"
-                                    name="name"
-                                    type="text"
-                                    id="name"
-                                    placeholder="Nama Kendaraan"
-                                    onChange={(e) =>
-                                      setVehicleData({
-                                        ...vehicleData,
-                                        name: e.target.value,
-                                      })
-                                    }
-                                  />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="name"
-                                  >
-                                    Nama Kendaraan
-                                  </Form.Label>
-                                </Form.Group>
-
-                                <Form.Group className="mb-3 form-floating">
-                                  <Form.Control
-                                    required
-                                    className="input form-custom"
-                                    name="license_number"
-                                    type="text"
-                                    id="license_number"
-                                    placeholder="Nomor Polisi"
-                                    onChange={(e) =>
-                                      setVehicleData({
-                                        ...vehicleData,
-                                        license_number: e.target.value,
-                                      })
-                                    }
-                                  />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="license_number"
-                                  >
-                                    Nomor Polisi
-                                  </Form.Label>
-                                </Form.Group>
-
-                                <Form.Group className="mb-3 form-floating">
-                                  <Form.Control
-                                    required
-                                    className="input form-custom"
-                                    name="year"
-                                    type="text"
-                                    id="year"
-                                    placeholder="Tahun Pembuatan"
-                                    onChange={(e) =>
-                                      setVehicleData({
-                                        ...vehicleData,
-                                        year: e.target.value,
-                                      })
-                                    }
-                                  />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="year"
-                                  >
-                                    Tahun Pembuatan
-                                  </Form.Label>
-                                </Form.Group>
-
-                                <Form.Group className="mb-3 form-floating">
-                                  <Form.Control
-                                    required
-                                    className="input form-custom"
-                                    name="distance_count"
                                     type="number"
-                                    id="distance_count"
-                                    placeholder="Dalam satuan KM"
                                     onChange={(e) =>
                                       setVehicleData({
                                         ...vehicleData,
@@ -218,105 +193,87 @@ export const CreateVehicle = () => {
                                       })
                                     }
                                   />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="distance_count"
-                                  >
-                                    Jumlah Kilometer Tempuh (Dalam satuan KM)
-                                  </Form.Label>
-                                </Form.Group>
-                              </Col>
-                              <Col>
-                                <Form.Group className="mb-3">
-                                  <Form.Select
-                                    style={{
-                                      backgroundColor: "#F5F7FC",
-                                      border: "none",
-                                      padding: "17px",
-                                    }}
-                                    aria-label="Default select example"
-                                    onChange={(e) =>
-                                      setVehicleData({
-                                        ...vehicleData,
-                                        vcategory_id: e.target.value,
-                                      })
-                                    }
-                                  >
-                                    <option>
-                                      -- Pilih Kategori Kendaraan --
+                                  <InputGroup.Text style={{ border: "none" }}>
+                                    KM
+                                  </InputGroup.Text>
+                                </InputGroup>
+                              </Form.Group>
+                            </Col>
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Kategori Kendaraan</Form.Label>
+                                <Form.Select
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "17px",
+                                  }}
+                                  aria-label="Default select example"
+                                  onChange={(e) =>
+                                    setVehicleData({
+                                      ...vehicleData,
+                                      vcategory_id: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option>
+                                    -- Pilih Kategori Kendaraan --
+                                  </option>
+                                  {vCategoriesData?.map((vcategories) => (
+                                    <option
+                                      key={vcategories.vcategory_id}
+                                      value={vcategories.vcategory_id}
+                                    >
+                                      {vcategories.name}
                                     </option>
-                                    {vCategoriesData?.map((vcategories) => (
-                                      <option
-                                        key={vcategories.vcategory_id}
-                                        value={vcategories.vcategory_id}
-                                      >
-                                        {vcategories.name}
-                                      </option>
-                                    ))}
-                                  </Form.Select>
-                                </Form.Group>
+                                  ))}
+                                </Form.Select>
+                              </Form.Group>
 
-                                <Form.Group className="mb-3 form-floating">
-                                  <Form.Control
-                                    className="input form-custom"
-                                    name="tax_date"
-                                    type="date"
-                                    id="tax_date"
-                                    placeholder="Waktu Pajak"
-                                    onChange={(e) =>
-                                      setVehicleData({
-                                        ...vehicleData,
-                                        tax_date: e.target.value,
-                                      })
-                                    }
-                                  />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="tax_date"
-                                  >
-                                    Waktu Pajak
-                                  </Form.Label>
-                                </Form.Group>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Jumlah Kilometer Tempuh</Form.Label>
+                                <Form.Control
+                                  className="input form-custom"
+                                  type="date"
+                                  onChange={(e) =>
+                                    setVehicleData({
+                                      ...vehicleData,
+                                      tax_date: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
 
-                                <Form.Group className="mb-3 form-floating">
-                                  <Form.Control
-                                    required
-                                    className="input form-custom"
-                                    name="valid_date"
-                                    type="date"
-                                    id="valid_date"
-                                    placeholder="Tanggal Berlaku"
-                                    onChange={(e) =>
-                                      setVehicleData({
-                                        ...vehicleData,
-                                        valid_date: e.target.value,
-                                      })
-                                    }
-                                  />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="valid_date"
-                                  >
-                                    Tanggal Berlaku
-                                  </Form.Label>
-                                </Form.Group>
-                              </Col>
-                            </Row>
-                          </Container>
-                        </Card.Body>
-                        <Card.Footer>
-                          <Container>
-                            <Button
-                              className="btn-post"
-                              onClick={postNewVehicle}
-                              type="submit"
-                            >
-                              Tambahkan
-                            </Button>
-                          </Container>
-                        </Card.Footer>
-                      </Card>
-                    </main>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Tanggal Berlaku</Form.Label>
+                                <Form.Control
+                                  required
+                                  className="input form-custom"
+                                  type="date"
+                                  onChange={(e) =>
+                                    setVehicleData({
+                                      ...vehicleData,
+                                      valid_date: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
+                            </Col>
+                          </Row>
+                        </Container>
+                      </Card.Body>
+                      <Card.Footer>
+                        <Container>
+                          <Button
+                            className="btn-post"
+                            onClick={postNewVehicle}
+                            type="submit"
+                          >
+                            Tambahkan
+                          </Button>
+                        </Container>
+                      </Card.Footer>
+                    </Card>
                   </Col>
                 </Row>
                 <Row>
@@ -324,7 +281,7 @@ export const CreateVehicle = () => {
                     <Footer />
                   </Col>
                 </Row>
-              </Container>
+              </main>
             </Col>
           </Row>
         </Container>

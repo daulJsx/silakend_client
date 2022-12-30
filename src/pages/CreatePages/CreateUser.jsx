@@ -193,158 +193,152 @@ export const CreateUser = () => {
               </Col>
             </Row>
             {/* NAVBAR */}
-            <Container fluid>
+            <main className="min-vh-100 px-2 mt-4">
               <Row>
                 <Col>
-                  <main className="min-vh-100">
-                    <Card>
-                      <Card.Title className="fs-4 color-primary p-4">
-                        Silahkan Tambahkan Pengguna Baru Disini
-                      </Card.Title>
-                      <Card.Body className="p-0">
-                        <Container>
-                          <Form>
-                            <Container>
-                              <Row>
-                                <Col>
-                                  <Form.Group className="mb-3 form-floating">
-                                    <Form.Control
-                                      required
-                                      className="input form-custom"
-                                      name="nip"
-                                      type="number"
-                                      placeholder="NIP"
-                                      onChange={(e) =>
-                                        setUserData({
-                                          ...userData,
-                                          nip: e.target.value,
-                                        })
-                                      }
-                                    />
-                                    <Form.Label>NIP</Form.Label>
-                                  </Form.Group>
-                                </Col>
-                                <Col>
-                                  <Form.Group className="mb-3 form-floating">
-                                    <Form.Control
-                                      required
-                                      className="input form-custom"
-                                      name="email"
-                                      type="email"
-                                      placeholder="Email"
-                                      onChange={(e) =>
-                                        setUserData({
-                                          ...userData,
-                                          email: e.target.value,
-                                        })
-                                      }
-                                    />
-                                    <Form.Label>Email</Form.Label>
-                                  </Form.Group>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col>
-                                  <Form.Group className="mb-3 form-floating">
-                                    <Form.Control
-                                      required
-                                      className="input form-custom"
-                                      name="name"
-                                      type="text"
-                                      placeholder="Nama"
-                                      onChange={(e) =>
-                                        setUserData({
-                                          ...userData,
-                                          name: e.target.value,
-                                        })
-                                      }
-                                    />
-                                    <Form.Label>Nama</Form.Label>
-                                  </Form.Group>
-                                </Col>
-                                <Col>
-                                  <Form.Group className="mb-3">
-                                    <Form.Select
-                                      required
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "17px",
-                                      }}
-                                      aria-label="Default select example"
-                                      onChange={(e) =>
-                                        setUserData({
-                                          ...userData,
-                                          unit_id: e.target.value,
-                                        })
-                                      }
-                                    >
-                                      <option>-- Pilih Unit Kerja --</option>
-                                      {jobsData?.map((jobunits) => (
+                  <Card>
+                    <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                      Silahkan Tambahkan Pengguna Baru Disini
+                    </Card.Title>
+                    <Card.Body className="p-0">
+                      <Container>
+                        <Form>
+                          <Container>
+                            <Row>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>NIP</Form.Label>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    type="number"
+                                    onChange={(e) =>
+                                      setUserData({
+                                        ...userData,
+                                        nip: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Email</Form.Label>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    type="email"
+                                    onChange={(e) =>
+                                      setUserData({
+                                        ...userData,
+                                        email: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Nama</Form.Label>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    type="text"
+                                    onChange={(e) =>
+                                      setUserData({
+                                        ...userData,
+                                        name: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Unit Kerja</Form.Label>
+                                  <Form.Select
+                                    required
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "17px",
+                                    }}
+                                    aria-label="Default select example"
+                                    onChange={(e) =>
+                                      setUserData({
+                                        ...userData,
+                                        unit_id: e.target.value,
+                                      })
+                                    }
+                                  >
+                                    <option>-- Pilih Unit Kerja --</option>
+                                    {jobsData?.map((jobunits) => (
+                                      <option
+                                        key={jobunits.unit_id}
+                                        value={jobunits.unit_id}
+                                      >
+                                        {jobunits.name}
+                                      </option>
+                                    ))}
+                                  </Form.Select>
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Telepon</Form.Label>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    type="number"
+                                    onChange={(e) =>
+                                      setUserData({
+                                        ...userData,
+                                        phone: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Peran</Form.Label>
+                                  <Form.Select
+                                    required
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "17px",
+                                    }}
+                                    aria-label="Default select example"
+                                    onChange={(e) =>
+                                      setUserData({
+                                        ...userData,
+                                        role_id: e.target.value,
+                                      })
+                                    }
+                                  >
+                                    <option>-- Pilih Peran --</option>
+                                    {rolesData?.map((roles) => {
+                                      return roles.level != 1 ? (
                                         <option
-                                          key={jobunits.unit_id}
-                                          value={jobunits.unit_id}
+                                          key={roles.role_id}
+                                          value={roles.role_id}
                                         >
-                                          {jobunits.name}
+                                          {roles.name} - Level {roles.level}
                                         </option>
-                                      ))}
-                                    </Form.Select>
-                                  </Form.Group>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col>
-                                  <Form.Group className="mb-3 form-floating">
-                                    <Form.Control
-                                      required
-                                      className="input form-custom"
-                                      name="phone"
-                                      type="number"
-                                      placeholder="Telepon"
-                                      onChange={(e) =>
-                                        setUserData({
-                                          ...userData,
-                                          phone: e.target.value,
-                                        })
-                                      }
-                                    />
-                                    <Form.Label>Telepon</Form.Label>
-                                  </Form.Group>
-                                </Col>
-                                <Col>
-                                  <Form.Group className="mb-3">
-                                    <Form.Select
-                                      required
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "17px",
-                                      }}
-                                      aria-label="Default select example"
-                                      onChange={(e) =>
-                                        setUserData({
-                                          ...userData,
-                                          role_id: e.target.value,
-                                        })
-                                      }
-                                    >
-                                      <option>-- Pilih Peran --</option>
-                                      {rolesData?.map((roles) => {
-                                        return roles.level != 1 ? (
-                                          <option
-                                            key={roles.role_id}
-                                            value={roles.role_id}
-                                          >
-                                            {roles.name} - Level {roles.level}
-                                          </option>
-                                        ) : null;
-                                      })}
-                                    </Form.Select>
-                                  </Form.Group>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col>
+                                      ) : null;
+                                    })}
+                                  </Form.Select>
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <Form.Group className="mb-3">
                                   <PasswordInputField
                                     isRequired={"required"}
                                     handlePasswordChange={handlePasswordChange}
@@ -352,36 +346,8 @@ export const CreateUser = () => {
                                     passwordValue={userData.password}
                                     passwordError={passwordError}
                                   />
-                                </Col>
-                                <Col>
-                                  <Form.Group className="mb-3 form-floating">
-                                    <textarea
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                      }}
-                                      className="textarea-custom form-control"
-                                      rows={3}
-                                      id="address"
-                                      name="address"
-                                      placeholder="Alamat"
-                                      onChange={(e) =>
-                                        setUserData({
-                                          ...userData,
-                                          address: e.target.value,
-                                        })
-                                      }
-                                    ></textarea>
-
-                                    <Form.Label for="address">
-                                      Alamat
-                                    </Form.Label>
-                                  </Form.Group>
-                                </Col>
-                              </Row>
-
-                              <Row>
-                                <Col md={6}>
+                                </Form.Group>
+                                <Form.Group className="mb-3">
                                   <ConfirmPasswordInputField
                                     isRequired={"required"}
                                     handlePasswordChange={handlePasswordChange}
@@ -391,25 +357,44 @@ export const CreateUser = () => {
                                     }
                                     confirmPasswordError={confirmPasswordError}
                                   />
-                                </Col>
-                              </Row>
-                            </Container>
-                          </Form>
-                        </Container>
-                      </Card.Body>
-                      <Card.Footer>
-                        <Container>
-                          <Button
-                            className="btn-post"
-                            onClick={postNewUser}
-                            type="submit"
-                          >
-                            Tambah
-                          </Button>
-                        </Container>
-                      </Card.Footer>
-                    </Card>
-                  </main>
+                                </Form.Group>
+                              </Col>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Alamat</Form.Label>
+                                  <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                    }}
+                                    onChange={(e) =>
+                                      setUserData({
+                                        ...userData,
+                                        address: e.target.value,
+                                      })
+                                    }
+                                  ></Form.Control>
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                          </Container>
+                        </Form>
+                      </Container>
+                    </Card.Body>
+                    <Card.Footer>
+                      <Container>
+                        <Button
+                          className="btn-post"
+                          onClick={postNewUser}
+                          type="submit"
+                        >
+                          Tambah
+                        </Button>
+                      </Container>
+                    </Card.Footer>
+                  </Card>
                 </Col>
               </Row>
               <Row>
@@ -417,7 +402,7 @@ export const CreateUser = () => {
                   <Footer />
                 </Col>
               </Row>
-            </Container>
+            </main>
           </Col>
         </Row>
       </Container>

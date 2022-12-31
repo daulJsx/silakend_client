@@ -106,7 +106,7 @@ export const UpdateOrder = () => {
         try {
           const response = await axios
             .put(
-              `http://silakend-server.xyz/api/vehicleusages/${usageId}`,
+              `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
               body,
               config
             )

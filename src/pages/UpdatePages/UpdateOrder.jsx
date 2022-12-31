@@ -36,7 +36,7 @@ import { useAuthUser } from "react-auth-kit";
 
 export const UpdateOrder = () => {
   const auth = useAuthUser();
-  const [isLoading, setIsLoading] = useState(true);
+
   const navigate = useNavigate();
 
   // Initialize newest usage id
@@ -56,7 +56,6 @@ export const UpdateOrder = () => {
           )
           .then((res) => {
             const orderById = res.data;
-            setIsLoading(false);
             setOrderToMap(orderById);
           });
 
@@ -162,18 +161,6 @@ export const UpdateOrder = () => {
     });
   };
 
-  if (isLoading) {
-    return (
-      <div className="loading-io">
-        <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-          <div className="ldio-c0sicszbk9i">
-            <div></div>
-            <div></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
   if (localStorage.getItem("token") && auth()) {
     if (localStorage.getItem("usage_id")) {
       return (

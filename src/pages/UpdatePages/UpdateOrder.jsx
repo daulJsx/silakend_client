@@ -39,37 +39,12 @@ export const UpdateOrder = () => {
   const navigate = useNavigate();
 
   // Initialize newest usage id
-  const usageId = localStorage.getItem("usage_id");
+  const [usageId, setUsageId] = useState(localStorage.getItem("usage_id"));
 
-  const [orderToMap, setOrderToMap] = useState(null);
-
-  useEffect(() => {
-    const usageId = localStorage.getItem("usage_id");
-    const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    };
-
-    async function fetchOrderById() {
-      try {
-        const response = await axios
-          .get(
-            `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
-            config
-          )
-          .then((res) => {
-            const orderById = res.data;
-            setOrderToMap(orderById);
-          });
-
-        return response;
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    return () => {
-      fetchOrderById();
-    };
-  }, []);
+  // Get the JSON object from local storage
+  const orderString = localStorage.getItem("orderToMap");
+  // Parse the JSON string into a JavaScript object
+  const orderToMap = JSON.parse(orderString);
 
   // Fetching requirement data
   const { data: vehiclesData } = useQuery("vehicles", FetchVehicles);
@@ -200,8 +175,8 @@ export const UpdateOrder = () => {
                         Silahkan Edit Data Peminjaman Kendaraan Dinas Disini
                       </Card.Title>
                       <Card.Body>
-                        {orderToMap != null
-                          ? orderToMap.map((orderToUpdate) => (
+                        {orderToMap != ""
+                          ? [orderToMap].map((orderToUpdate) => (
                               <>
                                 <Form.Group className="mb-3">
                                   <Form.Label>Kendaraan</Form.Label>

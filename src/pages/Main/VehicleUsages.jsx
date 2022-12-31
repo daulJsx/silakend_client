@@ -191,9 +191,7 @@ export const VehicleUsages = () => {
                                         to={"/order-peminjaman/edit-order"}
                                       >
                                         <Button
-                                          onClick={() =>
-                                            GetOrderId(orders.usage_id)
-                                          }
+                                          onClick={() => GetOrderId(orders)}
                                           className="btn btn-edit"
                                         >
                                           <AiFillEdit className="fs-6" />

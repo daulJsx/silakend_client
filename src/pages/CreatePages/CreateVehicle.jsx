@@ -27,7 +27,11 @@ import { FaArrowLeft } from "react-icons/fa";
 // React Notification
 import swal from "sweetalert";
 
+// For checking user have done in authentication
+import { useAuthUser } from "react-auth-kit";
+
 export const CreateVehicle = () => {
+  const auth = useAuthUser();
   const navigate = useNavigate();
 
   // Fetch all vehicle category
@@ -91,7 +95,7 @@ export const CreateVehicle = () => {
     }
   };
 
-  if (localStorage.getItem("token")) {
+  if (localStorage.getItem("token") && auth()) {
     return (
       <>
         <Container fluid>

@@ -29,7 +29,14 @@ import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import { FaInfo } from "react-icons/fa";
 
+// Pass parameters
+import { GetOrderId } from "../../functions/GetOrderId";
+
+// For checking user have done in authentication
+import { useAuthUser } from "react-auth-kit";
+
 export const VehicleUsages = () => {
+  const auth = useAuthUser();
   // Fetching orders data
   const {
     data: ordersData,
@@ -63,7 +70,7 @@ export const VehicleUsages = () => {
     }
   };
 
-  if (localStorage.getItem("token")) {
+  if (localStorage.getItem("token") && auth()) {
     if (isError) {
       return <div>{error.message}</div>;
     } else if (isLoading) {
@@ -133,10 +140,7 @@ export const VehicleUsages = () => {
                                 <th>PEMINJAM</th>
                                 <th>TANGGAL PINJAM</th>
                                 <th>ALASAN PEMINJAMAN</th>
-                                <th>KETERANGAN</th>
-
-                                {/* <th>PENGEMUDI</th> */}
-                                {/* <th>KENDARAAN</th> */}
+                                <th>STATUS</th>
                                 <th>AKSI</th>
                                 <th>RINCIAN</th>
                               </tr>
@@ -181,14 +185,20 @@ export const VehicleUsages = () => {
                                     </Badge>
                                   </td>
 
-                                  {/* <td>{orders.driver}</td> */}
-                                  {/* <td>{orders.vehicle}</td> */}
-
                                   <td>
                                     <div className="d-flex gap-1 justify-content-center">
-                                      <Button className="btn btn-edit">
-                                        <AiFillEdit className="fs-6" />
-                                      </Button>
+                                      <NavLink
+                                        to={"/order-peminjaman/edit-order"}
+                                      >
+                                        <Button
+                                          onClick={() =>
+                                            GetOrderId(orders.usage_id)
+                                          }
+                                          className="btn btn-edit"
+                                        >
+                                          <AiFillEdit className="fs-6" />
+                                        </Button>
+                                      </NavLink>
 
                                       <Button className="btn-danger btn-delete">
                                         <FaTrashAlt className="fs-6" />

@@ -34,6 +34,9 @@ import { FaArrowLeft } from "react-icons/fa";
 // custom styles
 import "../CustomStyles/formCustom.css";
 
+// For checking user have done in authentication
+import { useAuthUser } from "react-auth-kit";
+
 export const CreateUser = () => {
   // Navigating
   const navigate = useNavigate();
@@ -163,7 +166,9 @@ export const CreateUser = () => {
       }
     }
   };
-  if (localStorage.getItem("token")) {
+
+  const auth = useAuthUser();
+  if (localStorage.getItem("token") && auth()) {
     return (
       <Container fluid>
         <Row>

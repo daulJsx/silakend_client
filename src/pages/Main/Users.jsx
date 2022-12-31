@@ -35,7 +35,11 @@ import { DeleteUser } from "../../functions/Delete/DeleteUser";
 // Custom Styles
 import "../CustomStyles/users.css";
 
+// For checking user have done in authentication
+import { useAuthUser } from "react-auth-kit";
+
 export const Users = () => {
+  const auth = useAuthUser();
   // Fetching users data
   const {
     data: usersData,
@@ -70,7 +74,7 @@ export const Users = () => {
     }
   };
 
-  if (localStorage.getItem("token")) {
+  if (localStorage.getItem("token") && auth()) {
     if (isError) {
       return <div>{error.message}</div>;
     } else if (isLoading) {

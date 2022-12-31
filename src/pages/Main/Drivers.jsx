@@ -9,6 +9,9 @@ import FetchUsers from "../../consAPI/FetchUsers";
 // Navigating
 import { Navigate } from "react-router-dom";
 
+// For checking user have done in authentication
+import { useAuthUser } from "react-auth-kit";
+
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
@@ -23,6 +26,7 @@ import { Footer } from "../../components/footer/Footer";
 import { FaUserTie } from "react-icons/fa";
 
 export const Drivers = () => {
+  const auth = useAuthUser();
   // Fetching users as driver
   const {
     data: usersData,
@@ -31,7 +35,7 @@ export const Drivers = () => {
     isError,
   } = useQuery(["users", 10], FetchUsers);
 
-  if (localStorage.getItem("token")) {
+  if (localStorage.getItem("token") && auth()) {
     if (isError) {
       return <div>{error.message}</div>;
     } else if (isLoading) {

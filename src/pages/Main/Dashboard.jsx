@@ -23,11 +23,15 @@ import { FaUserClock } from "react-icons/fa";
 // Navigating
 import { Navigate } from "react-router-dom";
 
+// For checking user have done in authentication
+import { useAuthUser } from "react-auth-kit";
+
 // Custom Style
 import "../CustomStyles/dash.css";
 
 export const Dashboard = () => {
-  if (localStorage.getItem("token")) {
+  const auth = useAuthUser();
+  if (localStorage.getItem("token") && auth()) {
     return (
       <>
         <Container fluid>

@@ -32,7 +32,12 @@ import { FaInfo } from "react-icons/fa";
 import { GetVehicleById } from "../../functions/GetVehicleById";
 import { DeleteVehicle } from "../../functions/Delete/DeleteVehicle";
 
+// For checking user have done in authentication
+import { useAuthUser } from "react-auth-kit";
+
 export const Vehicles = () => {
+  const auth = useAuthUser();
+
   // Fetching vehicles data
   const {
     data: vehiclesData,
@@ -66,7 +71,7 @@ export const Vehicles = () => {
     }
   };
 
-  if (localStorage.getItem("token")) {
+  if (localStorage.getItem("token") && auth()) {
     if (isError) {
       return <div>{error.message}</div>;
     } else if (isLoading) {

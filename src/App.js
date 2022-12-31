@@ -22,6 +22,7 @@ import { UpdateUser } from "./pages/UpdatePages/UpdateUser";
 
 import { VehicleUsages } from "./pages/Main/VehicleUsages";
 import { CreateOrder } from "./pages/CreatePages/CreateOrder";
+import { UpdateOrder } from "./pages/UpdatePages/UpdateOrder";
 
 import { Vehicles } from "./pages/Main/Vehicles";
 import { CreateVehicle } from "./pages/CreatePages/CreateVehicle";
@@ -68,6 +69,10 @@ function App() {
             <Route
               path="/order-peminjaman/buat-order"
               element={<CreateOrder />}
+            />
+            <Route
+              path="/order-peminjaman/edit-order"
+              element={<UpdateOrder />}
             />
             {/*----- END ORDER PAGES---- */}
 

@@ -36,11 +36,13 @@ import { useAuthUser } from "react-auth-kit";
 
 export const UpdateOrder = () => {
   const auth = useAuthUser();
-
   const navigate = useNavigate();
 
   // Initialize newest usage id
   const usageId = localStorage.getItem("usage_id");
+
+  const [orderToMap, setOrderToMap] = useState(null);
+
   useEffect(() => {
     const usageId = localStorage.getItem("usage_id");
     const config = {
@@ -68,8 +70,6 @@ export const UpdateOrder = () => {
       fetchOrderById();
     };
   }, []);
-
-  const [orderToMap, setOrderToMap] = useState(null);
 
   // Fetching requirement data
   const { data: vehiclesData } = useQuery("vehicles", FetchVehicles);

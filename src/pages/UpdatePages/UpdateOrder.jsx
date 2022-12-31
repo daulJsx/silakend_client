@@ -39,36 +39,37 @@ export const UpdateOrder = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Initialize newest usage id
+  const usageId = localStorage.getItem("usage_id");
   useEffect(() => {
-    const orderId = localStorage.getItem("usage_id");
+    const usageId = localStorage.getItem("usage_id");
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
 
-    if (orderId) {
-      async function fetchOrderById() {
-        try {
-          const response = await axios
-            .get(
-              `https://silakend-server.xyz/api/vehicleusages/${orderId}`,
-              config
-            )
-            .then((res) => {
-              const orderById = res.data;
-              setIsLoading(false);
-              setOrderToMap(orderById);
-            });
+    async function fetchOrderById() {
+      try {
+        const response = await axios
+          .get(
+            `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
+            config
+          )
+          .then((res) => {
+            const orderById = res.data;
+            setIsLoading(false);
+            setOrderToMap(orderById);
+          });
 
-          return response;
-        } catch (error) {
-          console.log(error);
-        }
+        return response;
+      } catch (error) {
+        console.log(error);
       }
-      return () => {
-        fetchOrderById();
-      };
     }
+    return () => {
+      fetchOrderById();
+    };
   }, []);
+
   const [orderToMap, setOrderToMap] = useState(null);
 
   // Fetching requirement data
@@ -116,12 +117,9 @@ export const UpdateOrder = () => {
   };
 
   const handleUpdateOrder = async () => {
-    console.log(body);
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
-
-    const usageId = localStorage.getItem("usage_id");
 
     swal({
       title: "Yakin?",
@@ -164,193 +162,492 @@ export const UpdateOrder = () => {
     });
   };
 
+  if (isLoading) {
+    return (
+      <div className="loading-io">
+        <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+          <div className="ldio-c0sicszbk9i">
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   if (localStorage.getItem("token") && auth()) {
     if (localStorage.getItem("usage_id")) {
-      if (isLoading) {
-        return (
-          <div className="loading-io">
-            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-              <div className="ldio-c0sicszbk9i">
-                <div></div>
-                <div></div>
-              </div>
-            </div>
-          </div>
-        );
-      } else {
-        return (
-          <Container fluid>
-            <Row>
-              {/* SIDEBAR */}
-              <Col
-                xs="auto"
-                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <Aside />
-              </Col>
-              {/* SIDEBAR */}
+      return (
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col
+              xs="auto"
+              className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+            >
+              <Aside />
+            </Col>
+            {/* SIDEBAR */}
 
-              <Col>
-                {/* NAVBAR */}
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<FaArrowLeft />}
+                      title={"Edit Data Order"}
+                      parentLink={"/order-peminjaman"}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+              <main className="min-vh-100 px-2 mt-4">
                 <Row>
                   <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<FaArrowLeft />}
-                        title={"Edit Data Order"}
-                        parentLink={"/order-peminjaman"}
-                      />
-                    ))}
-                  </Col>
-                </Row>
-                {/* NAVBAR */}
-                <main className="min-vh-100 px-2 mt-4">
-                  <Row>
-                    <Col>
-                      <Card>
-                        <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                          Silahkan Edit Data Peminjaman Kendaraan Dinas Disini
-                        </Card.Title>
-                        <Card.Body>
-                          {orderToMap != null
-                            ? orderToMap.map((orderToUpdate) => (
-                                <>
-                                  <Form.Group className="mb-3">
-                                    <Form.Label>Kendaraan</Form.Label>
-                                    <Form.Select
-                                      required
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "17px",
-                                      }}
-                                      aria-label="Default select example"
-                                      onChange={(e) =>
-                                        setVehicleId(e.target.value)
-                                      }
-                                    >
-                                      <option value={orderToUpdate.vehicle_id}>
-                                        {orderToUpdate.vehicle.name}
-                                      </option>
-                                      {vehiclesData?.map((vehicles) => (
-                                        <option
-                                          key={vehicles.vehicle_id}
-                                          value={vehicles.vehicle_id}
-                                        >
-                                          {vehicles.name}
-                                        </option>
-                                      ))}
-                                    </Form.Select>
-                                  </Form.Group>
-
-                                  <Form.Group className="mb-3">
-                                    <Form.Label>Pengemudi</Form.Label>
-                                    <Form.Select
-                                      required
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "17px",
-                                      }}
-                                      aria-label="Default select example"
-                                      onChange={(e) =>
-                                        setDriverId(e.target.value)
-                                      }
-                                    >
-                                      <option value={orderToUpdate.driver_id}>
-                                        {orderToUpdate.driver.name}
-                                      </option>
-                                      {usersData?.map((users) =>
-                                        users.role.map((userAsDriver) => {
-                                          return userAsDriver.name ==
-                                            "Driver" ? (
-                                            <option
-                                              value={users.user_id}
-                                              key={users.user_id}
-                                            >
-                                              {users.name}
-                                            </option>
-                                          ) : null;
-                                        })
-                                      )}
-                                    </Form.Select>
-                                  </Form.Group>
-
-                                  <Form.Group className="mb-3">
-                                    <Form.Label>Peminjam</Form.Label>
-                                    <Form.Select
-                                      required
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "17px",
-                                      }}
-                                      aria-label="Default select example"
-                                      onChange={(e) =>
-                                        setUserId(e.target.value)
-                                      }
-                                    >
-                                      <option value={orderToUpdate.user_id}>
-                                        {orderToUpdate.user.name}
-                                      </option>
-                                      {usersData?.map((users) =>
-                                        users.role.map((userAsSuper) => {
-                                          return userAsSuper.level != 1 ? (
-                                            <option
-                                              value={users.user_id}
-                                              key={users.user_id}
-                                            >
-                                              {users.name}
-                                            </option>
-                                          ) : null;
-                                        })
-                                      )}
-                                    </Form.Select>
-                                  </Form.Group>
-
-                                  <Form.Group className="mb-3">
-                                    <Form.Label>Kategori Peminjaman</Form.Label>
-                                    <Form.Select
-                                      required
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "17px",
-                                      }}
-                                      aria-label="Default select example"
-                                      onChange={(e) =>
-                                        setUcategoryId(e.target.value)
-                                      }
-                                    >
-                                      <option
-                                        value={orderToUpdate.ucategory_id}
-                                      >
-                                        {orderToUpdate.category.name}
-                                      </option>
-                                      {usageCatData?.map((usageCat) => (
-                                        <option
-                                          value={usageCat.ucategory_id}
-                                          key={usageCat.ucategory_id}
-                                        >
-                                          {usageCat.name}
-                                        </option>
-                                      ))}
-                                    </Form.Select>
-                                  </Form.Group>
-
-                                  <Form.Group
-                                    className="mb-3"
-                                    controlId="exampleForm.ControlTextarea1"
+                    <Card>
+                      <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                        Silahkan Edit Data Peminjaman Kendaraan Dinas Disini
+                      </Card.Title>
+                      <Card.Body>
+                        {orderToMap != null
+                          ? orderToMap.map((orderToUpdate) => (
+                              <>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Kendaraan</Form.Label>
+                                  <Form.Select
+                                    required
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "17px",
+                                    }}
+                                    aria-label="Default select example"
+                                    onChange={(e) =>
+                                      setVehicleId(e.target.value)
+                                    }
                                   >
-                                    <Form.Label>
-                                      Deskripsi Peminjaman
-                                    </Form.Label>
+                                    <option value={orderToUpdate.vehicle_id}>
+                                      {orderToUpdate.vehicle.name}
+                                    </option>
+                                    {vehiclesData?.map((vehicles) => (
+                                      <option
+                                        key={vehicles.vehicle_id}
+                                        value={vehicles.vehicle_id}
+                                      >
+                                        {vehicles.name}
+                                      </option>
+                                    ))}
+                                  </Form.Select>
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Pengemudi</Form.Label>
+                                  <Form.Select
+                                    required
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "17px",
+                                    }}
+                                    aria-label="Default select example"
+                                    onChange={(e) =>
+                                      setDriverId(e.target.value)
+                                    }
+                                  >
+                                    <option value={orderToUpdate.driver_id}>
+                                      {orderToUpdate.driver.name}
+                                    </option>
+                                    {usersData?.map((users) =>
+                                      users.role.map((userAsDriver) => {
+                                        return userAsDriver.name == "Driver" ? (
+                                          <option
+                                            value={users.user_id}
+                                            key={users.user_id}
+                                          >
+                                            {users.name}
+                                          </option>
+                                        ) : null;
+                                      })
+                                    )}
+                                  </Form.Select>
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Peminjam</Form.Label>
+                                  <Form.Select
+                                    required
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "17px",
+                                    }}
+                                    aria-label="Default select example"
+                                    onChange={(e) => setUserId(e.target.value)}
+                                  >
+                                    <option value={orderToUpdate.user_id}>
+                                      {orderToUpdate.user.name}
+                                    </option>
+                                    {usersData?.map((users) =>
+                                      users.role.map((userAsSuper) => {
+                                        return userAsSuper.level != 1 ? (
+                                          <option
+                                            value={users.user_id}
+                                            key={users.user_id}
+                                          >
+                                            {users.name}
+                                          </option>
+                                        ) : null;
+                                      })
+                                    )}
+                                  </Form.Select>
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Kategori Peminjaman</Form.Label>
+                                  <Form.Select
+                                    required
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "17px",
+                                    }}
+                                    aria-label="Default select example"
+                                    onChange={(e) =>
+                                      setUcategoryId(e.target.value)
+                                    }
+                                  >
+                                    <option value={orderToUpdate.ucategory_id}>
+                                      {orderToUpdate.category.name}
+                                    </option>
+                                    {usageCatData?.map((usageCat) => (
+                                      <option
+                                        value={usageCat.ucategory_id}
+                                        key={usageCat.ucategory_id}
+                                      >
+                                        {usageCat.name}
+                                      </option>
+                                    ))}
+                                  </Form.Select>
+                                </Form.Group>
+
+                                <Form.Group
+                                  className="mb-3"
+                                  controlId="exampleForm.ControlTextarea1"
+                                >
+                                  <Form.Label>Deskripsi Peminjaman</Form.Label>
+                                  <Form.Control
+                                    placeholder={
+                                      orderToUpdate.usage_description
+                                    }
+                                    as="textarea"
+                                    rows={3}
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                    }}
+                                    onChange={(e) =>
+                                      setUsageDescription(e.target.value)
+                                    }
+                                  />
+                                </Form.Group>
+
+                                <Form.Group>
+                                  <Form.Label>Jumlah Personil</Form.Label>
+                                  <InputGroup className="mb-3">
                                     <Form.Control
+                                      onChange={(e) =>
+                                        setPersonelCount(e.target.value)
+                                      }
+                                      placeholder={orderToUpdate.personel_count}
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "15px",
+                                      }}
+                                      type="number"
+                                      aria-describedby="basic-addon2"
+                                    />
+                                    <InputGroup.Text
+                                      style={{
+                                        border: "none",
+                                      }}
+                                      id="basic-addon2"
+                                    >
+                                      Orang
+                                    </InputGroup.Text>
+                                  </InputGroup>
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Destinasi</Form.Label>
+                                  <Form.Control
+                                    onChange={(e) =>
+                                      setDestination(e.target.value)
+                                    }
+                                    placeholder={orderToUpdate.destination}
+                                    required
+                                    className="input form-custom"
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "15px",
+                                    }}
+                                    type="text"
+                                    //    onChange={(e) =>
+                                    //      setOrderData({
+                                    //        ...orderData,
+                                    //        destination: e.target.value,
+                                    //      })
+                                    //    }
+                                  />
+                                </Form.Group>
+
+                                <Form.Group className="py-1">
+                                  <Form.Label>
+                                    Tanggal pinjam saat ini :{" "}
+                                    <span className="fw-bold text-dark">
+                                      {orderToUpdate.start_date} s/d{" "}
+                                      {orderToUpdate.end_date}
+                                    </span>
+                                  </Form.Label>
+                                  <InputGroup className="mb-3">
+                                    <Form.Control
+                                      required
+                                      className="input form-custom"
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "15px",
+                                      }}
+                                      type="date"
+                                      onChange={(e) =>
+                                        setStarDate(e.target.value)
+                                      }
+                                    />
+                                    <InputGroup.Text
+                                      style={{
+                                        border: "none",
+                                      }}
+                                      id="basic-addon2"
+                                    >
+                                      s/d
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                      required
+                                      className="input form-custom"
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "15px",
+                                      }}
+                                      type="date"
+                                      onChange={(e) =>
+                                        setEndDate(e.target.value)
+                                      }
+                                    />
+                                  </InputGroup>
+                                </Form.Group>
+
+                                <Form.Group className="py-1">
+                                  <Form.Label>
+                                    Waktu Berangkat saat ini :{" "}
+                                    <span className="fw-bold text-dark">
+                                      {orderToUpdate.depart_date} Pukul{" "}
+                                      {orderToUpdate.depart_time}
+                                    </span>
+                                  </Form.Label>
+                                  <InputGroup className="mb-3">
+                                    <InputGroup.Text
+                                      style={{
+                                        border: "none",
+                                      }}
+                                      id="basic-addon2"
+                                    >
+                                      Tanggal
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                      required
+                                      className="input form-custom"
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "15px",
+                                      }}
+                                      type="date"
+                                      onChange={(e) =>
+                                        setDepartDate(e.target.value)
+                                      }
+                                    />
+                                    <InputGroup.Text
+                                      style={{
+                                        border: "none",
+                                      }}
+                                      id="basic-addon2"
+                                    >
+                                      Pukul
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                      required
+                                      className="input form-custom"
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "15px",
+                                      }}
+                                      type="time"
+                                      onChange={(e) =>
+                                        setDepartTime(e.target.value)
+                                      }
+                                    />
+                                  </InputGroup>
+                                </Form.Group>
+
+                                <Form.Group className="py-1">
+                                  <Form.Label>
+                                    Waktu tiba saat ini :{" "}
+                                    <span className="fw-bold text-dark">
+                                      {orderToUpdate.arrive_date} Pukul{" "}
+                                      {orderToUpdate.arrive_time}
+                                    </span>
+                                  </Form.Label>
+                                  <InputGroup className="mb-3">
+                                    <InputGroup.Text
+                                      style={{
+                                        border: "none",
+                                      }}
+                                      id="basic-addon2"
+                                    >
+                                      Tanggal
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                      required
+                                      className="input form-custom"
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "15px",
+                                      }}
+                                      type="date"
+                                      onChange={(e) =>
+                                        setArriveDate(e.target.value)
+                                      }
+                                    />
+                                    <InputGroup.Text
+                                      style={{
+                                        border: "none",
+                                      }}
+                                      id="basic-addon2"
+                                    >
+                                      Pukul
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                      required
+                                      className="input form-custom"
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "15px",
+                                      }}
+                                      type="time"
+                                      onChange={(e) =>
+                                        setArriveTime(e.target.value)
+                                      }
+                                    />
+                                  </InputGroup>
+                                </Form.Group>
+
+                                <Form.Group>
+                                  <Form.Label>Jarak</Form.Label>
+                                  <InputGroup className="mb-3">
+                                    <InputGroup.Text
+                                      style={{
+                                        border: "none",
+                                      }}
+                                      id="basic-addon2"
+                                    >
+                                      Jarak Pergi
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                      required
                                       placeholder={
-                                        orderToUpdate.usage_description
+                                        orderToUpdate.distance_count_out
+                                      }
+                                      className="input form-custom"
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "15px",
+                                      }}
+                                      type="number"
+                                      onChange={(e) => setDco(e.target.value)}
+                                    />
+                                    <InputGroup.Text
+                                      style={{
+                                        border: "none",
+                                      }}
+                                      id="basic-addon2"
+                                    >
+                                      Jarak Pulang
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                      required
+                                      placeholder={
+                                        orderToUpdate.distance_count_in
+                                      }
+                                      className="input form-custom"
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "15px",
+                                      }}
+                                      type="number"
+                                      onChange={(e) => setDci(e.target.value)}
+                                    />
+                                  </InputGroup>
+                                </Form.Group>
+
+                                <Form.Group>
+                                  <Form.Label>Status</Form.Label>
+                                  <InputGroup className="mb-3">
+                                    <Form.Select
+                                      required
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "17px",
+                                      }}
+                                      aria-label="Default select example"
+                                      onChange={(e) =>
+                                        setStatus(e.target.value)
+                                      }
+                                    >
+                                      <option value={orderToUpdate.status}>
+                                        {orderToUpdate.status}
+                                      </option>
+                                      <option>APPROVED</option>
+                                      <option>READY</option>
+                                      <option>PROGRESS</option>
+                                      <option>DONE</option>
+                                      <option>REJECTED</option>
+                                      <option>WAITING</option>
+                                      <option>CANCEL</option>
+                                    </Form.Select>
+                                    <InputGroup.Text
+                                      style={{
+                                        border: "none",
+                                      }}
+                                      id="basic-addon2"
+                                    >
+                                      Keterangan
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                      required
+                                      placeholder={
+                                        orderToUpdate.status_description
                                       }
                                       as="textarea"
                                       rows={3}
@@ -359,348 +656,37 @@ export const UpdateOrder = () => {
                                         border: "none",
                                       }}
                                       onChange={(e) =>
-                                        setUsageDescription(e.target.value)
+                                        setStatusDesc(e.target.value)
                                       }
                                     />
-                                  </Form.Group>
-
-                                  <Form.Group>
-                                    <Form.Label>Jumlah Personil</Form.Label>
-                                    <InputGroup className="mb-3">
-                                      <Form.Control
-                                        onChange={(e) =>
-                                          setPersonelCount(e.target.value)
-                                        }
-                                        placeholder={
-                                          orderToUpdate.personel_count
-                                        }
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="number"
-                                        aria-describedby="basic-addon2"
-                                      />
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Orang
-                                      </InputGroup.Text>
-                                    </InputGroup>
-                                  </Form.Group>
-
-                                  <Form.Group className="mb-3">
-                                    <Form.Label>Destinasi</Form.Label>
-                                    <Form.Control
-                                      onChange={(e) =>
-                                        setDestination(e.target.value)
-                                      }
-                                      placeholder={orderToUpdate.destination}
-                                      required
-                                      className="input form-custom"
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "15px",
-                                      }}
-                                      type="text"
-                                      //    onChange={(e) =>
-                                      //      setOrderData({
-                                      //        ...orderData,
-                                      //        destination: e.target.value,
-                                      //      })
-                                      //    }
-                                    />
-                                  </Form.Group>
-
-                                  <Form.Group className="py-1">
-                                    <Form.Label>
-                                      Tanggal pinjam saat ini :{" "}
-                                      <span className="fw-bold text-dark">
-                                        {orderToUpdate.start_date} s/d{" "}
-                                        {orderToUpdate.end_date}
-                                      </span>
-                                    </Form.Label>
-                                    <InputGroup className="mb-3">
-                                      <Form.Control
-                                        required
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="date"
-                                        onChange={(e) =>
-                                          setStarDate(e.target.value)
-                                        }
-                                      />
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        s/d
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="date"
-                                        onChange={(e) =>
-                                          setEndDate(e.target.value)
-                                        }
-                                      />
-                                    </InputGroup>
-                                  </Form.Group>
-
-                                  <Form.Group className="py-1">
-                                    <Form.Label>
-                                      Waktu Berangkat saat ini :{" "}
-                                      <span className="fw-bold text-dark">
-                                        {orderToUpdate.depart_date} Pukul{" "}
-                                        {orderToUpdate.depart_time}
-                                      </span>
-                                    </Form.Label>
-                                    <InputGroup className="mb-3">
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Tanggal
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="date"
-                                        onChange={(e) =>
-                                          setDepartDate(e.target.value)
-                                        }
-                                      />
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Pukul
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="time"
-                                        onChange={(e) =>
-                                          setDepartTime(e.target.value)
-                                        }
-                                      />
-                                    </InputGroup>
-                                  </Form.Group>
-
-                                  <Form.Group className="py-1">
-                                    <Form.Label>
-                                      Waktu tiba saat ini :{" "}
-                                      <span className="fw-bold text-dark">
-                                        {orderToUpdate.arrive_date} Pukul{" "}
-                                        {orderToUpdate.arrive_time}
-                                      </span>
-                                    </Form.Label>
-                                    <InputGroup className="mb-3">
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Tanggal
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="date"
-                                        onChange={(e) =>
-                                          setArriveDate(e.target.value)
-                                        }
-                                      />
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Pukul
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="time"
-                                        onChange={(e) =>
-                                          setArriveTime(e.target.value)
-                                        }
-                                      />
-                                    </InputGroup>
-                                  </Form.Group>
-
-                                  <Form.Group>
-                                    <Form.Label>Jarak</Form.Label>
-                                    <InputGroup className="mb-3">
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Jarak Pergi
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        placeholder={
-                                          orderToUpdate.distance_count_out
-                                        }
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="number"
-                                        onChange={(e) => setDco(e.target.value)}
-                                      />
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Jarak Pulang
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        placeholder={
-                                          orderToUpdate.distance_count_in
-                                        }
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="number"
-                                        onChange={(e) => setDci(e.target.value)}
-                                      />
-                                    </InputGroup>
-                                  </Form.Group>
-
-                                  <Form.Group>
-                                    <Form.Label>Status</Form.Label>
-                                    <InputGroup className="mb-3">
-                                      <Form.Select
-                                        required
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "17px",
-                                        }}
-                                        aria-label="Default select example"
-                                        onChange={(e) =>
-                                          setStatus(e.target.value)
-                                        }
-                                      >
-                                        <option value={orderToUpdate.status}>
-                                          {orderToUpdate.status}
-                                        </option>
-                                        <option>APPROVED</option>
-                                        <option>READY</option>
-                                        <option>PROGRESS</option>
-                                        <option>DONE</option>
-                                        <option>REJECTED</option>
-                                        <option>WAITING</option>
-                                        <option>CANCEL</option>
-                                      </Form.Select>
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Keterangan
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        placeholder={
-                                          orderToUpdate.status_description
-                                        }
-                                        as="textarea"
-                                        rows={3}
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                        }}
-                                        onChange={(e) =>
-                                          setStatusDesc(e.target.value)
-                                        }
-                                      />
-                                    </InputGroup>
-                                  </Form.Group>
-                                </>
-                              ))
-                            : null}
-                        </Card.Body>
-                        <Card.Footer>
-                          <Container>
-                            <Button
-                              className="btn-post"
-                              onClick={handleUpdateOrder}
-                              type="submit"
-                            >
-                              Simpan
-                            </Button>
-                          </Container>
-                        </Card.Footer>
-                      </Card>
-                    </Col>
-                  </Row>
-                </main>
-                <Row>
-                  <Col>
-                    <Footer />
+                                  </InputGroup>
+                                </Form.Group>
+                              </>
+                            ))
+                          : null}
+                      </Card.Body>
+                      <Card.Footer>
+                        <Button
+                          className="btn-post"
+                          onClick={handleUpdateOrder}
+                          type="submit"
+                        >
+                          Simpan
+                        </Button>
+                      </Card.Footer>
+                    </Card>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
-          </Container>
-        );
-      }
+              </main>
+              <Row>
+                <Col>
+                  <Footer />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      );
     } else {
       return <Navigate to="/order-peminjaman" />;
     }

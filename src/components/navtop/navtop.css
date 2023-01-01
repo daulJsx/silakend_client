@@ -47,7 +47,9 @@ a {
   box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
   color: var(--bg-primary);
   border: none;
-  cursor: pointer;
+  pointer-events: all;
+  position: relative;
+  z-index: 1;
 }
 #dropdown-autoclose-true {
   font-weight: 600;

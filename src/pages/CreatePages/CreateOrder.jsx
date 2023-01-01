@@ -620,15 +620,13 @@ export const CreateOrder = () => {
                       </Form.Group>
                     </Card.Body>
                     <Card.Footer>
-                      <Container>
-                        <Button
-                          className="btn-post"
-                          onClick={postNewOrder}
-                          type="submit"
-                        >
-                          Tambah
-                        </Button>
-                      </Container>
+                      <Button
+                        className="btn-post"
+                        onClick={postNewOrder}
+                        type="submit"
+                      >
+                        Tambah
+                      </Button>
                     </Card.Footer>
                   </Card>
                 </Col>

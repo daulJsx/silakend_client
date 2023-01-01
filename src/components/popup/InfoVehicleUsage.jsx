@@ -106,7 +106,7 @@ function InfoVehicleUsage(props) {
                         >
                           <div className="ms-2 me-auto">
                             <div className="fw-bold">WAKTU MEMINJAM</div>
-                            {order.start_date}
+                            {order.start_date} S/D {order.end_date}
                           </div>
                         </ListGroup.Item>
                       </Col>
@@ -116,24 +116,62 @@ function InfoVehicleUsage(props) {
                           className="d-flex justify-content-between align-items-start rounded"
                         >
                           <div className="ms-2 me-auto">
-                            <div className="fw-bold">
-                              WAKTU SELESAI MEMINJAM
-                            </div>
-                            {order.end_date}
+                            <div className="fw-bold">WAKTU KEBERANGKATAN</div>
+                            {order.depart_date} PUKUL {order.depart_time}
                           </div>
                         </ListGroup.Item>
                       </Col>
                     </Row>
 
-                    <ListGroup.Item
-                      as="li"
-                      className="d-flex justify-content-between align-items-start rounded"
-                    >
-                      <div className="ms-2 me-auto">
-                        <div className="fw-bold">KETERANGAN</div>
-                        {order.status_description}
-                      </div>
-                    </ListGroup.Item>
+                    <Row>
+                      <Col>
+                        <ListGroup.Item
+                          as="li"
+                          className="d-flex justify-content-between align-items-start rounded"
+                        >
+                          <div className="ms-2 me-auto">
+                            <div className="fw-bold">WAKTU TIBA</div>
+                            {order.arrive_date} Pukul {order.arrive_time}
+                          </div>
+                        </ListGroup.Item>
+                      </Col>
+                      <Col>
+                        <ListGroup.Item
+                          as="li"
+                          className="d-flex justify-content-between align-items-start rounded"
+                        >
+                          <div className="ms-2 me-auto">
+                            <div className="fw-bold">KETERANGAN</div>
+                            {order.status_description}
+                          </div>
+                        </ListGroup.Item>
+                      </Col>
+                    </Row>
+
+                    <Row>
+                      <Col>
+                        <ListGroup.Item
+                          as="li"
+                          className="d-flex justify-content-between align-items-start rounded"
+                        >
+                          <div className="ms-2 me-auto">
+                            <div className="fw-bold">JARAK TEMPUH PERGI</div>
+                            {order.distance_count_out} KM
+                          </div>
+                        </ListGroup.Item>
+                      </Col>
+                      <Col>
+                        <ListGroup.Item
+                          as="li"
+                          className="d-flex justify-content-between align-items-start rounded"
+                        >
+                          <div className="ms-2 me-auto">
+                            <div className="fw-bold">JARAK TEMPUH PULANG</div>
+                            {order.distance_count_in} KM
+                          </div>
+                        </ListGroup.Item>
+                      </Col>
+                    </Row>
                   </>
                 );
               })

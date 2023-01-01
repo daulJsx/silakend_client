@@ -30,10 +30,12 @@ import { UpdateVehicle } from "./pages/UpdatePages/UpdateVehicle";
 
 import { Drivers } from "./pages/Main/Drivers";
 
+import { VehicleMaintenances } from "./pages/Main/VehicleMaintenances";
+import { CreateVM } from "./pages/CreatePages/CreateVM";
+
 import { TasksIn } from "./pages/tasks/TasksIn";
 import { VehiclesKM } from "./pages/vehiclesKM/VehiclesKM";
 import { Validations } from "./pages/validations/Validations";
-import { VehiclesRep } from "./pages/vehiclesRep/VehiclesRep";
 import { Reports } from "./pages/reports/Reports";
 import { Login } from "./pages/auth/Login";
 
@@ -76,6 +78,41 @@ function App() {
             />
             {/*----- END ORDER PAGES---- */}
 
+            {/*----- START VM PAGES---- */}
+            <Route
+              path="/perbaikan-kendaraan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <VehicleMaintenances />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/perbaikan-kendaraan/tambah-perbaikan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <CreateVM />
+                </RequireAuth>
+              }
+            />
+            {/*----- END VM PAGES---- */}
+
+            {/*----- START DRIVER PAGES---- */}
+            <Route path="/data-pengemudi" element={<Drivers />} />
+            {/*----- END DRIVER PAGES---- */}
+
+            {/*----- START VEHICLE PAGES---- */}
+            <Route path="/data-kendaraan" element={<Vehicles />} />
+            <Route
+              path="/data-kendaraan/tambah-kendaraan"
+              element={<CreateVehicle />}
+            />
+            <Route
+              path="/data-kendaraan/edit-kendaraan"
+              element={<UpdateVehicle />}
+            />
+            {/*----- END VEHICLE PAGES---- */}
+
             <Route
               path="/tugas-masuk"
               element={
@@ -100,31 +137,6 @@ function App() {
                 </RequireAuth>
               }
             />
-            <Route
-              path="/data-perbaikan-kendaraan"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <VehiclesRep />
-                </RequireAuth>
-              }
-            />
-
-            {/*----- START DRIVER PAGES---- */}
-            <Route path="/data-pengemudi" element={<Drivers />} />
-            {/*----- END DRIVER PAGES---- */}
-
-            {/*----- START VEHICLE PAGES---- */}
-            <Route path="/data-kendaraan" element={<Vehicles />} />
-            <Route
-              path="/data-kendaraan/tambah-kendaraan"
-              element={<CreateVehicle />}
-            />
-            <Route
-              path="/data-kendaraan/edit-kendaraan"
-              element={<UpdateVehicle />}
-            />
-            {/*----- END VEHICLE PAGES---- */}
-
             <Route
               path="/laporan"
               element={

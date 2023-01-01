@@ -267,15 +267,13 @@ export const CreateVehicle = () => {
                         </Container>
                       </Card.Body>
                       <Card.Footer>
-                        <Container>
-                          <Button
-                            className="btn-post"
-                            onClick={postNewVehicle}
-                            type="submit"
-                          >
-                            Tambahkan
-                          </Button>
-                        </Container>
+                        <Button
+                          className="btn-post"
+                          onClick={postNewVehicle}
+                          type="submit"
+                        >
+                          Tambahkan
+                        </Button>
                       </Card.Footer>
                     </Card>
                   </Col>

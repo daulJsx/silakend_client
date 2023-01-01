@@ -389,15 +389,13 @@ export const CreateUser = () => {
                       </Container>
                     </Card.Body>
                     <Card.Footer>
-                      <Container>
-                        <Button
-                          className="btn-post"
-                          onClick={postNewUser}
-                          type="submit"
-                        >
-                          Tambah
-                        </Button>
-                      </Container>
+                      <Button
+                        className="btn-post"
+                        onClick={postNewUser}
+                        type="submit"
+                      >
+                        Tambah
+                      </Button>
                     </Card.Footer>
                   </Card>
                 </Col>

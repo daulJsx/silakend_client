@@ -45,27 +45,9 @@ export const Aside = () => {
           />
 
           <AsideMenu
-            icon={<FaListAlt />}
-            title="Tugas Masuk"
-            link="/tugas-masuk"
-          />
-
-          <AsideMenu
-            icon={<AiFillDashboard />}
-            title="Edit KM Kendaraan"
-            link="/edit-km-kendaraan"
-          />
-
-          <AsideMenu
-            icon={<BsCheckCircleFill />}
-            title="Validasi Order Masuk"
-            link="/validasi-order-masuk"
-          />
-
-          <AsideMenu
             icon={<FaTools />}
             title="Perbaikan Kendaraan"
-            link="/data-perbaikan-kendaraan"
+            link="/perbaikan-kendaraan"
           />
 
           <AsideMenu
@@ -84,6 +66,24 @@ export const Aside = () => {
             icon={<AiFillCar />}
             title="Data Kendaraan"
             link="/data-kendaraan"
+          />
+
+          <AsideMenu
+            icon={<FaListAlt />}
+            title="Tugas Masuk"
+            link="/tugas-masuk"
+          />
+
+          <AsideMenu
+            icon={<AiFillDashboard />}
+            title="Edit KM Kendaraan"
+            link="/edit-km-kendaraan"
+          />
+
+          <AsideMenu
+            icon={<BsCheckCircleFill />}
+            title="Validasi Order Masuk"
+            link="/validasi-order-masuk"
           />
 
           <AsideMenu icon={<FaBook />} title="Laporan" link="/laporan" />

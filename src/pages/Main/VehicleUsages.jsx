@@ -31,6 +31,7 @@ import { FaInfo } from "react-icons/fa";
 
 // Pass parameters
 import { GetOrderId } from "../../functions/GetOrderId";
+import { DeleteVU } from "../../functions/Delete/DeleteVU";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
@@ -198,7 +199,12 @@ export const VehicleUsages = () => {
                                         </Button>
                                       </NavLink>
 
-                                      <Button className="btn-danger btn-delete">
+                                      <Button
+                                        onClick={() =>
+                                          DeleteVU(orders.usage_id)
+                                        }
+                                        className="btn-danger btn-delete"
+                                      >
                                         <FaTrashAlt className="fs-6" />
                                       </Button>
                                     </div>

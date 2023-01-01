@@ -10,7 +10,7 @@ async function FetchVM() {
 
   try {
     const response = await axios
-      .get("http://silakend-server.xyz/api/vehiclemaintenances", config)
+      .get("https://silakend-server.xyz/api/vehiclemaintenances", config)
       .then((response) => {
         const maintenances = response.data;
         return maintenances;

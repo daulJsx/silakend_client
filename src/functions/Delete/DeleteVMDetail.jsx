@@ -22,7 +22,7 @@ export async function DeleteVMD(VMDId) {
     if (willDelete) {
       await axios
         .delete(
-          `http://silakend-server.xyz/api/vehiclemaintenancedetails/${VMDId}`,
+          `https://silakend-server.xyz/api/vehiclemaintenancedetails/${VMDId}`,
           config
         )
         .then((response) => {

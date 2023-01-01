@@ -36,39 +36,38 @@ export const Login = (props) => {
   const navigate = useNavigate();
   const auth = useAuthUser();
 
+  function handleError(error) {
+    console.log(error);
+    swal("Ups!", error.response.data.msg, "error");
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault();
     // perform login logic
     if (formData.nip && formData.password !== "") {
-      try {
-        await axios
-          .post("https://silakend-server.xyz/api/auth/login", formData)
-          .then((response) => {
-            if (response.data.msg === "Login successfully") {
-              signIn({
-                token: response.data.content.access_token,
-                expiresIn: 1000,
-                tokenType: "Bearer",
-                authState: response.data,
-              });
-              localStorage.setItem("token", response.data.content.access_token);
-              // if login is successful, navigate to the dashboard
-              navigate("/");
-              swal({
-                title: "Berhasil Login!",
-                text: "Selamat datang " + auth().content.username,
-                icon: "success",
-              });
-            }
-          });
-      } catch (e) {
-        const error = swal(
-          "Ups!",
-          "NIP atau password yang dimasukkan tidak tersedia!",
-          "error"
-        );
-        throw error;
-      }
+      await axios
+        .post("https://silakend-server.xyz/api/auth/login", formData)
+        .then((response) => {
+          if (response.data.msg === "Login successfully") {
+            signIn({
+              token: response.data.content.access_token,
+              expiresIn: 1000,
+              tokenType: "Bearer",
+              authState: response.data,
+            });
+            localStorage.setItem("token", response.data.content.access_token);
+            // if login is successful, navigate to the dashboard
+            navigate("/");
+            swal({
+              title: "Berhasil Login!",
+              text: "Selamat datang " + auth().content.username,
+              icon: "success",
+            });
+          }
+        })
+        .catch((error) => {
+          handleError(error);
+        });
     } else {
       toast("Harap Isi Kredensial Sebelum Melanjutkan!", {
         icon: "⚠️",

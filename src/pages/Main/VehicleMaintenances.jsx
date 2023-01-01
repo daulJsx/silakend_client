@@ -30,6 +30,9 @@ import { FaInfo } from "react-icons/fa";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
+// Delete function
+import { DeleteVM } from "../../functions/Delete/DeleteVM";
+
 export const VehicleMaintenances = () => {
   const auth = useAuthUser();
 
@@ -40,6 +43,13 @@ export const VehicleMaintenances = () => {
     isLoading,
     isError,
   } = useQuery("vm", FetchVM);
+
+  // get vm by id
+  function GetVMId(VMId) {
+    let { maintenance_id } = VMId;
+    localStorage.setItem("maintenanceId", maintenance_id);
+    localStorage.setItem("VMToMap", JSON.stringify(VMId));
+  }
 
   if (localStorage.getItem("token") && auth()) {
     if (isError) {
@@ -112,12 +122,12 @@ export const VehicleMaintenances = () => {
                             <thead>
                               <tr>
                                 <th>No</th>
+                                <th>KENDARAAN</th>
                                 <th>TANGGAL</th>
                                 <th>KATEGORI</th>
                                 <th>DESKRIPSI</th>
                                 <th>PENGELUARAN</th>
                                 <th>AKSI</th>
-                                <th>RINCIAN</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -125,6 +135,7 @@ export const VehicleMaintenances = () => {
                                 <>
                                   <tr>
                                     <td key={vm.maintenance_id}>{index + 1}</td>
+                                    <td>{vm.vehicle_id}</td>
                                     <td>{vm.date}</td>
                                     <td>{vm.category}</td>
                                     <td>{vm.description}</td>
@@ -136,21 +147,28 @@ export const VehicleMaintenances = () => {
                                     </td>
                                     <td>
                                       <div className="d-flex gap-1 justify-content-center">
-                                        <Button className="btn btn-edit">
-                                          <AiFillEdit className="fs-6" />
-                                        </Button>
+                                        <NavLink
+                                          to={
+                                            "/perbaikan-kendaraan/edit-perbaikan"
+                                          }
+                                        >
+                                          <Button
+                                            className="btn btn-edit"
+                                            onClick={() => GetVMId(vm)}
+                                          >
+                                            <AiFillEdit className="fs-6" />
+                                          </Button>
+                                        </NavLink>
 
-                                        <Button className="btn-danger btn-delete">
+                                        <Button
+                                          onClick={() =>
+                                            DeleteVM(vm.maintenance_id)
+                                          }
+                                          className="btn-danger btn-delete"
+                                        >
                                           <FaTrashAlt className="fs-6" />
                                         </Button>
                                       </div>
-                                    </td>
-                                    <td align="center">
-                                      <>
-                                        <Button className="btn-info btn-detail">
-                                          <FaInfo className="fs-6" />
-                                        </Button>
-                                      </>
                                     </td>
                                   </tr>
                                 </>

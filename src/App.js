@@ -32,6 +32,7 @@ import { Drivers } from "./pages/Main/Drivers";
 
 import { VehicleMaintenances } from "./pages/Main/VehicleMaintenances";
 import { CreateVM } from "./pages/CreatePages/CreateVM";
+import { UpdateVM } from "./pages/UpdatePages/UpdateVM";
 
 import { TasksIn } from "./pages/tasks/TasksIn";
 import { VehiclesKM } from "./pages/vehiclesKM/VehiclesKM";
@@ -92,6 +93,14 @@ function App() {
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <CreateVM />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/perbaikan-kendaraan/edit-perbaikan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <UpdateVM />
                 </RequireAuth>
               }
             />

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // Fetch Requirements
 import axios from "axios";
 import { useQuery } from "react-query";
-import FetchVehicles from "../../consAPI/FetchVehicles";
+import FetchVM from "../../consAPI/FetchVM";
 
 // Redirecting
 import { useNavigate } from "react-router-dom";
@@ -30,58 +30,57 @@ import swal from "sweetalert";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
-export const CreateVM = () => {
+export const CreateVMDetail = () => {
   const auth = useAuthUser();
   const navigate = useNavigate();
 
   // Body for store
-  const [vehicleMData, setVehicleMData] = useState({
-    vehicle_id: "",
-    date: "",
-    category: "",
-    description: "",
-    total_cost: "",
+  const [newVehicleMDetail, setNewVehicleMDetail] = useState({
+    maintenance_id: "",
+    item_name: "",
+    item_qty: "",
+    item_unit: "",
+    item_price: "",
+    price_total: "",
   });
 
+  function handleError(error) {
+    swal("Ups!", error.response.data.msg, "error");
+  }
+
   // Store new vehicle data
-  const postNewVehicleM = async () => {
+  const postNewVehicleMD = async () => {
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
     if (
-      vehicleMData.vehicle_id ||
-      vehicleMData.date ||
-      vehicleMData.category ||
-      vehicleMData.description ||
-      vehicleMData.total_cost != ""
+      newVehicleMDetail.maintenance_id ||
+      newVehicleMDetail.item_name ||
+      newVehicleMDetail.item_qty ||
+      newVehicleMDetail.item_unit ||
+      newVehicleMDetail.item_price ||
+      newVehicleMDetail.price_total != ""
     ) {
-      try {
-        await axios
-          .post(
-            "https://silakend-server.xyz/api/vehiclemaintenances",
-            vehicleMData,
-            config
-          )
-          .then((response) => {
-            if (response.status === 200) {
-              navigate("/kategori-perbaikan");
-              swal({
-                title: "Berhasil!",
-                text: "Data Kategori Perbaikan Telah Dibuat",
-                icon: "success",
-                button: "Tutup",
-              });
-            }
-          });
-      } catch (error) {
-        const e = swal({
-          title: "Gagal!",
-          text: "Error harap dilaporkan!",
-          icon: "error",
-          button: "Tutup",
+      await axios
+        .post(
+          "https://silakend-server.xyz/api/vehiclemaintenancedetails",
+          newVehicleMDetail,
+          config
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            navigate("/rincian-perbaikan");
+            swal({
+              title: "Berhasil!",
+              text: "Data Rincian Perbaikan Kendaraan Telah Dibuat",
+              icon: "success",
+              button: "Tutup",
+            });
+          }
+        })
+        .catch((error) => {
+          handleError(error);
         });
-        throw e;
-      }
     } else {
       swal({
         title: "Peringatan",
@@ -93,7 +92,10 @@ export const CreateVM = () => {
   };
 
   // Fetching requirement data
-  const { data: vehiclesData } = useQuery("vehicles", FetchVehicles);
+  const { data: vehicleMaintenances } = useQuery(
+    "vehicleMaintenances",
+    FetchVM
+  );
 
   if (localStorage.getItem("token") && auth()) {
     return (
@@ -144,47 +146,26 @@ export const CreateVM = () => {
                           }}
                           aria-label="Default select example"
                           onChange={(e) =>
-                            setVehicleMData({
-                              ...vehicleMData,
-                              vehicle_id: e.target.value,
+                            setNewVehicleMDetail({
+                              ...newVehicleMDetail,
+                              maintenance_id: e.target.value,
                             })
                           }
                         >
-                          <option>-- Pilih Kendaraan --</option>
-                          {vehiclesData?.map((vehicles) => (
+                          <option>-- Pilih Kategori --</option>
+                          {vehicleMaintenances?.map((vmd) => (
                             <option
-                              key={vehicles.vehicle_id}
-                              value={vehicles.vehicle_id}
+                              key={vmd.maintenance_id}
+                              value={vmd.maintenance_id}
                             >
-                              {vehicles.name}
+                              {vmd.category}
                             </option>
                           ))}
                         </Form.Select>
                       </Form.Group>
 
                       <Form.Group>
-                        <Form.Label>Tanggal Perbaikan</Form.Label>
-
-                        <Form.Control
-                          required
-                          className="input form-custom"
-                          style={{
-                            backgroundColor: "#F5F7FC",
-                            border: "none",
-                            padding: "15px",
-                          }}
-                          type="date"
-                          onChange={(e) =>
-                            setVehicleMData({
-                              ...vehicleMData,
-                              date: e.target.value,
-                            })
-                          }
-                        />
-                      </Form.Group>
-
-                      <Form.Group>
-                        <Form.Label>masukkan nama kategori</Form.Label>
+                        <Form.Label>nama spare part</Form.Label>
 
                         <Form.Control
                           required
@@ -196,20 +177,39 @@ export const CreateVM = () => {
                           }}
                           type="text"
                           onChange={(e) =>
-                            setVehicleMData({
-                              ...vehicleMData,
-                              category: e.target.value,
+                            setNewVehicleMDetail({
+                              ...newVehicleMDetail,
+                              item_name: e.target.value,
                             })
                           }
                         />
                       </Form.Group>
 
                       <Form.Group>
-                        <Form.Label>deskripsi kategori</Form.Label>
+                        <Form.Label>jumlah spare part</Form.Label>
+
                         <Form.Control
                           required
-                          as="textarea"
-                          rows={3}
+                          className="input form-custom"
+                          style={{
+                            backgroundColor: "#F5F7FC",
+                            border: "none",
+                            padding: "15px",
+                          }}
+                          type="number"
+                          onChange={(e) =>
+                            setNewVehicleMDetail({
+                              ...newVehicleMDetail,
+                              item_qty: e.target.value,
+                            })
+                          }
+                        />
+                      </Form.Group>
+
+                      <Form.Group>
+                        <Form.Label>satuan spare part</Form.Label>
+                        <Form.Control
+                          required
                           className="input form-custom"
                           style={{
                             backgroundColor: "#F5F7FC",
@@ -218,16 +218,16 @@ export const CreateVM = () => {
                           }}
                           type="text"
                           onChange={(e) =>
-                            setVehicleMData({
-                              ...vehicleMData,
-                              description: e.target.value,
+                            setNewVehicleMDetail({
+                              ...newVehicleMDetail,
+                              item_unit: e.target.value,
                             })
                           }
                         />
                       </Form.Group>
 
                       <Form.Group>
-                        <Form.Label>Jumlah Pengeluaran</Form.Label>
+                        <Form.Label>harga spare part</Form.Label>
                         <InputGroup>
                           <InputGroup.Text
                             style={{
@@ -247,9 +247,39 @@ export const CreateVM = () => {
                             }}
                             type="number"
                             onChange={(e) =>
-                              setVehicleMData({
-                                ...vehicleMData,
-                                total_cost: e.target.value,
+                              setNewVehicleMDetail({
+                                ...newVehicleMDetail,
+                                item_price: e.target.value,
+                              })
+                            }
+                          />
+                        </InputGroup>
+                      </Form.Group>
+
+                      <Form.Group>
+                        <Form.Label>harga total</Form.Label>
+                        <InputGroup>
+                          <InputGroup.Text
+                            style={{
+                              border: "none",
+                            }}
+                            id="basic-addon2"
+                          >
+                            Rp.
+                          </InputGroup.Text>
+                          <Form.Control
+                            required
+                            className="input form-custom"
+                            style={{
+                              backgroundColor: "#F5F7FC",
+                              border: "none",
+                              padding: "15px",
+                            }}
+                            type="number"
+                            onChange={(e) =>
+                              setNewVehicleMDetail({
+                                ...newVehicleMDetail,
+                                price_total: e.target.value,
                               })
                             }
                           />
@@ -260,7 +290,7 @@ export const CreateVM = () => {
                       <Button
                         className="btn-post"
                         type="submit"
-                        onClick={postNewVehicleM}
+                        onClick={postNewVehicleMD}
                       >
                         Tambah
                       </Button>

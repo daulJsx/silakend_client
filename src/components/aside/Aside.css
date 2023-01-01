@@ -30,7 +30,10 @@ a.brand-icon:hover {
   color: var(--color-primary);
 }
 
-.side-menu {
+.side-menu,
+.dropdown__menu,
+.submenu__title {
+  color: var(--gray-500);
   font-size: 0.8rem;
   font-weight: 600;
   transition: var(--transition);
@@ -73,4 +76,14 @@ a.brand-icon:hover {
   background: transparent;
   box-shadow: none;
   transform: scale(0.95, 0.95);
+}
+
+.submenu__sidebar,
+.dropdown__menu {
+  background-color: var(--bg-primary);
+  max-width: min-content;
+}
+
+.MenuItem {
+  transform: scale(0.9, 0.9);
 }

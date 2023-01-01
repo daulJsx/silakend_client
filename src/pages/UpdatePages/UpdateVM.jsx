@@ -124,7 +124,7 @@ export const UpdateVM = () => {
                       name={placement}
                       bc={<FaArrowLeft />}
                       title={"Tambah Data Perbaikan Kendaraan"}
-                      parentLink={"/perbaikan-kendaraan"}
+                      parentLink={"/kategori-perbaikan"}
                     />
                   ))}
                 </Col>

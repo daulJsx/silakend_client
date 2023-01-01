@@ -17,6 +17,7 @@ import { HiClipboardCopy } from "react-icons/hi";
 import { FaListAlt } from "react-icons/fa";
 import { AiFillDashboard } from "react-icons/ai";
 import { BsCheckCircleFill } from "react-icons/bs";
+import { BiDetail } from "react-icons/bi";
 import { FaTools } from "react-icons/fa";
 import { HiUserGroup } from "react-icons/hi";
 import { FaUserTie } from "react-icons/fa";
@@ -25,6 +26,8 @@ import { FaBook } from "react-icons/fa";
 
 // assets
 import polmanLogo from "./../../assets/polman.webp";
+
+import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
 export const Aside = () => {
   return (
@@ -44,11 +47,29 @@ export const Aside = () => {
             link="/order-peminjaman"
           />
 
-          <AsideMenu
-            icon={<FaTools />}
-            title="Perbaikan Kendaraan"
-            link="/perbaikan-kendaraan"
-          />
+          <Menu>
+            <SubMenu className="submenu__title" label="Perbaikan Kendaraan">
+              <Nav
+                variant="pills"
+                className="dropdown__menu d-flex flex-column gap-2"
+              >
+                <MenuItem className="MenuItem">
+                  <AsideMenu
+                    icon={<FaTools />}
+                    title="Kategori Perbaikan"
+                    link="/kategori-perbaikan"
+                  />
+                </MenuItem>
+                <MenuItem className="MenuItem">
+                  <AsideMenu
+                    icon={<BiDetail />}
+                    title="Rincian Perbaikan"
+                    link="/rincian-perbaikan"
+                  />
+                </MenuItem>
+              </Nav>
+            </SubMenu>
+          </Menu>
 
           <AsideMenu
             icon={<HiUserGroup />}

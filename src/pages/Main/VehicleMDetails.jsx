@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // fetch data requirement
 import { useQuery } from "react-query";
 import axios from "axios";
-import FetchVM from "../../consAPI/FetchVM";
+import FetchVMDetails from "../../consAPI/FetchVMDetails";
 
 // Navigating
 import { NavLink } from "react-router-dom";
@@ -31,18 +31,18 @@ import { FaInfo } from "react-icons/fa";
 import { useAuthUser } from "react-auth-kit";
 
 // Delete function
-import { DeleteVM } from "../../functions/Delete/DeleteVM";
+import { DeleteVMD } from "../../functions/Delete/DeleteVMDetail";
 
-export const VehicleMaintenances = () => {
+export const VehicleMDetails = () => {
   const auth = useAuthUser();
 
   // Fetching vm data
   const {
-    data: vehicleMData,
+    data: vehicleMDetails,
     error,
     isLoading,
     isError,
-  } = useQuery("vm", FetchVM);
+  } = useQuery("vm", FetchVMDetails);
 
   // get vm by id
   function GetVMId(VMId) {
@@ -89,7 +89,7 @@ export const VehicleMaintenances = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaTools />}
-                        parentLink={"/kategori-perbaikan"}
+                        parentLink={"/rincian-perbaikan"}
                       />
                     ))}
                   </Col>
@@ -100,10 +100,10 @@ export const VehicleMaintenances = () => {
                   <Row className="py-4 mb-2">
                     <Col>
                       <NavLink
-                        to={"/kategori-perbaikan/tambah-kategori-perbaikan"}
+                        to={"/rincian-perbaikan/tambah-rincian-perbaikan"}
                       >
                         <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                          Tambah Kategori
+                          Tambah Data Perbaikan
                           <HiPlusSm className="fs-3" />
                         </Button>
                       </NavLink>
@@ -124,26 +124,38 @@ export const VehicleMaintenances = () => {
                             <thead>
                               <tr>
                                 <th>No</th>
-                                <th>KENDARAAN</th>
-                                <th>TANGGAL</th>
                                 <th>KATEGORI</th>
-                                <th>DESKRIPSI</th>
-                                <th>PENGELUARAN</th>
+                                <th>SPARE PART</th>
+                                <th>JUMLAH SPARE PART</th>
+                                <th>SATUAN</th>
+                                <th>HARGA SPARE PART</th>
+                                <th>HARGA TOTAL</th>
                                 <th>AKSI</th>
                               </tr>
                             </thead>
                             <tbody>
-                              {vehicleMData?.map((vm, index) => (
+                              {vehicleMDetails?.map((vmd, index) => (
                                 <>
                                   <tr>
-                                    <td key={vm.maintenance_id}>{index + 1}</td>
-                                    <td>{vm.vehicle_id}</td>
-                                    <td>{vm.date}</td>
-                                    <td>{vm.category}</td>
-                                    <td>{vm.description}</td>
+                                    <td key={vmd.detail_id}>{index + 1}</td>
+                                    <td>{vmd.maintenance_id}</td>
+                                    <td>{vmd.item_name}</td>
+                                    <td>{vmd.item_qty}</td>
+                                    <td>{vmd.item_unit}</td>
                                     <td>
-                                      {vm.total_cost
-                                        ? vm.total_cost.toLocaleString(
+                                      {vmd.item_price
+                                        ? vmd.item_price.toLocaleString(
+                                            "id-ID",
+                                            {
+                                              style: "currency",
+                                              currency: "IDR",
+                                            }
+                                          )
+                                        : null}
+                                    </td>
+                                    <td>
+                                      {vmd.price_total
+                                        ? vmd.price_total.toLocaleString(
                                             "id-ID",
                                             {
                                               style: "currency",
@@ -156,12 +168,12 @@ export const VehicleMaintenances = () => {
                                       <div className="d-flex gap-1 justify-content-center">
                                         <NavLink
                                           to={
-                                            "/kategori-perbaikan/edit-kategori-perbaikan"
+                                            "/rincian-perbaikan/edit-perbaikan"
                                           }
                                         >
                                           <Button
                                             className="btn btn-edit"
-                                            onClick={() => GetVMId(vm)}
+                                            // onClick={() => GetVMId(vm)}
                                           >
                                             <AiFillEdit className="fs-6" />
                                           </Button>
@@ -169,7 +181,7 @@ export const VehicleMaintenances = () => {
 
                                         <Button
                                           onClick={() =>
-                                            DeleteVM(vm.maintenance_id)
+                                            DeleteVMD(vmd.detail_id)
                                           }
                                           className="btn-danger btn-delete"
                                         >

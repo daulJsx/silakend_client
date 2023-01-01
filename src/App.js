@@ -33,6 +33,8 @@ import { Drivers } from "./pages/Main/Drivers";
 import { VehicleMaintenances } from "./pages/Main/VehicleMaintenances";
 import { CreateVM } from "./pages/CreatePages/CreateVM";
 import { UpdateVM } from "./pages/UpdatePages/UpdateVM";
+import { VehicleMDetails } from "./pages/Main/VehicleMDetails";
+import { CreateVMDetail } from "./pages/CreatePages/CreateVMDetail";
 
 import { TasksIn } from "./pages/tasks/TasksIn";
 import { VehiclesKM } from "./pages/vehiclesKM/VehiclesKM";
@@ -81,7 +83,7 @@ function App() {
 
             {/*----- START VM PAGES---- */}
             <Route
-              path="/perbaikan-kendaraan"
+              path="/kategori-perbaikan"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <VehicleMaintenances />
@@ -89,7 +91,7 @@ function App() {
               }
             />
             <Route
-              path="/perbaikan-kendaraan/tambah-perbaikan"
+              path="/kategori-perbaikan/tambah-kategori-perbaikan"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <CreateVM />
@@ -97,10 +99,26 @@ function App() {
               }
             />
             <Route
-              path="/perbaikan-kendaraan/edit-perbaikan"
+              path="/kategori-perbaikan/edit-kategori-perbaikan"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <UpdateVM />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/rincian-perbaikan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <VehicleMDetails />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/rincian-perbaikan/tambah-rincian-perbaikan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <CreateVMDetail />
                 </RequireAuth>
               }
             />

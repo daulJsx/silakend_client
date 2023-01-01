@@ -37,7 +37,6 @@ export const Login = (props) => {
   const auth = useAuthUser();
 
   function handleError(error) {
-    console.log(error);
     swal("Ups!", error.response.data.msg, "error");
   }
 

@@ -121,7 +121,7 @@ export const CreateVMDetail = () => {
                     name={placement}
                     bc={<FaArrowLeft />}
                     title={"Tambah Data Kategori Perbaikan Kendaraan"}
-                    parentLink={"/kategori-perbaikan"}
+                    parentLink={"/rincian-perbaikan"}
                   />
                 ))}
               </Col>
@@ -132,7 +132,7 @@ export const CreateVMDetail = () => {
                 <Col>
                   <Card>
                     <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                      Silahkan Buat Kategori Perbaikan Kendaraan Disini
+                      Silahkan Buat Rincian Perbaikan Kendaraan Disini
                     </Card.Title>
                     <Card.Body className="d-flex flex-column gap-3">
                       <Form.Group>

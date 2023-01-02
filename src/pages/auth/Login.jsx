@@ -37,7 +37,11 @@ export const Login = (props) => {
   const auth = useAuthUser();
 
   function handleError(error) {
-    swal("Ups!", error.response.data.msg, "error");
+    if (error.response.data.message) {
+      swal("Ups!", error.response.data.message, "error");
+    } else {
+      swal("Ups!", error.response.data.msg, "error");
+    }
   }
 
   const onSubmit = async (e) => {
@@ -47,7 +51,7 @@ export const Login = (props) => {
       await axios
         .post("https://silakend-server.xyz/api/auth/login", formData)
         .then((response) => {
-          if (response.data.msg === "Login successfully") {
+          if (response.status === 200) {
             signIn({
               token: response.data.content.access_token,
               expiresIn: 1000,
@@ -58,7 +62,7 @@ export const Login = (props) => {
             // if login is successful, navigate to the dashboard
             navigate("/");
             swal({
-              title: "Berhasil Login!",
+              title: response.data.msg,
               text: "Selamat datang " + auth().content.username,
               icon: "success",
             });

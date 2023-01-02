@@ -9,13 +9,15 @@ import { Nav } from "react-bootstrap";
 import "./Aside.css";
 import "./../../App.css";
 
-export const AsideMenu = ({ icon, title, link }) => {
+export const AsideMenu = ({ icon, title, link, styleSelf }) => {
   return (
     <Nav.Item className="side-menu" as="li">
       <NavLink to={link} exact className="nav-link">
-        <div className=" d-flex">
-          <span className="fs-4"> {icon}</span>
-          <span className="ms-3 mt-2">{title}</span>
+        <div className="d-flex">
+          <span className={styleSelf}>
+            <span className="fs-4"> {icon}</span>
+            <span className="ms-3 mt-2">{title}</span>
+          </span>
         </div>
       </NavLink>
     </Nav.Item>

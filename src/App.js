@@ -35,11 +35,16 @@ import { CreateVM } from "./pages/CreatePages/CreateVM";
 import { UpdateVM } from "./pages/UpdatePages/UpdateVM";
 import { VehicleMDetails } from "./pages/Main/VehicleMDetails";
 import { CreateVMDetail } from "./pages/CreatePages/CreateVMDetail";
+import { UpdateVMDetail } from "./pages/UpdatePages/UpdateVMDetail";
 
-import { TasksIn } from "./pages/tasks/TasksIn";
-import { VehiclesKM } from "./pages/vehiclesKM/VehiclesKM";
-import { Validations } from "./pages/validations/Validations";
-import { Reports } from "./pages/reports/Reports";
+import { JobUnits } from "./pages/Main/JobUnits";
+import { CreateJobUnit } from "./pages/CreatePages/CreateJobUnit";
+import { UpdateJobUnit } from "./pages/UpdatePages/UpdateJobUnit";
+
+import { Roles } from "./pages/Main/Roles";
+import { CreateRole } from "./pages/CreatePages/CreateRole";
+import { UpdateRole } from "./pages/UpdatePages/UpdateRole";
+
 import { Login } from "./pages/auth/Login";
 
 function App() {
@@ -122,6 +127,14 @@ function App() {
                 </RequireAuth>
               }
             />
+            <Route
+              path="/rincian-perbaikan/edit-rincian-perbaikan"
+              element={
+                <RequireAuth loginPath={"/silakend-login"}>
+                  <UpdateVMDetail />
+                </RequireAuth>
+              }
+            />
             {/*----- END VM PAGES---- */}
 
             {/*----- START DRIVER PAGES---- */}
@@ -140,38 +153,38 @@ function App() {
             />
             {/*----- END VEHICLE PAGES---- */}
 
+            {/*----- START JOB UNITS PAGES---- */}
             <Route
-              path="/tugas-masuk"
+              path="/unit-kerja"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
-                  <TasksIn />
+                  <JobUnits />
                 </RequireAuth>
               }
             />
             <Route
-              path="/edit-km-kendaraan"
+              path="/unit-kerja/tambah-unit-kerja"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
-                  <VehiclesKM />
+                  <CreateJobUnit />
                 </RequireAuth>
               }
             />
             <Route
-              path="/validasi-order-masuk"
+              path="/unit-kerja/edit-unit-kerja"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
-                  <Validations />
+                  <UpdateJobUnit />
                 </RequireAuth>
               }
             />
-            <Route
-              path="/laporan"
-              element={
-                <RequireAuth loginPath={"/silakend-login"}>
-                  <Reports />
-                </RequireAuth>
-              }
-            />
+            {/*----- END JOB UNITS PAGES---- */}
+
+            {/*----- START ROLE PAGES---- */}
+            <Route path="/data-peran" element={<Roles />} />
+            <Route path="/data-peran/tambah-peran" element={<CreateRole />} />
+            <Route path="/data-peran/edit-peran" element={<UpdateRole />} />
+            {/*----- END ROLE PAGES---- */}
 
             {/*----- START AUTH PAGES---- */}
             <Route path="/silakend-login" element={<Login />} />

@@ -2,18 +2,21 @@ import React, { useState } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
-import axios from "axios";
-import FetchVMDetails from "../../consAPI/FetchVMDetails";
+import FetchRoles from "../../consAPI/FetchRoles";
 
 // Navigating
-import { NavLink } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
+
+// For checking user have done in authentication
+import { useAuthUser } from "react-auth-kit";
+
+// Delete Function
+import { DeleteRole } from "../../functions/Delete/DeleteRole";
 
 // Bootstrap components
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -21,39 +24,32 @@ import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
 // Icons
-import { FaTools } from "react-icons/fa";
+import { CgUserList } from "react-icons/cg";
 import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
-import { FaInfo } from "react-icons/fa";
 
-// For checking user have done in authentication
-import { useAuthUser } from "react-auth-kit";
-
-// Delete function
-import { DeleteVMD } from "../../functions/Delete/DeleteVMDetail";
-
-export const VehicleMDetails = () => {
+export const Roles = () => {
   const auth = useAuthUser();
 
-  // Fetching vm data
+  // Fetching job units
   const {
-    data: vehicleMDetails,
+    data: rolesData,
     error,
     isLoading,
     isError,
-  } = useQuery("vm", FetchVMDetails);
+  } = useQuery("roles", FetchRoles);
 
-  // get vm by id
-  function GetVMDId(VMDId) {
-    let { detail_id } = VMDId;
-    localStorage.setItem("detailId", detail_id);
-    localStorage.setItem("VMDToMap", JSON.stringify(VMDId));
+  // get job unit by id
+  function GetRolesById(roles) {
+    let { role_id } = roles;
+    localStorage.setItem("roleId", role_id);
+    localStorage.setItem("roleToMap", JSON.stringify(roles));
   }
 
   if (localStorage.getItem("token") && auth()) {
     if (isError) {
-      return <div>error</div>;
+      return <div>{error.message}</div>;
     } else if (isLoading) {
       return (
         <div className="loading-io">
@@ -88,8 +84,8 @@ export const VehicleMDetails = () => {
                         key={idx}
                         placement={placement}
                         name={placement}
-                        bc={<FaTools />}
-                        parentLink={"/rincian-perbaikan"}
+                        bc={<CgUserList />}
+                        parentLink={"/data-peran"}
                       />
                     ))}
                   </Col>
@@ -99,11 +95,9 @@ export const VehicleMDetails = () => {
                 <div className="me-1 d-flex justify-content-end">
                   <Row className="py-4 mb-2">
                     <Col>
-                      <NavLink
-                        to={"/rincian-perbaikan/tambah-rincian-perbaikan"}
-                      >
+                      <NavLink to={"/data-peran/tambah-peran"}>
                         <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                          Tambah Data Perbaikan
+                          Tambah Peran
                           <HiPlusSm className="fs-3" />
                         </Button>
                       </NavLink>
@@ -117,81 +111,53 @@ export const VehicleMDetails = () => {
                       <Card>
                         <Card.Body>
                           <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            Data Perbaikan Kendaraan
+                            Data Peran
                           </Card.Title>
 
                           <Table bordered hover responsive>
                             <thead>
                               <tr>
                                 <th>No</th>
-                                <th>KATEGORI</th>
-                                <th>SPARE PART</th>
-                                <th>JUMLAH SPARE PART</th>
-                                <th>SATUAN</th>
-                                <th>HARGA SPARE PART</th>
-                                <th>HARGA TOTAL</th>
+                                <th>NAMA PERAN</th>
+                                <th>LEVEL</th>
                                 <th>AKSI</th>
                               </tr>
                             </thead>
                             <tbody>
-                              {vehicleMDetails?.map((vmd, index) => (
-                                <>
+                              {rolesData?.map((roles, index) => {
+                                return roles.level != 1 ? (
                                   <tr>
-                                    <td key={vmd.detail_id}>{index + 1}</td>
-                                    <td>{vmd.maintenance_id}</td>
-                                    <td>{vmd.item_name}</td>
-                                    <td>{vmd.item_qty}</td>
-                                    <td>{vmd.item_unit}</td>
-                                    <td>
-                                      {vmd.item_price
-                                        ? vmd.item_price.toLocaleString(
-                                            "id-ID",
-                                            {
-                                              style: "currency",
-                                              currency: "IDR",
-                                            }
-                                          )
-                                        : null}
+                                    <td
+                                      key={roles.role_id}
+                                      value={roles.role_id}
+                                    >
+                                      {index + 1}
                                     </td>
-                                    <td>
-                                      {vmd.price_total
-                                        ? vmd.price_total.toLocaleString(
-                                            "id-ID",
-                                            {
-                                              style: "currency",
-                                              currency: "IDR",
-                                            }
-                                          )
-                                        : null}
-                                    </td>
+                                    <td>{roles.name}</td>
+                                    <td>{roles.level}</td>
                                     <td>
                                       <div className="d-flex gap-1 justify-content-center">
-                                        <NavLink
-                                          to={
-                                            "/rincian-perbaikan/edit-rincian-perbaikan"
-                                          }
-                                        >
+                                        <NavLink to={"/data-peran/edit-peran"}>
                                           <Button
                                             className="btn btn-edit"
-                                            onClick={() => GetVMDId(vmd)}
+                                            onClick={() => GetRolesById(roles)}
                                           >
                                             <AiFillEdit className="fs-6" />
                                           </Button>
                                         </NavLink>
-
                                         <Button
-                                          onClick={() =>
-                                            DeleteVMD(vmd.detail_id)
-                                          }
                                           className="btn-danger btn-delete"
+                                          onClick={() =>
+                                            DeleteRole(roles.role_id)
+                                          }
                                         >
                                           <FaTrashAlt className="fs-6" />
                                         </Button>
                                       </div>
                                     </td>
                                   </tr>
-                                </>
-                              ))}
+                                ) : null;
+                              })}
                             </tbody>
                           </Table>
                         </Card.Body>

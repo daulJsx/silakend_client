@@ -22,7 +22,7 @@ import { Footer } from "../../components/footer/Footer";
 import InfoVehicle from "../../components/popup/InfoVehicle";
 
 // Icons
-import { AiFillCar } from "react-icons/ai";
+import { RiCarLine } from "react-icons/ri";
 import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
@@ -108,7 +108,7 @@ export const Vehicles = () => {
                         key={idx}
                         placement={placement}
                         name={placement}
-                        bc={<AiFillCar />}
+                        bc={<RiCarLine />}
                         parentLink={"/data-kendaraan"}
                       />
                     ))}

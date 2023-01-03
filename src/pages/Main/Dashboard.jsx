@@ -14,7 +14,7 @@ import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
 // icons
-import { RiDashboardFill } from "react-icons/ri";
+import { CgHomeAlt } from "react-icons/cg";
 import { HiClipboardCopy } from "react-icons/hi";
 import { AiFillDashboard } from "react-icons/ai";
 import { RiUserReceivedFill } from "react-icons/ri";
@@ -48,7 +48,7 @@ export const Dashboard = () => {
                       key={idx}
                       placement={placement}
                       name={placement}
-                      bc={<RiDashboardFill />}
+                      bc={<CgHomeAlt />}
                     />
                   ))}
                 </Col>

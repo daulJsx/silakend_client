@@ -45,6 +45,14 @@ import { Roles } from "./pages/Main/Roles";
 import { CreateRole } from "./pages/CreatePages/CreateRole";
 import { UpdateRole } from "./pages/UpdatePages/UpdateRole";
 
+import { UsageCategories } from "./pages/Main/UsageCategories";
+import { CreateUsageCategories } from "./pages/CreatePages/CreateUsageCategories";
+import { UpdateUsageCategories } from "./pages/UpdatePages/UpdateUsageCategories";
+
+import { VehicleCategories } from "./pages/Main/VehicleCategories";
+import { CreateVehicleCat } from "./pages/CreatePages/CreateVehicleCat";
+import { UpdateVehicleCat } from "./pages/UpdatePages/UpdateVehicleCat";
+
 import { Login } from "./pages/auth/Login";
 
 function App() {
@@ -73,6 +81,18 @@ function App() {
               element={<UpdateUser />}
             />
             {/*----- END USER PAGES---- */}
+
+            {/*----- START ORDER CATEGORIES PAGES---- */}
+            <Route path="/kategori-peminjaman" element={<UsageCategories />} />
+            <Route
+              path="/kategori-peminjaman/tambah-kategori-peminjaman"
+              element={<CreateUsageCategories />}
+            />
+            <Route
+              path="/kategori-peminjaman/edit-kategori-peminjaman"
+              element={<UpdateUsageCategories />}
+            />
+            {/*----- END ORDER CATEGORIES PAGES---- */}
 
             {/*----- START ORDER PAGES---- */}
             <Route path="/order-peminjaman" element={<VehicleUsages />} />
@@ -150,6 +170,18 @@ function App() {
             <Route
               path="/data-kendaraan/edit-kendaraan"
               element={<UpdateVehicle />}
+            />
+            {/*----- END VEHICLE PAGES---- */}
+
+            {/*----- START VEHICLE PAGES---- */}
+            <Route path="/kategori-kendaraan" element={<VehicleCategories />} />
+            <Route
+              path="/kategori-kendaraan/tambah-kategori-kendaraan"
+              element={<CreateVehicleCat />}
+            />
+            <Route
+              path="/kategori-kendaraan/edit-kategori-kendaraan"
+              element={<UpdateVehicleCat />}
             />
             {/*----- END VEHICLE PAGES---- */}
 

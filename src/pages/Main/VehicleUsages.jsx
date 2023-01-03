@@ -23,7 +23,7 @@ import { Footer } from "../../components/footer/Footer";
 import InfoVehicleUsage from "../../components/popup/InfoVehicleUsage";
 
 // Icons
-import { HiClipboardCopy } from "react-icons/hi";
+import { HiOutlineClipboardCopy } from "react-icons/hi";
 import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
@@ -105,7 +105,7 @@ export const VehicleUsages = () => {
                         key={idx}
                         placement={placement}
                         name={placement}
-                        bc={<HiClipboardCopy />}
+                        bc={<HiOutlineClipboardCopy />}
                       />
                     ))}
                   </Col>

@@ -16,7 +16,7 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
 // icons
-import { HiUserGroup } from "react-icons/hi";
+import { TbUsers } from "react-icons/tb";
 import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
@@ -107,7 +107,7 @@ export const Users = () => {
                       key={idx}
                       placement={placement}
                       name={placement}
-                      bc={<HiUserGroup />}
+                      bc={<TbUsers />}
                       parentLink={"/data-pengguna"}
                     />
                   ))}

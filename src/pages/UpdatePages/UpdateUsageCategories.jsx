@@ -27,22 +27,21 @@ import swal from "sweetalert";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
-export const UpdateRole = () => {
+export const UpdateUsageCategories = () => {
   const auth = useAuthUser();
   const navigate = useNavigate();
 
   // Initialize newest role id
-  const [roleId, setRoleId] = useState(localStorage.getItem("roleId"));
+  const [uCatId, setUCatId] = useState(localStorage.getItem("ucategory_id"));
 
   // Get the JSON object from local storage
-  const roleString = localStorage.getItem("roleToMap");
+  const usageCatStr = localStorage.getItem("uCategoryToMap");
   // Parse the JSON string into a JavaScript object
-  const roleToMap = JSON.parse(roleString);
+  const uCategoryToMap = JSON.parse(usageCatStr);
 
   // Body for store
-  const [updateRole, setUpdateRole] = useState({
+  const [curUsageCat, setCurUsageCat] = useState({
     name: "",
-    level: "",
   });
 
   // Store new vehicle data
@@ -54,49 +53,35 @@ export const UpdateRole = () => {
     }
   }
 
-  const updateCurrentRole = async () => {
+  const updateUsageCat = async () => {
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
-    if (updateRole.name || updateRole.level != "") {
-      swal({
-        title: "Yakin?",
-        text: "Pastikan kembali perubahan data",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }).then(async (willDelete) => {
-        if (willDelete) {
-          await axios
-            .put(
-              `https://silakend-server.xyz/api/roles/${roleId}`,
-              updateRole,
-              config
-            )
-            .then((response) => {
-              navigate("/data-peran");
-              if (response.status === 200) {
-                swal({
-                  title: "Berhasil!",
-                  text: response.data.msg,
-                  icon: "success",
-                  button: "Tutup",
-                });
-                const updateV = response.data;
-                return updateV;
-              }
-            })
-            .catch((error) => {
-              handleError(error);
+    if (curUsageCat.name != "") {
+      await axios
+        .put(
+          `https://silakend-server.xyz/api/usagecategories/${uCatId}`,
+          curUsageCat,
+          config
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            navigate("/kategori-peminjaman");
+            swal({
+              title: "Berhasil!",
+              text: response.data.msg,
+              icon: "success",
+              button: "Tutup",
             });
-        } else {
-          swal("Data peran aman!");
-        }
-      });
+          }
+        })
+        .catch((error) => {
+          handleError(error);
+        });
     } else {
       swal({
         title: "Peringatan",
-        text: "Harap ubah data",
+        text: "Harap isi semua data!",
         icon: "warning",
         button: "Tutup",
       });
@@ -104,7 +89,7 @@ export const UpdateRole = () => {
   };
 
   if (localStorage.getItem("token") && auth()) {
-    if (localStorage.getItem("roleId")) {
+    if (localStorage.getItem("ucategory_id")) {
       return (
         <>
           <Container fluid>
@@ -128,8 +113,8 @@ export const UpdateRole = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaArrowLeft />}
-                        title={"Edit Data Unit Kerja"}
-                        parentLink={"/unit-kerja"}
+                        title={"Edit Kategori Peminjaman"}
+                        parentLink={"/kategori-peminjaman"}
                       />
                     ))}
                   </Col>
@@ -141,47 +126,28 @@ export const UpdateRole = () => {
                       <Card>
                         <Card.Body>
                           <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                            Silahkan Ubah Data Peran Disini
+                            Silahkan Edit Kategori Peminjaman Disini
                           </Card.Title>
-
                           <Container>
                             <Row>
                               <Col>
-                                {roleToMap
-                                  ? [roleToMap].map((currentRole) => (
-                                      <>
-                                        <Form.Group className="mb-3">
-                                          <Form.Label>Nama Peran</Form.Label>
-                                          <Form.Control
-                                            required
-                                            placeholder={currentRole.name}
-                                            className="input form-custom"
-                                            type="text"
-                                            onChange={(e) =>
-                                              setUpdateRole({
-                                                ...updateRole,
-                                                name: e.target.value,
-                                              })
-                                            }
-                                          />
-                                        </Form.Group>
-
-                                        <Form.Group className="mb-3">
-                                          <Form.Label>Level</Form.Label>
-                                          <Form.Control
-                                            required
-                                            placeholder={currentRole.level}
-                                            className="input form-custom"
-                                            type="number"
-                                            onChange={(e) =>
-                                              setUpdateRole({
-                                                ...updateRole,
-                                                level: e.target.value,
-                                              })
-                                            }
-                                          />
-                                        </Form.Group>
-                                      </>
+                                {uCategoryToMap != ""
+                                  ? [uCategoryToMap].map((uCat) => (
+                                      <Form.Group className="mb-3">
+                                        <Form.Label>Nama kategori</Form.Label>
+                                        <Form.Control
+                                          required
+                                          placeholder={uCat.name}
+                                          className="input form-custom"
+                                          type="text"
+                                          onChange={(e) =>
+                                            setCurUsageCat({
+                                              ...curUsageCat,
+                                              name: e.target.value,
+                                            })
+                                          }
+                                        />
+                                      </Form.Group>
                                     ))
                                   : null}
                               </Col>
@@ -191,7 +157,7 @@ export const UpdateRole = () => {
                         <Card.Footer>
                           <Button
                             className="btn-post"
-                            onClick={updateCurrentRole}
+                            onClick={updateUsageCat}
                             type="submit"
                           >
                             Simpan
@@ -212,7 +178,7 @@ export const UpdateRole = () => {
         </>
       );
     } else {
-      return <Navigate to="/unit-kerja" />;
+      return <Navigate to="/kategori-peminjaman" />;
     }
   } else {
     return <Navigate to="/silakend-login" />;

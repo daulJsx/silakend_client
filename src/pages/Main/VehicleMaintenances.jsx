@@ -21,7 +21,7 @@ import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
 // Icons
-import { FaTools } from "react-icons/fa";
+import { BiCog } from "react-icons/bi";
 import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
@@ -88,7 +88,7 @@ export const VehicleMaintenances = () => {
                         key={idx}
                         placement={placement}
                         name={placement}
-                        bc={<FaTools />}
+                        bc={<BiCog />}
                         parentLink={"/kategori-perbaikan"}
                       />
                     ))}

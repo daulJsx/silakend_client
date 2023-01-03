@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
-import FetchRoles from "../../consAPI/FetchRoles";
+import FetchVCategories from "../../consAPI/FetchVCategories";
 
 // Navigating
 import { Navigate, NavLink } from "react-router-dom";
@@ -11,7 +11,7 @@ import { Navigate, NavLink } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
 
 // Delete Function
-import { DeleteRole } from "../../functions/Delete/DeleteRole";
+import { DeleteVehicleCat } from "../../functions/Delete/DeleteVehicleCat";
 
 // Bootstrap components
 import { Container, Row, Col, Button } from "react-bootstrap";
@@ -24,27 +24,27 @@ import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
 // Icons
-import { CgUserList } from "react-icons/cg";
-import { HiPlusSm } from "react-icons/hi";
+import { RiCarWashingLine } from "react-icons/ri";
+import { TbClipboardPlus } from "react-icons/tb";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 
-export const Roles = () => {
+export const VehicleCategories = () => {
   const auth = useAuthUser();
 
-  // Fetching roles data
+  // Fetching vehicle categories data
   const {
-    data: rolesData,
+    data: vehicleCatData,
     error,
     isLoading,
     isError,
-  } = useQuery("roles", FetchRoles);
+  } = useQuery("vehicleCat", FetchVCategories);
 
   // get job unit by id
-  function GetRolesById(roles) {
-    let { role_id } = roles;
-    localStorage.setItem("roleId", role_id);
-    localStorage.setItem("roleToMap", JSON.stringify(roles));
+  function GetVehicleCatById(vCategory) {
+    let { vcategory_id } = vCategory;
+    localStorage.setItem("vcategory_id", vcategory_id);
+    localStorage.setItem("vCategoryToMap", JSON.stringify(vCategory));
   }
 
   if (localStorage.getItem("token") && auth()) {
@@ -84,8 +84,8 @@ export const Roles = () => {
                         key={idx}
                         placement={placement}
                         name={placement}
-                        bc={<CgUserList />}
-                        parentLink={"/data-peran"}
+                        bc={<RiCarWashingLine />}
+                        parentLink={"/kategori-kendaraan"}
                       />
                     ))}
                   </Col>
@@ -95,10 +95,12 @@ export const Roles = () => {
                 <div className="me-1 d-flex justify-content-end">
                   <Row className="py-4 mb-2">
                     <Col>
-                      <NavLink to={"/data-peran/tambah-peran"}>
+                      <NavLink
+                        to={"/kategori-kendaraan/tambah-kategori-kendaraan"}
+                      >
                         <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                          Tambah Peran
-                          <HiPlusSm className="fs-3" />
+                          Tambah Kategori
+                          <TbClipboardPlus className="fs-3" />
                         </Button>
                       </NavLink>
                     </Col>
@@ -111,53 +113,57 @@ export const Roles = () => {
                       <Card>
                         <Card.Body>
                           <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            Data Peran
+                            Data Kategori Kendaraan
                           </Card.Title>
 
                           <Table bordered hover responsive>
                             <thead>
                               <tr>
                                 <th>No</th>
-                                <th>NAMA PERAN</th>
-                                <th>LEVEL</th>
+                                <th>NAMA KATEGORI</th>
                                 <th>AKSI</th>
                               </tr>
                             </thead>
                             <tbody>
-                              {rolesData?.map((roles, index) => {
-                                return roles.level != 1 ? (
-                                  <tr>
-                                    <td
-                                      key={roles.role_id}
-                                      value={roles.role_id}
-                                    >
-                                      {index + 1}
-                                    </td>
-                                    <td>{roles.name}</td>
-                                    <td>{roles.level}</td>
-                                    <td>
-                                      <div className="d-flex gap-1 justify-content-center">
-                                        <NavLink to={"/data-peran/edit-peran"}>
-                                          <Button
-                                            className="btn btn-edit"
-                                            onClick={() => GetRolesById(roles)}
-                                          >
-                                            <AiFillEdit className="fs-6" />
-                                          </Button>
-                                        </NavLink>
+                              {vehicleCatData?.map((vehicleCat, index) => (
+                                <tr>
+                                  <td
+                                    key={vehicleCat.vcategory_id}
+                                    value={vehicleCat.vcategory_id}
+                                  >
+                                    {index + 1}
+                                  </td>
+                                  <td>{vehicleCat.name}</td>
+                                  <td>
+                                    <div className="d-flex gap-1 justify-content-center">
+                                      <NavLink
+                                        to={
+                                          "/kategori-kendaraan/edit-kategori-kendaraan"
+                                        }
+                                      >
                                         <Button
-                                          className="btn-danger btn-delete"
+                                          className="btn btn-edit"
                                           onClick={() =>
-                                            DeleteRole(roles.role_id)
+                                            GetVehicleCatById(vehicleCat)
                                           }
                                         >
-                                          <FaTrashAlt className="fs-6" />
+                                          <AiFillEdit className="fs-6" />
                                         </Button>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                ) : null;
-                              })}
+                                      </NavLink>
+                                      <Button
+                                        className="btn-danger btn-delete"
+                                        onClick={() =>
+                                          DeleteVehicleCat(
+                                            vehicleCat.vcategory_id
+                                          )
+                                        }
+                                      >
+                                        <FaTrashAlt className="fs-6" />
+                                      </Button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
                             </tbody>
                           </Table>
                         </Card.Body>

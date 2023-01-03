@@ -69,6 +69,15 @@ a.brand-icon:hover {
   box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
   transform: scale(1.05, 1.05);
 }
+/* .nav-pills .side-menu .nav-link {
+  color: var(--color-primary);
+  border-radius: 14px;
+  background: linear-gradient(145deg, #dddee3, #ffffff);
+  box-shadow: 7px 7px 14px #e4e6ea, -7px -7px 14px #ffffff;
+  text-decoration: none;
+
+  transform: scale(1.05, 1.05);
+} */
 
 .nav-pills .side-menu .nav-link:not(.active) {
   color: var(--gray-400);

@@ -12,20 +12,22 @@ import "./Aside.css";
 import "./../../App.css";
 
 // Icons
-import { RiDashboardFill } from "react-icons/ri";
-import { HiClipboardCopy } from "react-icons/hi";
+import { CgHomeAlt } from "react-icons/cg";
+import { HiOutlineClipboardCopy } from "react-icons/hi";
 import { RiCommunityLine } from "react-icons/ri";
-import { BiDetail } from "react-icons/bi";
-import { FaTools } from "react-icons/fa";
-import { HiUserGroup } from "react-icons/hi";
+import { FiTool } from "react-icons/fi";
+import { BiCog } from "react-icons/bi";
+import { TbUsers } from "react-icons/tb";
 import { FaUserTie } from "react-icons/fa";
-import { AiFillCar } from "react-icons/ai";
+import { RiCarLine } from "react-icons/ri";
 import { CgUserList } from "react-icons/cg";
+import { HiOutlineClipboardList } from "react-icons/hi";
+import { RiCarWashingLine } from "react-icons/ri";
 
 // assets
 import polmanLogo from "./../../assets/polman.webp";
 
-import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+// import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
 export const Aside = () => {
   return (
@@ -36,61 +38,43 @@ export const Aside = () => {
 
       {/* SIDEBAR MENU START */}
       <div className="d-flex gap-3 flex-column mx-auto ">
-        <AsideMenu icon={<RiDashboardFill />} title="Dashboard" link="/" />
+        <AsideMenu icon={<CgHomeAlt />} title="Beranda" link="/" />
 
         <AsideMenu
-          icon={<HiClipboardCopy />}
+          icon={<HiOutlineClipboardList />}
+          title="Kategori Peminjaman"
+          link="/kategori-peminjaman"
+        />
+
+        <AsideMenu
+          icon={<HiOutlineClipboardCopy />}
           title="Order Peminjaman"
           link="/order-peminjaman"
         />
 
-        <Menu>
-          <SubMenu className="submenu__title" label="Perbaikan Kendaraan">
-            <Nav
-              variant="pills"
-              className="dropdown__menu d-flex flex-column gap-2"
-            >
-              <MenuItem className="MenuItem">
-                <AsideMenu
-                  icon={<FaTools />}
-                  title="Kategori Perbaikan"
-                  link="/kategori-perbaikan"
-                />
-              </MenuItem>
-              <MenuItem className="MenuItem">
-                <AsideMenu
-                  icon={<BiDetail />}
-                  title="Rincian Perbaikan"
-                  link="/rincian-perbaikan"
-                />
-              </MenuItem>
-            </Nav>
-          </SubMenu>
-        </Menu>
+        <AsideMenu
+          icon={<BiCog />}
+          title="Kategori Perbaikan"
+          link="/kategori-perbaikan"
+        />
 
-        <Menu>
-          <SubMenu className="submenu__title" label="Data Pengguna">
-            <Nav
-              variant="pills"
-              className="dropdown__menu d-flex flex-column gap-2"
-            >
-              <MenuItem className="MenuItem">
-                <AsideMenu
-                  icon={<HiUserGroup />}
-                  title="Data Pengguna"
-                  link="/data-pengguna"
-                />
-              </MenuItem>
-              <MenuItem className="MenuItem">
-                <AsideMenu
-                  icon={<CgUserList />}
-                  title="Peran Pengguna"
-                  link="/data-peran"
-                />
-              </MenuItem>
-            </Nav>
-          </SubMenu>
-        </Menu>
+        <AsideMenu
+          icon={<FiTool />}
+          title="Rincian Perbaikan"
+          link="/rincian-perbaikan"
+        />
+
+        <AsideMenu
+          icon={<TbUsers />}
+          title="Data Pengguna"
+          link="/data-pengguna"
+        />
+
+        <AsideMenu
+          icon={<CgUserList />}
+          title="Peran Pengguna"
+          link="/data-peran"
+        />
 
         <AsideMenu
           icon={<FaUserTie />}
@@ -99,7 +83,13 @@ export const Aside = () => {
         />
 
         <AsideMenu
-          icon={<AiFillCar />}
+          icon={<RiCarWashingLine />}
+          title="Kategori Kendaraan"
+          link="/kategori-kendaraan"
+        />
+
+        <AsideMenu
+          icon={<RiCarLine />}
           title="Data Kendaraan"
           link="/data-kendaraan"
         />

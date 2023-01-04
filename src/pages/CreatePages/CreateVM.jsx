@@ -64,10 +64,10 @@ export const CreateVM = () => {
           )
           .then((response) => {
             if (response.status === 200) {
-              navigate("/kategori-perbaikan");
+              navigate("/perbaikan-kendaraan");
               swal({
                 title: "Berhasil!",
-                text: "Data Kategori Perbaikan Telah Dibuat",
+                text: response.data.msg,
                 icon: "success",
                 button: "Tutup",
               });

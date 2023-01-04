@@ -70,7 +70,7 @@ export const CreateVehicle = () => {
               navigate("/data-kendaraan");
               swal({
                 title: "Berhasil!",
-                text: "Data Kendaraan Ditambahkan",
+                text: response.data.msg,
                 icon: "success",
                 button: "Tutup",
               });

@@ -52,19 +52,22 @@ export const Login = (props) => {
         .post("https://silakend-server.xyz/api/auth/login", formData)
         .then((response) => {
           if (response.status === 200) {
-            signIn({
-              token: response.data.content.access_token,
-              expiresIn: 1000,
-              tokenType: "Bearer",
-              authState: response.data,
-            });
-            localStorage.setItem("token", response.data.content.access_token);
-            swal({
-              title: response.data.msg,
-              text: "Selamat datang " + auth().content.username,
-              icon: "success",
-            });
-            navigate("/");
+            if (
+              signIn({
+                token: response.data.content.access_token,
+                expiresIn: 1000,
+                tokenType: "Bearer",
+                authState: response.data,
+              })
+            ) {
+              localStorage.setItem("token", response.data.content.access_token);
+              swal({
+                title: response.data.msg,
+                text: "Selamat datang " + auth().content.username,
+                icon: "success",
+              });
+              navigate("/");
+            }
           }
         })
         .catch((error) => {

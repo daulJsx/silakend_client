@@ -133,6 +133,26 @@ export const VehicleMaintenancesDetail = () => {
                 </Row>
                 {/* NAVBAR */}
                 <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
+                  {maintenanceDetails === null ? (
+                    <Alert variant="warning" className="d-flex bd-highlight">
+                      <div className="fs-5 me-auto bd-highlight">
+                        Data perbaikan ini belum ada rincian!
+                      </div>
+
+                      <div className="bd-highlight">
+                        <NavLink
+                          to={
+                            "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/tambah-rincian"
+                          }
+                        >
+                          <Button variant="warning" size="sm">
+                            Tambahkan Rincian <FaPlus />
+                          </Button>
+                        </NavLink>
+                      </div>
+                    </Alert>
+                  ) : null}
+
                   <Row>
                     <Col>
                       <Card>
@@ -208,26 +228,7 @@ export const VehicleMaintenancesDetail = () => {
                     </Col>
                   </Row>
 
-                  {maintenanceDetails === null ? (
-                    <Alert variant="warning">
-                      <Alert.Heading>
-                        Data perbaikan ini belum ada rincian!
-                      </Alert.Heading>
-
-                      <hr />
-                      <div className="d-flex justify-content-end">
-                        <NavLink
-                          to={
-                            "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/tambah-rincian"
-                          }
-                        >
-                          <Button variant="outline-warning" size="sm">
-                            Tambahkan Rincian <FaPlus />
-                          </Button>
-                        </NavLink>
-                      </div>
-                    </Alert>
-                  ) : (
+                  {maintenanceDetails !== null ? (
                     <Row>
                       <Col>
                         <Card>
@@ -321,7 +322,7 @@ export const VehicleMaintenancesDetail = () => {
                         </Card>
                       </Col>
                     </Row>
-                  )}
+                  ) : null}
                 </main>
                 <Row>
                   <Col>

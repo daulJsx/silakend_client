@@ -121,8 +121,10 @@ export const CreateVMDetail = () => {
                       placement={placement}
                       name={placement}
                       bc={<FaArrowLeft />}
-                      title={"Tambah Data Kategori Perbaikan Kendaraan"}
-                      parentLink={"/rincian-perbaikan"}
+                      title={"Tambah Data Rincian Perbaikan Kendaraan"}
+                      parentLink={
+                        "/perbaikan-kendaraan/rincian-perbaikan-kendaraan"
+                      }
                     />
                   ))}
                 </Col>

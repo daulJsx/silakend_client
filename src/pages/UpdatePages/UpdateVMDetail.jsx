@@ -129,8 +129,10 @@ export const UpdateVMDetail = () => {
                       placement={placement}
                       name={placement}
                       bc={<FaArrowLeft />}
-                      title={"Tambah Data Kategori Perbaikan Kendaraan"}
-                      parentLink={"/rincian-perbaikan"}
+                      title={"Edit Data Rincian Perbaikan Kendaraan"}
+                      parentLink={
+                        "/perbaikan-kendaraan/rincian-perbaikan-kendaraan"
+                      }
                     />
                   ))}
                 </Col>

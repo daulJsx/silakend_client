@@ -15,7 +15,6 @@ import "./../../App.css";
 import { CgHomeAlt } from "react-icons/cg";
 import { HiOutlineClipboardCopy } from "react-icons/hi";
 import { RiCommunityLine } from "react-icons/ri";
-import { FiTool } from "react-icons/fi";
 import { BiCog } from "react-icons/bi";
 import { TbUsers } from "react-icons/tb";
 import { FaUserTie } from "react-icons/fa";
@@ -54,14 +53,8 @@ export const Aside = () => {
 
         <AsideMenu
           icon={<BiCog />}
-          title="Kategori Perbaikan"
-          link="/kategori-perbaikan"
-        />
-
-        <AsideMenu
-          icon={<FiTool />}
-          title="Rincian Perbaikan"
-          link="/rincian-perbaikan"
+          title="Perbaikan Kendaraan"
+          link="/perbaikan-kendaraan"
         />
 
         <AsideMenu

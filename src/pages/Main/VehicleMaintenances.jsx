@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
-import axios from "axios";
 import FetchVM from "../../consAPI/FetchVM";
 
 // Navigating
@@ -47,6 +46,7 @@ export const VehicleMaintenances = () => {
   // get vm by id
   function GetVMId(VMId) {
     let { maintenance_id } = VMId;
+    // FetchVehicleMaintenanceByMId(maintenance_id);
     localStorage.setItem("maintenanceId", maintenance_id);
     localStorage.setItem("VMToMap", JSON.stringify(VMId));
   }
@@ -89,7 +89,7 @@ export const VehicleMaintenances = () => {
                         placement={placement}
                         name={placement}
                         bc={<BiCog />}
-                        parentLink={"/kategori-perbaikan"}
+                        parentLink={"/perbaikan-kendaraan"}
                       />
                     ))}
                   </Col>
@@ -100,7 +100,7 @@ export const VehicleMaintenances = () => {
                   <Row className="py-4 mb-2">
                     <Col>
                       <NavLink
-                        to={"/kategori-perbaikan/tambah-kategori-perbaikan"}
+                        to={"/perbaikan-kendaraan/tambah-perbaikan-kendaraan"}
                       >
                         <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
                           Tambah Kategori
@@ -127,58 +127,70 @@ export const VehicleMaintenances = () => {
                                 <th>KENDARAAN</th>
                                 <th>TANGGAL</th>
                                 <th>KATEGORI</th>
-                                <th>DESKRIPSI</th>
                                 <th>PENGELUARAN</th>
                                 <th>AKSI</th>
+                                <th>RINCIAN</th>
                               </tr>
                             </thead>
                             <tbody>
                               {vehicleMData?.map((vm, index) => (
-                                <>
-                                  <tr>
-                                    <td key={vm.maintenance_id}>{index + 1}</td>
-                                    <td>{vm.vehicle_id}</td>
-                                    <td>{vm.date}</td>
-                                    <td>{vm.category}</td>
-                                    <td>{vm.description}</td>
-                                    <td>
-                                      {vm.total_cost
-                                        ? vm.total_cost.toLocaleString(
-                                            "id-ID",
-                                            {
-                                              style: "currency",
-                                              currency: "IDR",
-                                            }
-                                          )
-                                        : null}
-                                    </td>
-                                    <td>
-                                      <div className="d-flex gap-1 justify-content-center">
-                                        <NavLink
-                                          to={
-                                            "/kategori-perbaikan/edit-kategori-perbaikan"
-                                          }
-                                        >
-                                          <Button
-                                            className="btn btn-edit"
-                                            onClick={() => GetVMId(vm)}
-                                          >
-                                            <AiFillEdit className="fs-6" />
-                                          </Button>
-                                        </NavLink>
+                                <tr>
+                                  <td key={vm.maintenance_id}>{index + 1}</td>
+                                  <td>{vm.vehicle.name}</td>
+                                  <td>{vm.date}</td>
+                                  <td>{vm.category}</td>
 
+                                  <td>
+                                    {vm.total_cost
+                                      ? vm.total_cost.toLocaleString("id-ID", {
+                                          style: "currency",
+                                          currency: "IDR",
+                                        })
+                                      : null}
+                                  </td>
+
+                                  <td>
+                                    <div className="d-flex gap-1 justify-content-center">
+                                      <NavLink
+                                        to={
+                                          "/perbaikan-kendaraan/edit-perbaikan-kendaraan"
+                                        }
+                                      >
                                         <Button
-                                          onClick={() =>
-                                            DeleteVM(vm.maintenance_id)
-                                          }
-                                          className="btn-danger btn-delete"
+                                          className="btn btn-edit"
+                                          onClick={() => GetVMId(vm)}
                                         >
-                                          <FaTrashAlt className="fs-6" />
+                                          <AiFillEdit className="fs-6" />
                                         </Button>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                </>
+                                      </NavLink>
+
+                                      <Button
+                                        onClick={() =>
+                                          DeleteVM(vm.maintenance_id)
+                                        }
+                                        className="btn-danger btn-delete"
+                                      >
+                                        <FaTrashAlt className="fs-6" />
+                                      </Button>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <NavLink
+                                      to={
+                                        "/perbaikan-kendaraan/rincian-perbaikan-kendaraan"
+                                      }
+                                    >
+                                      <Button
+                                        onClick={() => {
+                                          GetVMId(vm);
+                                        }}
+                                        className="btn-info btn-detail"
+                                      >
+                                        <FaInfo className="fs-6" />
+                                      </Button>
+                                    </NavLink>
+                                  </td>
+                                </tr>
                               ))}
                             </tbody>
                           </Table>

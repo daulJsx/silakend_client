@@ -299,6 +299,8 @@ export const UpdateVM = () => {
           </Row>
         </Container>
       );
+    } else {
+      return <Navigate to="/perbaikan-kendaraan" />;
     }
   } else {
     return <Navigate to="/silakend-login" />;

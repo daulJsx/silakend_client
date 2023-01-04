@@ -33,9 +33,9 @@ import { Drivers } from "./pages/Main/Drivers";
 import { VehicleMaintenances } from "./pages/Main/VehicleMaintenances";
 import { CreateVM } from "./pages/CreatePages/CreateVM";
 import { UpdateVM } from "./pages/UpdatePages/UpdateVM";
-import { VehicleMDetails } from "./pages/Main/VehicleMDetails";
 import { CreateVMDetail } from "./pages/CreatePages/CreateVMDetail";
 import { UpdateVMDetail } from "./pages/UpdatePages/UpdateVMDetail";
+import { VehicleMaintenancesDetail } from "./pages/Details/VehicleMaintenanceDetail";
 
 import { JobUnits } from "./pages/Main/JobUnits";
 import { CreateJobUnit } from "./pages/CreatePages/CreateJobUnit";
@@ -108,7 +108,7 @@ function App() {
 
             {/*----- START VM PAGES---- */}
             <Route
-              path="/kategori-perbaikan"
+              path="/perbaikan-kendaraan"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <VehicleMaintenances />
@@ -116,7 +116,7 @@ function App() {
               }
             />
             <Route
-              path="/kategori-perbaikan/tambah-kategori-perbaikan"
+              path="/perbaikan-kendaraan/tambah-perbaikan-kendaraan"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <CreateVM />
@@ -124,7 +124,7 @@ function App() {
               }
             />
             <Route
-              path="/kategori-perbaikan/edit-kategori-perbaikan"
+              path="/perbaikan-kendaraan/edit-perbaikan-kendaraan"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <UpdateVM />
@@ -132,15 +132,15 @@ function App() {
               }
             />
             <Route
-              path="/rincian-perbaikan"
+              path="/perbaikan-kendaraan/rincian-perbaikan-kendaraan"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
-                  <VehicleMDetails />
+                  <VehicleMaintenancesDetail />
                 </RequireAuth>
               }
             />
             <Route
-              path="/rincian-perbaikan/tambah-rincian-perbaikan"
+              path="/perbaikan-kendaraan/rincian-perbaikan-kendaraan/tambah-rincian"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <CreateVMDetail />
@@ -148,7 +148,7 @@ function App() {
               }
             />
             <Route
-              path="/rincian-perbaikan/edit-rincian-perbaikan"
+              path="/perbaikan-kendaraan/rincian-perbaikan-kendaraan/edit-rincian"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
                   <UpdateVMDetail />

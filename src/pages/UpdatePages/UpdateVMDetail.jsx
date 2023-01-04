@@ -44,21 +44,13 @@ export const UpdateVMDetail = () => {
 
   // Body for store
   const [currentVehicleMDetail, setCurrentVehicleMDetail] = useState({
-    maintenance_id: "",
+    maintenance_id: localStorage.getItem("maintenanceId"),
     item_name: "",
     item_qty: "",
     item_unit: "",
     item_price: "",
     price_total: "",
   });
-
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
 
   // Store new vehicle data
   const updateVehicleMD = async () => {
@@ -81,7 +73,7 @@ export const UpdateVMDetail = () => {
         )
         .then((response) => {
           if (response.status === 200) {
-            navigate("/rincian-perbaikan");
+            navigate("/perbaikan-kendaraan/rincian-perbaikan-kendaraan/");
             swal({
               title: "Berhasil!",
               text: response.data.msg,
@@ -91,7 +83,11 @@ export const UpdateVMDetail = () => {
           }
         })
         .catch((error) => {
-          handleError(error);
+          if (error.response.data.message) {
+            swal("Ups!", error.response.data.message, "error");
+          } else {
+            swal("Ups!", error.response.data.msg, "error");
+          }
         });
     } else {
       swal({
@@ -151,38 +147,6 @@ export const UpdateVMDetail = () => {
                         {VMDToMap != ""
                           ? [VMDToMap].map((currentVMD) => (
                               <>
-                                <Form.Group>
-                                  <Form.Label>Kendaraan</Form.Label>
-                                  <Form.Select
-                                    required
-                                    style={{
-                                      backgroundColor: "#F5F7FC",
-                                      border: "none",
-                                      padding: "17px",
-                                    }}
-                                    aria-label="Default select example"
-                                    onChange={(e) =>
-                                      setCurrentVehicleMDetail({
-                                        ...currentVehicleMDetail,
-                                        maintenance_id: e.target.value,
-                                      })
-                                    }
-                                  >
-                                    <option>{currentVMD.maintenance_id}</option>
-                                    {vehicleMaintenances?.map((vm) => {
-                                      return vm.maintenance_id !=
-                                        currentVMD.maintenance_id ? (
-                                        <option
-                                          key={vm.maintenance_id}
-                                          value={vm.maintenance_id}
-                                        >
-                                          {vm.category}
-                                        </option>
-                                      ) : null;
-                                    })}
-                                  </Form.Select>
-                                </Form.Group>
-
                                 <Form.Group>
                                   <Form.Label>nama spare part</Form.Label>
 

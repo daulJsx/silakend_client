@@ -59,13 +59,12 @@ export const Login = (props) => {
               authState: response.data,
             });
             localStorage.setItem("token", response.data.content.access_token);
-            // if login is successful, navigate to the dashboard
-            navigate("/");
             swal({
               title: response.data.msg,
               text: "Selamat datang " + auth().content.username,
               icon: "success",
             });
+            navigate("/");
           }
         })
         .catch((error) => {
@@ -87,7 +86,6 @@ export const Login = (props) => {
 
   return (
     <>
-      <Toaster position="bottom-right" reverseOrder={false} />
       <Container fluid className="main-container">
         <Row className="main-row min-vh-100 ">
           <Col className="logo-side2 d-none d-lg-block">

@@ -235,7 +235,7 @@ export const CreateVehicle = () => {
                               </Form.Group>
 
                               <Form.Group className="mb-3">
-                                <Form.Label>Jumlah Kilometer Tempuh</Form.Label>
+                                <Form.Label>Tanggal Pajak</Form.Label>
                                 <Form.Control
                                   className="input form-custom"
                                   type="date"

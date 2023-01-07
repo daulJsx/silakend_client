@@ -49,7 +49,7 @@ export const CreateVehicleCat = () => {
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
-    if (newVehicleCat.name != "") {
+    if (newVehicleCat.name !== "") {
       await axios
         .post(
           "https://silakend-server.xyz/api/vehiclecategories",

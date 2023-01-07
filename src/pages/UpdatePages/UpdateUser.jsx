@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
 import FetchRoles from "../../consAPI/FetchRoles";
+import FetchJobUnits from "../../consAPI/FetchJobUnits";
 
 // Redirecting
 import { useNavigate } from "react-router-dom";
@@ -92,7 +93,6 @@ export const UpdateUser = () => {
   };
 
   const deleteRole = (id) => {
-    // console.log(id);
     const newRoles = tableRoles.filter(([row, index]) => row.role_id !== id);
     setTableRoles(newRoles);
   };
@@ -122,7 +122,7 @@ export const UpdateUser = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        const response = await axios
+        await axios
           .put(`https://silakend-server.xyz/api/users/${userId}`, body, config)
           .then((response) => {
             if (response.status === 200) {
@@ -133,16 +133,15 @@ export const UpdateUser = () => {
                 icon: "success",
                 button: "Tutup",
               });
+            }
+          })
+          .catch((error) => {
+            if (error.response.data.message) {
+              swal("Ups!", error.response.data.message, "error");
             } else {
-              swal({
-                title: "Gagal!",
-                text: response.data.msg,
-                icon: "error",
-                button: "Tutup",
-              });
+              swal("Ups!", error.response.data.msg, "error");
             }
           });
-        return response;
       } else {
         swal("Data pengguna aman!");
       }
@@ -151,6 +150,7 @@ export const UpdateUser = () => {
 
   // Fetch job units and roles data
   const { data: rolesData } = useQuery("roles", FetchRoles);
+  const { data: jobsData } = useQuery("jobunits", FetchJobUnits);
 
   // Password confirmation logic
   const [passwordError, setPasswordErr] = useState("");
@@ -254,289 +254,252 @@ export const UpdateUser = () => {
                         <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
                           Edit Data Pengguna Disini
                         </Card.Title>
-
-                        <Container>
-                          <Form>
-                            <Container>
-                              <Row>
-                                <Col>
-                                  <Form.Group className="mb-3 form-floating">
-                                    <Form.Control
-                                      required
-                                      value={nip}
-                                      className="input form-custom"
-                                      name="nip"
-                                      type="number"
-                                      id="nip"
-                                      placeholder="NIP"
-                                      onChange={(e) => setNip(e.target.value)}
-                                    />
-                                    <Form.Label
-                                      className="color-primary"
-                                      for="nip"
-                                    >
-                                      NIP
-                                    </Form.Label>
-                                  </Form.Group>
-                                </Col>
-                                <Col>
-                                  <Form.Group className="mb-3 form-floating">
-                                    <Form.Control
-                                      required
-                                      value={email}
-                                      className="input form-custom"
-                                      name="email"
-                                      type="email"
-                                      id="email"
-                                      placeholder="Email"
-                                      onChange={(e) => setEmail(e.target.value)}
-                                    />
-                                    <Form.Label
-                                      className="color-primary"
-                                      for="email"
-                                    >
-                                      Email
-                                    </Form.Label>
-                                  </Form.Group>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col>
-                                  <Form.Group className="mb-3 form-floating">
-                                    <Form.Control
-                                      required
-                                      value={name}
-                                      className="input form-custom"
-                                      name="name"
-                                      type="text"
-                                      id="name"
-                                      placeholder="Nama"
-                                      onChange={(e) => setName(e.target.value)}
-                                    />
-                                    <Form.Label
-                                      className="color-primary"
-                                      for="name"
-                                    >
-                                      Nama
-                                    </Form.Label>
-                                  </Form.Group>
-                                </Col>
-                                <Col>
-                                  <Form.Group className="mb-3 form-floating">
-                                    <textarea
-                                      value={address}
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                      }}
-                                      className="textarea-custom form-control"
-                                      rows={3}
-                                      id="address"
-                                      name="address"
-                                      placeholder="Alamat"
-                                      onChange={(e) =>
-                                        setAddress(e.target.value)
-                                      }
-                                    >
-                                      {address}
-                                    </textarea>
-
-                                    <Form.Label
-                                      className="color-primary"
-                                      for="address"
-                                    >
-                                      Alamat
-                                    </Form.Label>
-                                  </Form.Group>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Col>
-                                  <Form.Group className="mb-3 form-floating">
-                                    <Form.Control
-                                      required
-                                      value={phone}
-                                      className="input form-custom"
-                                      name="phone"
-                                      type="number"
-                                      id="phone"
-                                      placeholder="Telepon"
-                                      onChange={(e) => setPhone(e.target.value)}
-                                    />
-                                    <Form.Label
-                                      className="color-primary"
-                                      for="phone"
-                                    >
-                                      Telepon
-                                    </Form.Label>
-                                  </Form.Group>
-                                </Col>
-                                <Col>
-                                  <Form.Group className="mb-3 form-floating">
-                                    <Form.Control
-                                      disabled
-                                      value={jobUnit}
-                                      type="text"
-                                      id="jobunit"
-                                      placeholder="Unit Kerja"
-                                    />
-                                    <Form.Label
-                                      for="jobunit"
-                                      className="color-primary"
-                                    >
-                                      Unit kerja
-                                    </Form.Label>
-                                  </Form.Group>
-                                </Col>
-                              </Row>
-                              <Row>
-                                <Container>
-                                  <Alert variant="primary">
-                                    <Alert.Heading className="p-2 fs-6">
-                                      Pilih peran baru untuk pengguna
-                                    </Alert.Heading>
-                                    <Col>
-                                      <Form.Group>
-                                        <Form.Select
-                                          id="roleSelect"
-                                          onChange={handleRoleChanges}
-                                          required
-                                          style={{
-                                            backgroundColor: "#F5F7FC",
-                                            border: "none",
-                                            padding: "17px",
-                                            marginBottom: "10px",
-                                          }}
-                                          aria-label="Default select example"
-                                        >
-                                          <option>
-                                            -- Pilih Peran Baru --
-                                          </option>
-
-                                          {rolesData?.map((roles) => {
-                                            return roles.level != 1 &&
-                                              oldRole != [roles.role_id] ? (
-                                              <option
-                                                key={roles.role_id}
-                                                value={roles.role_id}
-                                              >
-                                                {roles.name}
-                                              </option>
-                                            ) : null;
-                                          })}
-                                        </Form.Select>
-
-                                        {/* <Button onClick={AddNewRoleToTable}>
-                                          Tambahkan Peran
-                                        </Button> */}
-                                      </Form.Group>
-                                    </Col>
-                                  </Alert>
-                                </Container>
-                              </Row>
-                              <Row>
-                                <Col>
-                                  <Form.Group className="mb-3">
-                                    <Form.Label className="color-primary">
-                                      Peran Saat Ini
-                                    </Form.Label>
-                                    <Table responsive bordered>
-                                      <thead>
-                                        <tr>
-                                          <th>Peran saat ini</th>
-                                          <th>Hapus peran</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        {role.map((rolesNow, index) => {
-                                          return (
-                                            <>
-                                              <tr key={index}>
-                                                <td>{rolesNow.name}</td>
-
-                                                <td></td>
-                                              </tr>
-                                            </>
-                                          );
-                                        })}
-                                        {tableRoles.map(([newRoles, index]) => {
-                                          return (
-                                            <tr key={index}>
-                                              <td>{newRoles.name}</td>
-                                              <td>
-                                                <Button
-                                                  onClick={() =>
-                                                    deleteRole(newRoles.role_id)
-                                                  }
-                                                  className="btn-sm btn-danger"
-                                                >
-                                                  <RiCloseFill className="fs-3" />
-                                                </Button>
-                                              </td>
-                                            </tr>
-                                          );
-                                        })}
-                                      </tbody>
-                                    </Table>
-                                  </Form.Group>
-                                </Col>
-                              </Row>
-
-                              <Row>
-                                <Col>
-                                  <Alert
-                                    variant="secondary"
-                                    className="alert-custom col-md-6"
+                        <Form>
+                          <Container>
+                            <Row>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>NIP</Form.Label>
+                                  <Form.Control
+                                    required
+                                    value={nip}
+                                    className="input form-custom"
+                                    type="number"
+                                    onChange={(e) => setNip(e.target.value)}
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Email</Form.Label>
+                                  <Form.Control
+                                    required
+                                    value={email}
+                                    className="input form-custom"
+                                    type="email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <Form.Group className="mb-3 ">
+                                  <Form.Label>Nama</Form.Label>
+                                  <Form.Control
+                                    required
+                                    value={name}
+                                    className="input form-custom"
+                                    type="text"
+                                    placeholder="Nama"
+                                    onChange={(e) => setName(e.target.value)}
+                                  />
+                                </Form.Group>
+                              </Col>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Telepon</Form.Label>
+                                  <Form.Control
+                                    required
+                                    value={phone}
+                                    className="input form-custom"
+                                    type="number"
+                                    placeholder="Telepon"
+                                    onChange={(e) => setPhone(e.target.value)}
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Unit Kerja</Form.Label>
+                                  <Form.Select
+                                    required
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "17px",
+                                    }}
+                                    aria-label="Default select example"
+                                    onChange={(e) => setUnitId(e.target.value)}
                                   >
-                                    <Alert.Heading className="p-2 fs-6">
-                                      Bagian Ini dapat dikosongkan
-                                    </Alert.Heading>
-                                    <Row>
-                                      <Col>
-                                        <PasswordInputField
-                                          handlePasswordChange={
-                                            handlePasswordChange
-                                          }
-                                          handleValidation={handleValidation}
-                                          passwordValue={userPassword.password}
-                                          passwordError={passwordError}
-                                        />
-                                      </Col>
-                                    </Row>
+                                    <option>{jobUnit}</option>
+                                    {jobsData?.map((jobunits) => {
+                                      return jobunits.name != jobUnit ? (
+                                        <option
+                                          key={jobunits.unit_id}
+                                          value={jobunits.unit_id}
+                                        >
+                                          {jobunits.name}
+                                        </option>
+                                      ) : null;
+                                    })}
+                                  </Form.Select>
+                                </Form.Group>
+                              </Col>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Alamat</Form.Label>
+                                  <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "15px",
+                                    }}
+                                    type="text"
+                                    value={address}
+                                    className="input form-custom"
+                                    onChange={(e) => setAddress(e.target.value)}
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Container>
+                                <Alert variant="primary">
+                                  <Alert.Heading className="fs-5">
+                                    Tambah peran baru untuk pengguna
+                                  </Alert.Heading>
+                                  <p>
+                                    Jika peran sebelumnya ingin tetap ada, maka
+                                    pilih peran yang sama dengan peran
+                                    sebelumnya
+                                  </p>
+                                  <Col>
+                                    <Form.Group>
+                                      <Form.Select
+                                        id="roleSelect"
+                                        onChange={handleRoleChanges}
+                                        required
+                                        style={{
+                                          backgroundColor: "#F5F7FC",
+                                          border: "none",
+                                          padding: "17px",
+                                          marginBottom: "10px",
+                                        }}
+                                        aria-label="Default select example"
+                                      >
+                                        <option>-- Pilih Peran Baru --</option>
 
-                                    <Row>
-                                      <Col>
-                                        <ConfirmPasswordInputField
-                                          handlePasswordChange={
-                                            handlePasswordChange
-                                          }
-                                          handleValidation={handleValidation}
-                                          confirmPasswordValue={
-                                            userPassword.password_confirmation
-                                          }
-                                          confirmPasswordError={
-                                            confirmPasswordError
-                                          }
-                                        />
-                                      </Col>
-                                    </Row>
-                                  </Alert>
-                                </Col>
-                              </Row>
-                            </Container>
-                          </Form>
-                        </Container>
+                                        {rolesData?.map((roles) => {
+                                          return roles.level != 1 ? (
+                                            <option
+                                              key={roles.role_id}
+                                              value={roles.role_id}
+                                            >
+                                              {roles.name} - Level {roles.level}
+                                            </option>
+                                          ) : null;
+                                        })}
+                                      </Form.Select>
+                                    </Form.Group>
+                                  </Col>
+                                </Alert>
+                              </Container>
+                            </Row>
+                            <Row>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label className="color-primary">
+                                    Peran Saat Ini
+                                  </Form.Label>
+                                  <Table responsive bordered>
+                                    <thead>
+                                      <tr>
+                                        <th>Peran saat ini</th>
+                                        <th>Hapus peran</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {role.map((rolesNow, index) => {
+                                        return (
+                                          <>
+                                            <tr key={index}>
+                                              <td>{rolesNow.name}</td>
+
+                                              <td></td>
+                                            </tr>
+                                          </>
+                                        );
+                                      })}
+                                      {tableRoles.map(([newRoles, index]) => {
+                                        return (
+                                          <tr key={index}>
+                                            <td>{newRoles.name}</td>
+                                            <td>
+                                              <Button
+                                                onClick={() =>
+                                                  deleteRole(newRoles.role_id)
+                                                }
+                                                className="btn-sm btn-danger"
+                                              >
+                                                <RiCloseFill className="fs-3" />
+                                              </Button>
+                                            </td>
+                                          </tr>
+                                        );
+                                      })}
+                                    </tbody>
+                                  </Table>
+                                </Form.Group>
+                              </Col>
+                            </Row>
+
+                            <Row>
+                              <Col>
+                                <Alert
+                                  variant="secondary"
+                                  className="alert-custom"
+                                >
+                                  <Alert.Heading className="p-2 fs-6">
+                                    Bagian Ini dapat dikosongkan
+                                  </Alert.Heading>
+                                  <Row>
+                                    <Col>
+                                      <PasswordInputField
+                                        handlePasswordChange={
+                                          handlePasswordChange
+                                        }
+                                        handleValidation={handleValidation}
+                                        passwordValue={userPassword.password}
+                                        passwordError={passwordError}
+                                      />
+                                    </Col>
+                                  </Row>
+
+                                  <Row>
+                                    <Col>
+                                      <ConfirmPasswordInputField
+                                        handlePasswordChange={
+                                          handlePasswordChange
+                                        }
+                                        handleValidation={handleValidation}
+                                        confirmPasswordValue={
+                                          userPassword.password_confirmation
+                                        }
+                                        confirmPasswordError={
+                                          confirmPasswordError
+                                        }
+                                      />
+                                    </Col>
+                                  </Row>
+                                </Alert>
+                              </Col>
+                            </Row>
+                          </Container>
+                        </Form>
                       </Card.Body>
                       <Card.Footer>
-                        <Container>
-                          <Button
-                            className="btn-post"
-                            type="submit"
-                            onClick={updateCurrentUser}
-                          >
-                            Simpan
-                          </Button>
-                        </Container>
+                        <Button
+                          className="btn-post"
+                          type="submit"
+                          onClick={updateCurrentUser}
+                        >
+                          Simpan
+                        </Button>
                       </Card.Footer>
                     </Card>
                   </Col>

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // this is fetch function
-async function fetchJobUnit() {
+async function FetchJobUnits() {
   const config = {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -22,4 +22,4 @@ async function fetchJobUnit() {
   }
 }
 
-export default fetchJobUnit;
+export default FetchJobUnits;

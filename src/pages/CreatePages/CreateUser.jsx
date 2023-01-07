@@ -46,7 +46,7 @@ export const CreateUser = () => {
   const { data: rolesData } = useQuery("roles", FetchRoles);
 
   // Body for store
-  const [userData, setUserData] = useState({
+  const [newUser, setNewUser] = useState({
     nip: "",
     name: "",
     password: "",
@@ -59,42 +59,49 @@ export const CreateUser = () => {
   });
 
   // Store new user data
-  const postNewUser = async () => {
+  // handle error function
+  function handleError(error) {
+    if (error.response.data.message) {
+      swal("Ups!", error.response.data.message, "error");
+    } else {
+      swal("Ups!", error.response.data.msg, "error");
+    }
+  }
+
+  const postNewUser = async (e) => {
+    e.preventDefault();
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
     if (
-      userData.nip ||
-      userData.name ||
-      userData.address ||
-      userData.phone ||
-      userData.email ||
-      userData.unit_id ||
-      userData.role_id != ""
+      newUser.nip !== "" &&
+      newUser.name !== "" &&
+      newUser.password !== "" &&
+      newUser.password_confirmation !== "" &&
+      newUser.address !== "" &&
+      newUser.phone !== "" &&
+      newUser.email !== "" &&
+      newUser.unit_id !== "" &&
+      newUser.role_id !== ""
     ) {
-      try {
-        await axios
-          .post("https://silakend-server.xyz/api/users/", userData, config)
-          .then((response) => {
-            if (response.status === 200) {
-              navigate("/data-user");
-              swal({
-                title: "Berhasil!",
-                text: "User Ditambahkan",
-                icon: "success",
-                button: "Tutup",
-              });
-            }
-          });
-      } catch (error) {
-        const e = swal({
-          title: "Gagal!",
-          text: "Error harap dilaporkan!",
-          icon: "error",
-          button: "Tutup",
+      await axios
+        .post("https://silakend-server.xyz/api/users/", newUser, config)
+        .then((response) => {
+          console.log(response);
+          if (response.status === 200) {
+            navigate("/data-pengguna");
+            swal({
+              title: "Berhasil!",
+              text: response.data.msg,
+              icon: "success",
+              button: "Tutup",
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          handleError(error);
         });
-        throw e;
-      }
     } else {
       swal({
         title: "Peringatan",
@@ -113,10 +120,10 @@ export const CreateUser = () => {
     const passwordInputValue = e.target.value.trim();
     const passwordInputFieldName = e.target.name;
     const NewPasswordInput = {
-      ...userData,
+      ...newUser,
       [passwordInputFieldName]: passwordInputValue,
     };
-    setUserData(NewPasswordInput);
+    setNewUser(NewPasswordInput);
   };
   const handleValidation = (e) => {
     const passwordInputValue = e.target.value.trim();
@@ -157,9 +164,9 @@ export const CreateUser = () => {
     if (
       passwordInputFieldName === "password_confirmation" ||
       (passwordInputFieldName === "password" &&
-        userData.password_confirmation.length > 0)
+        newUser.password_confirmation.length > 0)
     ) {
-      if (userData.password_confirmation !== userData.password) {
+      if (newUser.password_confirmation !== newUser.password) {
         setConfirmPasswordError("Password tidak sama!");
       } else {
         setConfirmPasswordError("");
@@ -202,12 +209,12 @@ export const CreateUser = () => {
               <Row>
                 <Col>
                   <Card>
-                    <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                      Silahkan Tambahkan Pengguna Baru Disini
-                    </Card.Title>
-                    <Card.Body className="p-0">
-                      <Container>
-                        <Form>
+                    <Form>
+                      <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                        Silahkan Tambahkan Pengguna Baru Disini
+                      </Card.Title>
+                      <Card.Body className="p-0">
+                        <Container>
                           <Container>
                             <Row>
                               <Col>
@@ -218,8 +225,8 @@ export const CreateUser = () => {
                                     className="input form-custom"
                                     type="number"
                                     onChange={(e) =>
-                                      setUserData({
-                                        ...userData,
+                                      setNewUser({
+                                        ...newUser,
                                         nip: e.target.value,
                                       })
                                     }
@@ -234,8 +241,8 @@ export const CreateUser = () => {
                                     className="input form-custom"
                                     type="email"
                                     onChange={(e) =>
-                                      setUserData({
-                                        ...userData,
+                                      setNewUser({
+                                        ...newUser,
                                         email: e.target.value,
                                       })
                                     }
@@ -252,8 +259,8 @@ export const CreateUser = () => {
                                     className="input form-custom"
                                     type="text"
                                     onChange={(e) =>
-                                      setUserData({
-                                        ...userData,
+                                      setNewUser({
+                                        ...newUser,
                                         name: e.target.value,
                                       })
                                     }
@@ -272,8 +279,8 @@ export const CreateUser = () => {
                                     }}
                                     aria-label="Default select example"
                                     onChange={(e) =>
-                                      setUserData({
-                                        ...userData,
+                                      setNewUser({
+                                        ...newUser,
                                         unit_id: e.target.value,
                                       })
                                     }
@@ -300,8 +307,8 @@ export const CreateUser = () => {
                                     className="input form-custom"
                                     type="number"
                                     onChange={(e) =>
-                                      setUserData({
-                                        ...userData,
+                                      setNewUser({
+                                        ...newUser,
                                         phone: e.target.value,
                                       })
                                     }
@@ -320,8 +327,8 @@ export const CreateUser = () => {
                                     }}
                                     aria-label="Default select example"
                                     onChange={(e) =>
-                                      setUserData({
-                                        ...userData,
+                                      setNewUser({
+                                        ...newUser,
                                         role_id: e.target.value,
                                       })
                                     }
@@ -348,7 +355,7 @@ export const CreateUser = () => {
                                     isRequired={"required"}
                                     handlePasswordChange={handlePasswordChange}
                                     handleValidation={handleValidation}
-                                    passwordValue={userData.password}
+                                    passwordValue={newUser.password}
                                     passwordError={passwordError}
                                   />
                                 </Form.Group>
@@ -358,7 +365,7 @@ export const CreateUser = () => {
                                     handlePasswordChange={handlePasswordChange}
                                     handleValidation={handleValidation}
                                     confirmPasswordValue={
-                                      userData.password_confirmation
+                                      newUser.password_confirmation
                                     }
                                     confirmPasswordError={confirmPasswordError}
                                   />
@@ -375,8 +382,8 @@ export const CreateUser = () => {
                                       border: "none",
                                     }}
                                     onChange={(e) =>
-                                      setUserData({
-                                        ...userData,
+                                      setNewUser({
+                                        ...newUser,
                                         address: e.target.value,
                                       })
                                     }
@@ -385,18 +392,18 @@ export const CreateUser = () => {
                               </Col>
                             </Row>
                           </Container>
-                        </Form>
-                      </Container>
-                    </Card.Body>
-                    <Card.Footer>
-                      <Button
-                        className="btn-post"
-                        onClick={postNewUser}
-                        type="submit"
-                      >
-                        Tambah
-                      </Button>
-                    </Card.Footer>
+                        </Container>
+                      </Card.Body>
+                      <Card.Footer>
+                        <Button
+                          className="btn-post"
+                          onClick={postNewUser}
+                          type="submit"
+                        >
+                          Tambah
+                        </Button>
+                      </Card.Footer>
+                    </Form>
                   </Card>
                 </Col>
               </Row>

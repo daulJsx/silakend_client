@@ -103,33 +103,34 @@ export const UpdateOrder = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        try {
-          const response = await axios
-            .put(
-              `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
-              body,
-              config
-            )
-            .then((response) => {
-              navigate("/order-peminjaman");
-              if (response.status === 200) {
-                swal({
-                  title: "Berhasil!",
-                  text: response.data.msg,
-                  icon: "success",
-                  button: "Tutup",
-                });
-                const updateV = response.data;
-                return updateV;
-              } else {
-                console.log(response.data);
-              }
-            });
-          return response;
-        } catch (e) {
-          const error = swal("Ups!", "Anda belum merubah apapun", "error");
-          throw error;
-        }
+        await axios
+          .put(
+            `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
+            body,
+            config
+          )
+          .then((response) => {
+            navigate("/pengajuan-peminjaman");
+            if (response.status === 200) {
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: "Tutup",
+              });
+              const updateV = response.data;
+              return updateV;
+            } else {
+              console.log(response.data);
+            }
+          })
+          .catch((error) => {
+            if (error.response.data.message) {
+              swal("Ups!", error.response.data.message, "error");
+            } else {
+              swal("Ups!", error.response.data.msg, "error");
+            }
+          });
       } else {
         swal("Data peminjaman aman!");
       }
@@ -160,8 +161,8 @@ export const UpdateOrder = () => {
                       placement={placement}
                       name={placement}
                       bc={<FaArrowLeft />}
-                      title={"Edit Data Order"}
-                      parentLink={"/order-peminjaman"}
+                      title={"Edit Pengajuan Peminjaman Kendaraan"}
+                      parentLink={"/pengajuan-peminjaman"}
                     />
                   ))}
                 </Col>

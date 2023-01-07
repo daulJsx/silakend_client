@@ -54,37 +54,34 @@ export const CreateVehicle = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
     if (
-      vehicleData.name ||
-      vehicleData.year ||
-      vehicleData.tax_date ||
-      vehicleData.valid_date ||
-      vehicleData.license_number ||
-      vehicleData.distance_count ||
-      vehicleData.vcategory_id != ""
+      vehicleData.name !== "" &&
+      vehicleData.year !== "" &&
+      vehicleData.tax_date !== "" &&
+      vehicleData.valid_date !== "" &&
+      vehicleData.license_number !== "" &&
+      vehicleData.distance_count !== "" &&
+      vehicleData.vcategory_id !== ""
     ) {
-      try {
-        await axios
-          .post("https://silakend-server.xyz/api/vehicles", vehicleData, config)
-          .then((response) => {
-            if (response.status === 200) {
-              navigate("/data-kendaraan");
-              swal({
-                title: "Berhasil!",
-                text: response.data.msg,
-                icon: "success",
-                button: "Tutup",
-              });
-            }
-          });
-      } catch (error) {
-        const e = swal({
-          title: "Gagal!",
-          text: "Error harap dilaporkan!",
-          icon: "error",
-          button: "Tutup",
+      await axios
+        .post("https://silakend-server.xyz/api/vehicles", vehicleData, config)
+        .then((response) => {
+          if (response.status === 200) {
+            navigate("/data-kendaraan");
+            swal({
+              title: "Berhasil!",
+              text: response.data.msg,
+              icon: "success",
+              button: "Tutup",
+            });
+          }
+        })
+        .catch((error) => {
+          if (error.response.data.message) {
+            swal("Ups!", error.response.data.message, "error");
+          } else {
+            swal("Ups!", error.response.data.msg, "error");
+          }
         });
-        throw e;
-      }
     } else {
       swal({
         title: "Peringatan",

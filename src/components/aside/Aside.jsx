@@ -47,8 +47,8 @@ export const Aside = () => {
 
         <AsideMenu
           icon={<HiOutlineClipboardCopy />}
-          title="Order Peminjaman"
-          link="/order-peminjaman"
+          title="Pengajuan Peminjaman"
+          link="/pengajuan-peminjaman"
         />
 
         <AsideMenu

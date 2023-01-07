@@ -3,7 +3,6 @@ import React, { useState } from "react";
 // fetch data requirement
 import { useQuery } from "react-query";
 import FetchVehicleUsages from "../../consAPI/FetchVehicleUsages";
-import axios from "axios";
 
 // Navigating
 import { NavLink } from "react-router-dom";
@@ -20,7 +19,6 @@ import Badge from "react-bootstrap/Badge";
 import { Aside } from "../../components/aside/Aside";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
-import InfoVehicleUsage from "../../components/popup/InfoVehicleUsage";
 
 // Icons
 import { HiOutlineClipboardCopy } from "react-icons/hi";
@@ -45,31 +43,6 @@ export const VehicleUsages = () => {
     isLoading,
     isError,
   } = useQuery("orders", FetchVehicleUsages);
-
-  // Get VU By ID
-  const [currentOrder, setCurrentOrder] = useState("");
-
-  //   Launch the pop up
-  const [modalShow, setModalShow] = useState(false);
-  const handleInfoOrder = (orderId) => {
-    const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    };
-
-    try {
-      const response = axios
-        .get(`https://silakend-server.xyz/api/vehicleusages/${orderId}`, config)
-        .then((res) => {
-          const orderById = res.data;
-          setCurrentOrder(orderById);
-          setModalShow(true);
-        });
-
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   if (localStorage.getItem("token") && auth()) {
     if (isError) {
@@ -115,9 +88,9 @@ export const VehicleUsages = () => {
                 <div className="me-1 d-flex justify-content-end">
                   <Row className="py-4 mb-2">
                     <Col>
-                      <NavLink to={"/order-peminjaman/buat-order"}>
+                      <NavLink to={"/pengajuan-peminjaman/buat-pengajuan"}>
                         <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                          Buat Order Baru
+                          Buat pengajuan Baru
                           <HiPlusSm className="fs-3" />
                         </Button>
                       </NavLink>
@@ -131,7 +104,9 @@ export const VehicleUsages = () => {
                       <Card>
                         <Card.Body>
                           <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            <span className="me-2">Data Order Peminjaman</span>
+                            <span className="me-2">
+                              Data Pengajuan Peminjaman Kendaraan Dinas
+                            </span>
                           </Card.Title>
 
                           <Table bordered hover responsive>
@@ -189,7 +164,9 @@ export const VehicleUsages = () => {
                                   <td>
                                     <div className="d-flex gap-1 justify-content-center">
                                       <NavLink
-                                        to={"/order-peminjaman/edit-order"}
+                                        to={
+                                          "/pengajuan-peminjaman/edit-pengajuan"
+                                        }
                                       >
                                         <Button
                                           onClick={() => GetOrderId(orders)}
@@ -211,19 +188,18 @@ export const VehicleUsages = () => {
                                   </td>
                                   <td align="center">
                                     <>
-                                      <Button
-                                        onClick={() => {
-                                          handleInfoOrder(orders.usage_id);
-                                        }}
-                                        className="btn btn-detail"
+                                      <NavLink
+                                        to={
+                                          "/pengajuan-peminjaman/rincian-pengajuan"
+                                        }
                                       >
-                                        <FaInfo className="fs-6" />
-                                      </Button>
-                                      <InfoVehicleUsage
-                                        currentOrder={currentOrder}
-                                        show={modalShow}
-                                        onHide={() => setModalShow(false)}
-                                      />
+                                        <Button
+                                          onClick={() => GetOrderId(orders)}
+                                          className="btn btn-detail"
+                                        >
+                                          <FaInfo className="fs-6" />
+                                        </Button>
+                                      </NavLink>
                                     </>
                                   </td>
                                 </tr>

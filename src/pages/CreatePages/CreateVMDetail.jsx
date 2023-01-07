@@ -50,12 +50,12 @@ export const CreateVMDetail = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
     if (
-      newVehicleMDetail.maintenance_id ||
-      newVehicleMDetail.item_name ||
-      newVehicleMDetail.item_qty ||
-      newVehicleMDetail.item_unit ||
-      newVehicleMDetail.item_price ||
-      newVehicleMDetail.price_total != ""
+      newVehicleMDetail.maintenance_id !== "" &&
+      newVehicleMDetail.item_name !== "" &&
+      newVehicleMDetail.item_qty !== "" &&
+      newVehicleMDetail.item_unit !== "" &&
+      newVehicleMDetail.item_price !== "" &&
+      newVehicleMDetail.price_total !== ""
     ) {
       await axios
         .post(

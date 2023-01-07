@@ -82,26 +82,28 @@ export const UpdateVehicle = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        try {
-          const response = await axios
-            .put(`https://silakend-server.xyz/api/vehicles/${id}`, body, config)
-            .then((response) => {
-              navigate("/data-kendaraan");
-              if (response.status === 200) {
-                swal({
-                  title: "Berhasil!",
-                  text: response.data.msg,
-                  icon: "success",
-                  button: "Tutup",
-                });
-                const updateV = response.data;
-                return updateV;
-              }
-            });
-        } catch (e) {
-          const error = swal("Ups!", "Anda belum merubah apapun", "error");
-          throw error;
-        }
+        await axios
+          .put(`https://silakend-server.xyz/api/vehicles/${id}`, body, config)
+          .then((response) => {
+            navigate("/data-kendaraan");
+            if (response.status === 200) {
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: "Tutup",
+              });
+              const updateV = response.data;
+              return updateV;
+            }
+          })
+          .catch((error) => {
+            if (error.response.data.message) {
+              swal("Ups!", error.response.data.message, "error");
+            } else {
+              swal("Ups!", error.response.data.msg, "error");
+            }
+          });
       } else {
         swal("Data kendaraan aman!");
       }

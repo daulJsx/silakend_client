@@ -71,51 +71,48 @@ export const CreateOrder = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
     if (
-      orderData.vehicle_id ||
-      orderData.driver_id ||
-      orderData.user_id ||
-      orderData.ucategory_id ||
-      orderData.usage_description ||
-      orderData.personel_count ||
-      orderData.destination ||
-      orderData.start_date ||
-      orderData.end_date ||
-      orderData.depart_date ||
-      orderData.depart_time ||
-      orderData.arrive_date ||
-      orderData.arrive_time ||
-      orderData.distance_count_out ||
-      orderData.distance_count_in ||
-      orderData.status ||
-      orderData.status_description != ""
+      orderData.vehicle_id !== "" &&
+      orderData.driver_id !== "" &&
+      orderData.user_id !== "" &&
+      orderData.ucategory_id !== "" &&
+      orderData.usage_description !== "" &&
+      orderData.personel_count !== "" &&
+      orderData.destination !== "" &&
+      orderData.start_date !== "" &&
+      orderData.end_date !== "" &&
+      orderData.depart_date !== "" &&
+      orderData.depart_time !== "" &&
+      orderData.arrive_date !== "" &&
+      orderData.arrive_time !== "" &&
+      orderData.distance_count_out !== "" &&
+      orderData.distance_count_in !== "" &&
+      orderData.status !== "" &&
+      orderData.status_description !== ""
     ) {
-      try {
-        await axios
-          .post(
-            "https://silakend-server.xyz/api/vehicleusages",
-            orderData,
-            config
-          )
-          .then((response) => {
-            if (response.status === 200) {
-              navigate("/order-peminjaman");
-              swal({
-                title: "Berhasil!",
-                text: "Order Ditambahkan",
-                icon: "success",
-                button: "Tutup",
-              });
-            }
-          });
-      } catch (error) {
-        const e = swal({
-          title: "Gagal!",
-          text: "Error harap dilaporkan!",
-          icon: "error",
-          button: "Tutup",
+      await axios
+        .post(
+          "https://silakend-server.xyz/api/vehicleusages",
+          orderData,
+          config
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            navigate("/pengajuan-peminjaman");
+            swal({
+              title: "Berhasil!",
+              text: response.data.msg,
+              icon: "success",
+              button: "Tutup",
+            });
+          }
+        })
+        .catch((error) => {
+          if (error.response.data.message) {
+            swal("Ups!", error.response.data.message, "error");
+          } else {
+            swal("Ups!", error.response.data.msg, "error");
+          }
         });
-        throw e;
-      }
     } else {
       swal({
         title: "Peringatan",
@@ -150,8 +147,8 @@ export const CreateOrder = () => {
                     placement={placement}
                     name={placement}
                     bc={<FaArrowLeft />}
-                    title={"Tambah Data Orderan Baru"}
-                    parentLink={"/order-peminjaman"}
+                    title={"Tambah Pengajuan Peminjaman Kendaraan"}
+                    parentLink={"/pengajuan-peminjaman"}
                   />
                 ))}
               </Col>

@@ -11,5 +11,7 @@ export function GetUserById(currentUser) {
   localStorage.setItem("job_unit", job_unit.name);
   localStorage.setItem("unit_id", job_unit.unit_id);
   localStorage.setItem("role", JSON.stringify(role));
-  localStorage.setItem("oldRoleId", role[0].role_id);
+  if (role.length !== 0) {
+    localStorage.setItem("oldRoleId", role[0].role_id);
+  }
 }

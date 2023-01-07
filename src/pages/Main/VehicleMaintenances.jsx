@@ -103,7 +103,7 @@ export const VehicleMaintenances = () => {
                         to={"/perbaikan-kendaraan/tambah-perbaikan-kendaraan"}
                       >
                         <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                          Tambah Kategori
+                          Tambah Perbaikan
                           <HiPlusSm className="fs-3" />
                         </Button>
                       </NavLink>

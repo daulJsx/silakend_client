@@ -19,10 +19,12 @@ import { Dashboard } from "./pages/Main/Dashboard";
 import { Users } from "./pages/Main/Users";
 import { CreateUser } from "./pages/CreatePages/CreateUser";
 import { UpdateUser } from "./pages/UpdatePages/UpdateUser";
+import { UserDetail } from "./pages/Details/UserDetail";
 
 import { VehicleUsages } from "./pages/Main/VehicleUsages";
 import { CreateOrder } from "./pages/CreatePages/CreateOrder";
 import { UpdateOrder } from "./pages/UpdatePages/UpdateOrder";
+import { VehicleUsageDetail } from "./pages/Details/VehicleUsageDetail";
 
 import { Vehicles } from "./pages/Main/Vehicles";
 import { CreateVehicle } from "./pages/CreatePages/CreateVehicle";
@@ -80,6 +82,10 @@ function App() {
               path="/data-pengguna/edit-pengguna"
               element={<UpdateUser />}
             />
+            <Route
+              path="/data-pengguna/rincian-pengguna"
+              element={<UserDetail />}
+            />
             {/*----- END USER PAGES---- */}
 
             {/*----- START ORDER CATEGORIES PAGES---- */}
@@ -95,14 +101,18 @@ function App() {
             {/*----- END ORDER CATEGORIES PAGES---- */}
 
             {/*----- START ORDER PAGES---- */}
-            <Route path="/order-peminjaman" element={<VehicleUsages />} />
+            <Route path="/pengajuan-peminjaman" element={<VehicleUsages />} />
             <Route
-              path="/order-peminjaman/buat-order"
+              path="/pengajuan-peminjaman/buat-pengajuan"
               element={<CreateOrder />}
             />
             <Route
-              path="/order-peminjaman/edit-order"
+              path="/pengajuan-peminjaman/edit-pengajuan"
               element={<UpdateOrder />}
+            />
+            <Route
+              path="/pengajuan-peminjaman/rincian-pengajuan"
+              element={<VehicleUsageDetail />}
             />
             {/*----- END ORDER PAGES---- */}
 

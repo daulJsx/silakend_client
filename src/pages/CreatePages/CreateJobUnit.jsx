@@ -50,7 +50,7 @@ export const CreateJobUnit = () => {
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
-    if (newJobUnit.name || newJobUnit.unit_account != "") {
+    if (newJobUnit.name !== "" && newJobUnit.unit_account !== "") {
       await axios
         .post("https://silakend-server.xyz/api/jobunits", newJobUnit, config)
         .then((response) => {

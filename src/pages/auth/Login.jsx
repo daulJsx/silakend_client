@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
 
 // React Notification
-import toast, { Toaster } from "react-hot-toast";
 import swal from "sweetalert";
 
 // React-bootstrap
@@ -32,7 +31,7 @@ import polmanLogo from "./../../assets/polman.webp";
 
 export const Login = (props) => {
   const signIn = useSignIn();
-  const [formData, setFormData] = React.useState({ nip: "", password: "" });
+  const [formData, setFormData] = useState({ nip: "", password: "" });
   const navigate = useNavigate();
   const auth = useAuthUser();
 
@@ -47,7 +46,7 @@ export const Login = (props) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     // perform login logic
-    if (formData.nip && formData.password !== "") {
+    if (formData.nip !== "" && formData.password !== "") {
       await axios
         .post("https://silakend-server.xyz/api/auth/login", formData)
         .then((response) => {
@@ -63,7 +62,7 @@ export const Login = (props) => {
               localStorage.setItem("token", response.data.content.access_token);
               swal({
                 title: response.data.msg,
-                text: "Selamat datang " + auth().content.username,
+                text: "Anda sebagai " + auth().content.username,
                 icon: "success",
               });
               navigate("/");
@@ -74,8 +73,11 @@ export const Login = (props) => {
           handleError(error);
         });
     } else {
-      toast("Harap Isi Kredensial Sebelum Melanjutkan!", {
-        icon: "⚠️",
+      swal({
+        title: "Peringatan",
+        text: "Harap isi semua kredensial!",
+        icon: "warning",
+        button: "Tutup",
       });
     }
   };

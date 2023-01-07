@@ -25,7 +25,7 @@ import { Footer } from "../../components/footer/Footer";
 
 // Icons
 import { RiCarWashingLine } from "react-icons/ri";
-import { TbClipboardPlus } from "react-icons/tb";
+import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 
@@ -100,7 +100,7 @@ export const VehicleCategories = () => {
                       >
                         <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
                           Tambah Kategori
-                          <TbClipboardPlus className="fs-3" />
+                          <HiPlusSm className="fs-3" />
                         </Button>
                       </NavLink>
                     </Col>

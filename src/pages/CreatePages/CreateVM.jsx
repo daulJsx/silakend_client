@@ -49,11 +49,11 @@ export const CreateVM = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
     if (
-      vehicleMData.vehicle_id ||
-      vehicleMData.date ||
-      vehicleMData.category ||
-      vehicleMData.description ||
-      vehicleMData.total_cost != ""
+      vehicleMData.vehicle_id !== "" &&
+      vehicleMData.date !== "" &&
+      vehicleMData.category !== "" &&
+      vehicleMData.description !== "" &&
+      vehicleMData.total_cost !== ""
     ) {
       try {
         await axios

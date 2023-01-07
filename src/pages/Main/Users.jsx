@@ -26,7 +26,6 @@ import { FaInfo } from "react-icons/fa";
 import { Aside } from "../../components/aside/Aside";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
-import InfoUser from "../../components/popup/InfoUser";
 
 // Functions
 import { GetUserById } from "../../functions/GetUserById";
@@ -47,32 +46,6 @@ export const Users = () => {
     isLoading,
     isError,
   } = useQuery(["users", 10], FetchUsers);
-
-  // Get User By Id
-  const [currentUser, setCurrentUser] = useState("");
-
-  //   Launch the pop up
-  const [modalShow, setModalShow] = useState(false);
-
-  const handleInfoUser = (userId) => {
-    const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    };
-
-    try {
-      const response = axios
-        .get(`https://silakend-server.xyz/api/users/${userId}`, config)
-        .then((res) => {
-          const userById = res.data;
-          setCurrentUser(userById);
-          setModalShow(true);
-        });
-
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   if (localStorage.getItem("token") && auth()) {
     if (isError) {
@@ -178,19 +151,16 @@ export const Users = () => {
 
                                 <td align="center">
                                   <>
-                                    <Button
-                                      onClick={() => {
-                                        handleInfoUser(users.user_id);
-                                      }}
-                                      className="btn-info btn-detail"
+                                    <NavLink
+                                      to={"/data-pengguna/rincian-pengguna"}
                                     >
-                                      <FaInfo className="fs-6" />
-                                    </Button>
-                                    <InfoUser
-                                      currentUser={currentUser}
-                                      show={modalShow}
-                                      onHide={() => setModalShow(false)}
-                                    />
+                                      <Button
+                                        className="btn-info btn-detail"
+                                        onClick={() => GetUserById(users)}
+                                      >
+                                        <FaInfo className="fs-6" />
+                                      </Button>
+                                    </NavLink>
                                   </>
                                 </td>
                               </tr>

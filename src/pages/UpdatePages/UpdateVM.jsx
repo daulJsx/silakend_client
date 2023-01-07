@@ -69,30 +69,32 @@ export const UpdateVM = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        try {
-          const response = await axios
-            .put(
-              `https://silakend-server.xyz/api/vehiclemaintenances/${maintenanceId}`,
-              vehicleMData,
-              config
-            )
-            .then((response) => {
-              navigate("/perbaikan-kendaraan");
-              if (response.status === 200) {
-                swal({
-                  title: "Berhasil!",
-                  text: response.data.msg,
-                  icon: "success",
-                  button: "Tutup",
-                });
-                const updateVM = response.data;
-                return updateVM;
-              }
-            });
-        } catch (e) {
-          const error = swal("Ups!", "Anda belum merubah apapun", "error");
-          throw error;
-        }
+        await axios
+          .put(
+            `https://silakend-server.xyz/api/vehiclemaintenances/${maintenanceId}`,
+            vehicleMData,
+            config
+          )
+          .then((response) => {
+            navigate("/perbaikan-kendaraan");
+            if (response.status === 200) {
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: "Tutup",
+              });
+              const updateVM = response.data;
+              return updateVM;
+            }
+          })
+          .catch((error) => {
+            if (error.response.data.message) {
+              swal("Ups!", error.response.data.message, "error");
+            } else {
+              swal("Ups!", error.response.data.msg, "error");
+            }
+          });
       } else {
         swal("Data perbaikan aman!");
       }

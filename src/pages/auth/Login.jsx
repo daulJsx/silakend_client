@@ -60,6 +60,7 @@ export const Login = (props) => {
               })
             ) {
               localStorage.setItem("token", response.data.content.access_token);
+
               swal({
                 title: response.data.msg,
                 text: "Anda sebagai " + auth().content.username,

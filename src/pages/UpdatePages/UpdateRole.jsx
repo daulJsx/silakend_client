@@ -39,13 +39,20 @@ export const UpdateRole = () => {
   // Parse the JSON string into a JavaScript object
   const roleToMap = JSON.parse(roleString);
 
-  // Body for store
-  const [updateRole, setUpdateRole] = useState({
-    name: "",
-    level: "",
-  });
+  // if update necessary
+  const [currentRoleName] = [roleToMap].map((name) => name.name);
+  const [currentRoleLevel] = [roleToMap].map((level) => level.level);
 
-  // Store new vehicle data
+  // handle value changes
+  const [newRoleName, setNewRoleName] = useState("");
+  const [newRoleLevel, setNewRoleLevel] = useState("");
+
+  // Body for update
+  const updateRole = {
+    name: newRoleName === "" ? currentRoleName : newRoleName,
+    level: newRoleLevel === "" ? currentRoleLevel : newRoleLevel,
+  };
+
   function handleError(error) {
     if (error.response.data.message) {
       swal("Ups!", error.response.data.message, "error");
@@ -82,8 +89,6 @@ export const UpdateRole = () => {
                   icon: "success",
                   button: "Tutup",
                 });
-                const updateV = response.data;
-                return updateV;
               }
             })
             .catch((error) => {
@@ -128,8 +133,8 @@ export const UpdateRole = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaArrowLeft />}
-                        title={"Edit Data Unit Kerja"}
-                        parentLink={"/unit-kerja"}
+                        title={"Edit Peran Pengguna"}
+                        parentLink={"/data-peran"}
                       />
                     ))}
                   </Col>
@@ -158,10 +163,7 @@ export const UpdateRole = () => {
                                             className="input form-custom"
                                             type="text"
                                             onChange={(e) =>
-                                              setUpdateRole({
-                                                ...updateRole,
-                                                name: e.target.value,
-                                              })
+                                              setNewRoleName(e.target.value)
                                             }
                                           />
                                         </Form.Group>
@@ -174,10 +176,7 @@ export const UpdateRole = () => {
                                             className="input form-custom"
                                             type="number"
                                             onChange={(e) =>
-                                              setUpdateRole({
-                                                ...updateRole,
-                                                level: e.target.value,
-                                              })
+                                              setNewRoleLevel(e.target.value)
                                             }
                                           />
                                         </Form.Group>

@@ -184,7 +184,7 @@ export const VehicleUsageDetail = () => {
                                         <div className="fw-bold">
                                           JUMLAH PERSONIL
                                         </div>
-                                        {currentUsage.personil_count}
+                                        {currentUsage.personel_count}
                                       </div>
                                     </ListGroup.Item>
 
@@ -206,7 +206,7 @@ export const VehicleUsageDetail = () => {
                                         <div className="fw-bold">
                                           TANGGAL PEMINJAMAN
                                         </div>
-                                        {currentUsage.start_date} S/ D{" "}
+                                        {currentUsage.start_date} s/d{" "}
                                         {currentUsage.end_date}
                                       </div>
                                     </ListGroup.Item>
@@ -242,15 +242,13 @@ export const VehicleUsageDetail = () => {
                                       className="d-flex justify-content-between align-items-start"
                                     >
                                       <div className="ms-2 me-auto">
-                                        <div className="fw-bold">
-                                          JARAK PERJALANAN
-                                        </div>
+                                        <div className="fw-bold">ODOMETER</div>
                                         <div>
-                                          Jarak Pergi :{" "}
+                                          Jumlah Kilometer Pergi :{" "}
                                           {currentUsage.distance_count_out} KM
                                         </div>
                                         <div>
-                                          Jarak Pulang :{" "}
+                                          Jumlah Kilometer Pulang :{" "}
                                           {currentUsage.distance_count_in} KM
                                         </div>
                                       </div>

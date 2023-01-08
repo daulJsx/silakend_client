@@ -57,6 +57,8 @@ import { UpdateVehicleCat } from "./pages/UpdatePages/UpdateVehicleCat";
 
 import { Login } from "./pages/auth/Login";
 
+import { UserVUsages } from "./pages/asUser/UserVUsages";
+
 function App() {
   return (
     <>
@@ -68,6 +70,8 @@ function App() {
       >
         <Router>
           <Routes>
+            {/*------------------------------- START USER AS ADMIN PAGES-------------------------------- */}
+
             {/*----- START DASHBOARD PAGES---- */}
             <Route path="/" element={<Dashboard />} />
             {/*----- END DASHBOARD PAGES---- */}
@@ -227,10 +231,16 @@ function App() {
             <Route path="/data-peran/tambah-peran" element={<CreateRole />} />
             <Route path="/data-peran/edit-peran" element={<UpdateRole />} />
             {/*----- END ROLE PAGES---- */}
+            {/*------------------------------- END USER AS ADMIN PAGES-------------------------------- */}
 
             {/*----- START AUTH PAGES---- */}
             <Route path="/silakend-login" element={<Login />} />
+
             {/*----- END AUTH PAGES---- */}
+
+            {/*------------------------------- START USER AS USER PAGES-------------------------------- */}
+            <Route path="/user" element={<UserVUsages />} />
+            {/*------------------------------- END USER AS USER PAGES-------------------------------- */}
           </Routes>
         </Router>
       </AuthProvider>

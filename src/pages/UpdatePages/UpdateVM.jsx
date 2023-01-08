@@ -33,19 +33,6 @@ import { useAuthUser } from "react-auth-kit";
 export const UpdateVM = () => {
   const auth = useAuthUser();
   const navigate = useNavigate();
-
-  // Body for store
-  const [vehicleMData, setVehicleMData] = useState({
-    vehicle_id: "",
-    date: "",
-    category: "",
-    description: "",
-    total_cost: "",
-  });
-
-  // Fetching requirement data
-  const { data: vehiclesData } = useQuery("vehicles", FetchVehicles);
-
   // Initialize newest maintenance id
   const [maintenanceId, setMaintenanceId] = useState(
     localStorage.getItem("maintenanceId")
@@ -56,7 +43,33 @@ export const UpdateVM = () => {
   // Parse the JSON string into a JavaScript object
   const VMToMap = JSON.parse(VMString);
 
-  // Update current vehicle data
+  // if update necessary
+  const [currentVehicleId] = [VMToMap].map((vId) => vId.vehicle_id);
+  const [currentDate] = [VMToMap].map((date) => date.date);
+  const [currentDesc] = [VMToMap].map((desc) => desc.description);
+  const [currentCategory] = [VMToMap].map((cat) => cat.category);
+  const [currentTotalCost] = [VMToMap].map((tc) => tc.total_cost);
+
+  // handle value changes
+  const [newVehicle, setNewVehicle] = useState("");
+  const [newDate, setNewDate] = useState("");
+  const [newDesc, setNewDesc] = useState("");
+  const [newCategory, setNewCategory] = useState("");
+  const [newTotalCost, setNewTotalCost] = useState("");
+
+  // Body for store
+  const vehicleMData = {
+    vehicle_id: newVehicle === "" ? currentVehicleId : newVehicle,
+    date: newDate === "" ? currentDate : newDate,
+    category: newCategory === "" ? currentCategory : newCategory,
+    description: newDesc === "" ? currentDesc : newDesc,
+    total_cost: newTotalCost === "" ? currentTotalCost : newTotalCost,
+  };
+
+  // Fetching requirement data
+  const { data: vehiclesData } = useQuery("vehicles", FetchVehicles);
+
+  // Update current newVehicle data
   const handleUpdateVM = async () => {
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -84,8 +97,6 @@ export const UpdateVM = () => {
                 icon: "success",
                 button: "Tutup",
               });
-              const updateVM = response.data;
-              return updateVM;
             }
           })
           .catch((error) => {
@@ -126,7 +137,7 @@ export const UpdateVM = () => {
                       name={placement}
                       bc={<FaArrowLeft />}
                       title={"Tambah Data Perbaikan Kendaraan"}
-                      parentLink={"/kategori-perbaikan"}
+                      parentLink={"/perbaikan-kendaraan"}
                     />
                   ))}
                 </Col>
@@ -154,13 +165,10 @@ export const UpdateVM = () => {
                                     }}
                                     aria-label="Default select example"
                                     onChange={(e) =>
-                                      setVehicleMData({
-                                        ...vehicleMData,
-                                        vehicle_id: e.target.value,
-                                      })
+                                      setNewVehicle(e.target.value)
                                     }
                                   >
-                                    <option>{currentVM.vehicle_id}</option>
+                                    <option>{currentVM.vehicle.name}</option>
                                     {vehiclesData?.map((vehicles) => (
                                       <option
                                         key={vehicles.vehicle_id}
@@ -189,12 +197,7 @@ export const UpdateVM = () => {
                                       padding: "15px",
                                     }}
                                     type="date"
-                                    onChange={(e) =>
-                                      setVehicleMData({
-                                        ...vehicleMData,
-                                        date: e.target.value,
-                                      })
-                                    }
+                                    onChange={(e) => setNewDate(e.target.value)}
                                   />
                                 </Form.Group>
 
@@ -214,10 +217,7 @@ export const UpdateVM = () => {
                                     }}
                                     type="text"
                                     onChange={(e) =>
-                                      setVehicleMData({
-                                        ...vehicleMData,
-                                        category: e.target.value,
-                                      })
+                                      setNewCategory(e.target.value)
                                     }
                                   />
                                 </Form.Group>
@@ -236,12 +236,7 @@ export const UpdateVM = () => {
                                       padding: "15px",
                                     }}
                                     type="text"
-                                    onChange={(e) =>
-                                      setVehicleMData({
-                                        ...vehicleMData,
-                                        description: e.target.value,
-                                      })
-                                    }
+                                    onChange={(e) => setNewDesc(e.target.value)}
                                   />
                                 </Form.Group>
 
@@ -267,10 +262,7 @@ export const UpdateVM = () => {
                                       }}
                                       type="number"
                                       onChange={(e) =>
-                                        setVehicleMData({
-                                          ...vehicleMData,
-                                          total_cost: e.target.value,
-                                        })
+                                        setNewTotalCost(e.target.value)
                                       }
                                     />
                                   </InputGroup>

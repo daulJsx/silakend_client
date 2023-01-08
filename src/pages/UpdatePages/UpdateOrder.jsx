@@ -59,7 +59,7 @@ export const UpdateOrder = () => {
   const [usageDescription, setUsageDescription] = useState("");
   const [personelCount, setPersonelCount] = useState("");
   const [destination, setDestination] = useState("");
-  const [starDate, setStarDate] = useState("");
+  const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [departDate, setDepartDate] = useState("");
   const [departTime, setDepartTime] = useState("");
@@ -70,24 +70,60 @@ export const UpdateOrder = () => {
   const [status, setStatus] = useState("");
   const [statusDesc, setStatusDesc] = useState("");
 
+  // if update necessary
+  const [currentVehicleId] = [orderToMap].map((vId) => vId.vehicle_id);
+  const [currentDriverId] = [orderToMap].map((dId) => dId.driver_id);
+  const [currentUserId] = [orderToMap].map((uId) => uId.user_id);
+  const [currentUCatId] = [orderToMap].map((uCatId) => uCatId.ucategory_id);
+  const [currentUDesc] = [orderToMap].map((UDesc) => UDesc.usage_description);
+  const [currentPersonelCount] = [orderToMap].map(
+    (pCount) => pCount.personel_count
+  );
+  const [currentDestination] = [orderToMap].map((dest) => dest.destination);
+
+  const [currentStartDate] = [orderToMap].map(
+    (startDate) => startDate.start_date
+  );
+
+  const [currentEndDate] = [orderToMap].map((endDate) => endDate.end_date);
+  const [currentDepartDate] = [orderToMap].map(
+    (departDate) => departDate.depart_date
+  );
+  const [currentDepartTime] = [orderToMap].map(
+    (departTime) => departTime.depart_time
+  );
+  const [currentArriveDate] = [orderToMap].map(
+    (arriveDate) => arriveDate.arrive_date
+  );
+  const [currentArriveTime] = [orderToMap].map(
+    (arriveTime) => arriveTime.arrive_time
+  );
+  const [currentDCO] = [orderToMap].map((dco) => dco.distance_count_out);
+  const [currentDCI] = [orderToMap].map((dci) => dci.distance_count_in);
+  const [currentStatus] = [orderToMap].map((status) => status.status);
+  const [currentStatusDesc] = [orderToMap].map(
+    (status) => status.status_description
+  );
+
   const body = {
-    vehicle_id: vehicleId,
-    driver_id: driverId,
-    user_id: userId,
-    ucategory_id: ucategoryId,
-    usage_description: usageDescription,
-    personel_count: personelCount,
-    destination: destination,
-    start_date: starDate,
-    end_date: endDate,
-    depart_date: departDate,
-    depart_time: departTime,
-    arrive_date: arriveDate,
-    arrive_time: arriveTime,
-    distance_count_out: dco,
-    distance_count_in: dci,
-    status: status,
-    status_description: statusDesc,
+    vehicle_id: vehicleId === "" ? currentVehicleId : vehicleId,
+    driver_id: driverId === "" ? currentDriverId : driverId,
+    user_id: userId === "" ? currentUserId : userId,
+    ucategory_id: ucategoryId === "" ? currentUCatId : ucategoryId,
+    usage_description:
+      usageDescription === "" ? currentUDesc : usageDescription,
+    personel_count: personelCount === "" ? currentPersonelCount : personelCount,
+    destination: destination === "" ? currentDestination : destination,
+    start_date: startDate === "" ? currentStartDate : startDate,
+    end_date: endDate === "" ? currentEndDate : endDate,
+    depart_date: departDate === "" ? currentDepartDate : departDate,
+    depart_time: departTime === "" ? currentDepartTime : departTime,
+    arrive_date: arriveDate === "" ? currentArriveDate : arriveDate,
+    arrive_time: arriveTime === "" ? currentArriveTime : arriveTime,
+    distance_count_out: dco === "" ? currentDCO : dco,
+    distance_count_in: dci === "" ? currentDCI : dci,
+    status: status === "" ? currentStatus : status,
+    status_description: statusDesc === "" ? currentStatusDesc : statusDesc,
   };
 
   const handleUpdateOrder = async () => {
@@ -118,13 +154,10 @@ export const UpdateOrder = () => {
                 icon: "success",
                 button: "Tutup",
               });
-              const updateV = response.data;
-              return updateV;
-            } else {
-              console.log(response.data);
             }
           })
           .catch((error) => {
+            console.log(error);
             if (error.response.data.message) {
               swal("Ups!", error.response.data.message, "error");
             } else {
@@ -388,7 +421,7 @@ export const UpdateOrder = () => {
                                       }}
                                       type="date"
                                       onChange={(e) =>
-                                        setStarDate(e.target.value)
+                                        setStartDate(e.target.value)
                                       }
                                     />
                                     <InputGroup.Text

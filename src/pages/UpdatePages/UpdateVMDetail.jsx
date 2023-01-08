@@ -42,61 +42,73 @@ export const UpdateVMDetail = () => {
   // Parse the JSON string into a JavaScript object
   const VMDToMap = JSON.parse(VMDString);
 
+  // if update necessary
+  const [currentItemName] = [VMDToMap].map((itemName) => itemName.item_name);
+  const [currentItemQty] = [VMDToMap].map((itemQty) => itemQty.item_qty);
+  const [currentItemUnit] = [VMDToMap].map((itemUnit) => itemUnit.item_unit);
+  const [currentItemPrice] = [VMDToMap].map(
+    (itemPrice) => itemPrice.item_price
+  );
+  const [currentPriceTotal] = [VMDToMap].map((pt) => pt.price_total);
+
+  // handle value changes
+  const [newItemName, setNewItemName] = useState("");
+  const [newItemQty, setNewItemQty] = useState("");
+  const [newItemUnit, setNewItemUnit] = useState("");
+  const [newItemPrice, setNewItemPrice] = useState("");
+  const [newPriceTotal, setNewPriceTotal] = useState("");
+
   // Body for store
-  const [currentVehicleMDetail, setCurrentVehicleMDetail] = useState({
+  const currentVehicleMDetail = {
     maintenance_id: localStorage.getItem("maintenanceId"),
-    item_name: "",
-    item_qty: "",
-    item_unit: "",
-    item_price: "",
-    price_total: "",
-  });
+    item_name: newItemName === "" ? currentItemName : newItemName,
+    item_qty: newItemQty === "" ? currentItemQty : newItemQty,
+    item_unit: newItemUnit === "" ? currentItemUnit : newItemUnit,
+    item_price: newItemPrice === "" ? currentItemPrice : newItemPrice,
+    price_total: newPriceTotal === "" ? currentPriceTotal : newPriceTotal,
+  };
 
   // Store new vehicle data
   const updateVehicleMD = async () => {
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
-    if (
-      currentVehicleMDetail.maintenance_id !== "" &&
-      currentVehicleMDetail.item_name !== "" &&
-      currentVehicleMDetail.item_qty !== "" &&
-      currentVehicleMDetail.item_unit !== "" &&
-      currentVehicleMDetail.item_price !== "" &&
-      currentVehicleMDetail.price_total !== ""
-    ) {
-      await axios
-        .put(
-          `https://silakend-server.xyz/api/vehiclemaintenancedetails/${detailId}`,
-          currentVehicleMDetail,
-          config
-        )
-        .then((response) => {
-          if (response.status === 200) {
-            navigate("/perbaikan-kendaraan/rincian-perbaikan-kendaraan/");
-            swal({
-              title: "Berhasil!",
-              text: response.data.msg,
-              icon: "success",
-              button: "Tutup",
-            });
-          }
-        })
-        .catch((error) => {
-          if (error.response.data.message) {
-            swal("Ups!", error.response.data.message, "error");
-          } else {
-            swal("Ups!", error.response.data.msg, "error");
-          }
-        });
-    } else {
-      swal({
-        title: "Peringatan",
-        text: "Harap isi semua data!",
-        icon: "warning",
-        button: "Tutup",
-      });
-    }
+    swal({
+      title: "Yakin?",
+      text: "Pastikan kembali perubahan data perbaikan",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        await axios
+          .put(
+            `https://silakend-server.xyz/api/vehiclemaintenancedetails/${detailId}`,
+            currentVehicleMDetail,
+            config
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              navigate("/perbaikan-kendaraan/rincian-perbaikan-kendaraan/");
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: "Tutup",
+              });
+            }
+          })
+          .catch((error) => {
+            if (error.response.data.message) {
+              swal("Ups!", error.response.data.message, "error");
+            } else {
+              swal("Ups!", error.response.data.msg, "error");
+            }
+          });
+      } else {
+        swal("Data perbaikan aman!");
+      }
+    });
   };
 
   // Fetching requirement data
@@ -163,10 +175,7 @@ export const UpdateVMDetail = () => {
                                     }}
                                     type="text"
                                     onChange={(e) =>
-                                      setCurrentVehicleMDetail({
-                                        ...currentVehicleMDetail,
-                                        item_name: e.target.value,
-                                      })
+                                      setNewItemName(e.target.value)
                                     }
                                   />
                                 </Form.Group>
@@ -185,10 +194,7 @@ export const UpdateVMDetail = () => {
                                     }}
                                     type="number"
                                     onChange={(e) =>
-                                      setCurrentVehicleMDetail({
-                                        ...currentVehicleMDetail,
-                                        item_qty: e.target.value,
-                                      })
+                                      setNewItemQty(e.target.value)
                                     }
                                   />
                                 </Form.Group>
@@ -206,10 +212,7 @@ export const UpdateVMDetail = () => {
                                     }}
                                     type="text"
                                     onChange={(e) =>
-                                      setCurrentVehicleMDetail({
-                                        ...currentVehicleMDetail,
-                                        item_unit: e.target.value,
-                                      })
+                                      setNewItemUnit(e.target.value)
                                     }
                                   />
                                 </Form.Group>
@@ -236,10 +239,7 @@ export const UpdateVMDetail = () => {
                                       }}
                                       type="number"
                                       onChange={(e) =>
-                                        setCurrentVehicleMDetail({
-                                          ...currentVehicleMDetail,
-                                          item_price: e.target.value,
-                                        })
+                                        setNewItemPrice(e.target.value)
                                       }
                                     />
                                   </InputGroup>
@@ -267,10 +267,7 @@ export const UpdateVMDetail = () => {
                                       }}
                                       type="number"
                                       onChange={(e) =>
-                                        setCurrentVehicleMDetail({
-                                          ...currentVehicleMDetail,
-                                          price_total: e.target.value,
-                                        })
+                                        setNewPriceTotal(e.target.value)
                                       }
                                     />
                                   </InputGroup>

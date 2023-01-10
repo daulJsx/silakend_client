@@ -50,7 +50,7 @@ export const CreateRole = () => {
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
-    if (newRole.name || newRole.level != "") {
+    if (newRole.name !== "" || newRole.level !== "") {
       await axios
         .post("https://silakend-server.xyz/api/roles", newRole, config)
         .then((response) => {

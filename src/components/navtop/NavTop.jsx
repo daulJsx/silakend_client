@@ -48,7 +48,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
     const logoutPost = await axios
       .post("https://silakend-server.xyz/api/auth/logout", body, config)
       .then((response) => {
-        if (response.data.status === "success") {
+        if (response.status === 200) {
           swal({
             title: "Berhasil Logout!",
             text: response.data.msg,
@@ -56,8 +56,13 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
           });
           localStorage.clear();
           redirect("/silakend-login");
+        }
+      })
+      .catch((error) => {
+        if (error.response.data.message) {
+          swal("Ups!", error.response.data.message, "error");
         } else {
-          redirect("/");
+          swal("Ups!", error.response.data.msg, "error");
         }
       });
     return logoutPost;
@@ -86,13 +91,13 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                 Signed in as:
                 <Dropdown className="d-inline mx-2" align="end">
                   <Dropdown.Toggle id="dropdown-autoclose-true">
-                    {auth() ? auth().content.username : null}
+                    {auth() ? localStorage.getItem("username") : null}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="dropdown-body shadow-sm rounded">
                     {/* Sign Out Button */}
                     <NavLink
-                      exact
+                      exactcontent
                       to={"/silakend-login"}
                       className="logout dropdown-item d-flex ms-2"
                       onClick={() => logout()}
@@ -127,7 +132,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                     Signed in as:
                     <Dropdown className="d-inline mx-2" align="end">
                       <Dropdown.Toggle id="dropdown-autoclose-true">
-                        {auth() ? auth().content.username : null}
+                        {auth() ? localStorage.getItem("username") : null}
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu className="dropdown-body shadow-sm rounded">

@@ -43,6 +43,15 @@ export const CreateVM = () => {
     total_cost: "",
   });
 
+  // handle error function
+  function handleError(error) {
+    if (error.response.data.message) {
+      swal("Ups!", error.response.data.message, "error");
+    } else {
+      swal("Ups!", error.response.data.msg, "error");
+    }
+  }
+
   // Store new vehicle data
   const postNewVehicleM = async () => {
     const config = {
@@ -74,13 +83,7 @@ export const CreateVM = () => {
             }
           });
       } catch (error) {
-        const e = swal({
-          title: "Gagal!",
-          text: "Error harap dilaporkan!",
-          icon: "error",
-          button: "Tutup",
-        });
-        throw e;
+        handleError(error);
       }
     } else {
       swal({

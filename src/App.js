@@ -1,7 +1,16 @@
 import React from "react";
 
+// Realtime requirements
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
+
 // Routing between pages
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 
 // react-auth-kit
 import { AuthProvider } from "react-auth-kit";
@@ -57,9 +66,22 @@ import { UpdateVehicleCat } from "./pages/UpdatePages/UpdateVehicleCat";
 
 import { Login } from "./pages/auth/Login";
 
+// ---------------------- USER AS USER ---------------------------
+import { UserCreateVU } from "./pages/asUser/UserCreateVU";
+
 import { UserVUsages } from "./pages/asUser/UserVUsages";
 
 function App() {
+  // window.Pusher = Pusher;
+  // window.Echo = new Echo({
+  //   broadcaster: "pusher",
+  //   key: "ABCDEFGH",
+  //   wsHost: "silakend-server-realtime.test",
+  //   wsPort: 6001,
+  //   forceTLS: false,
+  //   disableStats: true,
+  // });
+
   return (
     <>
       <AuthProvider
@@ -73,6 +95,7 @@ function App() {
             {/*------------------------------- START USER AS ADMIN PAGES-------------------------------- */}
 
             {/*----- START DASHBOARD PAGES---- */}
+
             <Route path="/" element={<Dashboard />} />
             {/*----- END DASHBOARD PAGES---- */}
 
@@ -239,7 +262,14 @@ function App() {
             {/*----- END AUTH PAGES---- */}
 
             {/*------------------------------- START USER AS USER PAGES-------------------------------- */}
-            <Route path="/user" element={<UserVUsages />} />
+            <Route
+              path="/user/data-pengajuan-peminjaman"
+              element={<UserVUsages />}
+            />
+            <Route
+              path="/user/pengajuan-peminjaman"
+              element={<UserCreateVU />}
+            />
             {/*------------------------------- END USER AS USER PAGES-------------------------------- */}
           </Routes>
         </Router>

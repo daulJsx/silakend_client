@@ -13,6 +13,7 @@ async function FetchVehicleUsages() {
       .get("https://silakend-server.xyz/api/vehicleusages", config)
       .then((response) => {
         const orders = response.data;
+        console.log(orders);
         return orders;
       });
     return response;

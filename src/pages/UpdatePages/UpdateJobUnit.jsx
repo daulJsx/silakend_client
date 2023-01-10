@@ -39,13 +39,21 @@ export const UpdateJobUnit = () => {
   // Parse the JSON string into a JavaScript object
   const jobUnitToMap = JSON.parse(jUnitString);
 
-  // Body for store
-  const [updateJUnit, setUpdateJUnit] = useState({
-    name: "",
-    unit_account: "",
-  });
+  // Handle changes
+  const [newJUName, setNewJUName] = useState("");
+  const [newJUCode, setNewJUCode] = useState("");
 
-  // Store new vehicle data
+  // if update necessary
+  const [currentJUName] = [jobUnitToMap].map((name) => name.name);
+  const [currentJUCode] = [jobUnitToMap].map((code) => code.unit_account);
+
+  // Body for store
+  const updateJUnit = {
+    name: newJUName === "" ? currentJUName : newJUName,
+    unit_account: newJUCode === "" ? currentJUCode : newJUCode,
+  };
+
+  // Handle validation
   function handleError(error) {
     if (error.response.data.message) {
       swal("Ups!", error.response.data.message, "error");
@@ -54,53 +62,44 @@ export const UpdateJobUnit = () => {
     }
   }
 
+  // update function
   const updateJobUnit = async () => {
     const config = {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     };
-    if (updateJUnit.name || updateJUnit.unit_account != "") {
-      swal({
-        title: "Yakin?",
-        text: "Pastikan kembali perubahan data",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }).then(async (willDelete) => {
-        if (willDelete) {
-          await axios
-            .put(
-              `https://silakend-server.xyz/api/jobunits/${unitId}`,
-              updateJUnit,
-              config
-            )
-            .then((response) => {
-              navigate("/unit-kerja");
-              if (response.status === 200) {
-                swal({
-                  title: "Berhasil!",
-                  text: response.data.msg,
-                  icon: "success",
-                  button: "Tutup",
-                });
-                const updateV = response.data;
-                return updateV;
-              }
-            })
-            .catch((error) => {
-              handleError(error);
-            });
-        } else {
-          swal("Data unit kerja aman!");
-        }
-      });
-    } else {
-      swal({
-        title: "Peringatan",
-        text: "Harap ubah data",
-        icon: "warning",
-        button: "Tutup",
-      });
-    }
+
+    swal({
+      title: "Yakin?",
+      text: "Pastikan kembali perubahan data",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        await axios
+          .put(
+            `https://silakend-server.xyz/api/jobunits/${unitId}`,
+            updateJUnit,
+            config
+          )
+          .then((response) => {
+            navigate("/unit-kerja");
+            if (response.status === 200) {
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: "Tutup",
+              });
+            }
+          })
+          .catch((error) => {
+            handleError(error);
+          });
+      } else {
+        swal("Data unit kerja aman!");
+      }
+    });
   };
 
   if (localStorage.getItem("token") && auth()) {
@@ -160,10 +159,7 @@ export const UpdateJobUnit = () => {
                                             className="input form-custom"
                                             type="text"
                                             onChange={(e) =>
-                                              setUpdateJUnit({
-                                                ...updateJUnit,
-                                                name: e.target.value,
-                                              })
+                                              setNewJUName(e.target.value)
                                             }
                                           />
                                         </Form.Group>
@@ -180,10 +176,7 @@ export const UpdateJobUnit = () => {
                                             className="input form-custom"
                                             type="text"
                                             onChange={(e) =>
-                                              setUpdateJUnit({
-                                                ...updateJUnit,
-                                                unit_account: e.target.value,
-                                              })
+                                              setNewJUCode(e.target.value)
                                             }
                                           />
                                         </Form.Group>

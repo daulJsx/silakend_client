@@ -50,23 +50,31 @@ export const Login = (props) => {
       await axios
         .post("https://silakend-server.xyz/api/auth/login", formData)
         .then((response) => {
-          if (response.status === 200) {
-            if (
-              signIn({
-                token: response.data.content.access_token,
-                expiresIn: 1000,
-                tokenType: "Bearer",
-                authState: response.data,
-              })
-            ) {
-              localStorage.setItem("token", response.data.content.access_token);
+          if (
+            signIn({
+              token: response.data.content.access_token,
+              expiresIn: 1000,
+              tokenType: "Bearer",
+              authState: response.data.content,
+            })
+          ) {
+            localStorage.setItem("token", response.data.content.access_token);
+            localStorage.setItem("username", response.data.content.username);
+            localStorage.setItem("userLevel", response.data.content.user_level);
+            const userName = localStorage.getItem("username");
+            const greetToUser = swal({
+              title: response.data.msg,
+              text: "Anda sebagai " + userName,
+              icon: "success",
+            });
+            const userRole = response.data.content.user_level;
 
-              swal({
-                title: response.data.msg,
-                text: "Anda sebagai " + auth().content.username,
-                icon: "success",
-              });
+            if (userRole === 1) {
               navigate("/");
+              greetToUser();
+            } else {
+              navigate("/user/data-pengajuan-peminjaman");
+              greetToUser();
             }
           }
         })

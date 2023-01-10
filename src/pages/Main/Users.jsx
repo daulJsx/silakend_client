@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -36,8 +36,25 @@ import "../CustomStyles/users.css";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
+import Push from "push.js"
 
 export const Users = () => {
+  useEffect(() => {
+    window.Echo.channel('user').listen('UserUpdate', (e) => {
+      Push.create("User updated", {
+          body: "A User just got updated",
+          icon: '/polman.ico',
+          timeout: 4000,
+          onClick: function () {
+              window.focus();
+              this.close();
+          }
+      });
+      //setelah tampil notif, fetch ulang dari event yang diterima.
+      FetchUsers()
+    })
+  }, []);
+  
   const auth = useAuthUser();
   // Fetching users data
   const {

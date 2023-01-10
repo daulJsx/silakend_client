@@ -4,8 +4,22 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+import Echo from "laravel-echo";
+
 // react-query starting
 import { QueryClient, QueryClientProvider } from "react-query";
+
+window.Pusher = require('pusher-js');
+
+window.Echo = new Echo({
+  broadcaster: 'pusher',
+  key: 'ABCDEFGH',
+  wsHost: 'silakend-server-realtime.test',
+  wsPort: 6001,
+  forceTLS: false,
+  disableStats: true,
+  cluster:'mt1'
+});
 
 // Initialze the client
 const queryClient = new QueryClient();

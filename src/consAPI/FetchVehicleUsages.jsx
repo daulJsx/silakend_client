@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// this is fetch function
+//  fetch function
 async function FetchVehicleUsages() {
   const config = {
     headers: {
@@ -10,10 +10,9 @@ async function FetchVehicleUsages() {
 
   try {
     const response = await axios
-      .get("https://silakend-server.xyz/api/vehicleusages", config)
+      .get("https://silakend-server.xyz/api/vehicleusages", config) // Request with asign the token
       .then((response) => {
         const orders = response.data;
-        console.log(orders);
         return orders;
       });
     return response;

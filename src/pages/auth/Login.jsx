@@ -35,6 +35,7 @@ export const Login = (props) => {
   const navigate = useNavigate();
   const auth = useAuthUser();
 
+  // Catch and display the errors
   function handleError(error) {
     if (error.response.data.message) {
       swal("Ups!", error.response.data.message, "error");
@@ -48,27 +49,27 @@ export const Login = (props) => {
     // perform login logic
     if (formData.nip !== "" && formData.password !== "") {
       await axios
-        .post("https://silakend-server.xyz/api/auth/login", formData)
+        .post("https://silakend-server.xyz/api/auth/login", formData) //Request to server
         .then((response) => {
-          if (
+          if (response.status === 200) {
             signIn({
-              token: response.data.content.access_token,
-              expiresIn: 1000,
-              tokenType: "Bearer",
-              authState: response.data.content,
-            })
-          ) {
-            localStorage.setItem("token", response.data.content.access_token);
-            localStorage.setItem("username", response.data.content.username);
-            localStorage.setItem("userLevel", response.data.content.user_level);
+              token: response.data.content.access_token, // asign token to auth package
+              expiresIn: 1000, // expires token in
+              tokenType: "Bearer", // type of token
+              authState: response.data.content, // asign user datas to auth package
+            });
+            localStorage.setItem("token", response.data.content.access_token); // asign token to local storage
+            localStorage.setItem("username", response.data.content.username); // asign username to local storage
+            localStorage.setItem("userLevel", response.data.content.user_level); // asign user level to local storage
             const userName = localStorage.getItem("username");
             const greetToUser = swal({
               title: response.data.msg,
               text: "Anda sebagai " + userName,
               icon: "success",
-            });
-            const userRole = response.data.content.user_level;
+            }); // notify user
+            const userRole = response.data.content.user_level; // access user level for RBAC
 
+            // Perform RBAC logic
             if (userRole === 1) {
               navigate("/");
               greetToUser();

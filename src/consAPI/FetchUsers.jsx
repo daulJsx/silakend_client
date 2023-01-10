@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// this is fetch function
-async function FetchUsers(key, limit) {
+//  fetch function
+async function FetchUsers(limit) {
   const config = {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -10,7 +10,7 @@ async function FetchUsers(key, limit) {
 
   try {
     const response = await axios
-      .get(`https://silakend-server.xyz/api/users?limit=${limit}`, config)
+      .get(`https://silakend-server.xyz/api/users?limit=${limit}`, config) // Request with asign the token
       .then((response) => {
         const users = response.data;
         return users;

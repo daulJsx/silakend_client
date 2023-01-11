@@ -1,10 +1,13 @@
 import axios from "axios";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 //  fetch function
 async function FetchUsers(limit) {
   const config = {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${Cookies.get("_auth")}`,
     },
   };
 

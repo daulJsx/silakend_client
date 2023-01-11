@@ -1,24 +1,28 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
-// this is fetch function
 async function FetchUsageCat() {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  };
-
   try {
-    const response = await axios
-      .get("https://silakend-server.xyz/api/usagecategories", config)
-      .then((response) => {
-        const uC = response.data;
-        return uC;
-      });
+    const token = Cookies.get("_auth");
+    if (!token) {
+      throw new Error("Token kadaluarsa, silahkan login kembali");
+    }
 
-    return response;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.get(
+      "https://silakend-server.xyz/api/usagecategories",
+      config
+    );
+
+    return response.data;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
 

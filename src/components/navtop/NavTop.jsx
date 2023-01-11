@@ -1,5 +1,8 @@
 import { React, useState } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // get current user auth data
 import { useAuthUser } from "react-auth-kit";
 
@@ -37,7 +40,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
   const logout = async () => {
     const config = {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${Cookies.get("_auth")}`,
       },
     };
 
@@ -91,7 +94,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                 Signed in as:
                 <Dropdown className="d-inline mx-2" align="end">
                   <Dropdown.Toggle id="dropdown-autoclose-true">
-                    {auth() ? localStorage.getItem("username") : null}
+                    {auth() ? auth().username : null}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="dropdown-body shadow-sm rounded">
@@ -132,7 +135,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                     Signed in as:
                     <Dropdown className="d-inline mx-2" align="end">
                       <Dropdown.Toggle id="dropdown-autoclose-true">
-                        {auth() ? localStorage.getItem("username") : null}
+                        {auth() ? auth().username : null}
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu className="dropdown-body shadow-sm rounded">

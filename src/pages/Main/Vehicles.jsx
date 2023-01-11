@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // fetch data requirement
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -35,8 +38,14 @@ import { DeleteVehicle } from "../../functions/Delete/DeleteVehicle";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
+// React Notification
+import swal from "sweetalert";
+
 export const Vehicles = () => {
   const auth = useAuthUser();
+
+  // Get access token
+  const token = Cookies.get("_auth");
 
   // Fetching vehicles data
   const {
@@ -53,7 +62,7 @@ export const Vehicles = () => {
   const [modalShow, setModalShow] = useState(false);
   const handleInfoVehicle = (vehicleId) => {
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
 
     try {
@@ -71,23 +80,36 @@ export const Vehicles = () => {
     }
   };
 
-  if (localStorage.getItem("token") && auth()) {
-    if (isError) {
-      return <div>{error.message}</div>;
-    } else if (isLoading) {
-      return (
-        <div className="loading-io">
-          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-            <div className="ldio-c0sicszbk9i">
-              <div></div>
-              <div></div>
+  const securingPage = () => {
+    swal({
+      title: "Maaf!",
+      text: "Anda tidak memiliki akses ke halaman ini",
+      icon: "warning",
+    });
+    {
+      return auth().user_level === 5 ? (
+        <Navigate to="/user/data-pengajuan-peminjaman" />
+      ) : (
+        <Navigate to="/silakend-login" />
+      );
+    }
+  };
+
+  {
+    return token !== "" && auth() ? (
+      auth().user_level === 1 ? (
+        isError ? (
+          <div>{error.message}</div>
+        ) : isLoading ? (
+          <div className="loading-io">
+            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+              <div className="ldio-c0sicszbk9i">
+                <div></div>
+                <div></div>
+              </div>
             </div>
           </div>
-        </div>
-      );
-    } else {
-      return (
-        <>
+        ) : (
           <Container fluid>
             <Row>
               {/* SIDEBAR */}
@@ -221,10 +243,12 @@ export const Vehicles = () => {
               </Col>
             </Row>
           </Container>
-        </>
-      );
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
+        )
+      ) : (
+        securingPage()
+      )
+    ) : (
+      <Navigate to="/silakend-login" />
+    );
   }
 };

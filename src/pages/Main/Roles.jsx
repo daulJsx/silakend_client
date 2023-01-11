@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import FetchRoles from "../../consAPI/FetchRoles";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // Navigating
 import { Navigate, NavLink } from "react-router-dom";
 
@@ -29,6 +32,9 @@ import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 
+// React Notification
+import swal from "sweetalert";
+
 export const Roles = () => {
   const auth = useAuthUser();
 
@@ -47,23 +53,39 @@ export const Roles = () => {
     localStorage.setItem("roleToMap", JSON.stringify(roles));
   }
 
-  if (localStorage.getItem("token") && auth()) {
-    if (isError) {
-      return <div>{error.message}</div>;
-    } else if (isLoading) {
-      return (
-        <div className="loading-io">
-          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-            <div className="ldio-c0sicszbk9i">
-              <div></div>
-              <div></div>
+  const securingPage = () => {
+    swal({
+      title: "Maaf!",
+      text: "Anda tidak memiliki akses ke halaman ini",
+      icon: "warning",
+    });
+    {
+      return auth().user_level === 5 ? (
+        <Navigate to="/user/data-pengajuan-peminjaman" />
+      ) : (
+        <Navigate to="/silakend-login" />
+      );
+    }
+  };
+
+  // Get access token
+  const token = Cookies.get("_auth");
+
+  {
+    return token !== "" && auth() ? (
+      auth().user_level === 1 ? (
+        isError ? (
+          <div>{error.message}</div>
+        ) : isLoading ? (
+          <div className="loading-io">
+            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+              <div className="ldio-c0sicszbk9i">
+                <div></div>
+                <div></div>
+              </div>
             </div>
           </div>
-        </div>
-      );
-    } else {
-      return (
-        <>
+        ) : (
           <Container fluid>
             <Row>
               {/* SIDEBAR */}
@@ -173,10 +195,12 @@ export const Roles = () => {
               </Col>
             </Row>
           </Container>
-        </>
-      );
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
+        )
+      ) : (
+        securingPage()
+      )
+    ) : (
+      <Navigate to="/silakend-login" />
+    );
   }
 };

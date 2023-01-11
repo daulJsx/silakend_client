@@ -1,10 +1,13 @@
 import axios from "axios";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // this is fetch function
 async function FetchVMDetails() {
   const config = {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${Cookies.get("_auth")}`,
     },
   };
 

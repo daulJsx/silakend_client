@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import FetchVehicleUsages from "../../consAPI/FetchVehicleUsages";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // Navigating
 import { NavLink } from "react-router-dom";
 import { Navigate } from "react-router-dom";
@@ -19,6 +22,9 @@ import Badge from "react-bootstrap/Badge";
 import { Aside } from "../../components/aside/Aside";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
+
+// React Notification
+import swal from "sweetalert";
 
 // Icons
 import { HiOutlineClipboardCopy } from "react-icons/hi";
@@ -44,23 +50,39 @@ export const VehicleUsages = () => {
     isError,
   } = useQuery("orders", FetchVehicleUsages);
 
-  if (localStorage.getItem("token") && auth()) {
-    if (isError) {
-      return <div>{error.message}</div>;
-    } else if (isLoading) {
-      return (
-        <div className="loading-io">
-          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-            <div className="ldio-c0sicszbk9i">
-              <div></div>
-              <div></div>
+  const securingPage = () => {
+    swal({
+      title: "Maaf!",
+      text: "Anda tidak memiliki akses ke halaman ini",
+      icon: "warning",
+    });
+    {
+      return auth().user_level === 5 ? (
+        <Navigate to="/user/data-pengajuan-peminjaman" />
+      ) : (
+        <Navigate to="/silakend-login" />
+      );
+    }
+  };
+
+  // Get access token
+  const token = Cookies.get("_auth");
+
+  {
+    return token !== "" && auth() ? (
+      auth().user_level === 1 ? (
+        isError ? (
+          <div>{error.message}</div>
+        ) : isLoading ? (
+          <div className="loading-io">
+            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+              <div className="ldio-c0sicszbk9i">
+                <div></div>
+                <div></div>
+              </div>
             </div>
           </div>
-        </div>
-      );
-    } else {
-      return (
-        <>
+        ) : (
           <Container fluid>
             <Row>
               <Col
@@ -220,10 +242,12 @@ export const VehicleUsages = () => {
               </Col>
             </Row>
           </Container>
-        </>
-      );
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
+        )
+      ) : (
+        securingPage()
+      )
+    ) : (
+      <Navigate to="/silakend-login" />
+    );
   }
 };

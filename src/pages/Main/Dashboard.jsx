@@ -3,6 +3,9 @@ import React from "react";
 // fetch data requirement
 // import { useQuery } from "react-query";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
@@ -50,9 +53,12 @@ export const Dashboard = () => {
     }
   };
 
-  if (localStorage.getItem("token")) {
-    {
-      return auth().user_level === 1 ? (
+  // Get access token
+  const token = Cookies.get("_auth");
+
+  {
+    return token !== "" && auth() ? (
+      auth().user_level === 1 ? (
         <Container fluid>
           <Row>
             <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
@@ -265,9 +271,9 @@ export const Dashboard = () => {
         </Container>
       ) : (
         securingPage()
-      );
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
+      )
+    ) : (
+      <Navigate to="/silakend-login" />
+    );
   }
 };

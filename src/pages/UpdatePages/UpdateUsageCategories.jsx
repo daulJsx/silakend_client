@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // Fetch Requirements
 import axios from "axios";
 
@@ -28,6 +31,24 @@ import swal from "sweetalert";
 import { useAuthUser } from "react-auth-kit";
 
 export const UpdateUsageCategories = () => {
+  // Get access token
+  const token = Cookies.get("_auth");
+
+  const securingPage = () => {
+    swal({
+      title: "Maaf!",
+      text: "Anda tidak memiliki akses ke halaman ini",
+      icon: "warning",
+    });
+    {
+      return auth().user_level === 5 ? (
+        <Navigate to="/user/data-pengajuan-peminjaman" />
+      ) : (
+        <Navigate to="/silakend-login" />
+      );
+    }
+  };
+
   const auth = useAuthUser();
   const navigate = useNavigate();
 
@@ -44,40 +65,37 @@ export const UpdateUsageCategories = () => {
     name: "",
   });
 
-  // Store new vehicle data
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
-
   const updateUsageCat = async () => {
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
-    if (curUsageCat.name != "") {
-      await axios
-        .put(
-          `https://silakend-server.xyz/api/usagecategories/${uCatId}`,
-          curUsageCat,
-          config
-        )
-        .then((response) => {
-          if (response.status === 200) {
-            navigate("/kategori-peminjaman");
-            swal({
-              title: "Berhasil!",
-              text: response.data.msg,
-              icon: "success",
-              button: "Tutup",
-            });
-          }
-        })
-        .catch((error) => {
-          handleError(error);
-        });
+
+    if (curUsageCat.name !== "") {
+      try {
+        await axios
+          .put(
+            `https://silakend-server.xyz/api/usagecategories/${uCatId}`,
+            curUsageCat,
+            config
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              navigate("/kategori-peminjaman");
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: "Tutup",
+              });
+            }
+          });
+      } catch (error) {
+        if (error.response.data.message) {
+          swal("Ups!", error.response.data.message, "error");
+        } else {
+          swal("Ups!", error.response.data.msg, "error");
+        }
+      }
     } else {
       swal({
         title: "Peringatan",
@@ -87,11 +105,10 @@ export const UpdateUsageCategories = () => {
       });
     }
   };
-
-  if (localStorage.getItem("token") && auth()) {
-    if (localStorage.getItem("ucategory_id")) {
-      return (
-        <>
+  {
+    return token !== "" && auth() ? (
+      auth().user_level === 1 ? (
+        uCatId !== "" ? (
           <Container fluid>
             <Row>
               {/* SIDEBAR */}
@@ -175,12 +192,14 @@ export const UpdateUsageCategories = () => {
               </Col>
             </Row>
           </Container>
-        </>
-      );
-    } else {
-      return <Navigate to="/kategori-peminjaman" />;
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
+        ) : (
+          <Navigate to="/kategori-peminjaman" />
+        )
+      ) : (
+        securingPage()
+      )
+    ) : (
+      <Navigate to="/silakend-login" />
+    );
   }
 };

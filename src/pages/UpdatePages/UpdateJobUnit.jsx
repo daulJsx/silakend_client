@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // Fetch Requirements
 import axios from "axios";
 
@@ -28,6 +31,24 @@ import swal from "sweetalert";
 import { useAuthUser } from "react-auth-kit";
 
 export const UpdateJobUnit = () => {
+  // Get access token
+  const token = Cookies.get("_auth");
+
+  const securingPage = () => {
+    swal({
+      title: "Maaf!",
+      text: "Anda tidak memiliki akses ke halaman ini",
+      icon: "warning",
+    });
+    {
+      return auth().user_level === 5 ? (
+        <Navigate to="/user/data-pengajuan-peminjaman" />
+      ) : (
+        <Navigate to="/silakend-login" />
+      );
+    }
+  };
+
   const auth = useAuthUser();
   const navigate = useNavigate();
 
@@ -53,19 +74,10 @@ export const UpdateJobUnit = () => {
     unit_account: newJUCode === "" ? currentJUCode : newJUCode,
   };
 
-  // Handle validation
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
-
   // update function
   const updateJobUnit = async () => {
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
 
     swal({
@@ -76,36 +88,41 @@ export const UpdateJobUnit = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        await axios
-          .put(
-            `https://silakend-server.xyz/api/jobunits/${unitId}`,
-            updateJUnit,
-            config
-          )
-          .then((response) => {
-            navigate("/unit-kerja");
-            if (response.status === 200) {
-              swal({
-                title: "Berhasil!",
-                text: response.data.msg,
-                icon: "success",
-                button: "Tutup",
-              });
-            }
-          })
-          .catch((error) => {
-            handleError(error);
-          });
+        try {
+          await axios
+            .put(
+              `https://silakend-server.xyz/api/jobunits/${unitId}`,
+              updateJUnit,
+              config
+            )
+            .then((response) => {
+              navigate("/unit-kerja");
+              if (response.status === 200) {
+                swal({
+                  title: "Berhasil!",
+                  text: response.data.msg,
+                  icon: "success",
+                  button: "Tutup",
+                });
+              }
+            });
+        } catch (error) {
+          if (error.response.data.message) {
+            swal("Ups!", error.response.data.message, "error");
+          } else {
+            swal("Ups!", error.response.data.msg, "error");
+          }
+        }
       } else {
         swal("Data unit kerja aman!");
       }
     });
   };
 
-  if (localStorage.getItem("token") && auth()) {
-    if (localStorage.getItem("unitId")) {
-      return (
-        <>
+  {
+    return token !== "" && auth() ? (
+      auth().user_level === 1 ? (
+        unitId !== "" ? (
           <Container fluid>
             <Row>
               {/* SIDEBAR */}
@@ -208,12 +225,14 @@ export const UpdateJobUnit = () => {
               </Col>
             </Row>
           </Container>
-        </>
-      );
-    } else {
-      return <Navigate to="/unit-kerja" />;
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
+        ) : (
+          <Navigate to="/unit-kerja" />
+        )
+      ) : (
+        securingPage()
+      )
+    ) : (
+      <Navigate to="/silakend-login" />
+    );
   }
 };

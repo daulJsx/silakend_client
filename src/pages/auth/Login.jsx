@@ -4,9 +4,7 @@ import React, { useState } from "react";
 import { useSignIn } from "react-auth-kit";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-// get current user auth data
-import { useAuthUser } from "react-auth-kit";
+import Cookies from "js-cookie";
 
 // React Notification
 import swal from "sweetalert";
@@ -33,56 +31,56 @@ export const Login = (props) => {
   const signIn = useSignIn();
   const [loginForm, setLoginForm] = useState({ nip: "", password: "" });
   const navigate = useNavigate();
-  const auth = useAuthUser();
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // perform login logic
+
     try {
       if (loginForm.nip !== "" && loginForm.password !== "") {
-        await axios
-          .post("https://silakend-server.xyz/api/auth/login", loginForm) //Request to server
-          .then((response) => {
-            if (response.status === 200) {
-              if (
-                signIn({
-                  token: response.data.content.access_token, // asign token to auth package
-                  expiresIn: 1000, // expires token in
-                  tokenType: "Bearer", // type of token
-                  authState: response.data.content, // asign user datas to auth package
-                })
-              ) {
-                localStorage.setItem(
-                  "token",
-                  response.data.content.access_token
-                ); // asign token to local storage
-                localStorage.setItem(
-                  "username",
-                  response.data.content.username
-                ); // asign username to local storage
-                localStorage.setItem(
-                  "userLevel",
-                  response.data.content.user_level
-                ); // asign user level to local storage
-                const userName = localStorage.getItem("username");
-                const greetToUser = swal({
-                  title: response.data.msg,
-                  text: "Anda sebagai " + userName,
-                  icon: "success",
-                }); // notify user
-                const userRole = response.data.content.user_level; // access user level for RBAC
-
-                // Perform RBAC logic
-                if (userRole === 1) {
-                  navigate("/");
-                  greetToUser();
-                } else {
-                  navigate("/user/data-pengajuan-peminjaman");
-                  greetToUser();
-                }
-              }
-            }
+        const response = await axios.post(
+          "https://silakend-server.xyz/api/auth/login",
+          loginForm
+        );
+        if (response.status === 200) {
+          const { access_token, username, user_level } = response.data.content;
+          signIn({
+            token: access_token,
+            expiresIn: 1000,
+            tokenType: "Bearer",
+            authState: response.data.content,
           });
+
+          // Store token in a http-only and secure cookie
+          Cookies.set("access_token", access_token, {
+            expires: 1000,
+            secure: true,
+            httpOnly: true,
+          });
+          Cookies.set("username", username, {
+            expires: 1,
+            secure: true,
+            httpOnly: true,
+          });
+          Cookies.set("userLevel", user_level, {
+            expires: 1,
+            secure: true,
+            httpOnly: true,
+          });
+
+          //notify user
+          swal({
+            title: response.data.msg,
+            text: "Anda sebagai " + username,
+            icon: "success",
+          });
+
+          // Perform RBAC logic
+          if (user_level === 1) {
+            navigate("/");
+          } else {
+            navigate("/user/data-pengajuan-peminjaman");
+          }
+        }
       } else {
         swal({
           title: "Peringatan",
@@ -92,14 +90,19 @@ export const Login = (props) => {
         });
       }
     } catch (error) {
-      const { message } = error.response.data;
-      const { msg } = error.response.data;
-      if (error) {
+      if (error.response) {
+        const { message, msg } = error.response.data;
         if (message) {
           swal("Ups!", message, "error");
         } else {
           swal("Ups!", msg, "error");
         }
+      } else {
+        swal(
+          "Ups!",
+          "Terjadi kesalahan pada jaringan, silahkan coba lagi",
+          "error"
+        );
       }
     }
   };

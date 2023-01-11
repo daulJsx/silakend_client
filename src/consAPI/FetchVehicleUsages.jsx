@@ -1,23 +1,31 @@
 import axios from "axios";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 //  fetch function
 async function FetchVehicleUsages() {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  };
-
   try {
-    const response = await axios
-      .get("https://silakend-server.xyz/api/vehicleusages", config) // Request with asign the token
-      .then((response) => {
-        const orders = response.data;
-        return orders;
-      });
-    return response;
+    const token = Cookies.get("_auth");
+    if (!token) {
+      throw new Error("Token kadaluarsa, silahkan login kembali");
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.get(
+      "https://silakend-server.xyz/api/vehicleusages",
+      config
+    );
+
+    return response.data;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
 

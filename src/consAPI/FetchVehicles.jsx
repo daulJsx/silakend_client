@@ -1,9 +1,12 @@
 import axios from "axios";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 async function FetchVehicles() {
   const config = {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${Cookies.get("_auth")}`,
     },
   };
 

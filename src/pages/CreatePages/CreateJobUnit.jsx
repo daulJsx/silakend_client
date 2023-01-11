@@ -3,6 +3,9 @@ import React, { useState } from "react";
 // Fetch Requirements
 import axios from "axios";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // Redirecting
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
@@ -27,7 +30,12 @@ import swal from "sweetalert";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
+
 export const CreateJobUnit = () => {
+  // Get access token
+  const token = Cookies.get("_auth");
+
   const auth = useAuthUser();
   const navigate = useNavigate();
 
@@ -37,144 +45,147 @@ export const CreateJobUnit = () => {
     unit_account: "",
   });
 
-  // Store new vehicle data
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
-
-  const postNewJobUnit = async () => {
+  const postNewJobUnit = async (e) => {
+    e.preventDefault();
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
-    if (newJobUnit.name !== "" && newJobUnit.unit_account !== "") {
-      await axios
-        .post("https://silakend-server.xyz/api/jobunits", newJobUnit, config)
-        .then((response) => {
-          if (response.status === 200) {
-            navigate("/unit-kerja");
-            swal({
-              title: "Berhasil!",
-              text: response.data.msg,
-              icon: "success",
-              button: "Tutup",
-            });
-          }
-        })
-        .catch((error) => {
-          handleError(error);
+    try {
+      if (newJobUnit.name !== "" && newJobUnit.unit_account !== "") {
+        await axios
+          .post("https://silakend-server.xyz/api/jobunits", newJobUnit, config)
+          .then((response) => {
+            if (response.status === 200) {
+              navigate("/unit-kerja");
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: "Tutup",
+              });
+            }
+          });
+      } else {
+        swal({
+          title: "Peringatan",
+          text: "Harap isi semua data!",
+          icon: "warning",
+          button: "Tutup",
         });
-    } else {
-      swal({
-        title: "Peringatan",
-        text: "Harap isi semua data!",
-        icon: "warning",
-        button: "Tutup",
-      });
+      }
+    } catch (error) {
+      if (error.response.data.message) {
+        swal("Ups!", "Something went wrong", "error");
+      } else {
+        swal("Ups!", error.response.data.msg, "error");
+      }
     }
   };
 
-  if (localStorage.getItem("token") && auth()) {
-    return (
-      <Container fluid>
-        <Row>
-          {/* SIDEBAR */}
-          <Col
-            xs="auto"
-            className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
-          >
-            <Aside />
-          </Col>
-          {/* SIDEBAR */}
+  {
+    return token !== "" && auth() ? (
+      auth().user_level === 1 ? (
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col
+              xs="auto"
+              className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+            >
+              <Aside />
+            </Col>
+            {/* SIDEBAR */}
 
-          <Col>
-            {/* NAVBAR */}
-            <Row>
-              <Col>
-                {["end"].map((placement, idx) => (
-                  <NavTop
-                    key={idx}
-                    placement={placement}
-                    name={placement}
-                    bc={<FaArrowLeft />}
-                    title={"Tambah Data Unit Kerja"}
-                    parentLink={"/unit-kerja"}
-                  />
-                ))}
-              </Col>
-            </Row>
-            {/* NAVBAR */}
-            <main className="min-vh-10 px-2 mt-4">
+            <Col>
+              {/* NAVBAR */}
               <Row>
                 <Col>
-                  <Card>
-                    <Card.Body>
-                      <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                        Silahkan Tambah Data Unit Kerja Baru Disini
-                      </Card.Title>
-
-                      <Container>
-                        <Row>
-                          <Col>
-                            <Form.Group className="mb-3">
-                              <Form.Label>Nama Unit Kerja</Form.Label>
-                              <Form.Control
-                                required
-                                className="input form-custom"
-                                type="text"
-                                onChange={(e) =>
-                                  setNewJobUnit({
-                                    ...newJobUnit,
-                                    name: e.target.value,
-                                  })
-                                }
-                              />
-                            </Form.Group>
-
-                            <Form.Group className="mb-3">
-                              <Form.Label>Kode Unit Kerja</Form.Label>
-                              <Form.Control
-                                required
-                                className="input form-custom"
-                                type="text"
-                                onChange={(e) =>
-                                  setNewJobUnit({
-                                    ...newJobUnit,
-                                    unit_account: e.target.value,
-                                  })
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                      </Container>
-                    </Card.Body>
-                    <Card.Footer>
-                      <Button
-                        className="btn-post"
-                        onClick={postNewJobUnit}
-                        type="submit"
-                      >
-                        Tambahkan
-                      </Button>
-                    </Card.Footer>
-                  </Card>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<FaArrowLeft />}
+                      title={"Tambah Data Unit Kerja"}
+                      parentLink={"/unit-kerja"}
+                    />
+                  ))}
                 </Col>
               </Row>
-              <Row>
-                <Col>
-                  <Footer />
-                </Col>
-              </Row>
-            </main>
-          </Col>
-        </Row>
-      </Container>
+              {/* NAVBAR */}
+              <main className="min-vh-10 px-2 mt-4">
+                <Row>
+                  <Col>
+                    <Card>
+                      <Form onSubmit={postNewJobUnit}>
+                        <Card.Body>
+                          <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                            Silahkan Tambah Data Unit Kerja Baru Disini
+                          </Card.Title>
+
+                          <Container>
+                            <Row>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Nama Unit Kerja</Form.Label>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    type="text"
+                                    onChange={(e) =>
+                                      setNewJobUnit({
+                                        ...newJobUnit,
+                                        name: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Kode Unit Kerja</Form.Label>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    type="text"
+                                    onChange={(e) =>
+                                      setNewJobUnit({
+                                        ...newJobUnit,
+                                        unit_account: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                          </Container>
+                        </Card.Body>
+                        <Card.Footer>
+                          <Button
+                            className="btn-post"
+                            onClick={postNewJobUnit}
+                            type="submit"
+                          >
+                            Tambahkan
+                          </Button>
+                        </Card.Footer>
+                      </Form>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
+              </main>
+            </Col>
+          </Row>
+        </Container>
+      ) : (
+        SecuringPage()
+      )
+    ) : (
+      <Navigate to="/silakend-login" />
     );
-  } else {
-    return <Navigate to="/silakend-login" />;
   }
 };

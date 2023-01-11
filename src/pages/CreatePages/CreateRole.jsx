@@ -3,6 +3,9 @@ import React, { useState } from "react";
 // Fetch Requirements
 import axios from "axios";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // Redirecting
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
@@ -27,7 +30,12 @@ import swal from "sweetalert";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
+
 export const CreateRole = () => {
+  // Get access token
+  const token = Cookies.get("_auth");
+
   const auth = useAuthUser();
   const navigate = useNavigate();
 
@@ -37,36 +45,35 @@ export const CreateRole = () => {
     level: "",
   });
 
-  // Store new vehicle data
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
+  const postNewRole = async (e) => {
+    e.preventDefault();
 
-  const postNewRole = async () => {
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
+
     if (newRole.name !== "" || newRole.level !== "") {
-      await axios
-        .post("https://silakend-server.xyz/api/roles", newRole, config)
-        .then((response) => {
-          if (response.status === 200) {
-            navigate("/data-peran");
-            swal({
-              title: "Berhasil!",
-              text: response.data.msg,
-              icon: "success",
-              button: "Tutup",
-            });
-          }
-        })
-        .catch((error) => {
-          handleError(error);
-        });
+      try {
+        await axios
+          .post("https://silakend-server.xyz/api/roles", newRole, config)
+          .then((response) => {
+            if (response.status === 200) {
+              navigate("/data-peran");
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: "Tutup",
+              });
+            }
+          });
+      } catch (error) {
+        if (error.response.data.message) {
+          swal("Ups!", "Something went wrong", "error");
+        } else {
+          swal("Ups!", error.response.data.msg, "error");
+        }
+      }
     } else {
       swal({
         title: "Peringatan",
@@ -77,9 +84,9 @@ export const CreateRole = () => {
     }
   };
 
-  if (localStorage.getItem("token") && auth()) {
-    return (
-      <>
+  {
+    return token !== "" && auth() ? (
+      auth().user_level === 1 ? (
         <Container fluid>
           <Row>
             {/* SIDEBAR */}
@@ -112,56 +119,58 @@ export const CreateRole = () => {
                 <Row>
                   <Col>
                     <Card>
-                      <Card.Body>
-                        <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                          Silahkan Tambah Peran Baru Untuk Pengguna Disini
-                        </Card.Title>
+                      <Form onSubmit={postNewRole}>
+                        <Card.Body>
+                          <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                            Silahkan Tambah Peran Baru Untuk Pengguna Disini
+                          </Card.Title>
 
-                        <Container>
-                          <Row>
-                            <Col>
-                              <Form.Group className="mb-3">
-                                <Form.Label>Nama Peran</Form.Label>
-                                <Form.Control
-                                  required
-                                  className="input form-custom"
-                                  type="text"
-                                  onChange={(e) =>
-                                    setNewRole({
-                                      ...newRole,
-                                      name: e.target.value,
-                                    })
-                                  }
-                                />
-                              </Form.Group>
+                          <Container>
+                            <Row>
+                              <Col>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>Nama Peran</Form.Label>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    type="text"
+                                    onChange={(e) =>
+                                      setNewRole({
+                                        ...newRole,
+                                        name: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </Form.Group>
 
-                              <Form.Group className="mb-3">
-                                <Form.Label>level</Form.Label>
-                                <Form.Control
-                                  required
-                                  className="input form-custom"
-                                  type="number"
-                                  onChange={(e) =>
-                                    setNewRole({
-                                      ...newRole,
-                                      level: e.target.value,
-                                    })
-                                  }
-                                />
-                              </Form.Group>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </Card.Body>
-                      <Card.Footer>
-                        <Button
-                          className="btn-post"
-                          onClick={postNewRole}
-                          type="submit"
-                        >
-                          Tambahkan
-                        </Button>
-                      </Card.Footer>
+                                <Form.Group className="mb-3">
+                                  <Form.Label>level</Form.Label>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    type="number"
+                                    onChange={(e) =>
+                                      setNewRole({
+                                        ...newRole,
+                                        level: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </Form.Group>
+                              </Col>
+                            </Row>
+                          </Container>
+                        </Card.Body>
+                        <Card.Footer>
+                          <Button
+                            className="btn-post"
+                            onClick={postNewRole}
+                            type="submit"
+                          >
+                            Tambahkan
+                          </Button>
+                        </Card.Footer>
+                      </Form>
                     </Card>
                   </Col>
                 </Row>
@@ -174,9 +183,11 @@ export const CreateRole = () => {
             </Col>
           </Row>
         </Container>
-      </>
+      ) : (
+        SecuringPage()
+      )
+    ) : (
+      <Navigate to="/silakend-login" />
     );
-  } else {
-    return <Navigate to="/silakend-login" />;
   }
 };

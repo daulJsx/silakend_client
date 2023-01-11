@@ -3,6 +3,9 @@ import React, { useState } from "react";
 // fetch data requirement
 import { useQuery } from "react-query";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // import axios from "axios";
 import FetchUsers from "../../consAPI/FetchUsers";
 
@@ -25,6 +28,9 @@ import { Footer } from "../../components/footer/Footer";
 // Icons
 import { FaUserTie } from "react-icons/fa";
 
+// React Notification
+import swal from "sweetalert";
+
 export const Drivers = () => {
   const auth = useAuthUser();
   // Fetching users as driver
@@ -35,23 +41,39 @@ export const Drivers = () => {
     isError,
   } = useQuery(["users", 10], FetchUsers);
 
-  if (localStorage.getItem("token") && auth()) {
-    if (isError) {
-      return <div>{error.message}</div>;
-    } else if (isLoading) {
-      return (
-        <div className="loading-io">
-          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-            <div className="ldio-c0sicszbk9i">
-              <div></div>
-              <div></div>
+  const securingPage = () => {
+    swal({
+      title: "Maaf!",
+      text: "Anda tidak memiliki akses ke halaman ini",
+      icon: "warning",
+    });
+    {
+      return auth().user_level === 5 ? (
+        <Navigate to="/user/data-pengajuan-peminjaman" />
+      ) : (
+        <Navigate to="/silakend-login" />
+      );
+    }
+  };
+
+  // Get access token
+  const token = Cookies.get("_auth");
+
+  {
+    return token !== "" && auth() ? (
+      auth().user_level === 1 ? (
+        isError ? (
+          <div>{error.message}</div>
+        ) : isLoading ? (
+          <div className="loading-io">
+            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+              <div className="ldio-c0sicszbk9i">
+                <div></div>
+                <div></div>
+              </div>
             </div>
           </div>
-        </div>
-      );
-    } else {
-      return (
-        <>
+        ) : (
           <Container fluid>
             <Row>
               {/* SIDEBAR */}
@@ -123,10 +145,12 @@ export const Drivers = () => {
               </Col>
             </Row>
           </Container>
-        </>
-      );
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
+        )
+      ) : (
+        securingPage()
+      )
+    ) : (
+      <Navigate to="/silakend-login" />
+    );
   }
 };

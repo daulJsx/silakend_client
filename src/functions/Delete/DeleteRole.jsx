@@ -1,20 +1,18 @@
 import axios from "axios";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // React Notification
 import swal from "sweetalert";
 
 export async function DeleteRole(roleId) {
-  const config = {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  };
+  // Get access token
+  const token = Cookies.get("_auth");
 
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
 
   swal({
     title: "Yakin?",
@@ -24,21 +22,26 @@ export async function DeleteRole(roleId) {
     dangerMode: true,
   }).then(async (willDelete) => {
     if (willDelete) {
-      await axios
-        .delete(`https://silakend-server.xyz/api/roles/${roleId}`, config)
-        .then((response) => {
-          if (response.status === 200) {
-            swal({
-              title: "Berhasil!",
-              text: response.data.msg,
-              icon: "success",
-              button: "Tutup",
-            });
-          }
-        })
-        .catch((error) => {
-          handleError(error);
-        });
+      try {
+        await axios
+          .delete(`https://silakend-server.xyz/api/roles/${roleId}`, config)
+          .then((response) => {
+            if (response.status === 200) {
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: "Tutup",
+              });
+            }
+          });
+      } catch (error) {
+        if (error.response.data.message) {
+          swal("Ups!", "Something went wrong", "error");
+        } else {
+          swal("Ups!", error.response.data.msg, "error");
+        }
+      }
     } else {
       swal("Data peran aman!");
     }

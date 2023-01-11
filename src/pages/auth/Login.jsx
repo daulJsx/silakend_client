@@ -31,64 +31,76 @@ import polmanLogo from "./../../assets/polman.webp";
 
 export const Login = (props) => {
   const signIn = useSignIn();
-  const [formData, setFormData] = useState({ nip: "", password: "" });
+  const [loginForm, setLoginForm] = useState({ nip: "", password: "" });
   const navigate = useNavigate();
   const auth = useAuthUser();
-
-  // Catch and display the errors
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
 
   const onSubmit = async (e) => {
     e.preventDefault();
     // perform login logic
-    if (formData.nip !== "" && formData.password !== "") {
-      await axios
-        .post("https://silakend-server.xyz/api/auth/login", formData) //Request to server
-        .then((response) => {
-          if (response.status === 200) {
-            signIn({
-              token: response.data.content.access_token, // asign token to auth package
-              expiresIn: 1000, // expires token in
-              tokenType: "Bearer", // type of token
-              authState: response.data.content, // asign user datas to auth package
-            });
-            localStorage.setItem("token", response.data.content.access_token); // asign token to local storage
-            localStorage.setItem("username", response.data.content.username); // asign username to local storage
-            localStorage.setItem("userLevel", response.data.content.user_level); // asign user level to local storage
-            const userName = localStorage.getItem("username");
-            const greetToUser = swal({
-              title: response.data.msg,
-              text: "Anda sebagai " + userName,
-              icon: "success",
-            }); // notify user
-            const userRole = response.data.content.user_level; // access user level for RBAC
+    try {
+      if (loginForm.nip !== "" && loginForm.password !== "") {
+        await axios
+          .post("https://silakend-server.xyz/api/auth/login", loginForm) //Request to server
+          .then((response) => {
+            if (response.status === 200) {
+              if (
+                signIn({
+                  token: response.data.content.access_token, // asign token to auth package
+                  expiresIn: 1000, // expires token in
+                  tokenType: "Bearer", // type of token
+                  authState: response.data.content, // asign user datas to auth package
+                })
+              ) {
+                localStorage.setItem(
+                  "token",
+                  response.data.content.access_token
+                ); // asign token to local storage
+                localStorage.setItem(
+                  "username",
+                  response.data.content.username
+                ); // asign username to local storage
+                localStorage.setItem(
+                  "userLevel",
+                  response.data.content.user_level
+                ); // asign user level to local storage
+                const userName = localStorage.getItem("username");
+                const greetToUser = swal({
+                  title: response.data.msg,
+                  text: "Anda sebagai " + userName,
+                  icon: "success",
+                }); // notify user
+                const userRole = response.data.content.user_level; // access user level for RBAC
 
-            // Perform RBAC logic
-            if (userRole === 1) {
-              navigate("/");
-              greetToUser();
-            } else {
-              navigate("/user/data-pengajuan-peminjaman");
-              greetToUser();
+                // Perform RBAC logic
+                if (userRole === 1) {
+                  navigate("/");
+                  greetToUser();
+                } else {
+                  navigate("/user/data-pengajuan-peminjaman");
+                  greetToUser();
+                }
+              }
             }
-          }
-        })
-        .catch((error) => {
-          handleError(error);
+          });
+      } else {
+        swal({
+          title: "Peringatan",
+          text: "Harap isi semua kredensial!",
+          icon: "warning",
+          button: "Tutup",
         });
-    } else {
-      swal({
-        title: "Peringatan",
-        text: "Harap isi semua kredensial!",
-        icon: "warning",
-        button: "Tutup",
-      });
+      }
+    } catch (error) {
+      const { message } = error.response.data;
+      const { msg } = error.response.data;
+      if (error) {
+        if (message) {
+          swal("Ups!", message, "error");
+        } else {
+          swal("Ups!", msg, "error");
+        }
+      }
     }
   };
 
@@ -150,7 +162,7 @@ export const Login = (props) => {
                         id="floatingInput"
                         placeholder="NIP"
                         onChange={(e) =>
-                          setFormData({ ...formData, nip: e.target.value })
+                          setLoginForm({ ...loginForm, nip: e.target.value })
                         }
                       />
                       <label htmlFor="floatingInput">NIP</label>
@@ -168,7 +180,10 @@ export const Login = (props) => {
                         id="floatingPassword"
                         placeholder="Password"
                         onChange={(e) =>
-                          setFormData({ ...formData, password: e.target.value })
+                          setLoginForm({
+                            ...loginForm,
+                            password: e.target.value,
+                          })
                         }
                       />
                       <label htmlFor="floatingPassword">Password</label>

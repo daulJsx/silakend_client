@@ -58,6 +58,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
             icon: "success",
           });
           localStorage.clear();
+          Cookies.remove("_auth", { path: "http://localhost:3000/" });
           redirect("/silakend-login");
         }
       })

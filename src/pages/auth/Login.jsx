@@ -56,16 +56,7 @@ export const Login = (props) => {
             secure: true,
             httpOnly: true,
           });
-          Cookies.set("username", username, {
-            expires: 1,
-            secure: true,
-            httpOnly: true,
-          });
-          Cookies.set("userLevel", user_level, {
-            expires: 1,
-            secure: true,
-            httpOnly: true,
-          });
+          console.log(Cookies.get("access_token"));
 
           //notify user
           swal({

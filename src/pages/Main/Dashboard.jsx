@@ -53,12 +53,9 @@ export const Dashboard = () => {
     }
   };
 
-  // Get access token
-  const token = Cookies.get("_auth");
-
   {
-    return token !== "" && auth() ? (
-      auth().user_level === 1 ? (
+    return auth() ? (
+      auth().user_level === 1 && auth().access_token ? (
         <Container fluid>
           <Row>
             <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">

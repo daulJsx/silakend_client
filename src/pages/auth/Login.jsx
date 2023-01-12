@@ -90,15 +90,15 @@ export const Login = (props) => {
         });
       }
     } catch (error) {
+      const { message, msg } = error.response.data;
       if (error.response) {
-        const { message, msg } = error.response.data;
         if (message) {
           swal("Ups!", message, "error");
         } else {
           swal("Ups!", msg, "error");
         }
       } else {
-        swal("Ups!", error.response.data.message, "error");
+        swal("Ups!", message, "error");
       }
     }
   };

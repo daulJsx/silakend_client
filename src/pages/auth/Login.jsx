@@ -90,8 +90,9 @@ export const Login = (props) => {
         });
       }
     } catch (error) {
-      const { message, msg } = error.response.data;
+      console.log(error.response.data);
       if (error.response) {
+        const { message, msg } = error.response.data;
         if (message) {
           swal("Ups!", message, "error");
         } else {
@@ -194,17 +195,12 @@ export const Login = (props) => {
                       className="w-100 btn-submit p-3"
                       variant="primary"
                       type="submit"
-                      onClick={onSubmit}
+                      onClick={(e) => onSubmit(e)}
                     >
                       <div className="btn-text fw-bold">Log In</div>
                     </Button>
 
-                    <div className="text-question fw-semibold">
-                      {/* Belum Punya Akun ?
-                    <a className="color-primary fw-semibold text-decoration-none ms-1">
-                      Register
-                    </a> */}
-                    </div>
+                    <div className="text-question fw-semibold"></div>
                   </Form>
                 </Col>
               </Row>

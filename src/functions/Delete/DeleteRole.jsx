@@ -8,7 +8,7 @@ import swal from "sweetalert";
 
 export async function DeleteRole(roleId) {
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -26,14 +26,12 @@ export async function DeleteRole(roleId) {
         await axios
           .delete(`https://silakend-server.xyz/api/roles/${roleId}`, config)
           .then((response) => {
-            if (response.status === 200) {
-              swal({
-                title: "Berhasil!",
-                text: response.data.msg,
-                icon: "success",
-                button: "Tutup",
-              });
-            }
+            swal({
+              title: "Berhasil!",
+              text: response.data.msg,
+              icon: "success",
+              button: "Tutup",
+            });
           });
       } catch (error) {
         if (error.response.data.message) {

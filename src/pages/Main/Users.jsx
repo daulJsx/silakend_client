@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -32,15 +32,13 @@ import { Footer } from "../../components/footer/Footer";
 // Functions
 import { GetUserById } from "../../functions/GetUserById";
 import { DeleteUser } from "../../functions/Delete/DeleteUser";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Custom Styles
 import "../CustomStyles/users.css";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
-
-// React Notification
-import swal from "sweetalert";
 
 export const Users = () => {
   const auth = useAuthUser();
@@ -52,26 +50,11 @@ export const Users = () => {
     isError,
   } = useQuery(["users", 10], FetchUsers);
 
-  const securingPage = () => {
-    swal({
-      title: "Maaf!",
-      text: "Anda tidak memiliki akses ke halaman ini",
-      icon: "warning",
-    });
-    {
-      return auth().user_level === 5 ? (
-        <Navigate to="/user/data-pengajuan-peminjaman" />
-      ) : (
-        <Navigate to="/silakend-login" />
-      );
-    }
-  };
-
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   {
-    return token !== "" && auth() ? (
+    return token ? (
       auth().user_level === 1 ? (
         isError ? (
           <div>{error.message}</div>
@@ -209,7 +192,7 @@ export const Users = () => {
           </Container>
         )
       ) : (
-        securingPage()
+        SecuringPage()
       )
     ) : (
       <Navigate to="/silakend-login" />

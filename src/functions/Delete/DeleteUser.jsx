@@ -1,12 +1,19 @@
 import axios from "axios";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // React Notification
 import swal from "sweetalert";
 
 export async function DeleteUser(userId) {
+  // Get access token
+  const token = Cookies.get("token");
+
   const config = {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    headers: { Authorization: `Bearer ${token}` },
   };
+
   swal({
     title: "Yakin?",
     text: "Data pengguna yang dihapus, tidak dapat kembali!",
@@ -15,27 +22,24 @@ export async function DeleteUser(userId) {
     dangerMode: true,
   }).then(async (willDelete) => {
     if (willDelete) {
-      await axios
-        .delete(`https://silakend-server.xyz/api/users/${userId}`, config)
-        .then((response) => {
-          if (response.status === 200) {
-            console.log(response.data.msg);
+      try {
+        await axios
+          .delete(`https://silakend-server.xyz/api/users/${userId}`, config)
+          .then((response) => {
             swal({
               title: "Berhasil!",
               text: response.data.msg,
               icon: "success",
               button: "Tutup",
             });
-          } else {
-            console.log(response.data.msg);
-            swal({
-              title: "Gagal!",
-              text: response.data.msg,
-              icon: "error",
-              button: "Tutup",
-            });
-          }
-        });
+          });
+      } catch (error) {
+        if (error.response.data.message) {
+          swal("Ups!", "Something went wrong", "error");
+        } else {
+          swal("Ups!", error.response.data.msg, "error");
+        }
+      }
     } else {
       swal("Data pengguna aman!");
     }

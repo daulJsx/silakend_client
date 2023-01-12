@@ -3,7 +3,11 @@ import React, { useState, useEffect } from "react";
 // Cookies JS
 import Cookies from "js-cookie";
 
+// Interceptors
 import axios from "axios";
+
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
@@ -27,26 +31,12 @@ import swal from "sweetalert";
 
 export const VehicleUsageDetail = () => {
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
-  const securingPage = () => {
-    swal({
-      title: "Maaf!",
-      text: "Anda tidak memiliki akses ke halaman ini",
-      icon: "warning",
-    });
-    {
-      return auth().user_level === 5 ? (
-        <Navigate to="/user/data-pengajuan-peminjaman" />
-      ) : (
-        <Navigate to="/silakend-login" />
-      );
-    }
-  };
   const auth = useAuthUser();
 
-  // Initialize newest maintenance id
-  const [usageId, setUsageId] = useState(localStorage.getItem("usage_id"));
+  // Initialize newest usage id
+  const usageId = localStorage.getItem("usage_id");
 
   // initialize the loading
   const [isLoading, setIsLoading] = useState(true);
@@ -77,10 +67,15 @@ export const VehicleUsageDetail = () => {
             }
           });
       } catch (error) {
-        if (error.response.data.message) {
-          swal("Ups!", error.response.data.message, "error");
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
+          } else {
+            swal("Ups!", msg, "error");
+          }
         } else {
-          swal("Ups!", error.response.data.msg, "error");
+          swal("Ups!", "Something went wrong", "error");
         }
       }
     }
@@ -89,9 +84,9 @@ export const VehicleUsageDetail = () => {
   }, []);
 
   {
-    return token !== "" && auth() ? (
-      auth().user_level === 1 ? (
-        usageId !== "" ? (
+    return token ? (
+      auth().user_level === 1 || auth().user_level === 2 ? (
+        usageId ? (
           isLoading ? (
             <div className="loading-io">
               <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
@@ -316,7 +311,7 @@ export const VehicleUsageDetail = () => {
           <Navigate to="/pengajuan-peminjaman" />
         )
       ) : (
-        securingPage()
+        SecuringPage()
       )
     ) : (
       <Navigate to="/silakend-login" />

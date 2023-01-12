@@ -10,7 +10,7 @@ import swal from "sweetalert";
 
 export async function DeleteUsageCat(usageCatId) {
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -31,15 +31,13 @@ export async function DeleteUsageCat(usageCatId) {
             config
           )
           .then((response) => {
-            if (response.status === 200) {
-              swal({
-                title: "Berhasil!",
-                text: response.data.msg,
-                icon: "success",
-                button: "Tutup",
-              });
-              FetchUsageCat();
-            }
+            swal({
+              title: "Berhasil!",
+              text: response.data.msg,
+              icon: "success",
+              button: "Tutup",
+            });
+            FetchUsageCat();
           });
       } catch (error) {
         if (error.response.data.message) {

@@ -34,7 +34,7 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 export const CreateRole = () => {
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   const auth = useAuthUser();
   const navigate = useNavigate();
@@ -68,10 +68,15 @@ export const CreateRole = () => {
             }
           });
       } catch (error) {
-        if (error.response.data.message) {
-          swal("Ups!", "Something went wrong", "error");
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
+          } else {
+            swal("Ups!", msg, "error");
+          }
         } else {
-          swal("Ups!", error.response.data.msg, "error");
+          swal("Ups!", "Something went wrong", "error");
         }
       }
     } else {
@@ -85,7 +90,7 @@ export const CreateRole = () => {
   };
 
   {
-    return token !== "" && auth() ? (
+    return token ? (
       auth().user_level === 1 ? (
         <Container fluid>
           <Row>

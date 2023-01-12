@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -13,8 +13,9 @@ import { Navigate, NavLink } from "react-router-dom";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
-// Delete Function
+// Functions
 import { DeleteRole } from "../../functions/Delete/DeleteRole";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Bootstrap components
 import { Container, Row, Col, Button } from "react-bootstrap";
@@ -31,9 +32,6 @@ import { CgUserList } from "react-icons/cg";
 import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
-
-// React Notification
-import swal from "sweetalert";
 
 export const Roles = () => {
   const auth = useAuthUser();
@@ -53,26 +51,11 @@ export const Roles = () => {
     localStorage.setItem("roleToMap", JSON.stringify(roles));
   }
 
-  const securingPage = () => {
-    swal({
-      title: "Maaf!",
-      text: "Anda tidak memiliki akses ke halaman ini",
-      icon: "warning",
-    });
-    {
-      return auth().user_level === 5 ? (
-        <Navigate to="/user/data-pengajuan-peminjaman" />
-      ) : (
-        <Navigate to="/silakend-login" />
-      );
-    }
-  };
-
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   {
-    return token !== "" && auth() ? (
+    return token ? (
       auth().user_level === 1 ? (
         isError ? (
           <div>{error.message}</div>
@@ -197,7 +180,7 @@ export const Roles = () => {
           </Container>
         )
       ) : (
-        securingPage()
+        SecuringPage()
       )
     ) : (
       <Navigate to="/silakend-login" />

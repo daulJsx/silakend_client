@@ -1,12 +1,11 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { redirect } from "react-router-dom";
+import swal from "sweetalert";
 
 async function FetchUsageCat() {
   try {
-    const token = Cookies.get("_auth");
-    if (!token) {
-      throw new Error("Token kadaluarsa, silahkan login kembali");
-    }
+    const token = Cookies.get("token");
 
     const config = {
       headers: {
@@ -18,6 +17,15 @@ async function FetchUsageCat() {
       "https://silakend-server.xyz/api/usagecategories",
       config
     );
+
+    if (!token) {
+      redirect("/silakend-login");
+      swal({
+        title: response.data.msg,
+        text: "Anda tidak memiliki akses, atau token sudah kadaluarsa, silahkan login kembali",
+        icon: "success",
+      });
+    }
 
     return response.data;
   } catch (error) {

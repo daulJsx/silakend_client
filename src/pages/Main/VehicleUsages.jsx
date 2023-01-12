@@ -33,9 +33,10 @@ import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import { FaInfo } from "react-icons/fa";
 
-// Pass parameters
+// Functions
 import { GetOrderId } from "../../functions/GetOrderId";
 import { DeleteVU } from "../../functions/Delete/DeleteVU";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
@@ -50,27 +51,12 @@ export const VehicleUsages = () => {
     isError,
   } = useQuery("orders", FetchVehicleUsages);
 
-  const securingPage = () => {
-    swal({
-      title: "Maaf!",
-      text: "Anda tidak memiliki akses ke halaman ini",
-      icon: "warning",
-    });
-    {
-      return auth().user_level === 5 ? (
-        <Navigate to="/user/data-pengajuan-peminjaman" />
-      ) : (
-        <Navigate to="/silakend-login" />
-      );
-    }
-  };
-
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   {
-    return token !== "" && auth() ? (
-      auth().user_level === 1 ? (
+    return token ? (
+      auth().user_level === 1 || auth().user_level === 2 ? (
         isError ? (
           <div>{error.message}</div>
         ) : isLoading ? (
@@ -244,7 +230,7 @@ export const VehicleUsages = () => {
           </Container>
         )
       ) : (
-        securingPage()
+        SecuringPage()
       )
     ) : (
       <Navigate to="/silakend-login" />

@@ -3,18 +3,16 @@ import axios from "axios";
 // React Notification
 import swal from "sweetalert";
 
-export async function DeleteJobUnit(unitId) {
-  const config = {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  };
+// Cookies JS
+import Cookies from "js-cookie";
 
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
+export async function DeleteJobUnit(unitId) {
+  // Get access token
+  const token = Cookies.get("token");
+
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
 
   swal({
     title: "Yakin?",
@@ -24,21 +22,24 @@ export async function DeleteJobUnit(unitId) {
     dangerMode: true,
   }).then(async (willDelete) => {
     if (willDelete) {
-      await axios
-        .delete(`https://silakend-server.xyz/api/jobunits/${unitId}`, config)
-        .then((response) => {
-          if (response.status === 200) {
+      try {
+        await axios
+          .delete(`https://silakend-server.xyz/api/jobunits/${unitId}`, config)
+          .then((response) => {
             swal({
               title: "Berhasil!",
               text: response.data.msg,
               icon: "success",
               button: "Tutup",
             });
-          }
-        })
-        .catch((error) => {
-          handleError(error);
-        });
+          });
+      } catch (error) {
+        if (error.response.data.message) {
+          swal("Ups!", "Something went wrong", "error");
+        } else {
+          swal("Ups!", error.response.data.msg, "error");
+        }
+      }
     } else {
       swal("Data unit kerja aman!");
     }

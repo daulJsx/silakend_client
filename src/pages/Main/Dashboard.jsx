@@ -29,33 +29,20 @@ import { Navigate } from "react-router-dom";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
-// React Notification
-import swal from "sweetalert";
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Custom Style
 import "../CustomStyles/dash.css";
 
 export const Dashboard = () => {
+  // get access token
+  const token = Cookies.get("token");
   const auth = useAuthUser();
 
-  const securingPage = () => {
-    swal({
-      title: "Maaf!",
-      text: "Anda tidak memiliki akses ke halaman ini",
-      icon: "warning",
-    });
-    {
-      return auth().user_level === 5 ? (
-        <Navigate to="/user/data-pengajuan-peminjaman" />
-      ) : (
-        <Navigate to="/silakend-login" />
-      );
-    }
-  };
-
   {
-    return auth() ? (
-      auth().user_level === 1 && auth().access_token ? (
+    return token ? (
+      auth().user_level === 1 || auth().user_level === 2 ? (
         <Container fluid>
           <Row>
             <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
@@ -267,7 +254,7 @@ export const Dashboard = () => {
           </Row>
         </Container>
       ) : (
-        securingPage()
+        SecuringPage()
       )
     ) : (
       <Navigate to="/silakend-login" />

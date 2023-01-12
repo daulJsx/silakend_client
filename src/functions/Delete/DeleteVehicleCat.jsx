@@ -2,19 +2,16 @@ import axios from "axios";
 
 // React Notification
 import swal from "sweetalert";
+// Cookies JS
+import Cookies from "js-cookie";
 
 export async function DeleteVehicleCat(vCatId) {
-  const config = {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  };
+  // Get access token
+  const token = Cookies.get("token");
 
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
 
   swal({
     title: "Yakin?",
@@ -24,24 +21,27 @@ export async function DeleteVehicleCat(vCatId) {
     dangerMode: true,
   }).then(async (willDelete) => {
     if (willDelete) {
-      await axios
-        .delete(
-          `https://silakend-server.xyz/api/vehiclecategories/${vCatId}`,
-          config
-        )
-        .then((response) => {
-          if (response.status === 200) {
+      try {
+        await axios
+          .delete(
+            `https://silakend-server.xyz/api/vehiclecategories/${vCatId}`,
+            config
+          )
+          .then((response) => {
             swal({
               title: "Berhasil!",
               text: response.data.msg,
               icon: "success",
               button: "Tutup",
             });
-          }
-        })
-        .catch((error) => {
-          handleError(error);
-        });
+          });
+      } catch (error) {
+        if (error.response.data.message) {
+          swal("Ups!", "Something went wrong", "error");
+        } else {
+          swal("Ups!", error.response.data.msg, "error");
+        }
+      }
     } else {
       swal("Data kategori kendaraan aman!");
     }

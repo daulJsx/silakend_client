@@ -13,16 +13,14 @@ import { useAuthUser } from "react-auth-kit";
 // Cookies JS
 import Cookies from "js-cookie";
 
-// Delete Function
+// Functions
 import { DeleteUsageCat } from "../../functions/Delete/DeleteUsageCat";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Bootstrap components
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
-
-// React Notification
-import swal from "sweetalert";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -53,25 +51,10 @@ export const UsageCategories = () => {
     localStorage.setItem("uCategoryToMap", JSON.stringify(uCategory));
   }
 
-  const securingPage = () => {
-    swal({
-      title: "Maaf!",
-      text: "Anda tidak memiliki akses ke halaman ini",
-      icon: "warning",
-    });
-    {
-      return auth().user_level === 5 ? (
-        <Navigate to="/user/data-pengajuan-peminjaman" />
-      ) : (
-        <Navigate to="/silakend-login" />
-      );
-    }
-  };
-
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
   {
-    return token !== "" && auth() ? (
+    return token ? (
       auth().user_level === 1 ? (
         isError ? (
           <div>{error.message}</div>
@@ -200,7 +183,7 @@ export const UsageCategories = () => {
           </Container>
         )
       ) : (
-        securingPage()
+        SecuringPage()
       )
     ) : (
       <Navigate to="/silakend-login" />

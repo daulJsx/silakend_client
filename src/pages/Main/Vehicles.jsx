@@ -34,18 +34,16 @@ import { FaInfo } from "react-icons/fa";
 // Functions
 import { GetVehicleById } from "../../functions/GetVehicleById";
 import { DeleteVehicle } from "../../functions/Delete/DeleteVehicle";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
-
-// React Notification
-import swal from "sweetalert";
 
 export const Vehicles = () => {
   const auth = useAuthUser();
 
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   // Fetching vehicles data
   const {
@@ -80,24 +78,9 @@ export const Vehicles = () => {
     }
   };
 
-  const securingPage = () => {
-    swal({
-      title: "Maaf!",
-      text: "Anda tidak memiliki akses ke halaman ini",
-      icon: "warning",
-    });
-    {
-      return auth().user_level === 5 ? (
-        <Navigate to="/user/data-pengajuan-peminjaman" />
-      ) : (
-        <Navigate to="/silakend-login" />
-      );
-    }
-  };
-
   {
-    return token !== "" && auth() ? (
-      auth().user_level === 1 ? (
+    return token ? (
+      auth().user_level === 1 || auth().user_level === 2 ? (
         isError ? (
           <div>{error.message}</div>
         ) : isLoading ? (
@@ -245,7 +228,7 @@ export const Vehicles = () => {
           </Container>
         )
       ) : (
-        securingPage()
+        SecuringPage()
       )
     ) : (
       <Navigate to="/silakend-login" />

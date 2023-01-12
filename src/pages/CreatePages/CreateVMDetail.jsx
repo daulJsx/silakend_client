@@ -35,7 +35,7 @@ import { useAuthUser } from "react-auth-kit";
 
 export const CreateVMDetail = () => {
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   const auth = useAuthUser();
   const navigate = useNavigate();
@@ -106,7 +106,7 @@ export const CreateVMDetail = () => {
   };
 
   {
-    return token !== "" && auth() ? (
+    return token ? (
       auth().user_level === 1 ? (
         maintenanceId !== "" ? (
           <Container fluid>

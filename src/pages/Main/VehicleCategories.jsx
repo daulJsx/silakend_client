@@ -13,8 +13,9 @@ import { Navigate, NavLink } from "react-router-dom";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
-// Delete Function
+// Functions
 import { DeleteVehicleCat } from "../../functions/Delete/DeleteVehicleCat";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Bootstrap components
 import { Container, Row, Col, Button } from "react-bootstrap";
@@ -31,9 +32,6 @@ import { RiCarWashingLine } from "react-icons/ri";
 import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
-
-// React Notification
-import swal from "sweetalert";
 
 export const VehicleCategories = () => {
   const auth = useAuthUser();
@@ -53,26 +51,11 @@ export const VehicleCategories = () => {
     localStorage.setItem("vCategoryToMap", JSON.stringify(vCategory));
   }
 
-  const securingPage = () => {
-    swal({
-      title: "Maaf!",
-      text: "Anda tidak memiliki akses ke halaman ini",
-      icon: "warning",
-    });
-    {
-      return auth().user_level === 5 ? (
-        <Navigate to="/user/data-pengajuan-peminjaman" />
-      ) : (
-        <Navigate to="/silakend-login" />
-      );
-    }
-  };
-
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   {
-    return token !== "" && auth() ? (
+    return token ? (
       auth().user_level === 1 ? (
         isError ? (
           <div>{error.message}</div>
@@ -203,7 +186,7 @@ export const VehicleCategories = () => {
           </Container>
         )
       ) : (
-        securingPage()
+        SecuringPage()
       )
     ) : (
       <Navigate to="/silakend-login" />

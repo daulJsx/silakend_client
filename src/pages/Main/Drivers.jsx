@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -15,6 +15,9 @@ import { Navigate } from "react-router-dom";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
+
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
@@ -28,9 +31,6 @@ import { Footer } from "../../components/footer/Footer";
 // Icons
 import { FaUserTie } from "react-icons/fa";
 
-// React Notification
-import swal from "sweetalert";
-
 export const Drivers = () => {
   const auth = useAuthUser();
   // Fetching users as driver
@@ -41,27 +41,12 @@ export const Drivers = () => {
     isError,
   } = useQuery(["users", 10], FetchUsers);
 
-  const securingPage = () => {
-    swal({
-      title: "Maaf!",
-      text: "Anda tidak memiliki akses ke halaman ini",
-      icon: "warning",
-    });
-    {
-      return auth().user_level === 5 ? (
-        <Navigate to="/user/data-pengajuan-peminjaman" />
-      ) : (
-        <Navigate to="/silakend-login" />
-      );
-    }
-  };
-
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   {
-    return token !== "" && auth() ? (
-      auth().user_level === 1 ? (
+    return token ? (
+      auth().user_level === 1 || auth().user_level === 2 ? (
         isError ? (
           <div>{error.message}</div>
         ) : isLoading ? (
@@ -147,7 +132,7 @@ export const Drivers = () => {
           </Container>
         )
       ) : (
-        securingPage()
+        SecuringPage()
       )
     ) : (
       <Navigate to="/silakend-login" />

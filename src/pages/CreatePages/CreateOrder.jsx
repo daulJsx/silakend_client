@@ -43,7 +43,7 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 export const CreateOrder = () => {
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   // Navigating
   const navigate = useNavigate();
@@ -76,26 +76,28 @@ export const CreateOrder = () => {
 
   const postNewOrder = async (e) => {
     e.preventDefault();
+
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    try {
-      if (
-        orderData.vehicle_id !== "" &&
-        orderData.driver_id !== "" &&
-        orderData.user_id !== "" &&
-        orderData.ucategory_id !== "" &&
-        orderData.usage_description !== "" &&
-        orderData.personel_count !== "" &&
-        orderData.destination !== "" &&
-        orderData.start_date !== "" &&
-        orderData.end_date !== "" &&
-        orderData.depart_date !== "" &&
-        orderData.depart_time !== "" &&
-        orderData.distance_count_out !== "" &&
-        orderData.status !== "" &&
-        orderData.status_description !== ""
-      ) {
+
+    if (
+      orderData.vehicle_id !== "" &&
+      orderData.driver_id !== "" &&
+      orderData.user_id !== "" &&
+      orderData.ucategory_id !== "" &&
+      orderData.usage_description !== "" &&
+      orderData.personel_count !== "" &&
+      orderData.destination !== "" &&
+      orderData.start_date !== "" &&
+      orderData.end_date !== "" &&
+      orderData.depart_date !== "" &&
+      orderData.depart_time !== "" &&
+      orderData.distance_count_out !== "" &&
+      orderData.status !== "" &&
+      orderData.status_description !== ""
+    ) {
+      try {
         await axios
           .post(
             "https://silakend-server.xyz/api/vehicleusages",
@@ -113,27 +115,31 @@ export const CreateOrder = () => {
               });
             }
           });
-      } else {
-        swal({
-          title: "Peringatan",
-          text: "Harap isi semua data!",
-          icon: "warning",
-          button: "Tutup",
-        });
+      } catch (error) {
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
+          } else {
+            swal("Ups!", msg, "error");
+          }
+        } else {
+          swal("Ups!", "Something went wrong", "error");
+        }
       }
-    } catch (error) {
-      console.log(error);
-      if (error.response.data.message) {
-        swal("Ups!", "Something went wrong", "error");
-      } else {
-        swal("Ups!", error.response.data.msg, "error");
-      }
+    } else {
+      swal({
+        title: "Peringatan",
+        text: "Harap isi semua data!",
+        icon: "warning",
+        button: "Tutup",
+      });
     }
   };
 
   const auth = useAuthUser();
   {
-    return token !== "" && auth() ? (
+    return token ? (
       auth().user_level === 1 ? (
         <Container fluid>
           <Row>

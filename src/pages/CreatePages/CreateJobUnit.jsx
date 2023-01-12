@@ -34,7 +34,7 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 export const CreateJobUnit = () => {
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   const auth = useAuthUser();
   const navigate = useNavigate();
@@ -47,11 +47,13 @@ export const CreateJobUnit = () => {
 
   const postNewJobUnit = async (e) => {
     e.preventDefault();
+
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    try {
-      if (newJobUnit.name !== "" && newJobUnit.unit_account !== "") {
+
+    if (newJobUnit.name !== "" && newJobUnit.unit_account !== "") {
+      try {
         await axios
           .post("https://silakend-server.xyz/api/jobunits", newJobUnit, config)
           .then((response) => {
@@ -65,25 +67,30 @@ export const CreateJobUnit = () => {
               });
             }
           });
-      } else {
-        swal({
-          title: "Peringatan",
-          text: "Harap isi semua data!",
-          icon: "warning",
-          button: "Tutup",
-        });
+      } catch (error) {
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
+          } else {
+            swal("Ups!", msg, "error");
+          }
+        } else {
+          swal("Ups!", "Something went wrong", "error");
+        }
       }
-    } catch (error) {
-      if (error.response.data.message) {
-        swal("Ups!", "Something went wrong", "error");
-      } else {
-        swal("Ups!", error.response.data.msg, "error");
-      }
+    } else {
+      swal({
+        title: "Peringatan",
+        text: "Harap isi semua data!",
+        icon: "warning",
+        button: "Tutup",
+      });
     }
   };
 
   {
-    return token !== "" && auth() ? (
+    return token ? (
       auth().user_level === 1 ? (
         <Container fluid>
           <Row>

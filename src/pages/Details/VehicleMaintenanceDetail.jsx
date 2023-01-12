@@ -3,12 +3,12 @@ import React, { useState, useEffect } from "react";
 // Cookies JS
 import Cookies from "js-cookie";
 
-import { SecuringPage } from "../../functions/Securing/SecuringPage";
-
+// Interceptors
 import axios from "axios";
 
-// Delete Function for maintenance details
+// Functions
 import { DeleteVMD } from "../../functions/Delete/DeleteVMDetail";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
@@ -37,14 +37,12 @@ import swal from "sweetalert";
 
 export const VehicleMaintenancesDetail = () => {
   // Get access token
-  const token = Cookies.get("_auth");
+  const token = Cookies.get("token");
 
   const auth = useAuthUser();
 
   // Initialize newest maintenance id
-  const [maintenanceId, setMaintenanceId] = useState(
-    localStorage.getItem("maintenanceId")
-  );
+  const maintenanceId = localStorage.getItem("maintenanceId");
 
   // initialize the loading
   const [isLoading, setIsLoading] = useState(true);
@@ -53,35 +51,39 @@ export const VehicleMaintenancesDetail = () => {
   const [maintenanceDetails, setMaintenanceDetails] = useState(null);
 
   useEffect(() => {
-    // Get access token
-    const token = Cookies.get("_auth");
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
     async function fetchData() {
-      const response = await axios
-        .get(
-          `https://silakend-server.xyz/api/maintenancedetails/${maintenanceId}`,
-          config
-        )
-        .then((response) => {
-          if (response.status === 200) {
-            setIsLoading(false);
-            const maintenanceDetails = response.data;
-            if (maintenanceDetails.length !== 0) {
-              setMaintenanceDetails(maintenanceDetails);
+      try {
+        await axios
+          .get(
+            `https://silakend-server.xyz/api/maintenancedetails/${maintenanceId}`,
+            config
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              setIsLoading(false);
+              const maintenanceDetails = response.data;
+              if (maintenanceDetails.length !== 0) {
+                setMaintenanceDetails(maintenanceDetails);
+              }
             }
-          }
-        })
-        .catch((error) => {
-          if (error.response.data.message) {
-            swal("Ups!", "Something went wrong", "error");
+          });
+      } catch (error) {
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
           } else {
-            swal("Ups!", error.response.data.msg, "error");
+            swal("Ups!", msg, "error");
           }
-        });
+        } else {
+          swal("Ups!", "Something went wrong", "error");
+        }
+      }
     }
 
     fetchData();
@@ -100,9 +102,9 @@ export const VehicleMaintenancesDetail = () => {
   }
 
   {
-    return token !== "" && auth() ? (
-      auth().user_level === 1 ? (
-        maintenanceId !== "" ? (
+    return token ? (
+      auth().user_level === 1 || auth().user_level === 2 ? (
+        maintenanceId ? (
           isLoading ? (
             <div className="loading-io">
               <div className="loadingio-spinner-ripple-bc4s1fo5ntn">

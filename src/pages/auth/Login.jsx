@@ -98,11 +98,7 @@ export const Login = (props) => {
           swal("Ups!", msg, "error");
         }
       } else {
-        swal(
-          "Ups!",
-          "Terjadi kesalahan pada jaringan, silahkan coba lagi",
-          "error"
-        );
+        swal("Ups!", error.response.data.message, "error");
       }
     }
   };

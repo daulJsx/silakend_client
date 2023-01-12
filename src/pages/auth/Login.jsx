@@ -98,7 +98,7 @@ export const Login = (props) => {
           swal("Ups!", msg, "error");
         }
       } else {
-        swal("Ups!", message, "error");
+        swal("Ups!", "Something went wrong", "error");
       }
     }
   };

@@ -29,18 +29,20 @@ import { Footer } from "../../components/footer/Footer";
 // Redirecting
 import { useNavigate } from "react-router-dom";
 
+// For checking user have done in authentication
+import { useAuthUser } from "react-auth-kit";
+
 // React Notification
 import swal from "sweetalert";
 
 // icons
 import { TbClipboardPlus } from "react-icons/tb";
 
-// For checking user have done in authentication
-import { useAuthUser } from "react-auth-kit";
-
 export const UserCreateVU = () => {
   // Get access token
   const token = Cookies.get("token");
+
+  const auth = useAuthUser();
 
   // Navigating
   const navigate = useNavigate();
@@ -50,6 +52,7 @@ export const UserCreateVU = () => {
 
   // Body for store
   const [orderData, setOrderData] = useState({
+    user_id: auth().user_id,
     ucategory_id: "",
     usage_description: "",
     personel_count: "",
@@ -82,7 +85,7 @@ export const UserCreateVU = () => {
           )
           .then((response) => {
             if (response.status === 200) {
-              navigate("/user/pengajuan-peminjaman");
+              navigate("/user/data-pengajuan-peminjaman");
               swal({
                 title: "Berhasil!",
                 text: response.data.msg,
@@ -113,7 +116,6 @@ export const UserCreateVU = () => {
     }
   };
 
-  const auth = useAuthUser();
   return token ? (
     <Container fluid>
       <Row>

@@ -41,7 +41,7 @@ export const Login = (props) => {
           "https://silakend-server.xyz/api/auth/login",
           loginForm
         );
-        const { access_token, username, user_level } = response.data.content;
+        const { access_token, user_name, user_level } = response.data.content;
         if (
           signIn({
             token: access_token,
@@ -56,7 +56,7 @@ export const Login = (props) => {
           //notify user
           swal({
             title: response.data.msg,
-            text: "Anda sebagai " + username,
+            text: "Selamat Datang " + user_name,
             icon: "success",
           });
 

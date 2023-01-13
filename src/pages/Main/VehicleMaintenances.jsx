@@ -135,8 +135,8 @@ export const VehicleMaintenances = () => {
                           </thead>
                           <tbody>
                             {vehicleMData?.map((vm, index) => (
-                              <tr>
-                                <td key={vm.maintenance_id}>{index + 1}</td>
+                              <tr key={vm.maintenance_id}>
+                                <td>{index + 1}</td>
                                 <td>{vm.vehicle.name}</td>
                                 <td>{vm.date}</td>
                                 <td>{vm.category}</td>

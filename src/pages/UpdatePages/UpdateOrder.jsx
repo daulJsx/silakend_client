@@ -241,7 +241,7 @@ export const UpdateOrder = () => {
                           Silahkan Edit Data Peminjaman Kendaraan Dinas Disini
                         </Card.Title>
                         <Card.Body>
-                          {orderToMap != ""
+                          {orderToMap !== ""
                             ? [orderToMap].map((orderToUpdate) => (
                                 <>
                                   <Form.Group className="mb-3">

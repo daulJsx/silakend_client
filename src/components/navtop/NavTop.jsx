@@ -56,7 +56,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                 Signed in as:
                 <Dropdown className="d-inline mx-2" align="end">
                   <Dropdown.Toggle id="dropdown-autoclose-true">
-                    {auth() ? auth().username : null}
+                    {auth() ? auth().user_name : null}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="dropdown-body shadow-sm rounded">
@@ -97,7 +97,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                     Signed in as:
                     <Dropdown className="d-inline mx-2" align="end">
                       <Dropdown.Toggle id="dropdown-autoclose-true">
-                        {auth() ? auth().username : null}
+                        {auth() ? auth().user_name : null}
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu className="dropdown-body shadow-sm rounded">

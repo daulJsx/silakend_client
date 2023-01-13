@@ -127,8 +127,8 @@ export const Users = () => {
                           </thead>
                           <tbody>
                             {usersData?.map((users, index) => (
-                              <tr>
-                                <td key={users.user_id}>{index + 1}</td>
+                              <tr key={users.user_id}>
+                                <td>{index + 1}</td>
                                 <td>{users.nip}</td>
                                 <td>{users.name}</td>
                                 <td>{users.job_unit.name}</td>

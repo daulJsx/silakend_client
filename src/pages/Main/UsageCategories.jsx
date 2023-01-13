@@ -127,13 +127,8 @@ export const UsageCategories = () => {
                           </thead>
                           <tbody>
                             {usageCatData?.map((usageCat, index) => (
-                              <tr>
-                                <td
-                                  key={usageCat.ucategory_id}
-                                  value={usageCat.ucategory_id}
-                                >
-                                  {index + 1}
-                                </td>
+                              <tr key={usageCat.ucategory_id}>
+                                <td>{index + 1}</td>
                                 <td>{usageCat.name}</td>
                                 <td>
                                   <div className="d-flex gap-1 justify-content-center">

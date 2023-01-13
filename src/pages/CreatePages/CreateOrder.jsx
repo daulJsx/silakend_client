@@ -227,12 +227,12 @@ export const CreateOrder = () => {
                             <option>-- Pilih Pengemudi --</option>
                             {usersData?.map((users) =>
                               users.role.map((userAsDriver) => {
-                                return userAsDriver.name == "Driver" ? (
+                                return userAsDriver.level === 4 ? (
                                   <option
                                     value={users.user_id}
                                     key={users.user_id}
                                   >
-                                    {users.name}
+                                    {users.nip} - {users.name}
                                   </option>
                                 ) : null;
                               })
@@ -260,12 +260,12 @@ export const CreateOrder = () => {
                             <option>-- Pilih Peminjam --</option>
                             {usersData?.map((users) =>
                               users.role.map((userAsSuper) => {
-                                return userAsSuper.level != 1 ? (
+                                return userAsSuper.level !== 1 ? (
                                   <option
                                     value={users.user_id}
                                     key={users.user_id}
                                   >
-                                    {users.name}
+                                    {users.nip} - {users.name}
                                   </option>
                                 ) : null;
                               })

@@ -126,13 +126,8 @@ export const JobUnits = () => {
                           </thead>
                           <tbody>
                             {jobsData?.map((jobUnits, index) => (
-                              <tr>
-                                <td
-                                  key={jobUnits.unit_id}
-                                  value={jobUnits.unit_id}
-                                >
-                                  {index + 1}
-                                </td>
+                              <tr key={jobUnits.unit_id}>
+                                <td>{index + 1}</td>
                                 <td>{jobUnits.name}</td>
                                 <td>{jobUnits.unit_account}</td>
                                 <td>

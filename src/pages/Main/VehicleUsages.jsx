@@ -124,8 +124,8 @@ export const VehicleUsages = () => {
                           </thead>
                           <tbody>
                             {ordersData?.map((orders, index) => (
-                              <tr>
-                                <td key={orders.usage_id}>{index + 1}</td>
+                              <tr key={orders.usage_id}>
+                                <td>{index + 1}</td>
                                 <td>{orders.user.name}</td>
                                 <td>{orders.start_date}</td>
                                 <td>{orders.usage_description}</td>

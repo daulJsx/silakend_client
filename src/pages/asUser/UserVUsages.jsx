@@ -12,6 +12,11 @@ import FetchVehicleUsages from "../../consAPI/FetchVehicleUsages";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
+// Functions
+import { GetOrderId } from "../../functions/GetOrderId";
+import { DeleteVU } from "../../functions/Delete/DeleteVU";
+import { UpdateVUAsUser } from "../../functions/Update/UpdateVUAsUser";
+
 // Navigating
 import { NavLink } from "react-router-dom";
 import { Navigate } from "react-router-dom";
@@ -21,7 +26,6 @@ import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
-import Badge from "react-bootstrap/Badge";
 import Alert from "react-bootstrap/Alert";
 
 // Components
@@ -32,6 +36,7 @@ import { Footer } from "../../components/footer/Footer";
 // icons
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { FaInfo } from "react-icons/fa";
+import { AiFillEdit } from "react-icons/ai";
 
 export const UserVUsages = () => {
   // Get access token
@@ -109,44 +114,67 @@ export const UserVUsages = () => {
                               <th>No</th>
                               <th>KATEGORI PEMINJAMAN</th>
                               <th>DESTINASI</th>
-
                               <th>WAKTU PINJAM</th>
-
-                              <th>AKSI</th>
+                              <th>EDIT</th>
                               <th>RINCIAN</th>
+                              <th>BATALKAN PENGAJUAN</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {ordersData?.map((orders, index) => (
-                              <tr>
-                                <td key={orders.usage_id}>{index + 1}</td>
-
-                                <td>{orders.category.name}</td>
-                                <td>{orders.destination}</td>
-
-                                <td>
-                                  {orders.start_date} s/d {orders.end_date}
-                                </td>
-                                <td>{orders.usage_description}</td>
-
-                                <td align="center">
-                                  <>
-                                    <NavLink
-                                      to={
-                                        "/user/pengajuan-peminjaman/rincian-pengajuan"
+                            {ordersData.map((orders, index) => {
+                              return orders.status !== "CANCELED" ? (
+                                <tr key={orders.usage_id}>
+                                  <td>{index + 1}</td>
+                                  <td>{orders.category.name}</td>
+                                  <td>{orders.destination}</td>
+                                  <td>
+                                    {orders.start_date} s/d {orders.end_date}
+                                  </td>
+                                  <td>
+                                    <div className="d-flex gap-1 justify-content-center">
+                                      <NavLink
+                                        to={
+                                          "/user/data-pengajuan-peminjaman/edit-pengajuan"
+                                        }
+                                      >
+                                        <Button
+                                          className="btn btn-edit"
+                                          onClick={() => GetOrderId(orders)}
+                                        >
+                                          <AiFillEdit className="fs-6" />
+                                        </Button>
+                                      </NavLink>
+                                    </div>
+                                  </td>
+                                  <td align="center">
+                                    <>
+                                      <NavLink
+                                        to={
+                                          "/user/data-pengajuan-peminjaman/rincian-peminjaman"
+                                        }
+                                      >
+                                        <Button
+                                          onClick={() => GetOrderId(orders)}
+                                          className="btn btn-detail"
+                                        >
+                                          <FaInfo className="fs-6" />
+                                        </Button>
+                                      </NavLink>
+                                    </>
+                                  </td>
+                                  <td align="center" className="bg-danger">
+                                    <Button
+                                      className="btn-danger btn-delete"
+                                      onClick={() =>
+                                        UpdateVUAsUser(orders, auth().user_id)
                                       }
                                     >
-                                      <Button
-                                        //  onClick={() => GetOrderId(orders)}
-                                        className="btn btn-detail"
-                                      >
-                                        <FaInfo className="fs-6" />
-                                      </Button>
-                                    </NavLink>
-                                  </>
-                                </td>
-                              </tr>
-                            ))}
+                                      Batalkan
+                                    </Button>
+                                  </td>
+                                </tr>
+                              ) : null;
+                            })}
                           </tbody>
                         </Table>
                       </Card.Body>

@@ -29,7 +29,12 @@ async function FetchUsageCat() {
 
     return response.data;
   } catch (error) {
-    console.log(error);
+    const { msg, message } = error.response.data;
+    if (message) {
+      console.log(message);
+    } else {
+      console.log(msg);
+    }
     throw error;
   }
 }

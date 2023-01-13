@@ -103,8 +103,8 @@ export const Drivers = () => {
                             {usersData?.map((users, index) =>
                               users.role.map((userAsDriver) => {
                                 return userAsDriver.name == "Driver" ? (
-                                  <tr>
-                                    <td key={users.user_id}>{index + 1}</td>
+                                  <tr key={users.user_id}>
+                                    <td>{index + 1}</td>
                                     <td>{users.name}</td>
                                     <td>{userAsDriver.name}</td>
                                   </tr>

@@ -127,7 +127,7 @@ export const VehicleDetail = () => {
                     <Col>
                       <Card>
                         <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                          Rincian Data kendaraan
+                          Rincian Data Kendaraan
                         </Card.Title>
                         <Card.Body className="d-flex flex-column gap-3">
                           <ListGroup as="ol" numbered className="mb-2">

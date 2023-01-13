@@ -347,7 +347,7 @@ export const CreateUser = () => {
                                 >
                                   <option>-- Pilih Peran --</option>
                                   {rolesData?.map((roles) => {
-                                    return roles.level != 1 ? (
+                                    return roles.level !== 1 ? (
                                       <option
                                         key={roles.role_id}
                                         value={roles.role_id}

@@ -126,11 +126,9 @@ export const Roles = () => {
                           </thead>
                           <tbody>
                             {rolesData?.map((roles, index) => {
-                              return roles.level != 1 ? (
-                                <tr>
-                                  <td key={roles.role_id} value={roles.role_id}>
-                                    {index + 1}
-                                  </td>
+                              return roles.level !== 1 ? (
+                                <tr key={roles.role_id}>
+                                  <td>{index + 1}</td>
                                   <td>{roles.name}</td>
                                   <td>{roles.level}</td>
                                   <td>

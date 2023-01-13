@@ -25,7 +25,7 @@ export async function DeleteVM(VMId) {
       try {
         await axios
           .delete(
-            `http://silakend-server.xyz/api/vehiclemaintenances/${VMId}`,
+            `https://silakend-server.xyz/api/vehiclemaintenances/${VMId}`,
             config
           )
           .then((response) => {
@@ -35,6 +35,7 @@ export async function DeleteVM(VMId) {
               icon: "success",
               button: "Tutup",
             });
+            window.location.reload();
           });
       } catch (error) {
         if (error.response) {

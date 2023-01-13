@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import FetchVehicleUsages from "../../consAPI/FetchVehicleUsages";
@@ -37,9 +36,8 @@ export const UpdateVUAsUser = async (order) => {
     usage_description: usage_description,
     personel_count: personel_count,
     status: "CANCELED",
+    status_description: "",
   };
-
-  const navigate = useNavigate();
 
   swal({
     title: "Batalkan Pengajuan?",
@@ -49,37 +47,57 @@ export const UpdateVUAsUser = async (order) => {
     dangerMode: true,
   }).then(async (willDelete) => {
     if (willDelete) {
-      try {
-        await axios
-          .put(
-            `https://silakend-server.xyz/api/vehicleusages/${usage_id}`,
-            body,
-            config
-          )
-          .then((response) => {
-            swal({
-              title: "Berhasil!",
-              text: response.data.msg,
-              icon: "success",
-              button: "Tutup",
-            });
-            navigate("/user/data-pengajuan-peminjaman");
-            FetchVehicleUsages();
-          });
-      } catch (error) {
-        if (error.response) {
-          const { message, msg } = error.response.data;
-          if (message) {
-            swal("Ups!", message, "error");
-          } else {
-            swal("Ups!", msg, "error");
+      swal({
+        icon: "info",
+        text: "Jelaskan mengapa anda membatalkan pengajuan ini",
+        buttons: true,
+        dangerMode: true,
+        content: {
+          element: "input",
+        },
+      }).then(async (status_description) => {
+        if (status_description) {
+          body.status_description = status_description;
+          try {
+            console.log(body);
+            await axios
+              .put(
+                `https://silakend-server.xyz/api/vehicleusages/${usage_id}`,
+                body,
+                config
+              )
+              .then((response) => {
+                swal({
+                  title: "Berhasil!",
+                  text: response.data.msg,
+                  icon: "success",
+                  button: "Tutup",
+                });
+
+                FetchVehicleUsages();
+              });
+          } catch (error) {
+            if (error.response) {
+              const { message, msg } = error.response.data;
+              if (message) {
+                swal("Ups!", message, "error");
+              } else {
+                swal("Ups!", msg, "error");
+              }
+            } else {
+              swal("Ups!", "Something went wrong", "error");
+            }
           }
         } else {
-          swal("Ups!", "Something went wrong", "error");
+          swal({
+            text: "Pengajuan peminjaman kendaraan tidak dibatalkan",
+          });
         }
-      }
+      });
     } else {
-      swal("Pengajuan peminjaman anda aman!");
+      swal({
+        text: "Aksi dibatalkan",
+      });
     }
   });
 };

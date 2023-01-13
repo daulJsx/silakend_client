@@ -98,7 +98,8 @@ export const CreateUser = () => {
               title: "Berhasil!",
               text: msg,
               icon: "success",
-              button: "Tutup",
+              button: false,
+              timer: 2000,
             })
           : console.error(msg);
         navigate("/data-pengguna");
@@ -119,7 +120,8 @@ export const CreateUser = () => {
         title: "Peringatan",
         text: "Harap isi semua data!",
         icon: "warning",
-        button: "Tutup",
+        button: false,
+        timer: 2000,
       });
     }
   };

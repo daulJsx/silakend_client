@@ -34,6 +34,7 @@ export async function DeleteVehicleCat(vCatId) {
               icon: "success",
               button: "Tutup",
             });
+            window.location.reload();
           });
       } catch (error) {
         if (error.response) {

@@ -58,6 +58,8 @@ export const Login = (props) => {
             title: response.data.msg,
             text: "Selamat Datang " + user_name,
             icon: "success",
+            buttons: false,
+            timer: 2000,
           });
 
           // Perform RBAC logic
@@ -72,12 +74,15 @@ export const Login = (props) => {
         if (error.response) {
           const { message, msg } = error.response.data;
           if (message) {
-            swal("Ups!", message, "error");
+            swal("Ups!", message, "error", { button: false, timer: 2000 });
           } else {
-            swal("Ups!", msg, "error");
+            swal("Ups!", msg, "error", { button: false, timer: 2000 });
           }
         } else {
-          swal("Ups!", "Something went wrong", "error");
+          swal("Ups!", "Something went wrong", "error", {
+            button: false,
+            timer: 2000,
+          });
         }
       }
     } else {

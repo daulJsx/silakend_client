@@ -37,6 +37,7 @@ export async function DeleteUsageCat(usageCatId) {
               icon: "success",
               button: "Tutup",
             });
+            window.location.reload();
             FetchUsageCat();
           });
       } catch (error) {

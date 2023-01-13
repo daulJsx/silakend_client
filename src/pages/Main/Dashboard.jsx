@@ -67,42 +67,23 @@ export const Dashboard = () => {
               <Row>
                 <Col>
                   <Card>
-                    <Card.Body className="p-0">
+                    <Card.Body>
                       <div className="fw-semibold color-primary fs-6 p-3 mb-1">
                         Order 7 Hari Ke Depan
                       </div>
-                      <div className="w-full">
-                        <Table borderless responsive>
-                          <thead>
-                            <tr>
-                              <th align="center">Tanggal Pinjam</th>
-                              <th>Nama Peminjam</th>
-                              <th>Kendaraan</th>
-                              <th>Dari</th>
-                              <th>Tujuan</th>
-                              <th>Pengemudi</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>1</td>
-                              <td>Mark</td>
-                              <td>Otto</td>
-                              <td>@mdo</td>
-                              <td>Otto</td>
-                              <td>@mdo</td>
-                            </tr>
-                            <tr>
-                              <td>2</td>
-                              <td>Jacob</td>
-                              <td>Thornton</td>
-                              <td>@fat</td>
-                              <td>Thornton</td>
-                              <td>@fat</td>
-                            </tr>
-                          </tbody>
-                        </Table>
-                      </div>
+                      <Table bordered responsive>
+                        <thead>
+                          <tr>
+                            <th align="center">Waktu Pinjam</th>
+                            <th>Nama Peminjam</th>
+                            <th>Kendaraan</th>
+
+                            <th>Tujuan</th>
+                            <th>Pengemudi</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </Table>
                     </Card.Body>
                   </Card>
                 </Col>

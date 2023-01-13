@@ -25,6 +25,8 @@ export const LogOut = async () => {
             title: "Berhasil Logout!",
             text: response.data.msg,
             icon: "success",
+            buttons: false,
+            timer: 2000,
           });
           localStorage.clear();
           Cookies.remove("token");

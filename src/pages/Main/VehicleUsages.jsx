@@ -17,6 +17,8 @@ import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -29,6 +31,7 @@ import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import { FaInfo } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 
 // Functions
 import { GetOrderId } from "../../functions/GetOrderId";
@@ -115,8 +118,8 @@ export const VehicleUsages = () => {
                             <tr>
                               <th>No</th>
                               <th>PEMINJAM</th>
-                              <th>TANGGAL PINJAM</th>
-                              <th>ALASAN PEMINJAMAN</th>
+                              <th>WAKTU PINJAM</th>
+
                               <th>STATUS</th>
                               <th>AKSI</th>
                               <th>RINCIAN</th>
@@ -127,8 +130,10 @@ export const VehicleUsages = () => {
                               <tr key={orders.usage_id}>
                                 <td>{index + 1}</td>
                                 <td>{orders.user.name}</td>
-                                <td>{orders.start_date}</td>
-                                <td>{orders.usage_description}</td>
+                                <td>
+                                  {orders.start_date} s/d {orders.end_date}
+                                </td>
+
                                 <td align="center">
                                   <Badge
                                     bg={

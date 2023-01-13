@@ -51,7 +51,7 @@ export const CreateVM = () => {
     total_cost: "",
   });
 
-  // Store new vehicle data
+  // Store new vehicle maintenance data
   const postNewVehicleM = async (e) => {
     e.preventDefault();
     const config = {
@@ -79,7 +79,8 @@ export const CreateVM = () => {
                 title: "Berhasil!",
                 text: response.data.msg,
                 icon: "success",
-                button: "Tutup",
+                button: false,
+                timer: 2000,
               });
             }
           });
@@ -100,7 +101,8 @@ export const CreateVM = () => {
         title: "Peringatan",
         text: "Harap isi semua data!",
         icon: "warning",
-        button: "Tutup",
+        button: false,
+        timer: 2000,
       });
     }
   };

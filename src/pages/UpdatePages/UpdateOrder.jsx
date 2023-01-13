@@ -126,7 +126,7 @@ export const UpdateOrder = () => {
 
   const arriveTimeFromMap = currentArriveTime || null;
   const formattedArriveTime = arriveTimeFromMap
-    ? new Date(`1970-01-01T${arriveTime}Z`).toISOString().substr(11, 5)
+    ? new Date(`1970-01-01T${arriveTimeFromMap}Z`).toISOString().substr(11, 5)
     : null;
 
   const body = {
@@ -259,7 +259,11 @@ export const UpdateOrder = () => {
                                       }
                                     >
                                       <option value={orderToUpdate.vehicle_id}>
-                                        {orderToUpdate.vehicle.name}
+                                        {orderToUpdate.vehicle !== null ? (
+                                          orderToUpdate.vehicle.name
+                                        ) : (
+                                          <p>-- Pilih Kendaraan --</p>
+                                        )}
                                       </option>
                                       {vehiclesData?.map((vehicles) => (
                                         <option
@@ -287,7 +291,11 @@ export const UpdateOrder = () => {
                                       }
                                     >
                                       <option value={orderToUpdate.driver_id}>
-                                        {orderToUpdate.driver.name}
+                                        {orderToUpdate.driver !== null ? (
+                                          orderToUpdate.driver.name
+                                        ) : (
+                                          <p>-- Pilih Pengemudi --</p>
+                                        )}
                                       </option>
                                       {usersData?.map((users) =>
                                         users.role.map((userAsDriver) => {
@@ -439,7 +447,7 @@ export const UpdateOrder = () => {
 
                                   <Form.Group className="py-1">
                                     <Form.Label>
-                                      Tanggal pinjam saat ini :{" "}
+                                      Tanggal pinjam yang diajukan :{" "}
                                       <span className="fw-bold text-dark">
                                         {orderToUpdate.start_date} s/d{" "}
                                         {orderToUpdate.end_date}
@@ -485,11 +493,20 @@ export const UpdateOrder = () => {
 
                                   <Form.Group className="py-1">
                                     <Form.Label>
-                                      Waktu Berangkat saat ini :{" "}
-                                      <span className="fw-bold text-dark">
-                                        {orderToUpdate.depart_date} Pukul{" "}
-                                        {orderToUpdate.depart_time}
-                                      </span>
+                                      {orderToUpdate.depart_date ||
+                                      orderToUpdate.depart_time ? (
+                                        <>
+                                          <p>Waktu berangkat saat ini:</p>{" "}
+                                          <span className="fw-bold text-dark">
+                                            {orderToUpdate.depart_date} Pukul{" "}
+                                            {orderToUpdate.depart_time}
+                                          </span>
+                                        </>
+                                      ) : (
+                                        <p className="text-warning">
+                                          Waktu berangkat belum ditentukan
+                                        </p>
+                                      )}
                                     </Form.Label>
                                     <InputGroup className="mb-3">
                                       <InputGroup.Text
@@ -539,14 +556,20 @@ export const UpdateOrder = () => {
 
                                   <Form.Group className="py-1">
                                     <Form.Label>
-                                      Waktu tiba :{" "}
-                                      {orderToUpdate.arrive_date === "" ||
+                                      {orderToUpdate.arrive_date ||
                                       orderToUpdate.arrive_time ? (
-                                        <span className="fw-bold text-dark">
-                                          {orderToUpdate.arrive_date} Pukul{" "}
-                                          {orderToUpdate.arrive_time}
-                                        </span>
-                                      ) : null}
+                                        <>
+                                          <p>Waktu pulang saat ini:</p>{" "}
+                                          <span className="fw-bold text-dark">
+                                            {orderToUpdate.arrive_date} Pukul{" "}
+                                            {orderToUpdate.arrive_time}
+                                          </span>
+                                        </>
+                                      ) : (
+                                        <p className="text-warning">
+                                          Waktu tiba belum dimasukkan
+                                        </p>
+                                      )}
                                     </Form.Label>
                                     <InputGroup className="mb-3">
                                       <InputGroup.Text
@@ -595,7 +618,16 @@ export const UpdateOrder = () => {
                                   </Form.Group>
 
                                   <Form.Group>
-                                    <Form.Label>ODOMETER</Form.Label>
+                                    <Form.Label>
+                                      {orderToUpdate.distance_count_out ||
+                                      orderToUpdate.distance_count_in ? (
+                                        <p>ODOMETER</p>
+                                      ) : (
+                                        <p className="text-warning">
+                                          ODOMETER BELUM DIMASUKKAN
+                                        </p>
+                                      )}
+                                    </Form.Label>
                                     <InputGroup className="mb-3">
                                       <InputGroup.Text
                                         style={{
@@ -676,7 +708,7 @@ export const UpdateOrder = () => {
                                         }}
                                         id="basic-addon2"
                                       >
-                                        Keterangan
+                                        KETERANGAN
                                       </InputGroup.Text>
                                       <Form.Control
                                         required

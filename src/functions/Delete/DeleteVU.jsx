@@ -49,6 +49,7 @@ export const DeleteVU = async (usageId, setAuthUser) => {
               icon: "success",
               button: "Tutup",
             });
+            window.location.reload();
             FetchVehicleUsages();
           });
       } catch (error) {

@@ -152,7 +152,14 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">PENGEMUDI</div>
-                                        {currentUsage.driver.name}
+                                        {currentUsage.driver ? (
+                                          currentUsage.driver.name
+                                        ) : (
+                                          <p>
+                                            Pengemudi belum ditugaskan untuk
+                                            pengajuan ini
+                                          </p>
+                                        )}
                                       </div>
                                     </ListGroup.Item>
 
@@ -162,7 +169,14 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">KENDARAAN</div>
-                                        {currentUsage.vehicle.name}
+                                        {currentUsage.vehicle ? (
+                                          currentUsage.vehicle.name
+                                        ) : (
+                                          <p>
+                                            Kendaraan belum ditugaskan untuk
+                                            pengajuan ini
+                                          </p>
+                                        )}
                                       </div>
                                     </ListGroup.Item>
 
@@ -196,7 +210,7 @@ export const VehicleUsageDetail = () => {
                                         <div className="fw-bold">
                                           JUMLAH PERSONIL
                                         </div>
-                                        {currentUsage.personel_count}
+                                        {currentUsage.personel_count} Orang
                                       </div>
                                     </ListGroup.Item>
 
@@ -231,8 +245,18 @@ export const VehicleUsageDetail = () => {
                                         <div className="fw-bold">
                                           WAKTU KEBERANGKATAN
                                         </div>
-                                        {currentUsage.depart_date} PUKUL{" "}
-                                        {currentUsage.depart_time}
+                                        {currentUsage.depart_date ||
+                                        currentUsage.depart_time ? (
+                                          <>
+                                            {currentUsage.depart_date} PUKUL{" "}
+                                            {currentUsage.depart_time}
+                                          </>
+                                        ) : (
+                                          <p>
+                                            Waktu keberangkatan belum dimasukkan
+                                            untuk pengajuan ini
+                                          </p>
+                                        )}
                                       </div>
                                     </ListGroup.Item>
 
@@ -244,8 +268,18 @@ export const VehicleUsageDetail = () => {
                                         <div className="fw-bold">
                                           WAKTU KEPULANGAN
                                         </div>
-                                        {currentUsage.arrive_date} PUKUL{" "}
-                                        {currentUsage.arrive_time}
+                                        {currentUsage.arrive_date ||
+                                        currentUsage.arrive_time ? (
+                                          <>
+                                            {currentUsage.arrive_date} PUKUL{" "}
+                                            {currentUsage.arrive_time}
+                                          </>
+                                        ) : (
+                                          <p>
+                                            Waktu kepulangan belum dimasukkan
+                                            untuk pengajuan ini
+                                          </p>
+                                        )}
                                       </div>
                                     </ListGroup.Item>
 
@@ -255,22 +289,33 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">ODOMETER</div>
-                                        <div>
-                                          Jumlah Kilometer Pergi :{" "}
-                                          {currentUsage.distance_count_out.toLocaleString(
-                                            "id-ID"
-                                          )}{" "}
-                                          KM
-                                        </div>
-                                        <div>
-                                          Jumlah Kilometer Pulang :{" "}
-                                          {currentUsage.distance_count_in
-                                            ? currentUsage.distance_count_in.toLocaleString(
+                                        {currentUsage.distance_count_out ||
+                                        currentUsage.distance_count_in ? (
+                                          <>
+                                            {" "}
+                                            <div>
+                                              Jumlah Kilometer Pergi :{" "}
+                                              {currentUsage.distance_count_out.toLocaleString(
                                                 "id-ID"
-                                              )
-                                            : null}{" "}
-                                          KM
-                                        </div>
+                                              )}{" "}
+                                              KM
+                                            </div>
+                                            <div>
+                                              Jumlah Kilometer Pulang :{" "}
+                                              {currentUsage.distance_count_in
+                                                ? currentUsage.distance_count_in.toLocaleString(
+                                                    "id-ID"
+                                                  )
+                                                : null}{" "}
+                                              KM
+                                            </div>
+                                          </>
+                                        ) : (
+                                          <p>
+                                            Odometer belum dimasukkan dalam
+                                            pengajuan ini
+                                          </p>
+                                        )}
                                       </div>
                                     </ListGroup.Item>
 
@@ -280,8 +325,12 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">STATUS</div>
-                                        {currentUsage.status} (
-                                        {currentUsage.status_description})
+                                        {currentUsage.status}{" "}
+                                        {currentUsage.status_description ? (
+                                          <>
+                                            ({currentUsage.status_description})
+                                          </>
+                                        ) : null}
                                       </div>
                                     </ListGroup.Item>
                                   </>

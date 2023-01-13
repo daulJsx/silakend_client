@@ -55,12 +55,12 @@ export const UserEditVU = () => {
 
   // dynamically variable value for update
 
-  const [ucategoryId, setUcategoryId] = useState("");
-  const [usageDescription, setUsageDescription] = useState("");
-  const [personelCount, setPersonelCount] = useState("");
-  const [destination, setDestination] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [newCategory, setNewCategory] = useState("");
+  const [newDesc, setNewDesc] = useState("");
+  const [newPersonelCount, setNewPersonelCount] = useState("");
+  const [newDestination, setNewDestination] = useState("");
+  const [newStartDate, setNewStartDate] = useState("");
+  const [newEndDate, setNewEndDate] = useState("");
 
   // if update necessary
   const [currentUCatId] = [orderToMap].map((uCatId) => uCatId.ucategory_id);
@@ -69,28 +69,24 @@ export const UserEditVU = () => {
     (pCount) => pCount.personel_count
   );
   const [currentDestination] = [orderToMap].map((dest) => dest.destination);
-
-  const [currentStartDate] = [orderToMap].map(
-    (startDate) => startDate.start_date
-  );
-
-  const [currentEndDate] = [orderToMap].map((endDate) => endDate.end_date);
+  const [currentStartDate] = [orderToMap].map((sd) => sd.start_date);
+  const [currentEndDate] = [orderToMap].map((ed) => ed.end_date);
 
   const body = {
     user_id: auth().user_id,
-    ucategory_id: ucategoryId === "" ? currentUCatId : ucategoryId,
-    usage_description:
-      usageDescription === "" ? currentUDesc : usageDescription,
-    personel_count: personelCount === "" ? currentPersonelCount : personelCount,
-    destination: destination === "" ? currentDestination : destination,
-    start_date: startDate === "" ? currentStartDate : startDate,
-    end_date: endDate === "" ? currentEndDate : endDate,
+    ucategory_id: newCategory === "" ? currentUCatId : newCategory,
+    usage_description: newDesc === "" ? currentUDesc : newDesc,
+    personel_count:
+      newPersonelCount === "" ? currentPersonelCount : newPersonelCount,
+    destination: newDestination === "" ? currentDestination : newDestination,
+    start_date: newStartDate === "" ? currentStartDate : newStartDate,
+    end_date: newEndDate === "" ? currentEndDate : newEndDate,
     status: "WAITING",
   };
 
   const handleUpdateOrder = async (e) => {
+    console.log(body);
     e.preventDefault();
-
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
@@ -111,13 +107,15 @@ export const UserEditVU = () => {
               config
             )
             .then((response) => {
+              console.log(response.data);
               if (response.status === 200) {
                 navigate("/user/data-pengajuan-peminjaman");
                 swal({
                   title: "Berhasil!",
                   text: response.data.msg,
                   icon: "success",
-                  button: "Tutup",
+                  button: false,
+                  timer: 2000,
                 });
               }
             });
@@ -178,7 +176,7 @@ export const UserEditVU = () => {
                         Silahkan Edit Data Peminjaman Kendaraan Dinas Disini
                       </Card.Title>
                       <Card.Body>
-                        {orderToMap !== ""
+                        {orderToMap
                           ? [orderToMap].map((orderToUpdate) => (
                               <>
                                 <Form.Group className="mb-3">
@@ -192,7 +190,7 @@ export const UserEditVU = () => {
                                     }}
                                     aria-label="Default select example"
                                     onChange={(e) =>
-                                      setUcategoryId(e.target.value)
+                                      setNewCategory(e.target.value)
                                     }
                                   >
                                     <option value={orderToUpdate.ucategory_id}>
@@ -224,9 +222,7 @@ export const UserEditVU = () => {
                                       backgroundColor: "#F5F7FC",
                                       border: "none",
                                     }}
-                                    onChange={(e) =>
-                                      setUsageDescription(e.target.value)
-                                    }
+                                    onChange={(e) => setNewDesc(e.target.value)}
                                   />
                                 </Form.Group>
 
@@ -235,7 +231,7 @@ export const UserEditVU = () => {
                                   <InputGroup className="mb-3">
                                     <Form.Control
                                       onChange={(e) =>
-                                        setPersonelCount(e.target.value)
+                                        setNewPersonelCount(e.target.value)
                                       }
                                       placeholder={orderToUpdate.personel_count}
                                       style={{
@@ -261,7 +257,7 @@ export const UserEditVU = () => {
                                   <Form.Label>Destinasi</Form.Label>
                                   <Form.Control
                                     onChange={(e) =>
-                                      setDestination(e.target.value)
+                                      setNewDestination(e.target.value)
                                     }
                                     placeholder={orderToUpdate.destination}
                                     required
@@ -277,7 +273,7 @@ export const UserEditVU = () => {
 
                                 <Form.Group className="py-1">
                                   <Form.Label>
-                                    Tanggal pinjam saat ini :{" "}
+                                    Waktu pinjam saat ini :{" "}
                                     <span className="fw-bold text-dark">
                                       {orderToUpdate.start_date} s/d{" "}
                                       {orderToUpdate.end_date}
@@ -294,7 +290,7 @@ export const UserEditVU = () => {
                                       }}
                                       type="date"
                                       onChange={(e) =>
-                                        setStartDate(e.target.value)
+                                        setNewStartDate(e.target.value)
                                       }
                                     />
                                     <InputGroup.Text
@@ -315,7 +311,7 @@ export const UserEditVU = () => {
                                       }}
                                       type="date"
                                       onChange={(e) =>
-                                        setEndDate(e.target.value)
+                                        setNewEndDate(e.target.value)
                                       }
                                     />
                                   </InputGroup>

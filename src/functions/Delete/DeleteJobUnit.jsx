@@ -32,6 +32,7 @@ export async function DeleteJobUnit(unitId) {
               icon: "success",
               button: "Tutup",
             });
+            window.location.reload();
           });
       } catch (error) {
         if (error.response) {

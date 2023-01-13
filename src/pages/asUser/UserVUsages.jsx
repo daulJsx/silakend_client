@@ -14,7 +14,6 @@ import { useAuthUser } from "react-auth-kit";
 
 // Functions
 import { GetOrderId } from "../../functions/GetOrderId";
-import { DeleteVU } from "../../functions/Delete/DeleteVU";
 import { UpdateVUAsUser } from "../../functions/Update/UpdateVUAsUser";
 
 // Navigating
@@ -37,6 +36,8 @@ import { Footer } from "../../components/footer/Footer";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { FaInfo } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
+
+import toast, { Toaster } from "react-hot-toast";
 
 export const UserVUsages = () => {
   // Get access token
@@ -66,6 +67,7 @@ export const UserVUsages = () => {
       </div>
     ) : (
       <Container fluid>
+        <Toaster position="bottom-right" reverseOrder={false} />
         <Row>
           <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
             <AsideUser />
@@ -131,36 +133,32 @@ export const UserVUsages = () => {
                                     {orders.start_date} s/d {orders.end_date}
                                   </td>
                                   <td>
-                                    <div className="d-flex gap-1 justify-content-center">
-                                      <NavLink
-                                        to={
-                                          "/user/data-pengajuan-peminjaman/edit-pengajuan"
-                                        }
+                                    <NavLink
+                                      to={
+                                        "/user/data-pengajuan-peminjaman/edit-pengajuan"
+                                      }
+                                    >
+                                      <Button
+                                        className="btn btn-edit"
+                                        onClick={() => GetOrderId(orders)}
                                       >
-                                        <Button
-                                          className="btn btn-edit"
-                                          onClick={() => GetOrderId(orders)}
-                                        >
-                                          <AiFillEdit className="fs-6" />
-                                        </Button>
-                                      </NavLink>
-                                    </div>
+                                        <AiFillEdit className="fs-6" />
+                                      </Button>
+                                    </NavLink>
                                   </td>
                                   <td align="center">
-                                    <>
-                                      <NavLink
-                                        to={
-                                          "/user/data-pengajuan-peminjaman/rincian-peminjaman"
-                                        }
+                                    <NavLink
+                                      to={
+                                        "/user/data-pengajuan-peminjaman/rincian-peminjaman"
+                                      }
+                                    >
+                                      <Button
+                                        onClick={() => GetOrderId(orders)}
+                                        className="btn btn-detail"
                                       >
-                                        <Button
-                                          onClick={() => GetOrderId(orders)}
-                                          className="btn btn-detail"
-                                        >
-                                          <FaInfo className="fs-6" />
-                                        </Button>
-                                      </NavLink>
-                                    </>
+                                        <FaInfo className="fs-6" />
+                                      </Button>
+                                    </NavLink>
                                   </td>
                                   <td align="center" className="bg-danger">
                                     <Button

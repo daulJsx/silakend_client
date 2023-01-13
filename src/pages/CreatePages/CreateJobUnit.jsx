@@ -63,7 +63,8 @@ export const CreateJobUnit = () => {
                 title: "Berhasil!",
                 text: response.data.msg,
                 icon: "success",
-                button: "Tutup",
+                button: false,
+                timer: 2000,
               });
             }
           });
@@ -84,7 +85,8 @@ export const CreateJobUnit = () => {
         title: "Peringatan",
         text: "Harap isi semua data!",
         icon: "warning",
-        button: "Tutup",
+        button: false,
+        timer: 2000,
       });
     }
   };

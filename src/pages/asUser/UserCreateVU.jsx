@@ -34,6 +34,7 @@ import { useAuthUser } from "react-auth-kit";
 
 // React Notification
 import swal from "sweetalert";
+import toast, { Toaster } from "react-hot-toast";
 
 // icons
 import { TbClipboardPlus } from "react-icons/tb";
@@ -85,12 +86,15 @@ export const UserCreateVU = () => {
           )
           .then((response) => {
             if (response.status === 200) {
+              const { msg } = response.data;
               navigate("/user/data-pengajuan-peminjaman");
+
               swal({
                 title: "Berhasil!",
-                text: response.data.msg,
+                text: msg,
                 icon: "success",
-                button: "Tutup",
+                button: false,
+                timer: 2000,
               });
             }
           });
@@ -118,6 +122,7 @@ export const UserCreateVU = () => {
 
   return token ? (
     <Container fluid>
+      <Toaster position="bottom-right" reverseOrder={false} />
       <Row>
         {/* SIDEBAR */}
         <Col

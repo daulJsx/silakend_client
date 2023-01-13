@@ -77,7 +77,7 @@ export const UpdateVM = () => {
   // Fetching requirement data
   const { data: vehiclesData } = useQuery("vehicles", FetchVehicles);
 
-  // Update current newVehicle data
+  // Update current vehicle maintenance data
   const handleUpdateVM = async (e) => {
     e.preventDefault();
 

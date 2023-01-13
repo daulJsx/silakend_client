@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -22,9 +22,6 @@ import Badge from "react-bootstrap/Badge";
 import { Aside } from "../../components/aside/Aside";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
-
-// React Notification
-import swal from "sweetalert";
 
 // Icons
 import { HiOutlineClipboardCopy } from "react-icons/hi";
@@ -54,186 +51,179 @@ export const VehicleUsages = () => {
   // Get access token
   const token = Cookies.get("token");
 
-  {
-    return token ? (
-      auth().user_level === 1 || auth().user_level === 2 ? (
-        isError ? (
-          <div>{error.message}</div>
-        ) : isLoading ? (
-          <div className="loading-io">
-            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-              <div className="ldio-c0sicszbk9i">
-                <div></div>
-                <div></div>
-              </div>
+  return token ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
+      isError ? (
+        <div>{error.message}</div>
+      ) : isLoading ? (
+        <div className="loading-io">
+          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+            <div className="ldio-c0sicszbk9i">
+              <div></div>
+              <div></div>
             </div>
           </div>
-        ) : (
-          <Container fluid>
-            <Row>
-              <Col
-                xs="auto"
-                className="d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <Aside />
-              </Col>
-              <Col>
-                {/* NAVBAR */}
-                <Row>
+        </div>
+      ) : (
+        <Container fluid>
+          <Row>
+            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
+              <Aside />
+            </Col>
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<HiOutlineClipboardCopy />}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+
+              <div className="me-1 d-flex justify-content-end">
+                <Row className="py-4 mb-2">
                   <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<HiOutlineClipboardCopy />}
-                      />
-                    ))}
+                    <NavLink to={"/pengajuan-peminjaman/buat-pengajuan"}>
+                      <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                        Buat pengajuan Baru
+                        <HiPlusSm className="fs-3" />
+                      </Button>
+                    </NavLink>
                   </Col>
                 </Row>
-                {/* NAVBAR */}
+              </div>
 
-                <div className="me-1 d-flex justify-content-end">
-                  <Row className="py-4 mb-2">
-                    <Col>
-                      <NavLink to={"/pengajuan-peminjaman/buat-pengajuan"}>
-                        <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                          Buat pengajuan Baru
-                          <HiPlusSm className="fs-3" />
-                        </Button>
-                      </NavLink>
-                    </Col>
-                  </Row>
-                </div>
+              <main className="px-2 min-vh-100">
+                <Row>
+                  <Col>
+                    <Card>
+                      <Card.Body>
+                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                          <span className="me-2">
+                            Data Pengajuan Peminjaman Kendaraan Dinas
+                          </span>
+                        </Card.Title>
 
-                <main className="px-2 min-vh-100">
-                  <Row>
-                    <Col>
-                      <Card>
-                        <Card.Body>
-                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            <span className="me-2">
-                              Data Pengajuan Peminjaman Kendaraan Dinas
-                            </span>
-                          </Card.Title>
-
-                          <Table bordered hover responsive>
-                            <thead>
+                        <Table bordered hover responsive>
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>PEMINJAM</th>
+                              <th>TANGGAL PINJAM</th>
+                              <th>ALASAN PEMINJAMAN</th>
+                              <th>STATUS</th>
+                              <th>AKSI</th>
+                              <th>RINCIAN</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {ordersData?.map((orders, index) => (
                               <tr>
-                                <th>No</th>
-                                <th>PEMINJAM</th>
-                                <th>TANGGAL PINJAM</th>
-                                <th>ALASAN PEMINJAMAN</th>
-                                <th>STATUS</th>
-                                <th>AKSI</th>
-                                <th>RINCIAN</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {ordersData?.map((orders, index) => (
-                                <tr>
-                                  <td key={orders.usage_id}>{index + 1}</td>
-                                  <td>{orders.user.name}</td>
-                                  <td>{orders.start_date}</td>
-                                  <td>{orders.usage_description}</td>
-                                  <td align="center">
-                                    <Badge
-                                      bg={
-                                        orders.status === "CANCELED" ||
-                                        orders.status === "REJECTED"
-                                          ? "danger"
-                                          : orders.status === "WAITING"
-                                          ? "warning"
-                                          : orders.status === "READY"
-                                          ? "primary"
-                                          : orders.status === "APPROVED"
-                                          ? "info"
-                                          : orders.status === "PROGRESS"
-                                          ? "secondary"
-                                          : "success"
+                                <td key={orders.usage_id}>{index + 1}</td>
+                                <td>{orders.user.name}</td>
+                                <td>{orders.start_date}</td>
+                                <td>{orders.usage_description}</td>
+                                <td align="center">
+                                  <Badge
+                                    bg={
+                                      orders.status === "CANCELED" ||
+                                      orders.status === "REJECTED"
+                                        ? "danger"
+                                        : orders.status === "WAITING"
+                                        ? "warning"
+                                        : orders.status === "READY"
+                                        ? "primary"
+                                        : orders.status === "APPROVED"
+                                        ? "info"
+                                        : orders.status === "PROGRESS"
+                                        ? "secondary"
+                                        : "success"
+                                    }
+                                  >
+                                    {orders.status === "CANCELED"
+                                      ? "Batal"
+                                      : orders.status === "REJECTED"
+                                      ? "Ditolak"
+                                      : orders.status === "WAITING"
+                                      ? "Verifying"
+                                      : orders.status === "READY"
+                                      ? "Siap berangkat"
+                                      : orders.status === "APPROVED"
+                                      ? "Disetujui"
+                                      : orders.status === "PROGRESS"
+                                      ? "Berlangsung"
+                                      : "Selesai"}
+                                  </Badge>
+                                </td>
+
+                                <td>
+                                  <div className="d-flex gap-1 justify-content-center">
+                                    <NavLink
+                                      to={
+                                        "/pengajuan-peminjaman/edit-pengajuan"
                                       }
                                     >
-                                      {orders.status === "CANCELED"
-                                        ? "Batal"
-                                        : orders.status === "REJECTED"
-                                        ? "Ditolak"
-                                        : orders.status === "WAITING"
-                                        ? "Verifying"
-                                        : orders.status === "READY"
-                                        ? "Siap berangkat"
-                                        : orders.status === "APPROVED"
-                                        ? "Disetujui"
-                                        : orders.status === "PROGRESS"
-                                        ? "Berlangsung"
-                                        : "Selesai"}
-                                    </Badge>
-                                  </td>
-
-                                  <td>
-                                    <div className="d-flex gap-1 justify-content-center">
-                                      <NavLink
-                                        to={
-                                          "/pengajuan-peminjaman/edit-pengajuan"
-                                        }
-                                      >
-                                        <Button
-                                          onClick={() => GetOrderId(orders)}
-                                          className="btn btn-edit"
-                                        >
-                                          <AiFillEdit className="fs-6" />
-                                        </Button>
-                                      </NavLink>
-
                                       <Button
-                                        onClick={() =>
-                                          DeleteVU(orders.usage_id)
-                                        }
-                                        className="btn-danger btn-delete"
+                                        onClick={() => GetOrderId(orders)}
+                                        className="btn btn-edit"
                                       >
-                                        <FaTrashAlt className="fs-6" />
+                                        <AiFillEdit className="fs-6" />
                                       </Button>
-                                    </div>
-                                  </td>
-                                  <td align="center">
-                                    <>
-                                      <NavLink
-                                        to={
-                                          "/pengajuan-peminjaman/rincian-pengajuan"
-                                        }
-                                      >
-                                        <Button
-                                          onClick={() => GetOrderId(orders)}
-                                          className="btn btn-detail"
-                                        >
-                                          <FaInfo className="fs-6" />
-                                        </Button>
-                                      </NavLink>
-                                    </>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </Table>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                </main>
+                                    </NavLink>
 
-                <Row>
-                  <Col>
-                    <Footer />
+                                    <Button
+                                      onClick={() => DeleteVU(orders.usage_id)}
+                                      className="btn-danger btn-delete"
+                                    >
+                                      <FaTrashAlt className="fs-6" />
+                                    </Button>
+                                  </div>
+                                </td>
+                                <td align="center">
+                                  <>
+                                    <NavLink
+                                      to={
+                                        "/pengajuan-peminjaman/rincian-pengajuan"
+                                      }
+                                    >
+                                      <Button
+                                        onClick={() => GetOrderId(orders)}
+                                        className="btn btn-detail"
+                                      >
+                                        <FaInfo className="fs-6" />
+                                      </Button>
+                                    </NavLink>
+                                  </>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </Table>
+                      </Card.Body>
+                    </Card>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
-          </Container>
-        )
-      ) : (
-        SecuringPage()
+              </main>
+
+              <Row>
+                <Col>
+                  <Footer />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       )
     ) : (
-      <Navigate to="/silakend-login" />
-    );
-  }
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

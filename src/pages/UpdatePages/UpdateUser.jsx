@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // API Consume
 import axios from "axios";
 import { useQuery } from "react-query";
 import FetchRoles from "../../consAPI/FetchRoles";
 import FetchJobUnits from "../../consAPI/FetchJobUnits";
+
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Redirecting
 import { useNavigate } from "react-router-dom";
@@ -41,6 +47,9 @@ import "../CustomStyles/users.css";
 import { useAuthUser } from "react-auth-kit";
 
 export const UpdateUser = () => {
+  // Get access token
+  const token = Cookies.get("token");
+
   const navigate = useNavigate();
   const auth = useAuthUser();
 
@@ -81,7 +90,7 @@ export const UpdateUser = () => {
   const handleRoleChanges = async (event) => {
     const selectedRole = event.target.value;
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
     const getRoleByIdApi = `https://silakend-server.xyz/api/roles/${selectedRole}`;
     const response = await axios
@@ -110,9 +119,10 @@ export const UpdateUser = () => {
     role_id: oldRole,
   };
 
-  const updateCurrentUser = async () => {
+  const updateCurrentUser = async (e) => {
+    e.preventDefault();
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
     swal({
       title: "Yakin?",
@@ -122,26 +132,36 @@ export const UpdateUser = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        await axios
-          .put(`https://silakend-server.xyz/api/users/${userId}`, body, config)
-          .then((response) => {
-            if (response.status === 200) {
-              navigate("/data-pengguna");
-              swal({
-                title: "Berhasil!",
-                text: response.data.msg,
-                icon: "success",
-                button: "Tutup",
-              });
-            }
-          })
-          .catch((error) => {
-            if (error.response.data.message) {
-              swal("Ups!", error.response.data.message, "error");
+        try {
+          await axios
+            .put(
+              `https://silakend-server.xyz/api/users/${userId}`,
+              body,
+              config
+            )
+            .then((response) => {
+              if (response.status === 200) {
+                navigate("/data-pengguna");
+                swal({
+                  title: "Berhasil!",
+                  text: response.data.msg,
+                  icon: "success",
+                  button: "Tutup",
+                });
+              }
+            });
+        } catch (error) {
+          if (error.response) {
+            const { message, msg } = error.response.data;
+            if (message) {
+              swal("Ups!", message, "error");
             } else {
-              swal("Ups!", error.response.data.msg, "error");
+              swal("Ups!", msg, "error");
             }
-          });
+          } else {
+            swal("Ups!", "Something went wrong", "error");
+          }
+        }
       } else {
         swal("Data pengguna aman!");
       }
@@ -214,9 +234,9 @@ export const UpdateUser = () => {
     }
   };
 
-  if (localStorage.getItem("token") && auth()) {
-    if (localStorage.getItem("user_id")) {
-      return (
+  return token ? (
+    auth().user_level === 1 ? (
+      localStorage.getItem("user_id") ? (
         <Container fluid>
           <Row>
             {/* SIDEBAR */}
@@ -254,7 +274,7 @@ export const UpdateUser = () => {
                         <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
                           Edit Data Pengguna Disini
                         </Card.Title>
-                        <Form>
+                        <Form onSubmit={updateCurrentUser}>
                           <Container>
                             <Row>
                               <Col>
@@ -513,11 +533,13 @@ export const UpdateUser = () => {
             </Col>
           </Row>
         </Container>
-      );
-    } else {
-      return <Navigate to="/data-pengguna" />;
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+      ) : (
+        <Navigate to="/data-pengguna" />
+      )
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

@@ -101,261 +101,255 @@ export const VehicleMaintenancesDetail = () => {
     localStorage.setItem("VMDToMap", JSON.stringify(VMDId));
   }
 
-  {
-    return token ? (
-      auth().user_level === 1 || auth().user_level === 2 ? (
-        maintenanceId ? (
-          isLoading ? (
-            <div className="loading-io">
-              <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-                <div className="ldio-c0sicszbk9i">
-                  <div></div>
-                  <div></div>
-                </div>
+  return token ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
+      maintenanceId ? (
+        isLoading ? (
+          <div className="loading-io">
+            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+              <div className="ldio-c0sicszbk9i">
+                <div></div>
+                <div></div>
               </div>
             </div>
-          ) : (
-            <Container fluid>
-              <Row>
-                {/* SIDEBAR */}
-                <Col
-                  xs="auto"
-                  className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
-                >
-                  <Aside />
-                </Col>
-                {/* SIDEBAR */}
+          </div>
+        ) : (
+          <Container fluid>
+            <Row>
+              {/* SIDEBAR */}
+              <Col
+                xs="auto"
+                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+              >
+                <Aside />
+              </Col>
+              {/* SIDEBAR */}
 
-                <Col>
-                  {/* NAVBAR */}
+              <Col>
+                {/* NAVBAR */}
+                <Row>
+                  <Col>
+                    {["end"].map((placement, idx) => (
+                      <NavTop
+                        key={idx}
+                        placement={placement}
+                        name={placement}
+                        bc={<FaArrowLeft />}
+                        title={"Rincian Data Perbaikan Kendaraan"}
+                        parentLink={"/perbaikan-kendaraan"}
+                      />
+                    ))}
+                  </Col>
+                </Row>
+                {/* NAVBAR */}
+                <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
+                  {maintenanceDetails === null ? (
+                    <Alert variant="warning" className="d-flex bd-highlight">
+                      <div className="fs-5 me-auto bd-highlight">
+                        Data perbaikan ini belum ada rincian!
+                      </div>
+
+                      <div className="bd-highlight">
+                        <NavLink
+                          to={
+                            "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/tambah-rincian"
+                          }
+                        >
+                          <Button variant="warning" size="sm">
+                            Tambahkan Rincian <FaPlus />
+                          </Button>
+                        </NavLink>
+                      </div>
+                    </Alert>
+                  ) : null}
+
                   <Row>
                     <Col>
-                      {["end"].map((placement, idx) => (
-                        <NavTop
-                          key={idx}
-                          placement={placement}
-                          name={placement}
-                          bc={<FaArrowLeft />}
-                          title={"Rincian Data Perbaikan Kendaraan"}
-                          parentLink={"/perbaikan-kendaraan"}
-                        />
-                      ))}
+                      <Card>
+                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                          Data Perbaikan Kendaraan
+                        </Card.Title>
+                        <Card.Body className="d-flex flex-column gap-3">
+                          <ListGroup as="ol" numbered className="mb-2">
+                            {VMToMap != ""
+                              ? [VMToMap].map((currentVM) => (
+                                  <>
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">KENDARAAN</div>
+                                        {currentVM.vehicle.name}
+                                      </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          JENIS PERBAIKAN
+                                        </div>
+                                        {currentVM.category}
+                                      </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">TANGGAL</div>
+                                        {currentVM.date}
+                                      </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">DESKRIPSI</div>
+                                        {currentVM.description}
+                                      </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          PENGELUARAN
+                                        </div>
+                                        {currentVM.total_cost.toLocaleString(
+                                          "id-ID",
+                                          {
+                                            style: "currency",
+                                            currency: "IDR",
+                                          }
+                                        )}
+                                      </div>
+                                    </ListGroup.Item>
+                                  </>
+                                ))
+                              : null}
+                          </ListGroup>
+                        </Card.Body>
+                      </Card>
                     </Col>
                   </Row>
-                  {/* NAVBAR */}
-                  <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
-                    {maintenanceDetails === null ? (
-                      <Alert variant="warning" className="d-flex bd-highlight">
-                        <div className="fs-5 me-auto bd-highlight">
-                          Data perbaikan ini belum ada rincian!
-                        </div>
 
-                        <div className="bd-highlight">
-                          <NavLink
-                            to={
-                              "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/tambah-rincian"
-                            }
-                          >
-                            <Button variant="warning" size="sm">
-                              Tambahkan Rincian <FaPlus />
-                            </Button>
-                          </NavLink>
-                        </div>
-                      </Alert>
-                    ) : null}
-
+                  {maintenanceDetails !== null ? (
                     <Row>
                       <Col>
                         <Card>
                           <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            Data Perbaikan Kendaraan
+                            Rincian Data Perbaikan Kendaraan
                           </Card.Title>
                           <Card.Body className="d-flex flex-column gap-3">
-                            <ListGroup as="ol" numbered className="mb-2">
-                              {VMToMap != ""
-                                ? [VMToMap].map((currentVM) => (
-                                    <>
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">
-                                            KENDARAAN
-                                          </div>
-                                          {currentVM.vehicle.name}
-                                        </div>
-                                      </ListGroup.Item>
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">
-                                            JENIS PERBAIKAN
-                                          </div>
-                                          {currentVM.category}
-                                        </div>
-                                      </ListGroup.Item>
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">TANGGAL</div>
-                                          {currentVM.date}
-                                        </div>
-                                      </ListGroup.Item>
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">
-                                            DESKRIPSI
-                                          </div>
-                                          {currentVM.description}
-                                        </div>
-                                      </ListGroup.Item>
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">
-                                            PENGELUARAN
-                                          </div>
-                                          {currentVM.total_cost.toLocaleString(
+                            <div className="me-1 d-flex justify-content-end">
+                              <NavLink
+                                to={
+                                  "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/tambah-rincian"
+                                }
+                              >
+                                <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                                  Tambah Rincian
+                                  <FaPlus className="fs-3" />
+                                </Button>
+                              </NavLink>
+                            </div>
+                            <Table responsive bordered hover>
+                              <thead>
+                                <tr>
+                                  <th>No</th>
+                                  <th>SPARE PART</th>
+                                  <th>JUMLAH SPARE PART</th>
+                                  <th>SATUAN</th>
+                                  <th>HARGA SPARE PART</th>
+                                  <th>HARGA TOTAL</th>
+                                  <th>AKSI</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {maintenanceDetails.map((vmd, index) => (
+                                  <tr>
+                                    <td key={vmd.detail_id}>{index + 1}</td>
+                                    <td>{vmd.item_name}</td>
+                                    <td>{vmd.item_qty}</td>
+                                    <td>{vmd.item_unit}</td>
+                                    <td>
+                                      {vmd.item_price
+                                        ? vmd.item_price.toLocaleString(
                                             "id-ID",
                                             {
                                               style: "currency",
                                               currency: "IDR",
                                             }
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
-                                    </>
-                                  ))
-                                : null}
-                            </ListGroup>
+                                          )
+                                        : null}
+                                    </td>
+                                    <td>
+                                      {vmd.price_total
+                                        ? vmd.price_total.toLocaleString(
+                                            "id-ID",
+                                            {
+                                              style: "currency",
+                                              currency: "IDR",
+                                            }
+                                          )
+                                        : null}
+                                    </td>
+                                    <td>
+                                      <div className="d-flex gap-1 justify-content-center">
+                                        <NavLink
+                                          to={
+                                            "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/edit-rincian"
+                                          }
+                                        >
+                                          <Button
+                                            className="btn btn-edit"
+                                            onClick={() => GetVMDId(vmd)}
+                                          >
+                                            <AiFillEdit className="fs-6" />
+                                          </Button>
+                                        </NavLink>
+
+                                        <Button
+                                          onClick={() =>
+                                            DeleteVMD(vmd.detail_id)
+                                          }
+                                          className="btn-danger btn-delete"
+                                        >
+                                          <FaTrashAlt className="fs-6" />
+                                        </Button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </Table>
                           </Card.Body>
                         </Card>
                       </Col>
                     </Row>
-
-                    {maintenanceDetails !== null ? (
-                      <Row>
-                        <Col>
-                          <Card>
-                            <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                              Rincian Data Perbaikan Kendaraan
-                            </Card.Title>
-                            <Card.Body className="d-flex flex-column gap-3">
-                              <div className="me-1 d-flex justify-content-end">
-                                <NavLink
-                                  to={
-                                    "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/tambah-rincian"
-                                  }
-                                >
-                                  <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                                    Tambah Rincian
-                                    <FaPlus className="fs-3" />
-                                  </Button>
-                                </NavLink>
-                              </div>
-                              <Table responsive bordered hover>
-                                <thead>
-                                  <tr>
-                                    <th>No</th>
-                                    <th>SPARE PART</th>
-                                    <th>JUMLAH SPARE PART</th>
-                                    <th>SATUAN</th>
-                                    <th>HARGA SPARE PART</th>
-                                    <th>HARGA TOTAL</th>
-                                    <th>AKSI</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {maintenanceDetails.map((vmd, index) => (
-                                    <tr>
-                                      <td key={vmd.detail_id}>{index + 1}</td>
-                                      <td>{vmd.item_name}</td>
-                                      <td>{vmd.item_qty}</td>
-                                      <td>{vmd.item_unit}</td>
-                                      <td>
-                                        {vmd.item_price
-                                          ? vmd.item_price.toLocaleString(
-                                              "id-ID",
-                                              {
-                                                style: "currency",
-                                                currency: "IDR",
-                                              }
-                                            )
-                                          : null}
-                                      </td>
-                                      <td>
-                                        {vmd.price_total
-                                          ? vmd.price_total.toLocaleString(
-                                              "id-ID",
-                                              {
-                                                style: "currency",
-                                                currency: "IDR",
-                                              }
-                                            )
-                                          : null}
-                                      </td>
-                                      <td>
-                                        <div className="d-flex gap-1 justify-content-center">
-                                          <NavLink
-                                            to={
-                                              "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/edit-rincian"
-                                            }
-                                          >
-                                            <Button
-                                              className="btn btn-edit"
-                                              onClick={() => GetVMDId(vmd)}
-                                            >
-                                              <AiFillEdit className="fs-6" />
-                                            </Button>
-                                          </NavLink>
-
-                                          <Button
-                                            onClick={() =>
-                                              DeleteVMD(vmd.detail_id)
-                                            }
-                                            className="btn-danger btn-delete"
-                                          >
-                                            <FaTrashAlt className="fs-6" />
-                                          </Button>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </Table>
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      </Row>
-                    ) : null}
-                  </main>
-                  <Row>
-                    <Col>
-                      <Footer />
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Container>
-          )
-        ) : (
-          <Navigate to="/perbaikan-kendaraan" />
+                  ) : null}
+                </main>
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Container>
         )
       ) : (
-        SecuringPage()
+        <Navigate to="/perbaikan-kendaraan" />
       )
     ) : (
-      <Navigate to="/silakend-login" />
-    );
-  }
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

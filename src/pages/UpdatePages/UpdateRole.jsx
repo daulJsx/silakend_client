@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
+
+// Cookies JS
+import Cookies from "js-cookie";
+
 // Fetch Requirements
 import axios from "axios";
 
@@ -28,11 +34,14 @@ import swal from "sweetalert";
 import { useAuthUser } from "react-auth-kit";
 
 export const UpdateRole = () => {
+  // Get access token
+  const token = Cookies.get("token");
+
   const auth = useAuthUser();
   const navigate = useNavigate();
 
   // Initialize newest role id
-  const [roleId, setRoleId] = useState(localStorage.getItem("roleId"));
+  const roleId = localStorage.getItem("roleId");
 
   // Get the JSON object from local storage
   const roleString = localStorage.getItem("roleToMap");
@@ -53,27 +62,22 @@ export const UpdateRole = () => {
     level: newRoleLevel === "" ? currentRoleLevel : newRoleLevel,
   };
 
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
+  const updateCurrentRole = async (e) => {
+    e.preventDefault();
 
-  const updateCurrentRole = async () => {
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
-    if (updateRole.name || updateRole.level != "") {
-      swal({
-        title: "Yakin?",
-        text: "Pastikan kembali perubahan data",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      }).then(async (willDelete) => {
-        if (willDelete) {
+
+    swal({
+      title: "Yakin?",
+      text: "Pastikan kembali perubahan data",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        try {
           await axios
             .put(
               `https://silakend-server.xyz/api/roles/${roleId}`,
@@ -81,8 +85,8 @@ export const UpdateRole = () => {
               config
             )
             .then((response) => {
-              navigate("/data-peran");
               if (response.status === 200) {
+                navigate("/data-peran");
                 swal({
                   title: "Berhasil!",
                   text: response.data.msg,
@@ -90,60 +94,61 @@ export const UpdateRole = () => {
                   button: "Tutup",
                 });
               }
-            })
-            .catch((error) => {
-              handleError(error);
             });
-        } else {
-          swal("Data peran aman!");
+        } catch (error) {
+          if (error.response) {
+            const { message, msg } = error.response.data;
+            if (message) {
+              swal("Ups!", message, "error");
+            } else {
+              swal("Ups!", msg, "error");
+            }
+          } else {
+            swal("Ups!", "Something went wrong", "error");
+          }
         }
-      });
-    } else {
-      swal({
-        title: "Peringatan",
-        text: "Harap ubah data",
-        icon: "warning",
-        button: "Tutup",
-      });
-    }
+      } else {
+        swal("Data peran aman!");
+      }
+    });
   };
 
-  if (localStorage.getItem("token") && auth()) {
-    if (localStorage.getItem("roleId")) {
-      return (
-        <>
-          <Container fluid>
-            <Row>
-              {/* SIDEBAR */}
-              <Col
-                xs="auto"
-                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <Aside />
-              </Col>
-              {/* SIDEBAR */}
+  return token ? (
+    auth().user_level === 1 ? (
+      roleId ? (
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col
+              xs="auto"
+              className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+            >
+              <Aside />
+            </Col>
+            {/* SIDEBAR */}
 
-              <Col>
-                {/* NAVBAR */}
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<FaArrowLeft />}
+                      title={"Edit Peran Pengguna"}
+                      parentLink={"/data-peran"}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+              <main className="min-vh-10 px-2 mt-4">
                 <Row>
                   <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<FaArrowLeft />}
-                        title={"Edit Peran Pengguna"}
-                        parentLink={"/data-peran"}
-                      />
-                    ))}
-                  </Col>
-                </Row>
-                {/* NAVBAR */}
-                <main className="min-vh-10 px-2 mt-4">
-                  <Row>
-                    <Col>
-                      <Card>
+                    <Card>
+                      <Form onSubmit={updateCurrentRole}>
                         <Card.Body>
                           <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
                             Silahkan Ubah Data Peran Disini
@@ -196,24 +201,26 @@ export const UpdateRole = () => {
                             Simpan
                           </Button>
                         </Card.Footer>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Footer />
-                    </Col>
-                  </Row>
-                </main>
-              </Col>
-            </Row>
-          </Container>
-        </>
-      );
-    } else {
-      return <Navigate to="/unit-kerja" />;
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+                      </Form>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
+              </main>
+            </Col>
+          </Row>
+        </Container>
+      ) : (
+        <Navigate to="/data-peran" />
+      )
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

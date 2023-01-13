@@ -1,5 +1,4 @@
 export function GetVehicleById(currentVehicle) {
-  console.log(currentVehicle);
   let {
     vehicle_id,
     name,

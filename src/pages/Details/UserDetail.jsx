@@ -45,16 +45,19 @@ export const UserDetail = () => {
   const [userToMap, setUserToMap] = useState(null);
 
   useEffect(() => {
+    const accessToken = Cookies.get("token");
+    const currentUserId = localStorage.getItem("user_id");
+
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     };
 
     async function fetchCurrentUser() {
       try {
         await axios
-          .get(`https://silakend-server.xyz/api/users/${userId}`, config)
+          .get(`https://silakend-server.xyz/api/users/${currentUserId}`, config)
           .then((response) => {
             if (response.status === 200) {
               setIsLoading(false);
@@ -81,171 +84,168 @@ export const UserDetail = () => {
     fetchCurrentUser();
   }, []);
 
-  {
-    return token ? (
-      auth().user_level === 1 ? (
-        userId ? (
-          isLoading ? (
-            <div className="loading-io">
-              <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-                <div className="ldio-c0sicszbk9i">
-                  <div></div>
-                  <div></div>
-                </div>
+  return token ? (
+    auth().user_level === 1 ? (
+      userId ? (
+        isLoading ? (
+          <div className="loading-io">
+            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+              <div className="ldio-c0sicszbk9i">
+                <div></div>
+                <div></div>
               </div>
             </div>
-          ) : (
-            <Container fluid>
-              <Row>
-                {/* SIDEBAR */}
-                <Col
-                  xs="auto"
-                  className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
-                >
-                  <Aside />
-                </Col>
-                {/* SIDEBAR */}
-
-                <Col>
-                  {/* NAVBAR */}
-                  <Row>
-                    <Col>
-                      {["end"].map((placement, idx) => (
-                        <NavTop
-                          key={idx}
-                          placement={placement}
-                          name={placement}
-                          bc={<FaArrowLeft />}
-                          title={"Rincian Pengguna"}
-                          parentLink={"/data-pengguna"}
-                        />
-                      ))}
-                    </Col>
-                  </Row>
-                  {/* NAVBAR */}
-                  <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
-                    <Row>
-                      <Col>
-                        <Card>
-                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            Rincian Pengguna
-                          </Card.Title>
-                          <Card.Body className="d-flex flex-column gap-3">
-                            <ListGroup as="ol" numbered className="mb-2">
-                              {userToMap != ""
-                                ? userToMap.map((currentUser) => (
-                                    <>
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">NIP</div>
-                                          {currentUser.nip}
-                                        </div>
-                                      </ListGroup.Item>
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">NAMA</div>
-                                          {currentUser.name}
-                                        </div>
-                                      </ListGroup.Item>
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">ALAMAT</div>
-                                          {currentUser.address}
-                                        </div>
-                                      </ListGroup.Item>
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">TELEPON</div>
-                                          {currentUser.phone}
-                                        </div>
-                                      </ListGroup.Item>
-
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">EMAIL</div>
-                                          {currentUser.email}
-                                        </div>
-                                      </ListGroup.Item>
-
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">
-                                            UNIT KERJA
-                                          </div>
-                                          {currentUser.job_unit.name}
-                                        </div>
-                                      </ListGroup.Item>
-
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="fw-bold">PERAN</div>
-                                          {currentUser.role.length !== 0 ? (
-                                            currentUser.role.map(
-                                              (userRole, index) => {
-                                                return (
-                                                  <ul className="rolesList">
-                                                    <li key={index}>
-                                                      {index + 1}.{" "}
-                                                      {userRole.name}
-                                                    </li>
-                                                  </ul>
-                                                );
-                                              }
-                                            )
-                                          ) : (
-                                            <p>
-                                              Pengguna ini belum memiliki peran
-                                            </p>
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
-                                    </>
-                                  ))
-                                : null}
-                            </ListGroup>
-                          </Card.Body>
-                        </Card>
-                      </Col>
-                    </Row>
-                  </main>
-                  <Row>
-                    <Col>
-                      <Footer />
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Container>
-          )
+          </div>
         ) : (
-          <Navigate to="/data-pengguna" />
+          <Container fluid>
+            <Row>
+              {/* SIDEBAR */}
+              <Col
+                xs="auto"
+                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+              >
+                <Aside />
+              </Col>
+              {/* SIDEBAR */}
+
+              <Col>
+                {/* NAVBAR */}
+                <Row>
+                  <Col>
+                    {["end"].map((placement, idx) => (
+                      <NavTop
+                        key={idx}
+                        placement={placement}
+                        name={placement}
+                        bc={<FaArrowLeft />}
+                        title={"Rincian Pengguna"}
+                        parentLink={"/data-pengguna"}
+                      />
+                    ))}
+                  </Col>
+                </Row>
+                {/* NAVBAR */}
+                <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
+                  <Row>
+                    <Col>
+                      <Card>
+                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                          Rincian Pengguna
+                        </Card.Title>
+                        <Card.Body className="d-flex flex-column gap-3">
+                          <ListGroup as="ol" numbered className="mb-2">
+                            {userToMap !== ""
+                              ? userToMap.map((currentUser) => (
+                                  <>
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">NIP</div>
+                                        {currentUser.nip}
+                                      </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">NAMA</div>
+                                        {currentUser.name}
+                                      </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">ALAMAT</div>
+                                        {currentUser.address}
+                                      </div>
+                                    </ListGroup.Item>
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">TELEPON</div>
+                                        {currentUser.phone}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">EMAIL</div>
+                                        {currentUser.email}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          UNIT KERJA
+                                        </div>
+                                        {currentUser.job_unit.name}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">PERAN</div>
+                                        {currentUser.role.length !== 0 ? (
+                                          currentUser.role.map(
+                                            (userRole, index) => {
+                                              return (
+                                                <ul className="rolesList">
+                                                  <li key={index}>
+                                                    {index + 1}. {userRole.name}
+                                                  </li>
+                                                </ul>
+                                              );
+                                            }
+                                          )
+                                        ) : (
+                                          <p>
+                                            Pengguna ini belum memiliki peran
+                                          </p>
+                                        )}
+                                      </div>
+                                    </ListGroup.Item>
+                                  </>
+                                ))
+                              : null}
+                          </ListGroup>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </Row>
+                </main>
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Container>
         )
       ) : (
-        SecuringPage()
+        <Navigate to="/data-pengguna" />
       )
     ) : (
-      <Navigate to="/silakend-login" />
-    );
-  }
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

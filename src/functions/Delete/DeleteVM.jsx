@@ -37,10 +37,15 @@ export async function DeleteVM(VMId) {
             });
           });
       } catch (error) {
-        if (error.response.data.message) {
-          swal("Ups!", "Something went wrong", "error");
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
+          } else {
+            swal("Ups!", msg, "error");
+          }
         } else {
-          swal("Ups!", error.response.data.msg, "error");
+          swal("Ups!", "Something went wrong", "error");
         }
       }
     } else {

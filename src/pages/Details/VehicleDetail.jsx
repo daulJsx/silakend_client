@@ -29,20 +29,20 @@ import { FaArrowLeft } from "react-icons/fa";
 // React Notification
 import swal from "sweetalert";
 
-export const VehicleUsageDetail = () => {
+export const VehicleDetail = () => {
   // Get access token
   const token = Cookies.get("token");
 
   const auth = useAuthUser();
 
-  // Initialize newest usage id
-  const usageId = localStorage.getItem("usage_id");
+  // Initialize newest maintenance id
+  const vehicleId = localStorage.getItem("vehicle_id");
 
   // initialize the loading
   const [isLoading, setIsLoading] = useState(true);
 
-  // catch the current user from fetchCurrentUsage
-  const [vUsageToMap, setVUsageToMap] = useState(null);
+  // catch the fetching vehicle details
+  const [vehicleDetail, setVehicleDetail] = useState(null);
 
   useEffect(() => {
     const config = {
@@ -50,19 +50,16 @@ export const VehicleUsageDetail = () => {
         Authorization: `Bearer ${token}`,
       },
     };
-    async function fetchCurrentUsage() {
+    async function fetchData() {
       try {
         await axios
-          .get(
-            `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
-            config
-          )
+          .get(`https://silakend-server.xyz/api/vehicles/${vehicleId}`, config)
           .then((response) => {
             if (response.status === 200) {
               setIsLoading(false);
-              const currentUsage = response.data;
-              if (currentUsage.length !== 0) {
-                setVUsageToMap(currentUsage);
+              const vehicleDetail = response.data;
+              if (vehicleDetail.length !== 0) {
+                setVehicleDetail(vehicleDetail);
               }
             }
           });
@@ -80,12 +77,12 @@ export const VehicleUsageDetail = () => {
       }
     }
 
-    fetchCurrentUsage();
+    fetchData();
   }, []);
 
   return token ? (
     auth().user_level === 1 || auth().user_level === 2 ? (
-      usageId ? (
+      vehicleId ? (
         isLoading ? (
           <div className="loading-io">
             <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
@@ -117,62 +114,35 @@ export const VehicleUsageDetail = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaArrowLeft />}
-                        title={"Rincian Pengajuan Peminjaman"}
-                        parentLink={"/pengajuan-peminjaman"}
+                        title={"Rincian Data Kendaraan"}
+                        parentLink={"/data-kendaraan"}
                       />
                     ))}
                   </Col>
                 </Row>
                 {/* NAVBAR */}
+
                 <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
                   <Row>
                     <Col>
                       <Card>
                         <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                          Rincian Pengajuan Peminjaman
+                          Rincian Data kendaraan
                         </Card.Title>
                         <Card.Body className="d-flex flex-column gap-3">
                           <ListGroup as="ol" numbered className="mb-2">
-                            {vUsageToMap != ""
-                              ? vUsageToMap.map((currentUsage) => (
+                            {vehicleDetail !== null
+                              ? vehicleDetail.map((currentVehicle) => (
                                   <>
                                     <ListGroup.Item
                                       as="li"
                                       className="d-flex justify-content-between align-items-start"
                                     >
                                       <div className="ms-2 me-auto">
-                                        <div className="fw-bold">PEMINJAM</div>
-                                        {currentUsage.user.name}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">PENGEMUDI</div>
-                                        {currentUsage.driver.name}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">KENDARAAN</div>
-                                        {currentUsage.vehicle.name}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">KEPERLUAN</div>
-                                        {currentUsage.usage_description}
+                                        <div className="fw-bold">
+                                          NAMA KENDARAAN
+                                        </div>
+                                        {currentVehicle.name}
                                       </div>
                                     </ListGroup.Item>
 
@@ -182,9 +152,9 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">
-                                          KATEGORI PEMINJAMAN
+                                          TAHUN PEMBUATAN
                                         </div>
-                                        {currentUsage.category.name}
+                                        {currentVehicle.year}
                                       </div>
                                     </ListGroup.Item>
 
@@ -194,19 +164,9 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">
-                                          JUMLAH PERSONIL
+                                          NOMOR POLISI
                                         </div>
-                                        {currentUsage.personel_count}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">DESTINASI</div>
-                                        {currentUsage.destination}
+                                        {currentVehicle.license_number}
                                       </div>
                                     </ListGroup.Item>
 
@@ -216,10 +176,9 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">
-                                          TANGGAL PEMINJAMAN
+                                          WAKTU PAJAK
                                         </div>
-                                        {currentUsage.start_date} s/d{" "}
-                                        {currentUsage.end_date}
+                                        {currentVehicle.tax_date}
                                       </div>
                                     </ListGroup.Item>
 
@@ -229,10 +188,9 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">
-                                          WAKTU KEBERANGKATAN
+                                          WAKTU VALID
                                         </div>
-                                        {currentUsage.depart_date} PUKUL{" "}
-                                        {currentUsage.depart_time}
+                                        {currentVehicle.valid_date}
                                       </div>
                                     </ListGroup.Item>
 
@@ -242,10 +200,14 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">
-                                          WAKTU KEPULANGAN
+                                          JUMLAH KILOMETER TEMPUH
                                         </div>
-                                        {currentUsage.arrive_date} PUKUL{" "}
-                                        {currentUsage.arrive_time}
+                                        {currentVehicle.distance_count
+                                          ? currentVehicle.distance_count.toLocaleString(
+                                              "id-ID"
+                                            )
+                                          : null}{" "}
+                                        KM
                                       </div>
                                     </ListGroup.Item>
 
@@ -254,34 +216,10 @@ export const VehicleUsageDetail = () => {
                                       className="d-flex justify-content-between align-items-start"
                                     >
                                       <div className="ms-2 me-auto">
-                                        <div className="fw-bold">ODOMETER</div>
-                                        <div>
-                                          Jumlah Kilometer Pergi :{" "}
-                                          {currentUsage.distance_count_out.toLocaleString(
-                                            "id-ID"
-                                          )}{" "}
-                                          KM
+                                        <div className="fw-bold">
+                                          KATEGORI KENDARAAN
                                         </div>
-                                        <div>
-                                          Jumlah Kilometer Pulang :{" "}
-                                          {currentUsage.distance_count_in
-                                            ? currentUsage.distance_count_in.toLocaleString(
-                                                "id-ID"
-                                              )
-                                            : null}{" "}
-                                          KM
-                                        </div>
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">STATUS</div>
-                                        {currentUsage.status} (
-                                        {currentUsage.status_description})
+                                        {currentVehicle.category.name}
                                       </div>
                                     </ListGroup.Item>
                                   </>
@@ -293,6 +231,7 @@ export const VehicleUsageDetail = () => {
                     </Col>
                   </Row>
                 </main>
+
                 <Row>
                   <Col>
                     <Footer />
@@ -303,7 +242,7 @@ export const VehicleUsageDetail = () => {
           </Container>
         )
       ) : (
-        <Navigate to="/pengajuan-peminjaman" />
+        <Navigate to="/data-kendaraan" />
       )
     ) : (
       SecuringPage()

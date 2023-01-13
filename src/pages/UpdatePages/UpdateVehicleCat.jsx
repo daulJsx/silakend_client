@@ -3,6 +3,12 @@ import React, { useState } from "react";
 // Fetch Requirements
 import axios from "axios";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
+
 // Redirecting
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
@@ -28,11 +34,14 @@ import swal from "sweetalert";
 import { useAuthUser } from "react-auth-kit";
 
 export const UpdateVehicleCat = () => {
+  // Get access token
+  const token = Cookies.get("token");
+
   const auth = useAuthUser();
   const navigate = useNavigate();
 
   // Initialize newest role id
-  const [vCatId, setVCatId] = useState(localStorage.getItem("vcategory_id"));
+  const vCatId = localStorage.getItem("vcategory_id");
 
   // Get the JSON object from local storage
   const vCatStr = localStorage.getItem("vCategoryToMap");
@@ -44,86 +53,90 @@ export const UpdateVehicleCat = () => {
     name: "",
   });
 
-  // Store new vehicle data
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
+  const updateVCat = async (e) => {
+    e.preventDefault();
 
-  const updateVCat = async () => {
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
-    if (curVCat.name != "") {
-      await axios
-        .put(
-          `https://silakend-server.xyz/api/vehiclecategories/${vCatId}`,
-          curVCat,
-          config
-        )
-        .then((response) => {
-          if (response.status === 200) {
-            navigate("/kategori-kendaraan");
-            swal({
-              title: "Berhasil!",
-              text: response.data.msg,
-              icon: "success",
-              button: "Tutup",
-            });
+
+    if (curVCat.name !== "") {
+      try {
+        await axios
+          .put(
+            `https://silakend-server.xyz/api/vehiclecategories/${vCatId}`,
+            curVCat,
+            config
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              navigate("/kategori-kendaraan");
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: "Tutup",
+              });
+            }
+          });
+      } catch (error) {
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
+          } else {
+            swal("Ups!", msg, "error");
           }
-        })
-        .catch((error) => {
-          handleError(error);
-        });
+        } else {
+          swal("Ups!", "Something went wrong", "error");
+        }
+      }
     } else {
       swal({
         title: "Peringatan",
-        text: "Harap isi semua data!",
+        text: "Harap edit data dengan benar",
         icon: "warning",
         button: "Tutup",
       });
     }
   };
 
-  if (localStorage.getItem("token") && auth()) {
-    if (localStorage.getItem("vcategory_id")) {
-      return (
-        <>
-          <Container fluid>
-            <Row>
-              {/* SIDEBAR */}
-              <Col
-                xs="auto"
-                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <Aside />
-              </Col>
-              {/* SIDEBAR */}
+  return token ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
+      vCatId ? (
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col
+              xs="auto"
+              className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+            >
+              <Aside />
+            </Col>
+            {/* SIDEBAR */}
 
-              <Col>
-                {/* NAVBAR */}
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<FaArrowLeft />}
+                      title={"Edit Kategori Kendaraan"}
+                      parentLink={"/kategori-kendaraan"}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+              <main className="min-vh-10 px-2 mt-4">
                 <Row>
                   <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<FaArrowLeft />}
-                        title={"Edit Kategori Kendaraan"}
-                        parentLink={"/kategori-kendaraan"}
-                      />
-                    ))}
-                  </Col>
-                </Row>
-                {/* NAVBAR */}
-                <main className="min-vh-10 px-2 mt-4">
-                  <Row>
-                    <Col>
-                      <Card>
+                    <Card>
+                      <Form onSubmit={updateVCat}>
                         <Card.Body>
                           <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
                             Silahkan Edit Kategori Kendaraan Disini
@@ -163,24 +176,26 @@ export const UpdateVehicleCat = () => {
                             Simpan
                           </Button>
                         </Card.Footer>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Footer />
-                    </Col>
-                  </Row>
-                </main>
-              </Col>
-            </Row>
-          </Container>
-        </>
-      );
-    } else {
-      return <Navigate to="/kategori-kendaraan" />;
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+                      </Form>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
+              </main>
+            </Col>
+          </Row>
+        </Container>
+      ) : (
+        <Navigate to="/kategori-kendaraan" />
+      )
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

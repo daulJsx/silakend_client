@@ -40,13 +40,10 @@ export const CreateVMDetail = () => {
   const auth = useAuthUser();
   const navigate = useNavigate();
 
-  const [maintenanceId, setMaintenanceId] = useState(
-    localStorage.getItem("maintenanceId")
-  );
-
+  const maintenanceId = localStorage.getItem("maintenanceId");
   // Body for store
   const [newVehicleMDetail, setNewVehicleMDetail] = useState({
-    maintenance_id: localStorage.getItem("maintenanceId"),
+    maintenance_id: maintenanceId,
     item_name: "",
     item_qty: "",
     item_unit: "",
@@ -105,73 +102,121 @@ export const CreateVMDetail = () => {
     }
   };
 
-  {
-    return token ? (
-      auth().user_level === 1 ? (
-        maintenanceId !== "" ? (
-          <Container fluid>
-            <Row>
-              {/* SIDEBAR */}
-              <Col
-                xs="auto"
-                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <Aside />
-              </Col>
-              {/* SIDEBAR */}
+  return token ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
+      maintenanceId ? (
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col
+              xs="auto"
+              className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+            >
+              <Aside />
+            </Col>
+            {/* SIDEBAR */}
 
-              <Col>
-                {/* NAVBAR */}
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<FaArrowLeft />}
+                      title={"Tambah Data Rincian Perbaikan Kendaraan"}
+                      parentLink={
+                        "/perbaikan-kendaraan/rincian-perbaikan-kendaraan"
+                      }
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+              <main className="min-vh-100 px-2 mt-4">
                 <Row>
                   <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<FaArrowLeft />}
-                        title={"Tambah Data Rincian Perbaikan Kendaraan"}
-                        parentLink={
-                          "/perbaikan-kendaraan/rincian-perbaikan-kendaraan"
-                        }
-                      />
-                    ))}
-                  </Col>
-                </Row>
-                {/* NAVBAR */}
-                <main className="min-vh-100 px-2 mt-4">
-                  <Row>
-                    <Col>
-                      <Card>
-                        <Form onSubmit={postNewVehicleMD}>
-                          <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                            Silahkan Buat Rincian Perbaikan Kendaraan Disini
-                          </Card.Title>
-                          <Card.Body className="d-flex flex-column gap-3">
-                            <Form.Group>
-                              <Form.Label>nama spare part</Form.Label>
+                    <Card>
+                      <Form onSubmit={postNewVehicleMD}>
+                        <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                          Silahkan Buat Rincian Perbaikan Kendaraan Disini
+                        </Card.Title>
+                        <Card.Body className="d-flex flex-column gap-3">
+                          <Form.Group>
+                            <Form.Label>nama spare part</Form.Label>
 
-                              <Form.Control
-                                required
-                                className="input form-custom"
+                            <Form.Control
+                              required
+                              className="input form-custom"
+                              style={{
+                                backgroundColor: "#F5F7FC",
+                                border: "none",
+                                padding: "15px",
+                              }}
+                              type="text"
+                              onChange={(e) =>
+                                setNewVehicleMDetail({
+                                  ...newVehicleMDetail,
+                                  item_name: e.target.value,
+                                })
+                              }
+                            />
+                          </Form.Group>
+
+                          <Form.Group>
+                            <Form.Label>jumlah spare part</Form.Label>
+
+                            <Form.Control
+                              required
+                              className="input form-custom"
+                              style={{
+                                backgroundColor: "#F5F7FC",
+                                border: "none",
+                                padding: "15px",
+                              }}
+                              type="number"
+                              onChange={(e) =>
+                                setNewVehicleMDetail({
+                                  ...newVehicleMDetail,
+                                  item_qty: e.target.value,
+                                })
+                              }
+                            />
+                          </Form.Group>
+
+                          <Form.Group>
+                            <Form.Label>satuan spare part</Form.Label>
+                            <Form.Control
+                              required
+                              className="input form-custom"
+                              style={{
+                                backgroundColor: "#F5F7FC",
+                                border: "none",
+                                padding: "15px",
+                              }}
+                              type="text"
+                              onChange={(e) =>
+                                setNewVehicleMDetail({
+                                  ...newVehicleMDetail,
+                                  item_unit: e.target.value,
+                                })
+                              }
+                            />
+                          </Form.Group>
+
+                          <Form.Group>
+                            <Form.Label>harga spare part</Form.Label>
+                            <InputGroup>
+                              <InputGroup.Text
                                 style={{
-                                  backgroundColor: "#F5F7FC",
                                   border: "none",
-                                  padding: "15px",
                                 }}
-                                type="text"
-                                onChange={(e) =>
-                                  setNewVehicleMDetail({
-                                    ...newVehicleMDetail,
-                                    item_name: e.target.value,
-                                  })
-                                }
-                              />
-                            </Form.Group>
-
-                            <Form.Group>
-                              <Form.Label>jumlah spare part</Form.Label>
-
+                                id="basic-addon2"
+                              >
+                                Rp.
+                              </InputGroup.Text>
                               <Form.Control
                                 required
                                 className="input form-custom"
@@ -184,14 +229,24 @@ export const CreateVMDetail = () => {
                                 onChange={(e) =>
                                   setNewVehicleMDetail({
                                     ...newVehicleMDetail,
-                                    item_qty: e.target.value,
+                                    item_price: e.target.value,
                                   })
                                 }
                               />
-                            </Form.Group>
+                            </InputGroup>
+                          </Form.Group>
 
-                            <Form.Group>
-                              <Form.Label>satuan spare part</Form.Label>
+                          <Form.Group>
+                            <Form.Label>harga total</Form.Label>
+                            <InputGroup>
+                              <InputGroup.Text
+                                style={{
+                                  border: "none",
+                                }}
+                                id="basic-addon2"
+                              >
+                                Rp.
+                              </InputGroup.Text>
                               <Form.Control
                                 required
                                 className="input form-custom"
@@ -200,106 +255,46 @@ export const CreateVMDetail = () => {
                                   border: "none",
                                   padding: "15px",
                                 }}
-                                type="text"
+                                type="number"
                                 onChange={(e) =>
                                   setNewVehicleMDetail({
                                     ...newVehicleMDetail,
-                                    item_unit: e.target.value,
+                                    price_total: e.target.value,
                                   })
                                 }
                               />
-                            </Form.Group>
-
-                            <Form.Group>
-                              <Form.Label>harga spare part</Form.Label>
-                              <InputGroup>
-                                <InputGroup.Text
-                                  style={{
-                                    border: "none",
-                                  }}
-                                  id="basic-addon2"
-                                >
-                                  Rp.
-                                </InputGroup.Text>
-                                <Form.Control
-                                  required
-                                  className="input form-custom"
-                                  style={{
-                                    backgroundColor: "#F5F7FC",
-                                    border: "none",
-                                    padding: "15px",
-                                  }}
-                                  type="number"
-                                  onChange={(e) =>
-                                    setNewVehicleMDetail({
-                                      ...newVehicleMDetail,
-                                      item_price: e.target.value,
-                                    })
-                                  }
-                                />
-                              </InputGroup>
-                            </Form.Group>
-
-                            <Form.Group>
-                              <Form.Label>harga total</Form.Label>
-                              <InputGroup>
-                                <InputGroup.Text
-                                  style={{
-                                    border: "none",
-                                  }}
-                                  id="basic-addon2"
-                                >
-                                  Rp.
-                                </InputGroup.Text>
-                                <Form.Control
-                                  required
-                                  className="input form-custom"
-                                  style={{
-                                    backgroundColor: "#F5F7FC",
-                                    border: "none",
-                                    padding: "15px",
-                                  }}
-                                  type="number"
-                                  onChange={(e) =>
-                                    setNewVehicleMDetail({
-                                      ...newVehicleMDetail,
-                                      price_total: e.target.value,
-                                    })
-                                  }
-                                />
-                              </InputGroup>
-                            </Form.Group>
-                          </Card.Body>
-                          <Card.Footer>
-                            <Button
-                              className="btn-post"
-                              type="submit"
-                              onClick={postNewVehicleMD}
-                            >
-                              Tambah Rincian
-                            </Button>
-                          </Card.Footer>
-                        </Form>
-                      </Card>
-                    </Col>
-                  </Row>
-                </main>
-                <Row>
-                  <Col>
-                    <Footer />
+                            </InputGroup>
+                          </Form.Group>
+                        </Card.Body>
+                        <Card.Footer>
+                          <Button
+                            className="btn-post"
+                            type="submit"
+                            onClick={postNewVehicleMD}
+                          >
+                            Tambah Rincian
+                          </Button>
+                        </Card.Footer>
+                      </Form>
+                    </Card>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
-          </Container>
-        ) : (
-          <Navigate to="/perbaikan-kendaraan" />
-        )
+              </main>
+              <Row>
+                <Col>
+                  <Footer />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       ) : (
-        SecuringPage()
+        <Navigate to="/perbaikan-kendaraan" />
       )
     ) : (
-      <Navigate to="/silakend-login" />
-    );
-  }
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

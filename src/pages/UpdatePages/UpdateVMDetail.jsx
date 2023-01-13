@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
+
 // Fetch Requirements
 import axios from "axios";
 import { useQuery } from "react-query";
@@ -31,11 +37,14 @@ import swal from "sweetalert";
 import { useAuthUser } from "react-auth-kit";
 
 export const UpdateVMDetail = () => {
+  // Get access token
+  const token = Cookies.get("token");
+
   const auth = useAuthUser();
   const navigate = useNavigate();
 
   // Initialize newest maintenance id
-  const [detailId, setDetailId] = useState(localStorage.getItem("detailId"));
+  const detailId = localStorage.getItem("detailId");
 
   // Get the JSON object from local storage
   const VMDString = localStorage.getItem("VMDToMap");
@@ -69,10 +78,13 @@ export const UpdateVMDetail = () => {
   };
 
   // Store new vehicle data
-  const updateVehicleMD = async () => {
+  const updateVehicleMD = async (e) => {
+    e.preventDefault();
+
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
+
     swal({
       title: "Yakin?",
       text: "Pastikan kembali perubahan data perbaikan",
@@ -81,32 +93,38 @@ export const UpdateVMDetail = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        await axios
-          .put(
-            `https://silakend-server.xyz/api/vehiclemaintenancedetails/${detailId}`,
-            currentVehicleMDetail,
-            config
-          )
-          .then((response) => {
-            if (response.status === 200) {
-              navigate("/perbaikan-kendaraan/rincian-perbaikan-kendaraan/");
-              swal({
-                title: "Berhasil!",
-                text: response.data.msg,
-                icon: "success",
-                button: "Tutup",
-              });
-            }
-          })
-          .catch((error) => {
-            if (error.response.data.message) {
-              swal("Ups!", error.response.data.message, "error");
+        try {
+          await axios
+            .put(
+              `https://silakend-server.xyz/api/vehiclemaintenancedetails/${detailId}`,
+              currentVehicleMDetail,
+              config
+            )
+            .then((response) => {
+              if (response.status === 200) {
+                navigate("/perbaikan-kendaraan/rincian-perbaikan-kendaraan/");
+                swal({
+                  title: "Berhasil!",
+                  text: response.data.msg,
+                  icon: "success",
+                  button: "Tutup",
+                });
+              }
+            });
+        } catch (error) {
+          if (error.response) {
+            const { message, msg } = error.response.data;
+            if (message) {
+              swal("Ups!", message, "error");
             } else {
-              swal("Ups!", error.response.data.msg, "error");
+              swal("Ups!", msg, "error");
             }
-          });
+          } else {
+            swal("Ups!", "Something went wrong", "error");
+          }
+        }
       } else {
-        swal("Data perbaikan aman!");
+        swal("Data rincian aman!");
       }
     });
   };
@@ -117,9 +135,9 @@ export const UpdateVMDetail = () => {
     FetchVM
   );
 
-  if (localStorage.getItem("token") && auth()) {
-    if (detailId != "") {
-      return (
+  return token ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
+      detailId ? (
         <Container fluid>
           <Row>
             {/* SIDEBAR */}
@@ -297,11 +315,13 @@ export const UpdateVMDetail = () => {
             </Col>
           </Row>
         </Container>
-      );
-    } else {
-      return <Navigate to="/rincian-perbaikan" />;
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+      ) : (
+        <Navigate to="/rincian-perbaikan" />
+      )
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

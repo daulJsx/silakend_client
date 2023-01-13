@@ -53,149 +53,142 @@ export const Users = () => {
   // Get access token
   const token = Cookies.get("token");
 
-  {
-    return token ? (
-      auth().user_level === 1 ? (
-        isError ? (
-          <div>{error.message}</div>
-        ) : isLoading ? (
-          <div className="loading-io">
-            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-              <div className="ldio-c0sicszbk9i">
-                <div></div>
-                <div></div>
-              </div>
+  return token ? (
+    auth().user_level === 1 ? (
+      isError ? (
+        <div>{error.message}</div>
+      ) : isLoading ? (
+        <div className="loading-io">
+          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+            <div className="ldio-c0sicszbk9i">
+              <div></div>
+              <div></div>
             </div>
           </div>
-        ) : (
-          <Container fluid>
-            <Row>
-              {/* SIDEBAR */}
-              <Col
-                xs="auto"
-                className="d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <Aside />
-              </Col>
-              {/* SIDEBAR */}
-
-              <Col>
-                {/* NAVBAR */}
-                <Row>
-                  <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<TbUsers />}
-                        parentLink={"/data-pengguna"}
-                      />
-                    ))}
-                  </Col>
-                </Row>
-                {/* NAVBAR */}
-
-                <div className="me-1 d-flex justify-content-end">
-                  <Row className="py-4 mb-2">
-                    <Col>
-                      <NavLink to={"/data-pengguna/tambah-pengguna"}>
-                        <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                          Tambah Pengguna Baru
-                          <HiPlusSm className="fs-3" />
-                        </Button>
-                      </NavLink>
-                    </Col>
-                  </Row>
-                </div>
-
-                <main className="min-vh-100 px-2">
-                  <Row>
-                    <Col>
-                      <Card>
-                        <Card.Body>
-                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            Data Pengguna
-                          </Card.Title>
-
-                          <Table bordered responsive hover>
-                            <thead>
-                              <tr>
-                                <th>No.</th>
-                                <th>NIP</th>
-                                <th>NAMA</th>
-                                <th>UNIT KERJA</th>
-                                <th align="center">AKSI</th>
-                                <th align="center">RINCIAN</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {usersData?.map((users, index) => (
-                                <tr>
-                                  <td key={users.user_id}>{index + 1}</td>
-                                  <td>{users.nip}</td>
-                                  <td>{users.name}</td>
-                                  <td>{users.job_unit.name}</td>
-                                  <td>
-                                    <div className="d-flex gap-1 justify-content-center">
-                                      <NavLink
-                                        to={"/data-pengguna/edit-pengguna"}
-                                      >
-                                        <Button
-                                          onClick={() => GetUserById(users)}
-                                          className="btn btn-edit"
-                                        >
-                                          <AiFillEdit className="fs-6" />
-                                        </Button>
-                                      </NavLink>
-                                      <Button
-                                        onClick={() =>
-                                          DeleteUser(users.user_id)
-                                        }
-                                        className="btn-danger btn-delete"
-                                      >
-                                        <FaTrashAlt className="fs-6" />
-                                      </Button>
-                                    </div>
-                                  </td>
-
-                                  <td align="center">
-                                    <>
-                                      <NavLink
-                                        to={"/data-pengguna/rincian-pengguna"}
-                                      >
-                                        <Button
-                                          className="btn-info btn-detail"
-                                          onClick={() => GetUserById(users)}
-                                        >
-                                          <FaInfo className="fs-6" />
-                                        </Button>
-                                      </NavLink>
-                                    </>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </Table>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                </main>
-                <Row>
-                  <Col>
-                    <Footer />
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </Container>
-        )
+        </div>
       ) : (
-        SecuringPage()
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
+              <Aside />
+            </Col>
+            {/* SIDEBAR */}
+
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<TbUsers />}
+                      parentLink={"/data-pengguna"}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+
+              <div className="me-1 d-flex justify-content-end">
+                <Row className="py-4 mb-2">
+                  <Col>
+                    <NavLink to={"/data-pengguna/tambah-pengguna"}>
+                      <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                        Tambah Pengguna Baru
+                        <HiPlusSm className="fs-3" />
+                      </Button>
+                    </NavLink>
+                  </Col>
+                </Row>
+              </div>
+
+              <main className="min-vh-100 px-2">
+                <Row>
+                  <Col>
+                    <Card>
+                      <Card.Body>
+                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                          Data Pengguna
+                        </Card.Title>
+
+                        <Table bordered responsive hover>
+                          <thead>
+                            <tr>
+                              <th>No.</th>
+                              <th>NIP</th>
+                              <th>NAMA</th>
+                              <th>UNIT KERJA</th>
+                              <th align="center">AKSI</th>
+                              <th align="center">RINCIAN</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {usersData?.map((users, index) => (
+                              <tr>
+                                <td key={users.user_id}>{index + 1}</td>
+                                <td>{users.nip}</td>
+                                <td>{users.name}</td>
+                                <td>{users.job_unit.name}</td>
+                                <td>
+                                  <div className="d-flex gap-1 justify-content-center">
+                                    <NavLink
+                                      to={"/data-pengguna/edit-pengguna"}
+                                    >
+                                      <Button
+                                        onClick={() => GetUserById(users)}
+                                        className="btn btn-edit"
+                                      >
+                                        <AiFillEdit className="fs-6" />
+                                      </Button>
+                                    </NavLink>
+                                    <Button
+                                      onClick={() => DeleteUser(users.user_id)}
+                                      className="btn-danger btn-delete"
+                                    >
+                                      <FaTrashAlt className="fs-6" />
+                                    </Button>
+                                  </div>
+                                </td>
+
+                                <td align="center">
+                                  <>
+                                    <NavLink
+                                      to={"/data-pengguna/rincian-pengguna"}
+                                    >
+                                      <Button
+                                        className="btn-info btn-detail"
+                                        onClick={() => GetUserById(users)}
+                                      >
+                                        <FaInfo className="fs-6" />
+                                      </Button>
+                                    </NavLink>
+                                  </>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </Table>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+              </main>
+              <Row>
+                <Col>
+                  <Footer />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       )
     ) : (
-      <Navigate to="/silakend-login" />
-    );
-  }
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

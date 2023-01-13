@@ -38,6 +38,7 @@ import { VehicleUsageDetail } from "./pages/Details/VehicleUsageDetail";
 import { Vehicles } from "./pages/Main/Vehicles";
 import { CreateVehicle } from "./pages/CreatePages/CreateVehicle";
 import { UpdateVehicle } from "./pages/UpdatePages/UpdateVehicle";
+import { VehicleDetail } from "./pages/Details/VehicleDetail";
 
 import { Drivers } from "./pages/Main/Drivers";
 
@@ -207,6 +208,10 @@ function App() {
             <Route
               path="/data-kendaraan/edit-kendaraan"
               element={<UpdateVehicle />}
+            />
+            <Route
+              path="/data-kendaraan/rincian-kendaraan"
+              element={<VehicleDetail />}
             />
             {/*----- END VEHICLE PAGES---- */}
 

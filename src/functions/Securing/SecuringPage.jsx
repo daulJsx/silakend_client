@@ -14,11 +14,10 @@ export const SecuringPage = () => {
     text: "Anda tidak memiliki akses ke halaman ini",
     icon: "warning",
   });
-  {
-    return auth().user_level === 5 ? (
-      <Navigate to="/user/data-pengajuan-peminjaman" />
-    ) : (
-      <Navigate to="/silakend-login" />
-    );
-  }
+
+  return auth().user_level === 5 ? (
+    <Navigate to="/user/data-pengajuan-peminjaman" />
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

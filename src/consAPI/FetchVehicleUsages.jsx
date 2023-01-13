@@ -8,7 +8,7 @@ import swal from "sweetalert";
 //  fetch function
 async function FetchVehicleUsages() {
   try {
-    const token = Cookies.get("_auth");
+    const token = Cookies.get("token");
 
     const config = {
       headers: {

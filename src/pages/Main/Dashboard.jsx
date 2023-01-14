@@ -3,6 +3,9 @@ import React from "react";
 // fetch data requirement
 // import { useQuery } from "react-query";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
@@ -26,248 +29,214 @@ import { Navigate } from "react-router-dom";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
-// React Notification
-import swal from "sweetalert";
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Custom Style
 import "../CustomStyles/dash.css";
 
 export const Dashboard = () => {
+  // get access token
+  const token = Cookies.get("token");
   const auth = useAuthUser();
 
-  const securingPage = () => {
-    swal({
-      title: "Maaf!",
-      text: "Anda tidak memiliki akses ke halaman ini",
-      icon: "warning",
-    });
-    {
-      return auth().user_level === 5 ? (
-        <Navigate to="/user/data-pengajuan-peminjaman" />
-      ) : (
-        <Navigate to="/silakend-login" />
-      );
-    }
-  };
+  return token ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
+      <Container fluid>
+        <Row>
+          <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
+            <Aside />
+          </Col>
+          <Col>
+            {/* NAVBAR */}
+            <Row>
+              <Col>
+                {["end"].map((placement, idx) => (
+                  <NavTop
+                    key={idx}
+                    placement={placement}
+                    name={placement}
+                    bc={<CgHomeAlt />}
+                  />
+                ))}
+              </Col>
+            </Row>
+            {/* NAVBAR */}
 
-  if (localStorage.getItem("token")) {
-    {
-      return auth().user_level === 1 ? (
-        <Container fluid>
-          <Row>
-            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
-              <Aside />
-            </Col>
-            <Col>
-              {/* NAVBAR */}
+            <main className="px-2 d-flex flex-column gap-4 mb-3 min-vh-100">
               <Row>
                 <Col>
-                  {["end"].map((placement, idx) => (
-                    <NavTop
-                      key={idx}
-                      placement={placement}
-                      name={placement}
-                      bc={<CgHomeAlt />}
-                    />
-                  ))}
+                  <Card>
+                    <Card.Body>
+                      <div className="fw-semibold color-primary fs-6 p-3 mb-1">
+                        Order 7 Hari Ke Depan
+                      </div>
+                      <Table bordered responsive>
+                        <thead>
+                          <tr>
+                            <th align="center">Waktu Pinjam</th>
+                            <th>Nama Peminjam</th>
+                            <th>Kendaraan</th>
+
+                            <th>Tujuan</th>
+                            <th>Pengemudi</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </Table>
+                    </Card.Body>
+                  </Card>
                 </Col>
               </Row>
-              {/* NAVBAR */}
 
-              <main className="px-2 d-flex flex-column gap-4 mb-3 min-vh-100">
-                <Row>
-                  <Col>
-                    <Card>
-                      <Card.Body className="p-0">
-                        <div className="fw-semibold color-primary fs-6 p-3 mb-1">
-                          Order 7 Hari Ke Depan
-                        </div>
-                        <div className="w-full">
-                          <Table borderless responsive>
-                            <thead>
-                              <tr>
-                                <th align="center">Tanggal Pinjam</th>
-                                <th>Nama Peminjam</th>
-                                <th>Kendaraan</th>
-                                <th>Dari</th>
-                                <th>Tujuan</th>
-                                <th>Pengemudi</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                              </tr>
-                              <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                              </tr>
-                            </tbody>
-                          </Table>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </Row>
-
-                <Row className="gap-3">
-                  <Col>
-                    <Card className="primary">
-                      <Card.Body>
-                        <Container>
-                          <Row>
-                            <Col md={6} className="py-3 mx-auto ">
-                              <div className="primary-icon fs-2">
-                                <HiClipboardCopy className="ms-1" />
-                              </div>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <div className="fw-semibold p-1 fs-3">20</div>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <div className="fw-light p-1 mb-3">
-                                Jumlah Order Kendaraan Tahun 2022
-                              </div>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                  <Col>
-                    <Card className="success">
-                      <Card.Body>
-                        <Container>
-                          <Row>
-                            <Col md={6} className="py-3 mx-auto fs-2">
-                              <div className="success-icon fs-2 ">
-                                <AiFillDashboard />
-                              </div>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <div className="fw-semibold p-1 fs-3">36</div>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <div className="fw-light p-1 mb-3">
-                                Jumlah Kilometer Tempuh Kendaraan Tahun 2022
-                              </div>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                  <Col>
-                    <Card className="warning">
-                      <Card.Body>
-                        <Container>
-                          <Row>
-                            <Col md={6} className="py-3 mx-auto ">
-                              <div className="warning-icon fs-2 ">
-                                <RiUserReceivedFill />
-                              </div>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <div className="fw-semibold p-1 fs-3">46</div>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <div className="fw-light p-1 mb-3">
-                                Jumlah Order Supir Tahun 2022
-                              </div>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                  <Col>
-                    <Card className="info">
-                      <Card.Body>
-                        <Container>
-                          <Row>
-                            <Col md={6} className="py-3 mx-auto ">
-                              <div className="info-icon fs-2 ">
-                                <FaUserClock />
-                              </div>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <div className="fw-semibold p-1 fs-3">56</div>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col>
-                              <div className="fw-light p-1">
-                                Jumlah Kilometer Tempuh Supir Tahun 2022
-                              </div>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col>
-                    <Card>
-                      <Card.Body>
-                        <div className="fw-semibold color-primary p-1 mb-3">
-                          Jumlah Order Per-Unit Kerja Tahun 2022
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col>
-                    <Card>
-                      <Card.Body>
-                        <div className="fw-semibold color-primary fs-6 p-1 mb-3">
-                          Jumlah Kilometer Order Per-Unit Kerja Tahun 2022
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </Row>
-              </main>
+              <Row className="gap-3">
+                <Col>
+                  <Card className="primary">
+                    <Card.Body>
+                      <Container>
+                        <Row>
+                          <Col md={6} className="py-3 mx-auto ">
+                            <div className="primary-icon fs-2">
+                              <HiClipboardCopy className="ms-1" />
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <div className="fw-semibold p-1 fs-3">20</div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <div className="fw-light p-1 mb-3">
+                              Jumlah Order Kendaraan Tahun 2022
+                            </div>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col>
+                  <Card className="success">
+                    <Card.Body>
+                      <Container>
+                        <Row>
+                          <Col md={6} className="py-3 mx-auto fs-2">
+                            <div className="success-icon fs-2 ">
+                              <AiFillDashboard />
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <div className="fw-semibold p-1 fs-3">36</div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <div className="fw-light p-1 mb-3">
+                              Jumlah Kilometer Tempuh Kendaraan Tahun 2022
+                            </div>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col>
+                  <Card className="warning">
+                    <Card.Body>
+                      <Container>
+                        <Row>
+                          <Col md={6} className="py-3 mx-auto ">
+                            <div className="warning-icon fs-2 ">
+                              <RiUserReceivedFill />
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <div className="fw-semibold p-1 fs-3">46</div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <div className="fw-light p-1 mb-3">
+                              Jumlah Order Supir Tahun 2022
+                            </div>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col>
+                  <Card className="info">
+                    <Card.Body>
+                      <Container>
+                        <Row>
+                          <Col md={6} className="py-3 mx-auto ">
+                            <div className="info-icon fs-2 ">
+                              <FaUserClock />
+                            </div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <div className="fw-semibold p-1 fs-3">56</div>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col>
+                            <div className="fw-light p-1">
+                              Jumlah Kilometer Tempuh Supir Tahun 2022
+                            </div>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
 
               <Row>
                 <Col>
-                  <Footer />
+                  <Card>
+                    <Card.Body>
+                      <div className="fw-semibold color-primary p-1 mb-3">
+                        Jumlah Order Per-Unit Kerja Tahun 2022
+                      </div>
+                    </Card.Body>
+                  </Card>
                 </Col>
               </Row>
-            </Col>
-          </Row>
-        </Container>
-      ) : (
-        securingPage()
-      );
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+
+              <Row>
+                <Col>
+                  <Card>
+                    <Card.Body>
+                      <div className="fw-semibold color-primary fs-6 p-1 mb-3">
+                        Jumlah Kilometer Order Per-Unit Kerja Tahun 2022
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
+            </main>
+
+            <Row>
+              <Col>
+                <Footer />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

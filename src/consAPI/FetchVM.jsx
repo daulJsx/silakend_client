@@ -1,23 +1,40 @@
 import axios from "axios";
 
-// this is fetch function
-async function FetchVM() {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  };
+// Cookies JS
+import Cookies from "js-cookie";
 
+import { redirect } from "react-router-dom";
+import swal from "sweetalert";
+
+// fetch function
+async function FetchVM() {
   try {
-    const response = await axios
-      .get("https://silakend-server.xyz/api/vehiclemaintenances", config)
-      .then((response) => {
-        const maintenances = response.data;
-        return maintenances;
+    const token = Cookies.get("token");
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.get(
+      "https://silakend-server.xyz/api/vehiclemaintenances",
+      config
+    );
+
+    if (!token) {
+      redirect("/silakend-login");
+      swal({
+        title: response.data.msg,
+        text: "Anda tidak memiliki akses, atau token sudah kadaluarsa, silahkan login kembali",
+        icon: "success",
       });
-    return response;
+    }
+
+    return response.data;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
 

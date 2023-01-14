@@ -1,24 +1,41 @@
 import axios from "axios";
+import Cookies from "js-cookie";
+import { redirect } from "react-router-dom";
+import swal from "sweetalert";
 
-// this is fetch function
 async function FetchUsageCat() {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  };
-
   try {
-    const response = await axios
-      .get("https://silakend-server.xyz/api/usagecategories", config)
-      .then((response) => {
-        const uC = response.data;
-        return uC;
-      });
+    const token = Cookies.get("token");
 
-    return response;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.get(
+      "https://silakend-server.xyz/api/usagecategories",
+      config
+    );
+
+    if (!token) {
+      redirect("/silakend-login");
+      swal({
+        title: response.data.msg,
+        text: "Anda tidak memiliki akses, atau token sudah kadaluarsa, silahkan login kembali",
+        icon: "success",
+      });
+    }
+
+    return response.data;
   } catch (error) {
-    console.log(error);
+    const { msg, message } = error.response.data;
+    if (message) {
+      console.log(message);
+    } else {
+      console.log(msg);
+    }
+    throw error;
   }
 }
 

@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
+
+// Cookies JS
+import Cookies from "js-cookie";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -10,8 +13,9 @@ import { Navigate, NavLink } from "react-router-dom";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
-// Delete Function
+// Functions
 import { DeleteJobUnit } from "../../functions/Delete/DeleteJobUnit";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Bootstrap components
 import { Container, Row, Col, Button } from "react-bootstrap";
@@ -47,11 +51,14 @@ export const JobUnits = () => {
     localStorage.setItem("jobUnitToMap", JSON.stringify(jobUnit));
   }
 
-  if (localStorage.getItem("token") && auth()) {
-    if (isError) {
-      return <div>{error.message}</div>;
-    } else if (isLoading) {
-      return (
+  // Get access token
+  const token = Cookies.get("token");
+
+  return token ? (
+    auth().user_level === 1 ? (
+      isError ? (
+        <div>{error.message}</div>
+      ) : isLoading ? (
         <div className="loading-io">
           <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
             <div className="ldio-c0sicszbk9i">
@@ -60,125 +67,111 @@ export const JobUnits = () => {
             </div>
           </div>
         </div>
-      );
-    } else {
-      return (
-        <>
-          <Container fluid>
-            <Row>
-              {/* SIDEBAR */}
-              <Col
-                xs="auto"
-                className="d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <Aside />
-              </Col>
-              {/* SIDEBAR */}
+      ) : (
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
+              <Aside />
+            </Col>
+            {/* SIDEBAR */}
 
-              <Col>
-                {/* NAVBAR */}
-                <Row>
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<RiCommunityLine />}
+                      parentLink={"/unit-kerja"}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+
+              <div className="me-1 d-flex justify-content-end">
+                <Row className="py-4 mb-2">
                   <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<RiCommunityLine />}
-                        parentLink={"/unit-kerja"}
-                      />
-                    ))}
+                    <NavLink to={"/unit-kerja/tambah-unit-kerja"}>
+                      <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                        Tambah Unit Kerja
+                        <HiPlusSm className="fs-3" />
+                      </Button>
+                    </NavLink>
                   </Col>
                 </Row>
-                {/* NAVBAR */}
+              </div>
 
-                <div className="me-1 d-flex justify-content-end">
-                  <Row className="py-4 mb-2">
-                    <Col>
-                      <NavLink to={"/unit-kerja/tambah-unit-kerja"}>
-                        <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                          Tambah Unit Kerja
-                          <HiPlusSm className="fs-3" />
-                        </Button>
-                      </NavLink>
-                    </Col>
-                  </Row>
-                </div>
+              <main className="min-vh-100 px-2">
+                <Row>
+                  <Col>
+                    <Card>
+                      <Card.Body>
+                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                          Data Unit Kerja
+                        </Card.Title>
 
-                <main className="min-vh-100 px-2">
-                  <Row>
-                    <Col>
-                      <Card>
-                        <Card.Body>
-                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            Data Unit Kerja
-                          </Card.Title>
-
-                          <Table bordered hover responsive>
-                            <thead>
-                              <tr>
-                                <th>No</th>
-                                <th>NAMA UNIT KERJA</th>
-                                <th>KODE</th>
-                                <th>AKSI</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {jobsData?.map((jobUnits, index) => (
-                                <tr>
-                                  <td
-                                    key={jobUnits.unit_id}
-                                    value={jobUnits.unit_id}
-                                  >
-                                    {index + 1}
-                                  </td>
-                                  <td>{jobUnits.name}</td>
-                                  <td>{jobUnits.unit_account}</td>
-                                  <td>
-                                    <div className="d-flex gap-1 justify-content-center">
-                                      <NavLink
-                                        to={"/unit-kerja/edit-unit-kerja"}
-                                      >
-                                        <Button
-                                          className="btn btn-edit"
-                                          onClick={() =>
-                                            GetJobUnitById(jobUnits)
-                                          }
-                                        >
-                                          <AiFillEdit className="fs-6" />
-                                        </Button>
-                                      </NavLink>
+                        <Table bordered hover responsive>
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>NAMA UNIT KERJA</th>
+                              <th>KODE</th>
+                              <th>AKSI</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {jobsData?.map((jobUnits, index) => (
+                              <tr key={jobUnits.unit_id}>
+                                <td>{index + 1}</td>
+                                <td>{jobUnits.name}</td>
+                                <td>{jobUnits.unit_account}</td>
+                                <td>
+                                  <div className="d-flex gap-1 justify-content-center">
+                                    <NavLink to={"/unit-kerja/edit-unit-kerja"}>
                                       <Button
-                                        className="btn-danger btn-delete"
-                                        onClick={() =>
-                                          DeleteJobUnit(jobUnits.unit_id)
-                                        }
+                                        className="btn btn-edit"
+                                        onClick={() => GetJobUnitById(jobUnits)}
                                       >
-                                        <FaTrashAlt className="fs-6" />
+                                        <AiFillEdit className="fs-6" />
                                       </Button>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </Table>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                </main>
-                <Row>
-                  <Col>
-                    <Footer />
+                                    </NavLink>
+                                    <Button
+                                      className="btn-danger btn-delete"
+                                      onClick={() =>
+                                        DeleteJobUnit(jobUnits.unit_id)
+                                      }
+                                    >
+                                      <FaTrashAlt className="fs-6" />
+                                    </Button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </Table>
+                      </Card.Body>
+                    </Card>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
-          </Container>
-        </>
-      );
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+              </main>
+              <Row>
+                <Col>
+                  <Footer />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      )
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

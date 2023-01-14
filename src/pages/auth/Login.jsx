@@ -4,9 +4,7 @@ import React, { useState } from "react";
 import { useSignIn } from "react-auth-kit";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
-// get current user auth data
-import { useAuthUser } from "react-auth-kit";
+import Cookies from "js-cookie";
 
 // React Notification
 import swal from "sweetalert";
@@ -31,56 +29,62 @@ import polmanLogo from "./../../assets/polman.webp";
 
 export const Login = (props) => {
   const signIn = useSignIn();
-  const [formData, setFormData] = useState({ nip: "", password: "" });
+  const [loginForm, setLoginForm] = useState({ nip: "", password: "" });
   const navigate = useNavigate();
-  const auth = useAuthUser();
-
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // perform login logic
-    if (formData.nip !== "" && formData.password !== "") {
-      await axios
-        .post("https://silakend-server.xyz/api/auth/login", formData)
-        .then((response) => {
-          if (
-            signIn({
-              token: response.data.content.access_token,
-              expiresIn: 1000,
-              tokenType: "Bearer",
-              authState: response.data.content,
-            })
-          ) {
-            localStorage.setItem("token", response.data.content.access_token);
-            localStorage.setItem("username", response.data.content.username);
-            localStorage.setItem("userLevel", response.data.content.user_level);
-            const userName = localStorage.getItem("username");
-            const greetToUser = swal({
-              title: response.data.msg,
-              text: "Anda sebagai " + userName,
-              icon: "success",
-            });
-            const userRole = response.data.content.user_level;
 
-            if (userRole === 1) {
-              navigate("/");
-              greetToUser();
-            } else {
-              navigate("/user/data-pengajuan-peminjaman");
-              greetToUser();
-            }
+    if (loginForm.nip !== "" && loginForm.password !== "") {
+      try {
+        const response = await axios.post(
+          "https://silakend-server.xyz/api/auth/login",
+          loginForm
+        );
+        const { access_token, user_name, user_level } = response.data.content;
+        if (
+          signIn({
+            token: access_token,
+            expiresIn: 1000,
+            tokenType: "Bearer",
+            authState: response.data.content,
+          })
+        ) {
+          // Store token in a http-only and secure cookie
+          Cookies.set("token", access_token, { secure: true });
+
+          //notify user
+          swal({
+            title: response.data.msg,
+            text: "Selamat Datang " + user_name,
+            icon: "success",
+            buttons: false,
+            timer: 2000,
+          });
+
+          // Perform RBAC logic
+          if (user_level === 1) {
+            navigate("/");
+          } else {
+            navigate("/user/data-pengajuan-peminjaman");
           }
-        })
-        .catch((error) => {
-          handleError(error);
-        });
+        }
+      } catch (error) {
+        console.log(error.response.data);
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error", { button: false, timer: 2000 });
+          } else {
+            swal("Ups!", msg, "error", { button: false, timer: 2000 });
+          }
+        } else {
+          swal("Ups!", "Something went wrong", "error", {
+            button: false,
+            timer: 2000,
+          });
+        }
+      }
     } else {
       swal({
         title: "Peringatan",
@@ -99,105 +103,96 @@ export const Login = (props) => {
   };
 
   return (
-    <>
-      <Container fluid className="main-container">
-        <Row className="main-row min-vh-100 ">
-          <Col className="logo-side2 d-none d-lg-block">
-            <div className="d-flex flex-column align-items-center justify-content-center">
-              <img
-                src={polmanLogo}
-                alt="Polman Logo"
-                className="--polman-logo"
-              />
-              <div className="text-center color-primary fs-4 fw-bold py-4 px-5">
-                Sistem Layanan Kendaraan <br /> Politeknik Manufaktur Bandung
-              </div>
+    <Container fluid className="main-container">
+      <Row className="main-row min-vh-100 ">
+        <Col className="logo-side2 d-none d-lg-block">
+          <div className="d-flex flex-column align-items-center justify-content-center">
+            <img src={polmanLogo} alt="Polman Logo" className="--polman-logo" />
+            <div className="text-center color-primary fs-4 fw-bold py-4 px-5">
+              Sistem Layanan Kendaraan <br /> Politeknik Manufaktur Bandung
             </div>
-          </Col>
-          <Col>
-            <Container className="mt-5">
-              <Row>
-                <Col className="p-5 mt-4">
-                  <div className="d-sm-block d-lg-none mb-3">
-                    <img
-                      src={polmanLogo}
-                      alt="Polman Logo"
-                      className="polman-logo"
+          </div>
+        </Col>
+        <Col>
+          <Container className="mt-5">
+            <Row>
+              <Col className="p-5 mt-4">
+                <div className="d-sm-block d-lg-none mb-3">
+                  <img
+                    src={polmanLogo}
+                    alt="Polman Logo"
+                    className="polman-logo"
+                  />
+                  <span className="color-primary ms-2 fw-bold fs-5 ">
+                    SiLaKend
+                  </span>
+                </div>
+                <div className="greeting fs-4 fw-semibold ">
+                  <span className="color-primary me-1">Hi,</span> Selamat Datang
+                </div>
+                <div className="credential fw-semibold ">
+                  Masukkan kredensial Anda untuk melanjutkan
+                </div>
+
+                <Form
+                  className="mt-3 d-flex flex-column gap-4 py-4 mt-4"
+                  onSubmit={onSubmit}
+                >
+                  <Form.Group className="form-floating">
+                    <input
+                      name="nip"
+                      required
+                      type={"number"}
+                      className="form-control form-login"
+                      id="floatingInput"
+                      placeholder="NIP"
+                      onChange={(e) =>
+                        setLoginForm({ ...loginForm, nip: e.target.value })
+                      }
                     />
-                    <span className="color-primary ms-2 fw-bold fs-5 ">
-                      SiLaKend
-                    </span>
-                  </div>
-                  <div className="greeting fs-4 fw-semibold ">
-                    <span className="color-primary me-1">Hi,</span> Selamat
-                    Datang
-                  </div>
-                  <div className="credential fw-semibold ">
-                    Masukkan kredensial Anda untuk melanjutkan
-                  </div>
-
-                  <Form
-                    className="mt-3 d-flex flex-column gap-4 py-4 mt-4"
-                    onSubmit={onSubmit}
+                    <label htmlFor="floatingInput">NIP</label>
+                  </Form.Group>
+                  <Form.Group
+                    className="mb-3 form-floating"
+                    controlId="formBasicPassword"
                   >
-                    <Form.Group className="form-floating">
-                      <input
-                        name="nip"
-                        required
-                        type={"number"}
-                        className="form-control form-login"
-                        id="floatingInput"
-                        placeholder="NIP"
-                        onChange={(e) =>
-                          setFormData({ ...formData, nip: e.target.value })
-                        }
-                      />
-                      <label htmlFor="floatingInput">NIP</label>
-                    </Form.Group>
-                    <Form.Group
-                      className="mb-3 form-floating"
-                      controlId="formBasicPassword"
-                    >
-                      <input
-                        type={!isVisible ? "password" : "text"}
-                        {...props}
-                        required
-                        name="password"
-                        className="form-control form-login"
-                        id="floatingPassword"
-                        placeholder="Password"
-                        onChange={(e) =>
-                          setFormData({ ...formData, password: e.target.value })
-                        }
-                      />
-                      <label htmlFor="floatingPassword">Password</label>
-                      <i className="eye-icon fs-5" onClick={toggle}>
-                        {isVisible ? <BsFillEyeFill /> : <BsFillEyeSlashFill />}
-                      </i>
-                    </Form.Group>
-                    <Button
-                      className="w-100 btn-submit p-3"
-                      variant="primary"
-                      type="submit"
-                      onClick={onSubmit}
-                    >
-                      <div className="btn-text fw-bold">Log In</div>
-                    </Button>
+                    <input
+                      type={!isVisible ? "password" : "text"}
+                      {...props}
+                      required
+                      name="password"
+                      className="form-control form-login"
+                      id="floatingPassword"
+                      placeholder="Password"
+                      onChange={(e) =>
+                        setLoginForm({
+                          ...loginForm,
+                          password: e.target.value,
+                        })
+                      }
+                    />
+                    <label htmlFor="floatingPassword">Password</label>
+                    <i className="eye-icon fs-5" onClick={toggle}>
+                      {isVisible ? <BsFillEyeFill /> : <BsFillEyeSlashFill />}
+                    </i>
+                  </Form.Group>
+                  <Button
+                    className="w-100 btn-submit p-3"
+                    variant="primary"
+                    type="submit"
+                    onClick={(e) => onSubmit(e)}
+                  >
+                    <div className="btn-text fw-bold">Log In</div>
+                  </Button>
 
-                    <div className="text-question fw-semibold">
-                      {/* Belum Punya Akun ?
-                    <a className="color-primary fw-semibold text-decoration-none ms-1">
-                      Register
-                    </a> */}
-                    </div>
-                  </Form>
-                </Col>
-              </Row>
-            </Container>
-            <Footer />
-          </Col>
-        </Row>
-      </Container>
-    </>
+                  <div className="text-question fw-semibold"></div>
+                </Form>
+              </Col>
+            </Row>
+          </Container>
+          <Footer />
+        </Col>
+      </Row>
+    </Container>
   );
 };

@@ -1,24 +1,39 @@
 import axios from "axios";
 
-// this is fetch function
-async function FetchVehicleUsages() {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  };
+// Cookies JS
+import Cookies from "js-cookie";
+import { redirect } from "react-router-dom";
+import swal from "sweetalert";
 
+//  fetch function
+async function FetchVehicleUsages() {
   try {
-    const response = await axios
-      .get("https://silakend-server.xyz/api/vehicleusages", config)
-      .then((response) => {
-        const orders = response.data;
-        console.log(orders);
-        return orders;
+    const token = Cookies.get("token");
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.get(
+      "https://silakend-server.xyz/api/vehicleusages",
+      config
+    );
+
+    if (!token) {
+      redirect("/silakend-login");
+      swal({
+        title: response.data.msg,
+        text: "Anda tidak memiliki akses, atau token sudah kadaluarsa, silahkan login kembali",
+        icon: "success",
       });
-    return response;
+    }
+
+    return response.data;
   } catch (error) {
-    console.log(error);
+    console.log(error.response.data);
+    throw error;
   }
 }
 

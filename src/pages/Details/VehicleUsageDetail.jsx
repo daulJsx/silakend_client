@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
+// Interceptors
 import axios from "axios";
+
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 import { Navigate } from "react-router-dom";
-import { NavLink } from "react-router-dom";
 
 // bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
-import Alert from "react-bootstrap/Alert";
 
 // Components
 import { Aside } from "./../../components/aside/Aside";
@@ -20,18 +25,18 @@ import { Footer } from "../../components/footer/Footer";
 
 // icons
 import { FaArrowLeft } from "react-icons/fa";
-import { AiFillEdit } from "react-icons/ai";
-import { FaTrashAlt } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa";
 
 // React Notification
 import swal from "sweetalert";
 
 export const VehicleUsageDetail = () => {
+  // Get access token
+  const token = Cookies.get("token");
+
   const auth = useAuthUser();
 
-  // Initialize newest maintenance id
-  const [usageId, setUsageId] = useState(localStorage.getItem("usage_id"));
+  // Initialize newest usage id
+  const usageId = localStorage.getItem("usage_id");
 
   // initialize the loading
   const [isLoading, setIsLoading] = useState(true);
@@ -42,37 +47,46 @@ export const VehicleUsageDetail = () => {
   useEffect(() => {
     const config = {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     };
     async function fetchCurrentUsage() {
-      await axios
-        .get(`https://silakend-server.xyz/api/vehicleusages/${usageId}`, config)
-        .then((response) => {
-          if (response.status === 200) {
-            setIsLoading(false);
-            const currentUsage = response.data;
-            if (currentUsage.length !== 0) {
-              setVUsageToMap(currentUsage);
+      try {
+        await axios
+          .get(
+            `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
+            config
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              setIsLoading(false);
+              const currentUsage = response.data;
+              if (currentUsage.length !== 0) {
+                setVUsageToMap(currentUsage);
+              }
             }
-          }
-        })
-        .catch((error) => {
-          if (error.response.data.message) {
-            swal("Ups!", error.response.data.message, "error");
+          });
+      } catch (error) {
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
           } else {
-            swal("Ups!", error.response.data.msg, "error");
+            swal("Ups!", msg, "error");
           }
-        });
+        } else {
+          swal("Ups!", "Something went wrong", "error");
+        }
+      }
     }
 
     fetchCurrentUsage();
   }, []);
 
-  if (localStorage.getItem("token") && auth()) {
-    if (localStorage.getItem("usage_id")) {
-      if (isLoading) {
-        return (
+  return token ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
+      usageId ? (
+        isLoading ? (
           <div className="loading-io">
             <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
               <div className="ldio-c0sicszbk9i">
@@ -81,9 +95,7 @@ export const VehicleUsageDetail = () => {
               </div>
             </div>
           </div>
-        );
-      } else {
-        return (
+        ) : (
           <Container fluid>
             <Row>
               {/* SIDEBAR */}
@@ -140,7 +152,14 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">PENGEMUDI</div>
-                                        {currentUsage.driver.name}
+                                        {currentUsage.driver ? (
+                                          currentUsage.driver.name
+                                        ) : (
+                                          <p>
+                                            Pengemudi belum ditugaskan untuk
+                                            pengajuan ini
+                                          </p>
+                                        )}
                                       </div>
                                     </ListGroup.Item>
 
@@ -150,7 +169,14 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">KENDARAAN</div>
-                                        {currentUsage.vehicle.name}
+                                        {currentUsage.vehicle ? (
+                                          currentUsage.vehicle.name
+                                        ) : (
+                                          <p>
+                                            Kendaraan belum ditugaskan untuk
+                                            pengajuan ini
+                                          </p>
+                                        )}
                                       </div>
                                     </ListGroup.Item>
 
@@ -184,7 +210,7 @@ export const VehicleUsageDetail = () => {
                                         <div className="fw-bold">
                                           JUMLAH PERSONIL
                                         </div>
-                                        {currentUsage.personel_count}
+                                        {currentUsage.personel_count} Orang
                                       </div>
                                     </ListGroup.Item>
 
@@ -219,8 +245,18 @@ export const VehicleUsageDetail = () => {
                                         <div className="fw-bold">
                                           WAKTU KEBERANGKATAN
                                         </div>
-                                        {currentUsage.depart_date} PUKUL{" "}
-                                        {currentUsage.depart_time}
+                                        {currentUsage.depart_date ||
+                                        currentUsage.depart_time ? (
+                                          <>
+                                            {currentUsage.depart_date} PUKUL{" "}
+                                            {currentUsage.depart_time}
+                                          </>
+                                        ) : (
+                                          <p>
+                                            Waktu keberangkatan belum dimasukkan
+                                            untuk pengajuan ini
+                                          </p>
+                                        )}
                                       </div>
                                     </ListGroup.Item>
 
@@ -232,8 +268,18 @@ export const VehicleUsageDetail = () => {
                                         <div className="fw-bold">
                                           WAKTU KEPULANGAN
                                         </div>
-                                        {currentUsage.arrive_date} PUKUL{" "}
-                                        {currentUsage.arrive_time}
+                                        {currentUsage.arrive_date ||
+                                        currentUsage.arrive_time ? (
+                                          <>
+                                            {currentUsage.arrive_date} PUKUL{" "}
+                                            {currentUsage.arrive_time}
+                                          </>
+                                        ) : (
+                                          <p>
+                                            Waktu kepulangan belum dimasukkan
+                                            untuk pengajuan ini
+                                          </p>
+                                        )}
                                       </div>
                                     </ListGroup.Item>
 
@@ -243,14 +289,33 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">ODOMETER</div>
-                                        <div>
-                                          Jumlah Kilometer Pergi :{" "}
-                                          {currentUsage.distance_count_out} KM
-                                        </div>
-                                        <div>
-                                          Jumlah Kilometer Pulang :{" "}
-                                          {currentUsage.distance_count_in} KM
-                                        </div>
+                                        {currentUsage.distance_count_out ||
+                                        currentUsage.distance_count_in ? (
+                                          <>
+                                            {" "}
+                                            <div>
+                                              Jumlah Kilometer Pergi :{" "}
+                                              {currentUsage.distance_count_out.toLocaleString(
+                                                "id-ID"
+                                              )}{" "}
+                                              KM
+                                            </div>
+                                            <div>
+                                              Jumlah Kilometer Pulang :{" "}
+                                              {currentUsage.distance_count_in
+                                                ? currentUsage.distance_count_in.toLocaleString(
+                                                    "id-ID"
+                                                  )
+                                                : null}{" "}
+                                              KM
+                                            </div>
+                                          </>
+                                        ) : (
+                                          <p>
+                                            Odometer belum dimasukkan dalam
+                                            pengajuan ini
+                                          </p>
+                                        )}
                                       </div>
                                     </ListGroup.Item>
 
@@ -260,8 +325,12 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">STATUS</div>
-                                        {currentUsage.status} (
-                                        {currentUsage.status_description})
+                                        {currentUsage.status}{" "}
+                                        {currentUsage.status_description ? (
+                                          <>
+                                            ({currentUsage.status_description})
+                                          </>
+                                        ) : null}
                                       </div>
                                     </ListGroup.Item>
                                   </>
@@ -281,12 +350,14 @@ export const VehicleUsageDetail = () => {
               </Col>
             </Row>
           </Container>
-        );
-      }
-    } else {
-      return <Navigate to="/order-peminjaman" />;
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+        )
+      ) : (
+        <Navigate to="/pengajuan-peminjaman" />
+      )
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
+
 // Fetch Requirements
 import axios from "axios";
 import { useQuery } from "react-query";
@@ -31,6 +36,9 @@ import swal from "sweetalert";
 import { useAuthUser } from "react-auth-kit";
 
 export const CreateVM = () => {
+  // Get access token
+  const token = Cookies.get("token");
+
   const auth = useAuthUser();
   const navigate = useNavigate();
 
@@ -43,20 +51,13 @@ export const CreateVM = () => {
     total_cost: "",
   });
 
-  // handle error function
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
-
-  // Store new vehicle data
-  const postNewVehicleM = async () => {
+  // Store new vehicle maintenance data
+  const postNewVehicleM = async (e) => {
+    e.preventDefault();
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
+
     if (
       vehicleMData.vehicle_id !== "" &&
       vehicleMData.date !== "" &&
@@ -78,19 +79,30 @@ export const CreateVM = () => {
                 title: "Berhasil!",
                 text: response.data.msg,
                 icon: "success",
-                button: "Tutup",
+                button: false,
+                timer: 2000,
               });
             }
           });
       } catch (error) {
-        handleError(error);
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
+          } else {
+            swal("Ups!", msg, "error");
+          }
+        } else {
+          swal("Ups!", "Something went wrong", "error");
+        }
       }
     } else {
       swal({
         title: "Peringatan",
         text: "Harap isi semua data!",
         icon: "warning",
-        button: "Tutup",
+        button: false,
+        timer: 2000,
       });
     }
   };
@@ -98,8 +110,8 @@ export const CreateVM = () => {
   // Fetching requirement data
   const { data: vehiclesData } = useQuery("vehicles", FetchVehicles);
 
-  if (localStorage.getItem("token") && auth()) {
-    return (
+  return token ? (
+    auth().user_level === 1 ? (
       <Container fluid>
         <Row>
           {/* SIDEBAR */}
@@ -132,114 +144,43 @@ export const CreateVM = () => {
               <Row>
                 <Col>
                   <Card>
-                    <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                      Silahkan Buat Kategori Perbaikan Kendaraan Disini
-                    </Card.Title>
-                    <Card.Body className="d-flex flex-column gap-3">
-                      <Form.Group>
-                        <Form.Label>Kendaraan</Form.Label>
-                        <Form.Select
-                          required
-                          style={{
-                            backgroundColor: "#F5F7FC",
-                            border: "none",
-                            padding: "17px",
-                          }}
-                          aria-label="Default select example"
-                          onChange={(e) =>
-                            setVehicleMData({
-                              ...vehicleMData,
-                              vehicle_id: e.target.value,
-                            })
-                          }
-                        >
-                          <option>-- Pilih Kendaraan --</option>
-                          {vehiclesData?.map((vehicles) => (
-                            <option
-                              key={vehicles.vehicle_id}
-                              value={vehicles.vehicle_id}
-                            >
-                              {vehicles.name}
-                            </option>
-                          ))}
-                        </Form.Select>
-                      </Form.Group>
-
-                      <Form.Group>
-                        <Form.Label>Tanggal Perbaikan</Form.Label>
-
-                        <Form.Control
-                          required
-                          className="input form-custom"
-                          style={{
-                            backgroundColor: "#F5F7FC",
-                            border: "none",
-                            padding: "15px",
-                          }}
-                          type="date"
-                          onChange={(e) =>
-                            setVehicleMData({
-                              ...vehicleMData,
-                              date: e.target.value,
-                            })
-                          }
-                        />
-                      </Form.Group>
-
-                      <Form.Group>
-                        <Form.Label>masukkan nama kategori</Form.Label>
-
-                        <Form.Control
-                          required
-                          className="input form-custom"
-                          style={{
-                            backgroundColor: "#F5F7FC",
-                            border: "none",
-                            padding: "15px",
-                          }}
-                          type="text"
-                          onChange={(e) =>
-                            setVehicleMData({
-                              ...vehicleMData,
-                              category: e.target.value,
-                            })
-                          }
-                        />
-                      </Form.Group>
-
-                      <Form.Group>
-                        <Form.Label>deskripsi kategori</Form.Label>
-                        <Form.Control
-                          required
-                          as="textarea"
-                          rows={3}
-                          className="input form-custom"
-                          style={{
-                            backgroundColor: "#F5F7FC",
-                            border: "none",
-                            padding: "15px",
-                          }}
-                          type="text"
-                          onChange={(e) =>
-                            setVehicleMData({
-                              ...vehicleMData,
-                              description: e.target.value,
-                            })
-                          }
-                        />
-                      </Form.Group>
-
-                      <Form.Group>
-                        <Form.Label>Jumlah Pengeluaran</Form.Label>
-                        <InputGroup>
-                          <InputGroup.Text
+                    <Form onSubmit={postNewVehicleM}>
+                      <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                        Silahkan Tambah Perbaikan Kendaraan Disini
+                      </Card.Title>
+                      <Card.Body className="d-flex flex-column gap-3">
+                        <Form.Group>
+                          <Form.Label>Kendaraan</Form.Label>
+                          <Form.Select
+                            required
                             style={{
+                              backgroundColor: "#F5F7FC",
                               border: "none",
+                              padding: "17px",
                             }}
-                            id="basic-addon2"
+                            aria-label="Default select example"
+                            onChange={(e) =>
+                              setVehicleMData({
+                                ...vehicleMData,
+                                vehicle_id: e.target.value,
+                              })
+                            }
                           >
-                            Rp.
-                          </InputGroup.Text>
+                            <option>-- Pilih Kendaraan --</option>
+                            {vehiclesData?.map((vehicles) => (
+                              <option
+                                key={vehicles.vehicle_id}
+                                value={vehicles.vehicle_id}
+                              >
+                                {vehicles.name}
+                              </option>
+                            ))}
+                          </Form.Select>
+                        </Form.Group>
+
+                        <Form.Group>
+                          <Form.Label>Tanggal Perbaikan</Form.Label>
+
                           <Form.Control
                             required
                             className="input form-custom"
@@ -248,26 +189,99 @@ export const CreateVM = () => {
                               border: "none",
                               padding: "15px",
                             }}
-                            type="number"
+                            type="date"
                             onChange={(e) =>
                               setVehicleMData({
                                 ...vehicleMData,
-                                total_cost: e.target.value,
+                                date: e.target.value,
                               })
                             }
                           />
-                        </InputGroup>
-                      </Form.Group>
-                    </Card.Body>
-                    <Card.Footer>
-                      <Button
-                        className="btn-post"
-                        type="submit"
-                        onClick={postNewVehicleM}
-                      >
-                        Tambah
-                      </Button>
-                    </Card.Footer>
+                        </Form.Group>
+
+                        <Form.Group>
+                          <Form.Label>masukkan nama perbaikan</Form.Label>
+
+                          <Form.Control
+                            required
+                            className="input form-custom"
+                            style={{
+                              backgroundColor: "#F5F7FC",
+                              border: "none",
+                              padding: "15px",
+                            }}
+                            type="text"
+                            onChange={(e) =>
+                              setVehicleMData({
+                                ...vehicleMData,
+                                category: e.target.value,
+                              })
+                            }
+                          />
+                        </Form.Group>
+
+                        <Form.Group>
+                          <Form.Label>deskripsi kategori</Form.Label>
+                          <Form.Control
+                            required
+                            as="textarea"
+                            rows={3}
+                            className="input form-custom"
+                            style={{
+                              backgroundColor: "#F5F7FC",
+                              border: "none",
+                              padding: "15px",
+                            }}
+                            type="text"
+                            onChange={(e) =>
+                              setVehicleMData({
+                                ...vehicleMData,
+                                description: e.target.value,
+                              })
+                            }
+                          />
+                        </Form.Group>
+
+                        <Form.Group>
+                          <Form.Label>Jumlah Pengeluaran</Form.Label>
+                          <InputGroup>
+                            <InputGroup.Text
+                              style={{
+                                border: "none",
+                              }}
+                              id="basic-addon2"
+                            >
+                              Rp.
+                            </InputGroup.Text>
+                            <Form.Control
+                              required
+                              className="input form-custom"
+                              style={{
+                                backgroundColor: "#F5F7FC",
+                                border: "none",
+                                padding: "15px",
+                              }}
+                              type="number"
+                              onChange={(e) =>
+                                setVehicleMData({
+                                  ...vehicleMData,
+                                  total_cost: e.target.value,
+                                })
+                              }
+                            />
+                          </InputGroup>
+                        </Form.Group>
+                      </Card.Body>
+                      <Card.Footer>
+                        <Button
+                          className="btn-post"
+                          type="submit"
+                          onClick={postNewVehicleM}
+                        >
+                          Tambah Perbaikan
+                        </Button>
+                      </Card.Footer>
+                    </Form>
                   </Card>
                 </Col>
               </Row>
@@ -280,8 +294,10 @@ export const CreateVM = () => {
           </Col>
         </Row>
       </Container>
-    );
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

@@ -1,24 +1,38 @@
 import axios from "axios";
+// Cookies JS
+import Cookies from "js-cookie";
+import { redirect } from "react-router-dom";
+import swal from "sweetalert";
 
 // this is fetch function
 async function FetchJobUnits() {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  };
-
   try {
-    const response = await axios
-      .get("https://silakend-server.xyz/api/jobunits", config)
-      .then((response) => {
-        const jobs = response.data;
-        return jobs;
-      });
+    const token = Cookies.get("token");
 
-    return response;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios.get(
+      "https://silakend-server.xyz/api/jobunits",
+      config
+    );
+
+    if (!token) {
+      redirect("/silakend-login");
+      swal({
+        title: response.data.msg,
+        text: "Anda tidak memiliki akses, atau token sudah kadaluarsa, silahkan login kembali",
+        icon: "success",
+      });
+    }
+
+    return response.data;
   } catch (error) {
     console.log(error);
+    throw error;
   }
 }
 

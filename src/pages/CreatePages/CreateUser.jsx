@@ -3,6 +3,9 @@ import React, { useState } from "react";
 // Axios
 import axios from "axios";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // Fetch Requirements
 import { useQuery } from "react-query";
 import FetchJobUnits from "../../consAPI/FetchJobUnits";
@@ -37,7 +40,12 @@ import "../CustomStyles/formCustom.css";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
+
 export const CreateUser = () => {
+  // Get access token
+  const token = Cookies.get("token");
+
   // Navigating
   const navigate = useNavigate();
 
@@ -59,40 +67,62 @@ export const CreateUser = () => {
   });
 
   // Store new user data
-  // handle error function
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
-
-  const postNewUser = async () => {
+  const postNewUser = async (e) => {
+    e.preventDefault();
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
 
-    try {
-      const response = await axios.post(
-        "https://silakend-server.xyz/api/users",
-        newUser,
-        config
-      );
-      const { msg } = response.data;
-      const { status } = response;
-      console.log(response);
-      status === 200
-        ? swal({
-            title: "Berhasil!",
-            text: msg,
-            icon: "success",
-            button: "Tutup",
-          })
-        : console.error(msg);
-      navigate("/data-pengguna");
-    } catch (error) {
-      handleError(error);
+    if (
+      newUser.nip !== "" &&
+      newUser.name !== "" &&
+      newUser.password !== "" &&
+      newUser.password_confirmation !== "" &&
+      newUser.address !== "" &&
+      newUser.email !== "" &&
+      newUser.phone !== "" &&
+      newUser.unit_id !== "" &&
+      newUser.role_id !== ""
+    ) {
+      try {
+        const response = await axios.post(
+          "https://silakend-server.xyz/api/users",
+          newUser,
+          config
+        );
+        const { msg } = response.data;
+        const { status } = response;
+
+        status === 200
+          ? swal({
+              title: "Berhasil!",
+              text: msg,
+              icon: "success",
+              button: false,
+              timer: 2000,
+            })
+          : console.error(msg);
+        navigate("/data-pengguna");
+      } catch (error) {
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
+          } else {
+            swal("Ups!", msg, "error");
+          }
+        } else {
+          swal("Ups!", "Something went wrong", "error");
+        }
+      }
+    } else {
+      swal({
+        title: "Peringatan",
+        text: "Harap isi semua data!",
+        icon: "warning",
+        button: false,
+        timer: 2000,
+      });
     }
   };
 
@@ -159,8 +189,9 @@ export const CreateUser = () => {
   };
 
   const auth = useAuthUser();
-  if (localStorage.getItem("token") && auth()) {
-    return (
+
+  return token ? (
+    auth().user_level === 1 ? (
       <Container fluid>
         <Row>
           {/* SIDEBAR */}
@@ -193,197 +224,199 @@ export const CreateUser = () => {
               <Row>
                 <Col>
                   <Card>
-                    <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                      Silahkan Tambahkan Pengguna Baru Disini
-                    </Card.Title>
-                    <Card.Body className="p-0">
-                      <Container>
-                        <Row>
-                          <Col>
-                            <Form.Group className="mb-3">
-                              <Form.Label>NIP</Form.Label>
-                              <Form.Control
-                                required
-                                className="input form-custom"
-                                type="number"
-                                onChange={(e) =>
-                                  setNewUser({
-                                    ...newUser,
-                                    nip: e.target.value,
-                                  })
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-                          <Col>
-                            <Form.Group className="mb-3">
-                              <Form.Label>Email</Form.Label>
-                              <Form.Control
-                                required
-                                className="input form-custom"
-                                type="email"
-                                onChange={(e) =>
-                                  setNewUser({
-                                    ...newUser,
-                                    email: e.target.value,
-                                  })
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <Form.Group className="mb-3">
-                              <Form.Label>Nama</Form.Label>
-                              <Form.Control
-                                required
-                                className="input form-custom"
-                                type="text"
-                                onChange={(e) =>
-                                  setNewUser({
-                                    ...newUser,
-                                    name: e.target.value,
-                                  })
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-                          <Col>
-                            <Form.Group className="mb-3">
-                              <Form.Label>Unit Kerja</Form.Label>
-                              <Form.Select
-                                required
-                                style={{
-                                  backgroundColor: "#F5F7FC",
-                                  border: "none",
-                                  padding: "17px",
-                                }}
-                                aria-label="Default select example"
-                                onChange={(e) =>
-                                  setNewUser({
-                                    ...newUser,
-                                    unit_id: e.target.value,
-                                  })
-                                }
-                              >
-                                <option>-- Pilih Unit Kerja --</option>
-                                {jobsData?.map((jobunits) => (
-                                  <option
-                                    key={jobunits.unit_id}
-                                    value={jobunits.unit_id}
-                                  >
-                                    {jobunits.name}
-                                  </option>
-                                ))}
-                              </Form.Select>
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <Form.Group className="mb-3">
-                              <Form.Label>Telepon</Form.Label>
-                              <Form.Control
-                                required
-                                className="input form-custom"
-                                type="number"
-                                onChange={(e) =>
-                                  setNewUser({
-                                    ...newUser,
-                                    phone: e.target.value,
-                                  })
-                                }
-                              />
-                            </Form.Group>
-                          </Col>
-                          <Col>
-                            <Form.Group className="mb-3">
-                              <Form.Label>Peran</Form.Label>
-                              <Form.Select
-                                required
-                                style={{
-                                  backgroundColor: "#F5F7FC",
-                                  border: "none",
-                                  padding: "17px",
-                                }}
-                                aria-label="Default select example"
-                                onChange={(e) =>
-                                  setNewUser({
-                                    ...newUser,
-                                    role_id: e.target.value,
-                                  })
-                                }
-                              >
-                                <option>-- Pilih Peran --</option>
-                                {rolesData?.map((roles) => {
-                                  return roles.level != 1 ? (
+                    <Form onSubmit={postNewUser}>
+                      <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                        Silahkan Tambahkan Pengguna Baru Disini
+                      </Card.Title>
+                      <Card.Body className="p-0">
+                        <Container>
+                          <Row>
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <Form.Label>NIP</Form.Label>
+                                <Form.Control
+                                  required
+                                  className="input form-custom"
+                                  type="number"
+                                  onChange={(e) =>
+                                    setNewUser({
+                                      ...newUser,
+                                      nip: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control
+                                  required
+                                  className="input form-custom"
+                                  type="email"
+                                  onChange={(e) =>
+                                    setNewUser({
+                                      ...newUser,
+                                      email: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Nama</Form.Label>
+                                <Form.Control
+                                  required
+                                  className="input form-custom"
+                                  type="text"
+                                  onChange={(e) =>
+                                    setNewUser({
+                                      ...newUser,
+                                      name: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Unit Kerja</Form.Label>
+                                <Form.Select
+                                  required
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "17px",
+                                  }}
+                                  aria-label="Default select example"
+                                  onChange={(e) =>
+                                    setNewUser({
+                                      ...newUser,
+                                      unit_id: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option>-- Pilih Unit Kerja --</option>
+                                  {jobsData?.map((jobunits) => (
                                     <option
-                                      key={roles.role_id}
-                                      value={roles.role_id}
+                                      key={jobunits.unit_id}
+                                      value={jobunits.unit_id}
                                     >
-                                      {roles.name} - Level {roles.level}
+                                      {jobunits.name}
                                     </option>
-                                  ) : null;
-                                })}
-                              </Form.Select>
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col>
-                            <Form.Group className="mb-3">
-                              <PasswordInputField
-                                isRequired={"required"}
-                                handlePasswordChange={handlePasswordChange}
-                                handleValidation={handleValidation}
-                                passwordValue={newUser.password}
-                                passwordError={passwordError}
-                              />
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                              <ConfirmPasswordInputField
-                                isRequired={"required"}
-                                handlePasswordChange={handlePasswordChange}
-                                handleValidation={handleValidation}
-                                confirmPasswordValue={
-                                  newUser.password_confirmation
-                                }
-                                confirmPasswordError={confirmPasswordError}
-                              />
-                            </Form.Group>
-                          </Col>
-                          <Col>
-                            <Form.Group className="mb-3">
-                              <Form.Label>Alamat</Form.Label>
-                              <Form.Control
-                                as="textarea"
-                                rows={3}
-                                style={{
-                                  backgroundColor: "#F5F7FC",
-                                  border: "none",
-                                }}
-                                onChange={(e) =>
-                                  setNewUser({
-                                    ...newUser,
-                                    address: e.target.value,
-                                  })
-                                }
-                              ></Form.Control>
-                            </Form.Group>
-                          </Col>
-                        </Row>
-                      </Container>
-                    </Card.Body>
-                    <Card.Footer>
-                      <Button
-                        className="btn-post"
-                        onClick={postNewUser}
-                        type="submit"
-                      >
-                        Tambah
-                      </Button>
-                    </Card.Footer>
+                                  ))}
+                                </Form.Select>
+                              </Form.Group>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Telepon</Form.Label>
+                                <Form.Control
+                                  required
+                                  className="input form-custom"
+                                  type="number"
+                                  onChange={(e) =>
+                                    setNewUser({
+                                      ...newUser,
+                                      phone: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Peran</Form.Label>
+                                <Form.Select
+                                  required
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "17px",
+                                  }}
+                                  aria-label="Default select example"
+                                  onChange={(e) =>
+                                    setNewUser({
+                                      ...newUser,
+                                      role_id: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option>-- Pilih Peran --</option>
+                                  {rolesData?.map((roles) => {
+                                    return roles.level !== 1 ? (
+                                      <option
+                                        key={roles.role_id}
+                                        value={roles.role_id}
+                                      >
+                                        {roles.name} - Level {roles.level}
+                                      </option>
+                                    ) : null;
+                                  })}
+                                </Form.Select>
+                              </Form.Group>
+                            </Col>
+                          </Row>
+                          <Row>
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <PasswordInputField
+                                  isRequired={"required"}
+                                  handlePasswordChange={handlePasswordChange}
+                                  handleValidation={handleValidation}
+                                  passwordValue={newUser.password}
+                                  passwordError={passwordError}
+                                />
+                              </Form.Group>
+                              <Form.Group className="mb-3">
+                                <ConfirmPasswordInputField
+                                  isRequired={"required"}
+                                  handlePasswordChange={handlePasswordChange}
+                                  handleValidation={handleValidation}
+                                  confirmPasswordValue={
+                                    newUser.password_confirmation
+                                  }
+                                  confirmPasswordError={confirmPasswordError}
+                                />
+                              </Form.Group>
+                            </Col>
+                            <Col>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Alamat</Form.Label>
+                                <Form.Control
+                                  as="textarea"
+                                  rows={3}
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                  }}
+                                  onChange={(e) =>
+                                    setNewUser({
+                                      ...newUser,
+                                      address: e.target.value,
+                                    })
+                                  }
+                                ></Form.Control>
+                              </Form.Group>
+                            </Col>
+                          </Row>
+                        </Container>
+                      </Card.Body>
+                      <Card.Footer>
+                        <Button
+                          className="btn-post"
+                          onClick={postNewUser}
+                          type="submit"
+                        >
+                          Tambahkan Pengguna
+                        </Button>
+                      </Card.Footer>
+                    </Form>
                   </Card>
                 </Col>
               </Row>
@@ -396,8 +429,10 @@ export const CreateUser = () => {
           </Col>
         </Row>
       </Container>
-    );
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

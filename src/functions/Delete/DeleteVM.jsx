@@ -3,10 +3,17 @@ import axios from "axios";
 // React Notification
 import swal from "sweetalert";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 export async function DeleteVM(VMId) {
+  // Get access token
+  const token = Cookies.get("token");
+
   const config = {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    headers: { Authorization: `Bearer ${token}` },
   };
+
   swal({
     title: "Yakin?",
     text: "Data perbaikan yang dihapus, tidak dapat kembali!",
@@ -15,28 +22,33 @@ export async function DeleteVM(VMId) {
     dangerMode: true,
   }).then(async (willDelete) => {
     if (willDelete) {
-      await axios
-        .delete(
-          `http://silakend-server.xyz/api/vehiclemaintenances/${VMId}`,
-          config
-        )
-        .then((response) => {
-          if (response.status === 200) {
+      try {
+        await axios
+          .delete(
+            `https://silakend-server.xyz/api/vehiclemaintenances/${VMId}`,
+            config
+          )
+          .then((response) => {
             swal({
               title: "Berhasil!",
               text: response.data.msg,
               icon: "success",
               button: "Tutup",
             });
+            window.location.reload();
+          });
+      } catch (error) {
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
           } else {
-            swal({
-              title: "Gagal!",
-              text: response.data.msg,
-              icon: "error",
-              button: "Tutup",
-            });
+            swal("Ups!", msg, "error");
           }
-        });
+        } else {
+          swal("Ups!", "Something went wrong", "error");
+        }
+      }
     } else {
       swal("Data perbaikan aman!");
     }

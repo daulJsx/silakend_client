@@ -1,49 +1,59 @@
 import axios from "axios";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
+import FetchUsageCat from "../../consAPI/FetchUsageCat";
+
 // React Notification
 import swal from "sweetalert";
 
 export async function DeleteUsageCat(usageCatId) {
-  const config = {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  };
+  // Get access token
+  const token = Cookies.get("token");
 
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
 
   swal({
     title: "Yakin?",
-    text: "Data kategori peminjaman yang dihapus, tidak dapat kembali!",
+    text: "Data peminjaman yang dihapus, tidak dapat kembali!",
     icon: "warning",
     buttons: true,
     dangerMode: true,
   }).then(async (willDelete) => {
     if (willDelete) {
-      await axios
-        .delete(
-          `https://silakend-server.xyz/api/usagecategories/${usageCatId}`,
-          config
-        )
-        .then((response) => {
-          if (response.status === 200) {
+      try {
+        await axios
+          .delete(
+            `https://silakend-server.xyz/api/usagecategories/${usageCatId}`,
+            config
+          )
+          .then((response) => {
             swal({
               title: "Berhasil!",
               text: response.data.msg,
               icon: "success",
               button: "Tutup",
             });
+            window.location.reload();
+            FetchUsageCat();
+          });
+      } catch (error) {
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
+          } else {
+            swal("Ups!", msg, "error");
           }
-        })
-        .catch((error) => {
-          handleError(error);
-        });
+        } else {
+          swal("Ups!", "Something went wrong", "error");
+        }
+      }
     } else {
-      swal("Data kategori peminjaman aman!");
+      swal("Data peminjaman aman!");
     }
   });
 }

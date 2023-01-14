@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
+
 // Fetch Requirements
 import axios from "axios";
 import FetchVCategories from "../../consAPI/FetchVCategories";
@@ -30,11 +36,14 @@ import swal from "sweetalert";
 import { useAuthUser } from "react-auth-kit";
 
 export const UpdateVehicle = () => {
+  // Get access token
+  const token = Cookies.get("token");
+
   const auth = useAuthUser();
   const navigate = useNavigate();
 
   //   Change vehicle dynamically
-  const [id, setId] = useState(null);
+  const [vehicleId, setVehicleId] = useState(null);
   const [name, setName] = useState("");
   const [year, setYear] = useState("");
   const [taxDate, setTaxDate] = useState("");
@@ -45,7 +54,7 @@ export const UpdateVehicle = () => {
 
   //   Load current vehicle data on this page
   useEffect(() => {
-    setId(localStorage.getItem("vehicleId"));
+    setVehicleId(localStorage.getItem("vehicleId"));
     setName(localStorage.getItem("vehicleName"));
     setYear(localStorage.getItem("year"));
     setTaxDate(localStorage.getItem("taxDate"));
@@ -70,10 +79,13 @@ export const UpdateVehicle = () => {
   };
 
   // Update current vehicle data
-  const handleUpdateV = async () => {
+  const handleUpdateV = async (e) => {
+    e.preventDefault();
+
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
+
     swal({
       title: "Yakin?",
       text: "Pastikan kembali perubahan data kendaraan",
@@ -82,71 +94,81 @@ export const UpdateVehicle = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        await axios
-          .put(`https://silakend-server.xyz/api/vehicles/${id}`, body, config)
-          .then((response) => {
-            navigate("/data-kendaraan");
-            if (response.status === 200) {
-              swal({
-                title: "Berhasil!",
-                text: response.data.msg,
-                icon: "success",
-                button: "Tutup",
-              });
-              const updateV = response.data;
-              return updateV;
-            }
-          })
-          .catch((error) => {
-            if (error.response.data.message) {
-              swal("Ups!", error.response.data.message, "error");
+        try {
+          await axios
+            .put(
+              `https://silakend-server.xyz/api/vehicles/${vehicleId}`,
+              body,
+              config
+            )
+            .then((response) => {
+              navigate("/data-kendaraan");
+              if (response.status === 200) {
+                swal({
+                  title: "Berhasil!",
+                  text: response.data.msg,
+                  icon: "success",
+                  button: "Tutup",
+                });
+                const updateV = response.data;
+                return updateV;
+              }
+            });
+        } catch (error) {
+          if (error.response) {
+            const { message, msg } = error.response.data;
+            if (message) {
+              swal("Ups!", message, "error");
             } else {
-              swal("Ups!", error.response.data.msg, "error");
+              swal("Ups!", msg, "error");
             }
-          });
+          } else {
+            swal("Ups!", "Something went wrong", "error");
+          }
+        }
       } else {
         swal("Data kendaraan aman!");
       }
     });
   };
 
-  if (localStorage.getItem("token") && auth()) {
-    if (localStorage.getItem("vehicleId")) {
-      return (
-        <>
-          <Container fluid>
-            <Row>
-              {/* SIDEBAR */}
-              <Col
-                xs="auto"
-                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <Aside />
-              </Col>
-              {/* SIDEBAR */}
+  return token ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
+      localStorage.getItem("vehicleId") ? (
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col
+              xs="auto"
+              className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+            >
+              <Aside />
+            </Col>
+            {/* SIDEBAR */}
 
-              <Col>
-                {/* NAVBAR */}
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<FaArrowLeft />}
+                      title={"Tambah Data Kendaraan Dinas"}
+                      parentLink={"/data-kendaraan"}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+
+              <main className="min-vh-100 px-2 mt-4">
                 <Row>
                   <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<FaArrowLeft />}
-                        title={"Tambah Data Kendaraan Dinas"}
-                        parentLink={"/data-kendaraan"}
-                      />
-                    ))}
-                  </Col>
-                </Row>
-                {/* NAVBAR */}
-
-                <main className="min-vh-100 px-2 mt-4">
-                  <Row>
-                    <Col>
-                      <Card>
+                    <Card>
+                      <Form onSubmit={handleUpdateV}>
                         <Card.Body>
                           <Card.Title className="fs-4 p-4 fw-semibold color-primary">
                             Silahkan Edit Data Kendaraan Dinas Disini
@@ -162,7 +184,7 @@ export const UpdateVehicle = () => {
                                     className="input form-custom"
                                     name="name"
                                     type="text"
-                                    id="name"
+                                    vehicleId="name"
                                     placeholder="Nama Kendaraan"
                                     onChange={(e) => setName(e.target.value)}
                                   />
@@ -181,7 +203,7 @@ export const UpdateVehicle = () => {
                                     className="input form-custom"
                                     name="license_number"
                                     type="text"
-                                    id="license_number"
+                                    vehicleId="license_number"
                                     placeholder="Nomor Polisi"
                                     onChange={(e) =>
                                       setLicenseNumber(e.target.value)
@@ -202,7 +224,7 @@ export const UpdateVehicle = () => {
                                     className="input form-custom"
                                     name="year"
                                     type="text"
-                                    id="year"
+                                    vehicleId="year"
                                     placeholder="Tahun Pembuatan"
                                     onChange={(e) => setYear(e.target.value)}
                                   />
@@ -217,11 +239,13 @@ export const UpdateVehicle = () => {
                                 <Form.Group className="mb-3 form-floating">
                                   <Form.Control
                                     required
-                                    value={distanceCount}
+                                    value={distanceCount.toLocaleString(
+                                      "id-ID"
+                                    )}
                                     className="input form-custom"
                                     name="distance_count"
                                     type="number"
-                                    id="distance_count"
+                                    vehicleId="distance_count"
                                     placeholder="Dalam satuan KM"
                                     onChange={(e) =>
                                       setDistanceCount(e.target.value)
@@ -266,7 +290,7 @@ export const UpdateVehicle = () => {
                                     value={taxDate}
                                     name="tax_date"
                                     type="date"
-                                    id="tax_date"
+                                    vehicleId="tax_date"
                                     placeholder="Nama Kendaraan"
                                     onChange={(e) => setTaxDate(e.target.value)}
                                   />
@@ -285,7 +309,7 @@ export const UpdateVehicle = () => {
                                     className="input form-custom"
                                     name="valid_date"
                                     type="date"
-                                    id="valid_date"
+                                    vehicleId="valid_date"
                                     placeholder="Nama Kendaraan"
                                     onChange={(e) =>
                                       setValidDate(e.target.value)
@@ -313,24 +337,26 @@ export const UpdateVehicle = () => {
                             </Button>
                           </Container>
                         </Card.Footer>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Footer />
-                    </Col>
-                  </Row>
-                </main>
-              </Col>
-            </Row>
-          </Container>
-        </>
-      );
-    } else {
-      return <Navigate to="/data-kendaraan" />;
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+                      </Form>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
+              </main>
+            </Col>
+          </Row>
+        </Container>
+      ) : (
+        <Navigate to="/data-kendaraan" />
+      )
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

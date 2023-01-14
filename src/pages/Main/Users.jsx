@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
-import axios from "axios";
 import FetchUsers from "../../consAPI/FetchUsers";
+
+// Cookies JS
+import Cookies from "js-cookie";
 
 // Navigating
 import { NavLink } from "react-router-dom";
@@ -30,6 +32,7 @@ import { Footer } from "../../components/footer/Footer";
 // Functions
 import { GetUserById } from "../../functions/GetUserById";
 import { DeleteUser } from "../../functions/Delete/DeleteUser";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Custom Styles
 import "../CustomStyles/users.css";
@@ -64,11 +67,14 @@ export const Users = () => {
     isError,
   } = useQuery(["users", 10], FetchUsers);
 
-  if (localStorage.getItem("token") && auth()) {
-    if (isError) {
-      return <div>{error.message}</div>;
-    } else if (isLoading) {
-      return (
+  // Get access token
+  const token = Cookies.get("token");
+
+  return token ? (
+    auth().user_level === 1 ? (
+      isError ? (
+        <div>{error.message}</div>
+      ) : isLoading ? (
         <div className="loading-io">
           <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
             <div className="ldio-c0sicszbk9i">
@@ -77,9 +83,7 @@ export const Users = () => {
             </div>
           </div>
         </div>
-      );
-    } else {
-      return (
+      ) : (
         <Container fluid>
           <Row>
             {/* SIDEBAR */}
@@ -140,8 +144,8 @@ export const Users = () => {
                           </thead>
                           <tbody>
                             {usersData?.map((users, index) => (
-                              <tr>
-                                <td key={users.user_id}>{index + 1}</td>
+                              <tr key={users.user_id}>
+                                <td>{index + 1}</td>
                                 <td>{users.nip}</td>
                                 <td>{users.name}</td>
                                 <td>{users.job_unit.name}</td>
@@ -197,9 +201,11 @@ export const Users = () => {
             </Col>
           </Row>
         </Container>
-      );
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+      )
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

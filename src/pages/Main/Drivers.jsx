@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
+
+// Cookies JS
+import Cookies from "js-cookie";
 
 // import axios from "axios";
 import FetchUsers from "../../consAPI/FetchUsers";
@@ -11,6 +14,9 @@ import { Navigate } from "react-router-dom";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
+
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -35,11 +41,14 @@ export const Drivers = () => {
     isError,
   } = useQuery(["users", 10], FetchUsers);
 
-  if (localStorage.getItem("token") && auth()) {
-    if (isError) {
-      return <div>{error.message}</div>;
-    } else if (isLoading) {
-      return (
+  // Get access token
+  const token = Cookies.get("token");
+
+  return token ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
+      isError ? (
+        <div>{error.message}</div>
+      ) : isLoading ? (
         <div className="loading-io">
           <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
             <div className="ldio-c0sicszbk9i">
@@ -48,85 +57,80 @@ export const Drivers = () => {
             </div>
           </div>
         </div>
-      );
-    } else {
-      return (
-        <>
-          <Container fluid>
-            <Row>
-              {/* SIDEBAR */}
-              <Col
-                xs="auto"
-                className="d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <Aside />
-              </Col>
-              {/* SIDEBAR */}
+      ) : (
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
+              <Aside />
+            </Col>
+            {/* SIDEBAR */}
 
-              <Col>
-                {/* NAVBAR */}
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<FaUserTie />}
+                      parentLink={"/data-pengemudi"}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+              <main className="min-vh-100 px-2 mt-4">
                 <Row>
                   <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<FaUserTie />}
-                        parentLink={"/data-pengemudi"}
-                      />
-                    ))}
-                  </Col>
-                </Row>
-                {/* NAVBAR */}
-                <main className="min-vh-100 px-2 mt-4">
-                  <Row>
-                    <Col>
-                      <Card>
-                        <Card.Body>
-                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            Data Pengemudi
-                          </Card.Title>
+                    <Card>
+                      <Card.Body>
+                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                          Data Pengemudi
+                        </Card.Title>
 
-                          <Table bordered hover responsive>
-                            <thead>
-                              <tr>
-                                <th>No</th>
-                                <th>NAMA PENGEMUDI</th>
-                                <th>PERAN</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {usersData?.map((users, index) =>
-                                users.role.map((userAsDriver) => {
-                                  return userAsDriver.name == "Driver" ? (
-                                    <tr>
-                                      <td key={users.user_id}>{index + 1}</td>
-                                      <td>{users.name}</td>
-                                      <td>{userAsDriver.name}</td>
-                                    </tr>
-                                  ) : null;
-                                })
-                              )}
-                            </tbody>
-                          </Table>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                </main>
-                <Row>
-                  <Col>
-                    <Footer />
+                        <Table bordered hover responsive>
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>NAMA PENGEMUDI</th>
+                              <th>PERAN</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {usersData?.map((users, index) =>
+                              users.role.map((userAsDriver) => {
+                                return userAsDriver.name == "Driver" ? (
+                                  <tr key={users.user_id}>
+                                    <td>{index + 1}</td>
+                                    <td>{users.name}</td>
+                                    <td>{userAsDriver.name}</td>
+                                  </tr>
+                                ) : null;
+                              })
+                            )}
+                          </tbody>
+                        </Table>
+                      </Card.Body>
+                    </Card>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
-          </Container>
-        </>
-      );
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+              </main>
+              <Row>
+                <Col>
+                  <Footer />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
+      )
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

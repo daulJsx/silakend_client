@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // Fetch Requirements
 import axios from "axios";
+
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Redirecting
 import { useNavigate } from "react-router-dom";
@@ -28,11 +34,14 @@ import swal from "sweetalert";
 import { useAuthUser } from "react-auth-kit";
 
 export const UpdateJobUnit = () => {
+  // Get access token
+  const token = Cookies.get("token");
+
   const auth = useAuthUser();
   const navigate = useNavigate();
 
   // Initialize newest maintenance id
-  const [unitId, setUnitId] = useState(localStorage.getItem("unitId"));
+  const unitId = localStorage.getItem("unitId");
 
   // Get the JSON object from local storage
   const jUnitString = localStorage.getItem("jobUnitToMap");
@@ -53,19 +62,12 @@ export const UpdateJobUnit = () => {
     unit_account: newJUCode === "" ? currentJUCode : newJUCode,
   };
 
-  // Handle validation
-  function handleError(error) {
-    if (error.response.data.message) {
-      swal("Ups!", error.response.data.message, "error");
-    } else {
-      swal("Ups!", error.response.data.msg, "error");
-    }
-  }
-
   // update function
-  const updateJobUnit = async () => {
+  const updateJobUnit = async (e) => {
+    e.preventDefault();
+
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
 
     swal({
@@ -76,68 +78,78 @@ export const UpdateJobUnit = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        await axios
-          .put(
-            `https://silakend-server.xyz/api/jobunits/${unitId}`,
-            updateJUnit,
-            config
-          )
-          .then((response) => {
-            navigate("/unit-kerja");
-            if (response.status === 200) {
-              swal({
-                title: "Berhasil!",
-                text: response.data.msg,
-                icon: "success",
-                button: "Tutup",
-              });
+        try {
+          await axios
+            .put(
+              `https://silakend-server.xyz/api/jobunits/${unitId}`,
+              updateJUnit,
+              config
+            )
+            .then((response) => {
+              if (response.status === 200) {
+                navigate("/unit-kerja");
+                swal({
+                  title: "Berhasil!",
+                  text: response.data.msg,
+                  icon: "success",
+                  button: "Tutup",
+                });
+              }
+            });
+        } catch (error) {
+          if (error.response) {
+            const { message, msg } = error.response.data;
+            if (message) {
+              swal("Ups!", message, "error");
+            } else {
+              swal("Ups!", msg, "error");
             }
-          })
-          .catch((error) => {
-            handleError(error);
-          });
+          } else {
+            swal("Ups!", "Something went wrong", "error");
+          }
+        }
       } else {
         swal("Data unit kerja aman!");
       }
     });
   };
 
-  if (localStorage.getItem("token") && auth()) {
-    if (localStorage.getItem("unitId")) {
-      return (
-        <>
-          <Container fluid>
-            <Row>
-              {/* SIDEBAR */}
-              <Col
-                xs="auto"
-                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <Aside />
-              </Col>
-              {/* SIDEBAR */}
+  return token ? (
+    auth().user_level === 1 ? (
+      unitId ? (
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col
+              xs="auto"
+              className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+            >
+              <Aside />
+            </Col>
+            {/* SIDEBAR */}
 
-              <Col>
-                {/* NAVBAR */}
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<FaArrowLeft />}
+                      title={"Edit Data Unit Kerja"}
+                      parentLink={"/unit-kerja"}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+              <main className="min-vh-10 px-2 mt-4">
                 <Row>
                   <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<FaArrowLeft />}
-                        title={"Edit Data Unit Kerja"}
-                        parentLink={"/unit-kerja"}
-                      />
-                    ))}
-                  </Col>
-                </Row>
-                {/* NAVBAR */}
-                <main className="min-vh-10 px-2 mt-4">
-                  <Row>
-                    <Col>
-                      <Card>
+                    <Card>
+                      <Form onSubmit={updateJobUnit}>
                         <Card.Body>
                           <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
                             Silahkan Ubah Data Unit Kerja Disini
@@ -196,24 +208,26 @@ export const UpdateJobUnit = () => {
                             Simpan
                           </Button>
                         </Card.Footer>
-                      </Card>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Footer />
-                    </Col>
-                  </Row>
-                </main>
-              </Col>
-            </Row>
-          </Container>
-        </>
-      );
-    } else {
-      return <Navigate to="/unit-kerja" />;
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+                      </Form>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
+              </main>
+            </Col>
+          </Row>
+        </Container>
+      ) : (
+        <Navigate to="/unit-kerja" />
+      )
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

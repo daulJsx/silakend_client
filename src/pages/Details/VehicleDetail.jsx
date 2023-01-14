@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
 // Interceptors
 import axios from "axios";
 
 // Functions
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
-
-// Cookies JS
-import Cookies from "js-cookie";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
@@ -29,41 +29,37 @@ import { FaArrowLeft } from "react-icons/fa";
 // React Notification
 import swal from "sweetalert";
 
-export const UserDetail = () => {
-  // get access token
+export const VehicleDetail = () => {
+  // Get access token
   const token = Cookies.get("token");
 
   const auth = useAuthUser();
 
   // Initialize newest maintenance id
-  const userId = localStorage.getItem("user_id");
+  const vehicleId = localStorage.getItem("vehicle_id");
 
   // initialize the loading
   const [isLoading, setIsLoading] = useState(true);
 
-  // catch the current user from fetchCurrentUser
-  const [userToMap, setUserToMap] = useState(null);
+  // catch the fetching vehicle details
+  const [vehicleDetail, setVehicleDetail] = useState(null);
 
   useEffect(() => {
-    const accessToken = Cookies.get("token");
-    const currentUserId = localStorage.getItem("user_id");
-
     const config = {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
     };
-
-    async function fetchCurrentUser() {
+    async function fetchData() {
       try {
         await axios
-          .get(`https://silakend-server.xyz/api/users/${currentUserId}`, config)
+          .get(`https://silakend-server.xyz/api/vehicles/${vehicleId}`, config)
           .then((response) => {
             if (response.status === 200) {
               setIsLoading(false);
-              const currentUser = response.data;
-              if (currentUser.length !== 0) {
-                setUserToMap(currentUser);
+              const vehicleDetail = response.data;
+              if (vehicleDetail.length !== 0) {
+                setVehicleDetail(vehicleDetail);
               }
             }
           });
@@ -81,12 +77,12 @@ export const UserDetail = () => {
       }
     }
 
-    fetchCurrentUser();
+    fetchData();
   }, []);
 
   return token ? (
-    auth().user_level === 1 ? (
-      userId ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
+      vehicleId ? (
         isLoading ? (
           <div className="loading-io">
             <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
@@ -118,69 +114,35 @@ export const UserDetail = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaArrowLeft />}
-                        title={"Rincian Pengguna"}
-                        parentLink={"/data-pengguna"}
+                        title={"Rincian Data Kendaraan"}
+                        parentLink={"/data-kendaraan"}
                       />
                     ))}
                   </Col>
                 </Row>
                 {/* NAVBAR */}
+
                 <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
                   <Row>
                     <Col>
                       <Card>
                         <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                          Rincian Pengguna
+                          Rincian Data Kendaraan
                         </Card.Title>
                         <Card.Body className="d-flex flex-column gap-3">
                           <ListGroup as="ol" numbered className="mb-2">
-                            {userToMap !== ""
-                              ? userToMap.map((currentUser) => (
+                            {vehicleDetail !== null
+                              ? vehicleDetail.map((currentVehicle) => (
                                   <>
                                     <ListGroup.Item
                                       as="li"
                                       className="d-flex justify-content-between align-items-start"
                                     >
                                       <div className="ms-2 me-auto">
-                                        <div className="fw-bold">NIP</div>
-                                        {currentUser.nip}
-                                      </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">NAMA</div>
-                                        {currentUser.name}
-                                      </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">ALAMAT</div>
-                                        {currentUser.address}
-                                      </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">TELEPON</div>
-                                        {currentUser.phone}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">EMAIL</div>
-                                        {currentUser.email}
+                                        <div className="fw-bold">
+                                          NAMA KENDARAAN
+                                        </div>
+                                        {currentVehicle.name}
                                       </div>
                                     </ListGroup.Item>
 
@@ -190,9 +152,9 @@ export const UserDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">
-                                          UNIT KERJA
+                                          TAHUN PEMBUATAN
                                         </div>
-                                        {currentUser.job_unit.name}
+                                        {currentVehicle.year}
                                       </div>
                                     </ListGroup.Item>
 
@@ -201,24 +163,63 @@ export const UserDetail = () => {
                                       className="d-flex justify-content-between align-items-start"
                                     >
                                       <div className="ms-2 me-auto">
-                                        <div className="fw-bold">PERAN</div>
-                                        {currentUser.role.length !== 0 ? (
-                                          currentUser.role.map(
-                                            (userRole, index) => {
-                                              return (
-                                                <ul className="rolesList">
-                                                  <li key={index}>
-                                                    {index + 1}. {userRole.name}
-                                                  </li>
-                                                </ul>
-                                              );
-                                            }
-                                          )
-                                        ) : (
-                                          <p>
-                                            Pengguna ini belum memiliki peran
-                                          </p>
-                                        )}
+                                        <div className="fw-bold">
+                                          NOMOR POLISI
+                                        </div>
+                                        {currentVehicle.license_number}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          WAKTU PAJAK
+                                        </div>
+                                        {currentVehicle.tax_date}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          WAKTU VALID
+                                        </div>
+                                        {currentVehicle.valid_date}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          JUMLAH KILOMETER TEMPUH
+                                        </div>
+                                        {currentVehicle.distance_count
+                                          ? currentVehicle.distance_count.toLocaleString(
+                                              "id-ID"
+                                            )
+                                          : null}{" "}
+                                        KM
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          KATEGORI KENDARAAN
+                                        </div>
+                                        {currentVehicle.category.name}
                                       </div>
                                     </ListGroup.Item>
                                   </>
@@ -230,6 +231,7 @@ export const UserDetail = () => {
                     </Col>
                   </Row>
                 </main>
+
                 <Row>
                   <Col>
                     <Footer />
@@ -240,7 +242,7 @@ export const UserDetail = () => {
           </Container>
         )
       ) : (
-        <Navigate to="/data-pengguna" />
+        <Navigate to="/data-kendaraan" />
       )
     ) : (
       SecuringPage()

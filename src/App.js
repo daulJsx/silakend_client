@@ -38,6 +38,7 @@ import { VehicleUsageDetail } from "./pages/Details/VehicleUsageDetail";
 import { Vehicles } from "./pages/Main/Vehicles";
 import { CreateVehicle } from "./pages/CreatePages/CreateVehicle";
 import { UpdateVehicle } from "./pages/UpdatePages/UpdateVehicle";
+import { VehicleDetail } from "./pages/Details/VehicleDetail";
 
 import { Drivers } from "./pages/Main/Drivers";
 
@@ -68,8 +69,9 @@ import { Login } from "./pages/auth/Login";
 
 // ---------------------- USER AS USER ---------------------------
 import { UserCreateVU } from "./pages/asUser/UserCreateVU";
-
+import { UserVUDetail } from "./pages/asUser/UserVUDetail";
 import { UserVUsages } from "./pages/asUser/UserVUsages";
+import { UserEditVU } from "./pages/asUser/UserEditVU";
 
 function App() {
   // window.Pusher = Pusher;
@@ -96,11 +98,11 @@ function App() {
 
             {/*----- START DASHBOARD PAGES---- */}
 
-            <Route path="/" element={<Dashboard />} />
+            <Route exact path="/" element={<Dashboard />} />
             {/*----- END DASHBOARD PAGES---- */}
 
             {/*----- START USER PAGES---- */}
-            <Route path="/data-pengguna" element={<Users />} />
+            <Route exact path="/data-pengguna" element={<Users />} />
             <Route
               path="/data-pengguna/tambah-pengguna"
               element={<CreateUser />}
@@ -116,7 +118,11 @@ function App() {
             {/*----- END USER PAGES---- */}
 
             {/*----- START ORDER CATEGORIES PAGES---- */}
-            <Route path="/kategori-peminjaman" element={<UsageCategories />} />
+            <Route
+              exact
+              path="/kategori-peminjaman"
+              element={<UsageCategories />}
+            />
             <Route
               path="/kategori-peminjaman/tambah-kategori-peminjaman"
               element={<CreateUsageCategories />}
@@ -128,7 +134,11 @@ function App() {
             {/*----- END ORDER CATEGORIES PAGES---- */}
 
             {/*----- START ORDER PAGES---- */}
-            <Route path="/pengajuan-peminjaman" element={<VehicleUsages />} />
+            <Route
+              exact
+              path="/pengajuan-peminjaman"
+              element={<VehicleUsages />}
+            />
             <Route
               path="/pengajuan-peminjaman/buat-pengajuan"
               element={<CreateOrder />}
@@ -145,6 +155,7 @@ function App() {
 
             {/*----- START VM PAGES---- */}
             <Route
+              exact
               path="/perbaikan-kendaraan"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
@@ -199,7 +210,7 @@ function App() {
             {/*----- END DRIVER PAGES---- */}
 
             {/*----- START VEHICLE PAGES---- */}
-            <Route path="/data-kendaraan" element={<Vehicles />} />
+            <Route exact path="/data-kendaraan" element={<Vehicles />} />
             <Route
               path="/data-kendaraan/tambah-kendaraan"
               element={<CreateVehicle />}
@@ -208,10 +219,18 @@ function App() {
               path="/data-kendaraan/edit-kendaraan"
               element={<UpdateVehicle />}
             />
+            <Route
+              path="/data-kendaraan/rincian-kendaraan"
+              element={<VehicleDetail />}
+            />
             {/*----- END VEHICLE PAGES---- */}
 
             {/*----- START VEHICLE PAGES---- */}
-            <Route path="/kategori-kendaraan" element={<VehicleCategories />} />
+            <Route
+              exact
+              path="/kategori-kendaraan"
+              element={<VehicleCategories />}
+            />
             <Route
               path="/kategori-kendaraan/tambah-kategori-kendaraan"
               element={<CreateVehicleCat />}
@@ -224,6 +243,7 @@ function App() {
 
             {/*----- START JOB UNITS PAGES---- */}
             <Route
+              exact
               path="/unit-kerja"
               element={
                 <RequireAuth loginPath={"/silakend-login"}>
@@ -250,7 +270,7 @@ function App() {
             {/*----- END JOB UNITS PAGES---- */}
 
             {/*----- START ROLE PAGES---- */}
-            <Route path="/data-peran" element={<Roles />} />
+            <Route exact path="/data-peran" element={<Roles />} />
             <Route path="/data-peran/tambah-peran" element={<CreateRole />} />
             <Route path="/data-peran/edit-peran" element={<UpdateRole />} />
             {/*----- END ROLE PAGES---- */}
@@ -263,12 +283,21 @@ function App() {
 
             {/*------------------------------- START USER AS USER PAGES-------------------------------- */}
             <Route
+              exact
               path="/user/data-pengajuan-peminjaman"
               element={<UserVUsages />}
             />
             <Route
               path="/user/pengajuan-peminjaman"
               element={<UserCreateVU />}
+            />
+            <Route
+              path="/user/data-pengajuan-peminjaman/rincian-peminjaman"
+              element={<UserVUDetail />}
+            />
+            <Route
+              path="/user/data-pengajuan-peminjaman/edit-pengajuan"
+              element={<UserEditVU />}
             />
             {/*------------------------------- END USER AS USER PAGES-------------------------------- */}
           </Routes>

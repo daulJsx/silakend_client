@@ -4,10 +4,10 @@ import { React, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 
 // Routing
-import { NavLink, redirect } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-// Axios
-import axios from "axios";
+// Logout function
+import { LogOut } from "../../functions/Auth/LogOut";
 
 // bootstrap
 import { Nav, Navbar } from "react-bootstrap";
@@ -21,7 +21,6 @@ import Card from "react-bootstrap/Card";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { HiOutlineLogout } from "react-icons/hi";
 
-import swal from "sweetalert";
 import "./navtop.css";
 
 import { Aside } from "./../aside/Aside";
@@ -33,40 +32,6 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
   const handleShow = () => setShow(true);
 
   const auth = useAuthUser();
-
-  const logout = async () => {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    };
-
-    const body = {
-      body: {},
-    };
-
-    const logoutPost = await axios
-      .post("https://silakend-server.xyz/api/auth/logout", body, config)
-      .then((response) => {
-        if (response.status === 200) {
-          swal({
-            title: "Berhasil Logout!",
-            text: response.data.msg,
-            icon: "success",
-          });
-          localStorage.clear();
-          redirect("/silakend-login");
-        }
-      })
-      .catch((error) => {
-        if (error.response.data.message) {
-          swal("Ups!", error.response.data.message, "error");
-        } else {
-          swal("Ups!", error.response.data.msg, "error");
-        }
-      });
-    return logoutPost;
-  };
 
   return (
     <div className="px-2">
@@ -91,7 +56,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                 Signed in as:
                 <Dropdown className="d-inline mx-2" align="end">
                   <Dropdown.Toggle id="dropdown-autoclose-true">
-                    {auth() ? localStorage.getItem("username") : null}
+                    {auth() ? auth().user_name : null}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu className="dropdown-body shadow-sm rounded">
@@ -100,9 +65,9 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                       exactcontent
                       to={"/silakend-login"}
                       className="logout dropdown-item d-flex ms-2"
-                      onClick={() => logout()}
+                      onClick={() => LogOut()}
                     >
-                      Logout
+                      Log Out
                       <HiOutlineLogout className="logout-icon ms-2 fs-4" />
                     </NavLink>
                     {/* Sign Out Button */}
@@ -132,7 +97,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                     Signed in as:
                     <Dropdown className="d-inline mx-2" align="end">
                       <Dropdown.Toggle id="dropdown-autoclose-true">
-                        {auth() ? localStorage.getItem("username") : null}
+                        {auth() ? auth().user_name : null}
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu className="dropdown-body shadow-sm rounded">
@@ -141,7 +106,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                           exact
                           to={"/silakend-login"}
                           className="logout dropdown-item d-flex ms-2"
-                          onClick={() => logout()}
+                          onClick={() => LogOut()}
                         >
                           Logout
                           <HiOutlineLogout className="logout-icon ms-2 fs-4" />

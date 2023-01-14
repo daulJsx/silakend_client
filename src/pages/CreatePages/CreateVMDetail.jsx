@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 
+// Cookies JS
+import Cookies from "js-cookie";
+
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
+
 // Fetch Requirements
 import axios from "axios";
-import { useQuery } from "react-query";
-import FetchVM from "../../consAPI/FetchVM";
 
 // Redirecting
 import { useNavigate } from "react-router-dom";
@@ -31,12 +34,16 @@ import swal from "sweetalert";
 import { useAuthUser } from "react-auth-kit";
 
 export const CreateVMDetail = () => {
+  // Get access token
+  const token = Cookies.get("token");
+
   const auth = useAuthUser();
   const navigate = useNavigate();
 
+  const maintenanceId = localStorage.getItem("maintenanceId");
   // Body for store
   const [newVehicleMDetail, setNewVehicleMDetail] = useState({
-    maintenance_id: localStorage.getItem("maintenanceId"),
+    maintenance_id: maintenanceId,
     item_name: "",
     item_qty: "",
     item_unit: "",
@@ -45,10 +52,13 @@ export const CreateVMDetail = () => {
   });
 
   // Store new vehicle data
-  const postNewVehicleMD = async () => {
+  const postNewVehicleMD = async (e) => {
+    e.preventDefault();
+
     const config = {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${token}` },
     };
+
     if (
       newVehicleMDetail.maintenance_id !== "" &&
       newVehicleMDetail.item_name !== "" &&
@@ -57,49 +67,46 @@ export const CreateVMDetail = () => {
       newVehicleMDetail.item_price !== "" &&
       newVehicleMDetail.price_total !== ""
     ) {
-      await axios
-        .post(
-          "https://silakend-server.xyz/api/vehiclemaintenancedetails",
-          newVehicleMDetail,
-          config
-        )
-        .then((response) => {
-          if (response.status === 200) {
-            navigate("/perbaikan-kendaraan/rincian-perbaikan-kendaraan/");
-            swal({
-              title: "Berhasil!",
-              text: response.data.msg,
-              icon: "success",
-              button: "Tutup",
-            });
-          }
-        })
-        .catch((error) => {
-          if (error.response.data.message) {
-            swal("Ups!", error.response.data.message, "error");
-          } else {
-            swal("Ups!", error.response.data.msg, "error");
-          }
-        });
+      try {
+        await axios
+          .post(
+            "https://silakend-server.xyz/api/vehiclemaintenancedetails",
+            newVehicleMDetail,
+            config
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              navigate("/perbaikan-kendaraan/rincian-perbaikan-kendaraan/");
+              swal({
+                title: "Berhasil!",
+                text: response.data.msg,
+                icon: "success",
+                button: false,
+                timer: 2000,
+              });
+            }
+          });
+      } catch (error) {
+        if (error.response.data.message) {
+          swal("Ups!", "Something wnt wrong", "error");
+        } else {
+          swal("Ups!", error.response.data.msg, "error");
+        }
+      }
     } else {
       swal({
         title: "Peringatan",
         text: "Harap isi semua data!",
         icon: "warning",
-        button: "Tutup",
+        button: false,
+        timer: 2000,
       });
     }
   };
 
-  // Fetching requirement data
-  const { data: vehicleMaintenances } = useQuery(
-    "vehicleMaintenances",
-    FetchVM
-  );
-
-  if (localStorage.getItem("token") && auth()) {
-    if (localStorage.getItem("maintenanceId")) {
-      return (
+  return token ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
+      maintenanceId ? (
         <Container fluid>
           <Row>
             {/* SIDEBAR */}
@@ -134,83 +141,35 @@ export const CreateVMDetail = () => {
                 <Row>
                   <Col>
                     <Card>
-                      <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                        Silahkan Buat Rincian Perbaikan Kendaraan Disini
-                      </Card.Title>
-                      <Card.Body className="d-flex flex-column gap-3">
-                        <Form.Group>
-                          <Form.Label>nama spare part</Form.Label>
+                      <Form onSubmit={postNewVehicleMD}>
+                        <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                          Silahkan Buat Rincian Perbaikan Kendaraan Disini
+                        </Card.Title>
+                        <Card.Body className="d-flex flex-column gap-3">
+                          <Form.Group>
+                            <Form.Label>nama spare part</Form.Label>
 
-                          <Form.Control
-                            required
-                            className="input form-custom"
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "15px",
-                            }}
-                            type="text"
-                            onChange={(e) =>
-                              setNewVehicleMDetail({
-                                ...newVehicleMDetail,
-                                item_name: e.target.value,
-                              })
-                            }
-                          />
-                        </Form.Group>
-
-                        <Form.Group>
-                          <Form.Label>jumlah spare part</Form.Label>
-
-                          <Form.Control
-                            required
-                            className="input form-custom"
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "15px",
-                            }}
-                            type="number"
-                            onChange={(e) =>
-                              setNewVehicleMDetail({
-                                ...newVehicleMDetail,
-                                item_qty: e.target.value,
-                              })
-                            }
-                          />
-                        </Form.Group>
-
-                        <Form.Group>
-                          <Form.Label>satuan spare part</Form.Label>
-                          <Form.Control
-                            required
-                            className="input form-custom"
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "15px",
-                            }}
-                            type="text"
-                            onChange={(e) =>
-                              setNewVehicleMDetail({
-                                ...newVehicleMDetail,
-                                item_unit: e.target.value,
-                              })
-                            }
-                          />
-                        </Form.Group>
-
-                        <Form.Group>
-                          <Form.Label>harga spare part</Form.Label>
-                          <InputGroup>
-                            <InputGroup.Text
+                            <Form.Control
+                              required
+                              className="input form-custom"
                               style={{
+                                backgroundColor: "#F5F7FC",
                                 border: "none",
+                                padding: "15px",
                               }}
-                              id="basic-addon2"
-                            >
-                              Rp.
-                            </InputGroup.Text>
+                              type="text"
+                              onChange={(e) =>
+                                setNewVehicleMDetail({
+                                  ...newVehicleMDetail,
+                                  item_name: e.target.value,
+                                })
+                              }
+                            />
+                          </Form.Group>
+
+                          <Form.Group>
+                            <Form.Label>jumlah spare part</Form.Label>
+
                             <Form.Control
                               required
                               className="input form-custom"
@@ -223,24 +182,14 @@ export const CreateVMDetail = () => {
                               onChange={(e) =>
                                 setNewVehicleMDetail({
                                   ...newVehicleMDetail,
-                                  item_price: e.target.value,
+                                  item_qty: e.target.value,
                                 })
                               }
                             />
-                          </InputGroup>
-                        </Form.Group>
+                          </Form.Group>
 
-                        <Form.Group>
-                          <Form.Label>harga total</Form.Label>
-                          <InputGroup>
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              Rp.
-                            </InputGroup.Text>
+                          <Form.Group>
+                            <Form.Label>satuan spare part</Form.Label>
                             <Form.Control
                               required
                               className="input form-custom"
@@ -249,26 +198,86 @@ export const CreateVMDetail = () => {
                                 border: "none",
                                 padding: "15px",
                               }}
-                              type="number"
+                              type="text"
                               onChange={(e) =>
                                 setNewVehicleMDetail({
                                   ...newVehicleMDetail,
-                                  price_total: e.target.value,
+                                  item_unit: e.target.value,
                                 })
                               }
                             />
-                          </InputGroup>
-                        </Form.Group>
-                      </Card.Body>
-                      <Card.Footer>
-                        <Button
-                          className="btn-post"
-                          type="submit"
-                          onClick={postNewVehicleMD}
-                        >
-                          Tambah
-                        </Button>
-                      </Card.Footer>
+                          </Form.Group>
+
+                          <Form.Group>
+                            <Form.Label>harga spare part</Form.Label>
+                            <InputGroup>
+                              <InputGroup.Text
+                                style={{
+                                  border: "none",
+                                }}
+                                id="basic-addon2"
+                              >
+                                Rp.
+                              </InputGroup.Text>
+                              <Form.Control
+                                required
+                                className="input form-custom"
+                                style={{
+                                  backgroundColor: "#F5F7FC",
+                                  border: "none",
+                                  padding: "15px",
+                                }}
+                                type="number"
+                                onChange={(e) =>
+                                  setNewVehicleMDetail({
+                                    ...newVehicleMDetail,
+                                    item_price: e.target.value,
+                                  })
+                                }
+                              />
+                            </InputGroup>
+                          </Form.Group>
+
+                          <Form.Group>
+                            <Form.Label>harga total</Form.Label>
+                            <InputGroup>
+                              <InputGroup.Text
+                                style={{
+                                  border: "none",
+                                }}
+                                id="basic-addon2"
+                              >
+                                Rp.
+                              </InputGroup.Text>
+                              <Form.Control
+                                required
+                                className="input form-custom"
+                                style={{
+                                  backgroundColor: "#F5F7FC",
+                                  border: "none",
+                                  padding: "15px",
+                                }}
+                                type="number"
+                                onChange={(e) =>
+                                  setNewVehicleMDetail({
+                                    ...newVehicleMDetail,
+                                    price_total: e.target.value,
+                                  })
+                                }
+                              />
+                            </InputGroup>
+                          </Form.Group>
+                        </Card.Body>
+                        <Card.Footer>
+                          <Button
+                            className="btn-post"
+                            type="submit"
+                            onClick={postNewVehicleMD}
+                          >
+                            Tambah Rincian
+                          </Button>
+                        </Card.Footer>
+                      </Form>
                     </Card>
                   </Col>
                 </Row>
@@ -281,11 +290,13 @@ export const CreateVMDetail = () => {
             </Col>
           </Row>
         </Container>
-      );
-    } else {
-      return <Navigate to="/perbaikan-kendaraan" />;
-    }
-  } else {
-    return <Navigate to="/silakend-login" />;
-  }
+      ) : (
+        <Navigate to="/perbaikan-kendaraan" />
+      )
+    ) : (
+      SecuringPage()
+    )
+  ) : (
+    <Navigate to="/silakend-login" />
+  );
 };

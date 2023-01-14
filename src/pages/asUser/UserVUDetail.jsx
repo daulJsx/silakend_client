@@ -16,7 +16,7 @@ import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 
 // Components
-import { Aside } from "./../../components/aside/Aside";
+import { AsideUser } from "../../components/aside/AsideUser";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
@@ -102,7 +102,7 @@ export const UserVUDetail = () => {
               xs="auto"
               className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
             >
-              <Aside />
+              <AsideUser />
             </Col>
             {/* SIDEBAR */}
 

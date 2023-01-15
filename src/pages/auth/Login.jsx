@@ -63,10 +63,12 @@ export const Login = (props) => {
           });
 
           // Perform RBAC logic
-          if (user_level === 1) {
-            navigate("/");
-          } else {
-            navigate("/user/data-pengajuan-peminjaman");
+          {
+            user_level === 1 || user_level === 2
+              ? navigate("/")
+              : user_level === 3
+              ? navigate("/verifier/data-pengajuan-peminjaman")
+              : navigate("/user/data-pengajuan-peminjaman");
           }
         }
       } catch (error) {

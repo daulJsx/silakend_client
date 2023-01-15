@@ -1,11 +1,19 @@
 import React from "react";
 
-// fetch data requirement
-import { useQuery } from "react-query";
-import FetchVehicleUsages from "../../consAPI/FetchVehicleUsages";
-
 // Cookies JS
 import Cookies from "js-cookie";
+
+// Fetching requirement
+import { useQuery } from "react-query";
+
+// Fetch data
+import FetchVehicleUsages from "../../consAPI/FetchVehicleUsages";
+
+// For checking user have done in authentication
+import { useAuthUser } from "react-auth-kit";
+
+// Functions
+import { GetOrderId } from "../../functions/GetOrderId";
 
 // Navigating
 import { NavLink } from "react-router-dom";
@@ -16,28 +24,27 @@ import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 import Badge from "react-bootstrap/Badge";
 
 // Components
-import { Aside } from "../../components/aside/Aside";
+import { AsideUser } from "../../components/aside/AsideUser";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
-// Icons
-import { HiOutlineClipboardCopy } from "react-icons/hi";
-import { HiPlusSm } from "react-icons/hi";
-import { AiFillEdit } from "react-icons/ai";
+// icons
+import { HiOutlineClipboardList } from "react-icons/hi";
 import { FaInfo } from "react-icons/fa";
+import { AiFillEdit } from "react-icons/ai";
 
-// Functions
-import { GetOrderId } from "../../functions/GetOrderId";
-import { SecuringPage } from "../../functions/Securing/SecuringPage";
+import toast, { Toaster } from "react-hot-toast";
 
-// For checking user have done in authentication
-import { useAuthUser } from "react-auth-kit";
+export const MainUser = () => {
+  // Get access token
+  const token = Cookies.get("token");
 
-export const VehicleUsages = () => {
   const auth = useAuthUser();
+
   // Fetching orders data
   const {
     data: ordersData,
@@ -46,65 +53,63 @@ export const VehicleUsages = () => {
     isError,
   } = useQuery("orders", FetchVehicleUsages);
 
-  // Get access token
-  const token = Cookies.get("token");
+  // Numbering row
+  let index = 0;
 
   return token ? (
-    auth().user_level === 1 || auth().user_level === 2 ? (
-      isError ? (
-        <div>{error.message}</div>
-      ) : isLoading ? (
-        <div className="loading-io">
-          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-            <div className="ldio-c0sicszbk9i">
-              <div></div>
-              <div></div>
-            </div>
+    isError ? (
+      <div>{error.message}</div>
+    ) : isLoading ? (
+      <div className="loading-io">
+        <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+          <div className="ldio-c0sicszbk9i">
+            <div></div>
+            <div></div>
           </div>
         </div>
-      ) : (
-        <Container fluid>
-          <Row>
-            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
-              <Aside />
-            </Col>
-            <Col>
-              {/* NAVBAR */}
+      </div>
+    ) : (
+      <Container fluid>
+        <Toaster position="bottom-right" reverseOrder={false} />
+        <Row>
+          <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
+            <AsideUser />
+          </Col>
+          <Col>
+            {/* NAVBAR */}
+            <Row>
+              <Col>
+                {["end"].map((placement, idx) => (
+                  <NavTop
+                    key={idx}
+                    placement={placement}
+                    name={placement}
+                    bc={<HiOutlineClipboardList />}
+                  />
+                ))}
+              </Col>
+            </Row>
+            {/* NAVBAR */}
+
+            <main className="px-2 min-vh-100 d-flex flex-column gap-3">
               <Row>
                 <Col>
-                  {["end"].map((placement, idx) => (
-                    <NavTop
-                      key={idx}
-                      placement={placement}
-                      name={placement}
-                      bc={<HiOutlineClipboardCopy />}
-                    />
-                  ))}
-                </Col>
-              </Row>
-              {/* NAVBAR */}
-
-              <div className="me-1 d-flex justify-content-end">
-                <Row className="py-4 mb-2">
-                  <Col>
-                    <NavLink to={"/pengajuan-peminjaman/buat-pengajuan"}>
-                      <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                        Buat pengajuan Baru
-                        <HiPlusSm className="fs-3" />
-                      </Button>
-                    </NavLink>
-                  </Col>
-                </Row>
-              </div>
-
-              <main className="px-2 min-vh-100">
-                <Row>
-                  <Col>
+                  {ordersData.length === 0 ? (
+                    <Alert variant="warning" style={{ border: "none" }}>
+                      <Alert.Heading>
+                        Anda Belum Mengajukan Peminjaman Kendaraan Dinas
+                      </Alert.Heading>
+                      <p>
+                        Silahkan buat pengajuan kendaraan pada halaman buat
+                        pengajuan.
+                      </p>
+                    </Alert>
+                  ) : (
                     <Card>
                       <Card.Body>
                         <Card.Title className="fs-4 p-4 fw-semibold color-primary">
                           <span className="me-2">
-                            Data Pengajuan Peminjaman Kendaraan Dinas
+                            Data Pengajuan Peminjaman Kendaraan Dinas Anda
                           </span>
                         </Card.Title>
 
@@ -112,23 +117,24 @@ export const VehicleUsages = () => {
                           <thead>
                             <tr>
                               <th>No</th>
-                              <th>PEMINJAM</th>
+                              <th>KATEGORI PEMINJAMAN</th>
+                              <th>DESTINASI</th>
                               <th>WAKTU PINJAM</th>
                               <th>STATUS</th>
-                              <th>AKSI</th>
+                              <th>EDIT</th>
                               <th>RINCIAN</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {ordersData?.map((orders, index) => {
+                            {ordersData.map((orders) => {
                               return orders.status !== "DONE" ? (
                                 <tr key={orders.usage_id}>
-                                  <td>{index + 1}</td>
-                                  <td>{orders.user.name}</td>
+                                  <td>{(index += 1)}</td>
+                                  <td>{orders.category.name}</td>
+                                  <td>{orders.destination}</td>
                                   <td>
                                     {orders.start_date} s/d {orders.end_date}
                                   </td>
-
                                   <td align="center">
                                     <Badge
                                       bg={
@@ -153,7 +159,7 @@ export const VehicleUsages = () => {
                                         : orders.status === "WAITING"
                                         ? "Verifying"
                                         : orders.status === "READY"
-                                        ? "Siap berangkat"
+                                        ? "Siap Berangkat"
                                         : orders.status === "APPROVED"
                                         ? "Disetujui"
                                         : orders.status === "PROGRESS"
@@ -166,12 +172,12 @@ export const VehicleUsages = () => {
                                     {orders.status !== "CANCELED" ? (
                                       <NavLink
                                         to={
-                                          "/pengajuan-peminjaman/edit-pengajuan"
+                                          "/user/data-pengajuan-peminjaman/edit-pengajuan"
                                         }
                                       >
                                         <Button
-                                          onClick={() => GetOrderId(orders)}
                                           className="btn btn-edit"
+                                          onClick={() => GetOrderId(orders)}
                                         >
                                           <AiFillEdit className="fs-6" />
                                         </Button>
@@ -180,20 +186,18 @@ export const VehicleUsages = () => {
                                   </td>
 
                                   <td align="center">
-                                    <>
-                                      <NavLink
-                                        to={
-                                          "/pengajuan-peminjaman/rincian-pengajuan"
-                                        }
+                                    <NavLink
+                                      to={
+                                        "/user/data-pengajuan-peminjaman/rincian-peminjaman"
+                                      }
+                                    >
+                                      <Button
+                                        onClick={() => GetOrderId(orders)}
+                                        className="btn btn-detail"
                                       >
-                                        <Button
-                                          onClick={() => GetOrderId(orders)}
-                                          className="btn btn-detail"
-                                        >
-                                          <FaInfo className="fs-6" />
-                                        </Button>
-                                      </NavLink>
-                                    </>
+                                        <FaInfo className="fs-6" />
+                                      </Button>
+                                    </NavLink>
                                   </td>
                                 </tr>
                               ) : null;
@@ -202,21 +206,19 @@ export const VehicleUsages = () => {
                         </Table>
                       </Card.Body>
                     </Card>
-                  </Col>
-                </Row>
-              </main>
-
-              <Row>
-                <Col>
-                  <Footer />
+                  )}
                 </Col>
               </Row>
-            </Col>
-          </Row>
-        </Container>
-      )
-    ) : (
-      SecuringPage()
+            </main>
+
+            <Row>
+              <Col>
+                <Footer />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
     )
   ) : (
     <Navigate to="/silakend-login" />

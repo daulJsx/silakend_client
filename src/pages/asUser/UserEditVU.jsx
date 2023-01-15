@@ -10,6 +10,9 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import FetchUsageCat from "../../consAPI/FetchUsageCat";
 
+// Functions
+import { CancelVU } from "../../functions/Update/CancelVU";
+
 // Navigating
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
@@ -28,9 +31,12 @@ import { Footer } from "../../components/footer/Footer";
 
 // React Notification
 import swal from "sweetalert";
+import toast, { Toaster } from "react-hot-toast";
 
 // icons
 import { FaArrowLeft } from "react-icons/fa";
+import { FiXCircle } from "react-icons/fi";
+import { FiCheckCircle } from "react-icons/fi";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
@@ -107,16 +113,10 @@ export const UserEditVU = () => {
               config
             )
             .then((response) => {
-              console.log(response.data);
               if (response.status === 200) {
+                const { msg } = response.data;
                 navigate("/user/data-pengajuan-peminjaman");
-                swal({
-                  title: "Berhasil!",
-                  text: response.data.msg,
-                  icon: "success",
-                  button: false,
-                  timer: 2000,
-                });
+                toast.success(msg);
               }
             });
         } catch (error) {
@@ -125,10 +125,10 @@ export const UserEditVU = () => {
             if (message) {
               swal("Ups!", message, "error");
             } else {
-              swal("Ups!", msg, "error");
+              toast.error(msg);
             }
           } else {
-            swal("Ups!", "Something went wrong", "error");
+            toast.error("Something went wrong");
           }
         }
       } else {
@@ -140,6 +140,7 @@ export const UserEditVU = () => {
   return token ? (
     usageId ? (
       <Container fluid>
+        <Toaster position="bottom-right" reverseOrder={false} />
         <Row>
           {/* SIDEBAR */}
           <Col
@@ -172,13 +173,14 @@ export const UserEditVU = () => {
                 <Col>
                   <Card>
                     <Form onSubmit={handleUpdateOrder}>
-                      <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                        Silahkan Edit Data Peminjaman Kendaraan Dinas Disini
-                      </Card.Title>
-                      <Card.Body>
-                        {orderToMap
-                          ? [orderToMap].map((orderToUpdate) => (
-                              <>
+                      {orderToMap
+                        ? [orderToMap].map((orderToUpdate) => (
+                            <>
+                              <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                                Silahkan Edit Data Peminjaman Kendaraan Dinas
+                                Disini
+                              </Card.Title>
+                              <Card.Body>
                                 <Form.Group className="mb-3">
                                   <Form.Label>Kategori Peminjaman</Form.Label>
                                   <Form.Select
@@ -316,19 +318,35 @@ export const UserEditVU = () => {
                                     />
                                   </InputGroup>
                                 </Form.Group>
-                              </>
-                            ))
-                          : null}
-                      </Card.Body>
-                      <Card.Footer>
-                        <Button
-                          className="btn-post"
-                          onClick={handleUpdateOrder}
-                          type="submit"
-                        >
-                          Simpan
-                        </Button>
-                      </Card.Footer>
+                              </Card.Body>
+                              <Card.Footer className="d-flex gap-2">
+                                <Button
+                                  className="btn-post"
+                                  onClick={handleUpdateOrder}
+                                  type="submit"
+                                >
+                                  <div className="d-flex gap-2">
+                                    Simpan
+                                    <FiCheckCircle className="fs-4" />
+                                  </div>
+                                </Button>
+                                {orderToUpdate.status === "WAITING" ? (
+                                  <Button
+                                    variant="danger"
+                                    onClick={() =>
+                                      CancelVU(orderToUpdate, auth().user_id)
+                                    }
+                                  >
+                                    <div className="d-flex gap-2">
+                                      Batalkan Pengajuan
+                                      <FiXCircle className="fs-4" />
+                                    </div>
+                                  </Button>
+                                ) : null}
+                              </Card.Footer>
+                            </>
+                          ))
+                        : null}
                     </Form>
                   </Card>
                 </Col>

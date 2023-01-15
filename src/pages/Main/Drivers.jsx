@@ -44,6 +44,8 @@ export const Drivers = () => {
   // Get access token
   const token = Cookies.get("token");
 
+  let index = 0;
+
   return token ? (
     auth().user_level === 1 || auth().user_level === 2 ? (
       isError ? (
@@ -100,11 +102,11 @@ export const Drivers = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {usersData?.map((users, index) =>
+                            {usersData?.map((users) =>
                               users.role.map((userAsDriver) => {
                                 return userAsDriver.name == "Driver" ? (
                                   <tr key={users.user_id}>
-                                    <td>{index + 1}</td>
+                                    <td>{(index += 1)}</td>
                                     <td>{users.name}</td>
                                     <td>{userAsDriver.name}</td>
                                   </tr>

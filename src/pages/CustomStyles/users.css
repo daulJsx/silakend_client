@@ -45,8 +45,7 @@ td {
 
 .btn-delete {
   background: linear-gradient(145deg, #fff7e8, #e6d0c3);
-
-  color: #7a0c2e;
+  color: rgb(200, 22, 22);
   border: none;
 }
 

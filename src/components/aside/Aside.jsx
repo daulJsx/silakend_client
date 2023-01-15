@@ -22,6 +22,7 @@ import { RiCarLine } from "react-icons/ri";
 import { CgUserList } from "react-icons/cg";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { RiCarWashingLine } from "react-icons/ri";
+import { FiArchive } from "react-icons/fi";
 
 // assets
 import polmanLogo from "./../../assets/polman.webp";
@@ -49,6 +50,12 @@ export const Aside = () => {
           icon={<HiOutlineClipboardCopy />}
           title="Pengajuan Peminjaman"
           link="/pengajuan-peminjaman"
+        />
+
+        <AsideMenu
+          icon={<FiArchive />}
+          title="Riwayat Pengajuan "
+          link="/riwayat-pengajuan"
         />
 
         <AsideMenu

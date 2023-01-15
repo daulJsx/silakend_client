@@ -22,6 +22,18 @@ button.btn-post {
   );
   box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
   border: none;
-
   padding: 0.7rem;
+  transition: var(--transition);
+}
+
+button.btn-post:hover {
+  background-image: linear-gradient(
+    to bottom,
+    #0962a272,
+    #0c6db76e,
+    #1778cd6a,
+    #2681e269,
+    #388bf863
+  );
+  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
 }

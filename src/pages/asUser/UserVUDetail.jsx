@@ -197,6 +197,58 @@ export const UserVUDetail = () => {
                                       {userOrder.end_date}
                                     </div>
                                   </ListGroup.Item>
+
+                                  {userOrder.vehicle && userOrder.driver ? (
+                                    <>
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            PENGEMUDI
+                                          </div>
+                                          {userOrder.driver.name}
+                                        </div>
+                                      </ListGroup.Item>
+
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            KENDARAAN
+                                          </div>
+                                          {userOrder.vehicle.name}
+                                        </div>
+                                      </ListGroup.Item>
+                                    </>
+                                  ) : null}
+
+                                  <ListGroup.Item
+                                    as="li"
+                                    className="d-flex justify-content-between align-items-start"
+                                  >
+                                    <div className="ms-2 me-auto">
+                                      <div className="fw-bold">STATUS</div>
+                                      {userOrder.status}
+                                    </div>
+                                  </ListGroup.Item>
+
+                                  <ListGroup.Item
+                                    as="li"
+                                    className="d-flex justify-content-between align-items-start"
+                                  >
+                                    <div className="ms-2 me-auto">
+                                      <div className="fw-bold">KETERANGAN</div>
+                                      {userOrder.status_description ? (
+                                        userOrder.status_description
+                                      ) : (
+                                        <p>Belum ada keterangan</p>
+                                      )}
+                                    </div>
+                                  </ListGroup.Item>
                                 </>
                               ))
                             : null}

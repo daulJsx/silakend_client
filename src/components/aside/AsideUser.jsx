@@ -14,6 +14,7 @@ import "./../../App.css";
 // Icons
 import { TbClipboardPlus } from "react-icons/tb";
 import { HiOutlineClipboardList } from "react-icons/hi";
+import { FiArchive } from "react-icons/fi";
 
 // assets
 import polmanLogo from "./../../assets/polman.webp";
@@ -39,6 +40,12 @@ export const AsideUser = () => {
           icon={<HiOutlineClipboardList />}
           title="Data Pengajuan Peminjaman"
           link="/user/data-pengajuan-peminjaman"
+        />
+
+        <AsideMenu
+          icon={<FiArchive />}
+          title="Riwayat Pengajuan "
+          link="/user/riwayat-pengajuan"
         />
       </div>
       {/* SIDEBAR MENU END */}

@@ -25,7 +25,7 @@ import { Footer } from "../../components/footer/Footer";
 
 // Icons
 import { HiOutlineClipboardCopy } from "react-icons/hi";
-import { HiPlusSm } from "react-icons/hi";
+import { FiArchive } from "react-icons/fi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaInfo } from "react-icons/fa";
 
@@ -36,7 +36,7 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
-export const VehicleUsages = () => {
+export const VehicleUsageHistory = () => {
   const auth = useAuthUser();
   // Fetching orders data
   const {
@@ -77,25 +77,12 @@ export const VehicleUsages = () => {
                       key={idx}
                       placement={placement}
                       name={placement}
-                      bc={<HiOutlineClipboardCopy />}
+                      bc={<FiArchive />}
                     />
                   ))}
                 </Col>
               </Row>
               {/* NAVBAR */}
-
-              <div className="me-1 d-flex justify-content-end">
-                <Row className="py-4 mb-2">
-                  <Col>
-                    <NavLink to={"/pengajuan-peminjaman/buat-pengajuan"}>
-                      <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                        Buat pengajuan Baru
-                        <HiPlusSm className="fs-3" />
-                      </Button>
-                    </NavLink>
-                  </Col>
-                </Row>
-              </div>
 
               <main className="px-2 min-vh-100">
                 <Row>
@@ -104,7 +91,7 @@ export const VehicleUsages = () => {
                       <Card.Body>
                         <Card.Title className="fs-4 p-4 fw-semibold color-primary">
                           <span className="me-2">
-                            Data Pengajuan Peminjaman Kendaraan Dinas
+                            Riwayat Pengajuan Peminjaman Kendaraan Dinas
                           </span>
                         </Card.Title>
 
@@ -115,13 +102,12 @@ export const VehicleUsages = () => {
                               <th>PEMINJAM</th>
                               <th>WAKTU PINJAM</th>
                               <th>STATUS</th>
-                              <th>AKSI</th>
                               <th>RINCIAN</th>
                             </tr>
                           </thead>
                           <tbody>
                             {ordersData?.map((orders, index) => {
-                              return orders.status !== "DONE" ? (
+                              return orders.status === "DONE" ? (
                                 <tr key={orders.usage_id}>
                                   <td>{index + 1}</td>
                                   <td>{orders.user.name}</td>
@@ -130,53 +116,9 @@ export const VehicleUsages = () => {
                                   </td>
 
                                   <td align="center">
-                                    <Badge
-                                      bg={
-                                        orders.status === "CANCELED" ||
-                                        orders.status === "REJECTED"
-                                          ? "danger"
-                                          : orders.status === "WAITING"
-                                          ? "warning"
-                                          : orders.status === "READY"
-                                          ? "primary"
-                                          : orders.status === "APPROVED"
-                                          ? "info"
-                                          : orders.status === "PROGRESS"
-                                          ? "secondary"
-                                          : "success"
-                                      }
-                                    >
-                                      {orders.status === "CANCELED"
-                                        ? "Batal"
-                                        : orders.status === "REJECTED"
-                                        ? "Ditolak"
-                                        : orders.status === "WAITING"
-                                        ? "Verifying"
-                                        : orders.status === "READY"
-                                        ? "Siap berangkat"
-                                        : orders.status === "APPROVED"
-                                        ? "Disetujui"
-                                        : orders.status === "PROGRESS"
-                                        ? "Berlangsung"
-                                        : "Selesai"}
+                                    <Badge bg={"success"}>
+                                      {orders.status}
                                     </Badge>
-                                  </td>
-
-                                  <td align="center">
-                                    {orders.status !== "CANCELED" ? (
-                                      <NavLink
-                                        to={
-                                          "/pengajuan-peminjaman/edit-pengajuan"
-                                        }
-                                      >
-                                        <Button
-                                          onClick={() => GetOrderId(orders)}
-                                          className="btn btn-edit"
-                                        >
-                                          <AiFillEdit className="fs-6" />
-                                        </Button>
-                                      </NavLink>
-                                    ) : null}
                                   </td>
 
                                   <td align="center">

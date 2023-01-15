@@ -8,6 +8,7 @@ import axios from "axios";
 
 // Functions
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
+import { DeleteVU } from "../../functions/Delete/DeleteVU";
 
 // Fetch Requirements
 import { useQuery } from "react-query";
@@ -39,6 +40,9 @@ import { FaArrowLeft } from "react-icons/fa";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
+
+// Icons
+import { FiXCircle } from "react-icons/fi";
 
 export const UpdateOrder = () => {
   // Get access token
@@ -237,13 +241,138 @@ export const UpdateOrder = () => {
                   <Col>
                     <Card>
                       <Form onSubmit={handleUpdateOrder}>
-                        <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                          Silahkan Edit Data Peminjaman Kendaraan Dinas Disini
-                        </Card.Title>
-                        <Card.Body>
-                          {orderToMap !== ""
-                            ? [orderToMap].map((orderToUpdate) => (
-                                <>
+                        {orderToMap !== ""
+                          ? [orderToMap].map((orderToUpdate) => (
+                              <>
+                                <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
+                                  Silahkan Edit Data Peminjaman Kendaraan Dinas
+                                  Disini
+                                </Card.Title>
+                                <Card.Body>
+                                  <Form.Group className="mb-3">
+                                    <Form.Label>Peminjam</Form.Label>
+                                    <Form.Select
+                                      disabled
+                                      required
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "17px",
+                                      }}
+                                      aria-label="Default select example"
+                                      onChange={(e) =>
+                                        setUserId(e.target.value)
+                                      }
+                                    >
+                                      <option value={orderToUpdate.user_id}>
+                                        {orderToUpdate.user.name}
+                                      </option>
+                                      {usersData?.map((users) =>
+                                        users.role.map((userAsSuper) => {
+                                          return userAsSuper.level != 1 ? (
+                                            <option
+                                              value={users.user_id}
+                                              key={users.user_id}
+                                            >
+                                              {users.name}
+                                            </option>
+                                          ) : null;
+                                        })
+                                      )}
+                                    </Form.Select>
+                                  </Form.Group>
+
+                                  <Form.Group className="mb-3">
+                                    <Form.Label>Kategori Peminjaman</Form.Label>
+                                    <Form.Select
+                                      disabled
+                                      required
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "17px",
+                                      }}
+                                      aria-label="Default select example"
+                                      onChange={(e) =>
+                                        setUcategoryId(e.target.value)
+                                      }
+                                    >
+                                      <option
+                                        value={orderToUpdate.ucategory_id}
+                                      >
+                                        {orderToUpdate.category.name}
+                                      </option>
+                                      {usageCatData?.map((usageCat) => (
+                                        <option
+                                          value={usageCat.ucategory_id}
+                                          key={usageCat.ucategory_id}
+                                        >
+                                          {usageCat.name}
+                                        </option>
+                                      ))}
+                                    </Form.Select>
+                                  </Form.Group>
+
+                                  <Form.Group
+                                    className="mb-3"
+                                    controlId="exampleForm.ControlTextarea1"
+                                  >
+                                    <Form.Label>
+                                      Deskripsi Peminjaman
+                                    </Form.Label>
+                                    <Form.Control
+                                      disabled
+                                      value={orderToUpdate.usage_description}
+                                      as="textarea"
+                                      rows={3}
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                      }}
+                                    />
+                                  </Form.Group>
+
+                                  <Form.Group>
+                                    <Form.Label>Jumlah Personil</Form.Label>
+                                    <InputGroup className="mb-3">
+                                      <Form.Control
+                                        disabled
+                                        value={orderToUpdate.personel_count}
+                                        style={{
+                                          backgroundColor: "#F5F7FC",
+                                          border: "none",
+                                          padding: "15px",
+                                        }}
+                                        type="number"
+                                        aria-describedby="basic-addon2"
+                                      />
+                                      <InputGroup.Text
+                                        style={{
+                                          border: "none",
+                                        }}
+                                        id="basic-addon2"
+                                      >
+                                        Orang
+                                      </InputGroup.Text>
+                                    </InputGroup>
+                                  </Form.Group>
+
+                                  <Form.Group className="mb-3">
+                                    <Form.Label>Destinasi</Form.Label>
+                                    <Form.Control
+                                      disabled
+                                      value={orderToUpdate.destination}
+                                      required
+                                      className="input form-custom"
+                                      style={{
+                                        backgroundColor: "#F5F7FC",
+                                        border: "none",
+                                        padding: "15px",
+                                      }}
+                                      type="text"
+                                    />
+                                  </Form.Group>
+
                                   <Form.Group className="mb-3">
                                     <Form.Label>Kendaraan</Form.Label>
                                     <Form.Select
@@ -311,138 +440,6 @@ export const UpdateOrder = () => {
                                         })
                                       )}
                                     </Form.Select>
-                                  </Form.Group>
-
-                                  <Form.Group className="mb-3">
-                                    <Form.Label>Peminjam</Form.Label>
-                                    <Form.Select
-                                      required
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "17px",
-                                      }}
-                                      aria-label="Default select example"
-                                      onChange={(e) =>
-                                        setUserId(e.target.value)
-                                      }
-                                    >
-                                      <option value={orderToUpdate.user_id}>
-                                        {orderToUpdate.user.name}
-                                      </option>
-                                      {usersData?.map((users) =>
-                                        users.role.map((userAsSuper) => {
-                                          return userAsSuper.level != 1 ? (
-                                            <option
-                                              value={users.user_id}
-                                              key={users.user_id}
-                                            >
-                                              {users.name}
-                                            </option>
-                                          ) : null;
-                                        })
-                                      )}
-                                    </Form.Select>
-                                  </Form.Group>
-
-                                  <Form.Group className="mb-3">
-                                    <Form.Label>Kategori Peminjaman</Form.Label>
-                                    <Form.Select
-                                      required
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "17px",
-                                      }}
-                                      aria-label="Default select example"
-                                      onChange={(e) =>
-                                        setUcategoryId(e.target.value)
-                                      }
-                                    >
-                                      <option
-                                        value={orderToUpdate.ucategory_id}
-                                      >
-                                        {orderToUpdate.category.name}
-                                      </option>
-                                      {usageCatData?.map((usageCat) => (
-                                        <option
-                                          value={usageCat.ucategory_id}
-                                          key={usageCat.ucategory_id}
-                                        >
-                                          {usageCat.name}
-                                        </option>
-                                      ))}
-                                    </Form.Select>
-                                  </Form.Group>
-
-                                  <Form.Group
-                                    className="mb-3"
-                                    controlId="exampleForm.ControlTextarea1"
-                                  >
-                                    <Form.Label>
-                                      Deskripsi Peminjaman
-                                    </Form.Label>
-                                    <Form.Control
-                                      placeholder={
-                                        orderToUpdate.usage_description
-                                      }
-                                      as="textarea"
-                                      rows={3}
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                      }}
-                                      onChange={(e) =>
-                                        setUsageDescription(e.target.value)
-                                      }
-                                    />
-                                  </Form.Group>
-
-                                  <Form.Group>
-                                    <Form.Label>Jumlah Personil</Form.Label>
-                                    <InputGroup className="mb-3">
-                                      <Form.Control
-                                        onChange={(e) =>
-                                          setPersonelCount(e.target.value)
-                                        }
-                                        placeholder={
-                                          orderToUpdate.personel_count
-                                        }
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="number"
-                                        aria-describedby="basic-addon2"
-                                      />
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Orang
-                                      </InputGroup.Text>
-                                    </InputGroup>
-                                  </Form.Group>
-
-                                  <Form.Group className="mb-3">
-                                    <Form.Label>Destinasi</Form.Label>
-                                    <Form.Control
-                                      onChange={(e) =>
-                                        setDestination(e.target.value)
-                                      }
-                                      placeholder={orderToUpdate.destination}
-                                      required
-                                      className="input form-custom"
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "15px",
-                                      }}
-                                      type="text"
-                                    />
                                   </Form.Group>
 
                                   <Form.Group className="py-1">
@@ -727,19 +724,19 @@ export const UpdateOrder = () => {
                                       />
                                     </InputGroup>
                                   </Form.Group>
-                                </>
-                              ))
-                            : null}
-                        </Card.Body>
-                        <Card.Footer>
-                          <Button
-                            className="btn-post"
-                            onClick={handleUpdateOrder}
-                            type="submit"
-                          >
-                            Simpan
-                          </Button>
-                        </Card.Footer>
+                                </Card.Body>
+                                <Card.Footer>
+                                  <Button
+                                    className="btn-post"
+                                    onClick={handleUpdateOrder}
+                                    type="submit"
+                                  >
+                                    Simpan
+                                  </Button>
+                                </Card.Footer>
+                              </>
+                            ))
+                          : null}
                       </Form>
                     </Card>
                   </Col>

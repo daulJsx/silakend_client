@@ -38,6 +38,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 // icons
 import { TbClipboardPlus } from "react-icons/tb";
+import { FiSend } from "react-icons/fi";
 
 export const UserCreateVU = () => {
   // Get access token
@@ -308,7 +309,10 @@ export const UserCreateVU = () => {
                         onClick={postNewOrder}
                         type="submit"
                       >
-                        Ajukan
+                        <div className="d-flex gap-2">
+                          Ajukan
+                          <FiSend className="fs-5" />
+                        </div>
                       </Button>
                     </Card.Footer>
                   </Form>

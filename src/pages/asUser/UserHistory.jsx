@@ -14,7 +14,6 @@ import { useAuthUser } from "react-auth-kit";
 
 // Functions
 import { GetOrderId } from "../../functions/GetOrderId";
-import { UpdateVUAsUser } from "../../functions/Update/UpdateVUAsUser";
 
 // Navigating
 import { NavLink } from "react-router-dom";
@@ -26,6 +25,7 @@ import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
+import Badge from "react-bootstrap/Badge";
 
 // Components
 import { AsideUser } from "../../components/aside/AsideUser";
@@ -39,7 +39,7 @@ import { AiFillEdit } from "react-icons/ai";
 
 import toast, { Toaster } from "react-hot-toast";
 
-export const UserVUsages = () => {
+export const UserHistory = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -52,6 +52,14 @@ export const UserVUsages = () => {
     isLoading,
     isError,
   } = useQuery("orders", FetchVehicleUsages);
+
+  // Numbering row
+  let index = 0;
+
+  // Condition if there are orders with status are DONE
+  const orderHistory = ordersData?.map((orders) => {
+    return orders.status === "DONE";
+  });
 
   return token ? (
     isError ? (
@@ -88,25 +96,19 @@ export const UserVUsages = () => {
             </Row>
             {/* NAVBAR */}
 
-            <main className="px-2 min-vh-100">
+            <main className="px-2 min-vh-100 d-flex flex-column gap-3">
               <Row>
                 <Col>
-                  {ordersData.length === 0 ? (
-                    <Alert variant="warning" style={{ border: "none" }}>
-                      <Alert.Heading>
-                        Anda Belum Mengajukan Peminjaman Kendaraan Dinas
-                      </Alert.Heading>
-                      <p>
-                        Silahkan buat pengajuan kendaraan pada halaman buat
-                        pengajuan.
-                      </p>
+                  {orderHistory ? (
+                    <Alert variant="secondary" style={{ border: "none" }}>
+                      <p>Belum ada riwayat pengajuan</p>
                     </Alert>
                   ) : (
                     <Card>
                       <Card.Body>
                         <Card.Title className="fs-4 p-4 fw-semibold color-primary">
                           <span className="me-2">
-                            Data Pengajuan Peminjaman Kendaraan Dinas Anda
+                            Riwayat Pengajuan Peminjaman Kendaraan Dinas Anda
                           </span>
                         </Card.Title>
 
@@ -117,22 +119,54 @@ export const UserVUsages = () => {
                               <th>KATEGORI PEMINJAMAN</th>
                               <th>DESTINASI</th>
                               <th>WAKTU PINJAM</th>
+                              <th>STATUS</th>
                               <th>EDIT</th>
                               <th>RINCIAN</th>
-                              <th>BATALKAN PENGAJUAN</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {ordersData.map((orders, index) => {
-                              return orders.status !== "CANCELED" ? (
+                            {ordersData.map((orders) => {
+                              return orders.status === "DONE" ? (
                                 <tr key={orders.usage_id}>
-                                  <td>{index + 1}</td>
+                                  <td>{(index += 1)}</td>
                                   <td>{orders.category.name}</td>
                                   <td>{orders.destination}</td>
                                   <td>
                                     {orders.start_date} s/d {orders.end_date}
                                   </td>
-                                  <td>
+                                  <td align="center">
+                                    <Badge
+                                      bg={
+                                        orders.status === "CANCELED" ||
+                                        orders.status === "REJECTED"
+                                          ? "danger"
+                                          : orders.status === "WAITING"
+                                          ? "warning"
+                                          : orders.status === "READY"
+                                          ? "primary"
+                                          : orders.status === "APPROVED"
+                                          ? "info"
+                                          : orders.status === "PROGRESS"
+                                          ? "secondary"
+                                          : "success"
+                                      }
+                                    >
+                                      {orders.status === "CANCELED"
+                                        ? "Batal"
+                                        : orders.status === "REJECTED"
+                                        ? "Ditolak"
+                                        : orders.status === "WAITING"
+                                        ? "Verifying"
+                                        : orders.status === "READY"
+                                        ? "Siap Berangkat"
+                                        : orders.status === "APPROVED"
+                                        ? "Disetujui"
+                                        : orders.status === "PROGRESS"
+                                        ? "Berlangsung"
+                                        : "Selesai"}
+                                    </Badge>
+                                  </td>
+                                  <td align="center">
                                     <NavLink
                                       to={
                                         "/user/data-pengajuan-peminjaman/edit-pengajuan"
@@ -146,6 +180,7 @@ export const UserVUsages = () => {
                                       </Button>
                                     </NavLink>
                                   </td>
+
                                   <td align="center">
                                     <NavLink
                                       to={
@@ -159,16 +194,6 @@ export const UserVUsages = () => {
                                         <FaInfo className="fs-6" />
                                       </Button>
                                     </NavLink>
-                                  </td>
-                                  <td align="center" className="bg-danger">
-                                    <Button
-                                      className="btn-danger btn-delete"
-                                      onClick={() =>
-                                        UpdateVUAsUser(orders, auth().user_id)
-                                      }
-                                    >
-                                      Batalkan
-                                    </Button>
                                   </td>
                                 </tr>
                               ) : null;

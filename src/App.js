@@ -34,6 +34,7 @@ import { VehicleUsages } from "./pages/Main/VehicleUsages";
 import { CreateOrder } from "./pages/CreatePages/CreateOrder";
 import { UpdateOrder } from "./pages/UpdatePages/UpdateOrder";
 import { VehicleUsageDetail } from "./pages/Details/VehicleUsageDetail";
+import { VehicleUsageHistory } from "./pages/Main/VehicleUsageHistory";
 
 import { Vehicles } from "./pages/Main/Vehicles";
 import { CreateVehicle } from "./pages/CreatePages/CreateVehicle";
@@ -70,8 +71,13 @@ import { Login } from "./pages/auth/Login";
 // ---------------------- USER AS USER ---------------------------
 import { UserCreateVU } from "./pages/asUser/UserCreateVU";
 import { UserVUDetail } from "./pages/asUser/UserVUDetail";
-import { UserVUsages } from "./pages/asUser/UserVUsages";
+import { MainUser } from "./pages/asUser/MainUser";
 import { UserEditVU } from "./pages/asUser/UserEditVU";
+import { UserHistory } from "./pages/asUser/UserHistory";
+
+// ---------------------- USER AS VERIFIER -----------------------
+import { MainVerifier } from "./pages/asVerifier/MainVerifier";
+import { VerifierVUDetail } from "./pages/asVerifier/VerifierDetailVU";
 
 function App() {
   // window.Pusher = Pusher;
@@ -150,6 +156,10 @@ function App() {
             <Route
               path="/pengajuan-peminjaman/rincian-pengajuan"
               element={<VehicleUsageDetail />}
+            />
+            <Route
+              path="/riwayat-pengajuan"
+              element={<VehicleUsageHistory />}
             />
             {/*----- END ORDER PAGES---- */}
 
@@ -281,11 +291,24 @@ function App() {
 
             {/*----- END AUTH PAGES---- */}
 
+            {/*------------------------------- START USER AS VERIFIER PAGES-------------------------------- */}
+            <Route
+              exact
+              path="/verifier/data-pengajuan-peminjaman"
+              element={<MainVerifier />}
+            />
+            <Route
+              exact
+              path="/verifier/data-pengajuan-peminjaman/rincian-peminjaman"
+              element={<VerifierVUDetail />}
+            />
+            {/*------------------------------- END USER AS VERIFIER PAGES-------------------------------- */}
+
             {/*------------------------------- START USER AS USER PAGES-------------------------------- */}
             <Route
               exact
               path="/user/data-pengajuan-peminjaman"
-              element={<UserVUsages />}
+              element={<MainUser />}
             />
             <Route
               path="/user/pengajuan-peminjaman"
@@ -299,6 +322,7 @@ function App() {
               path="/user/data-pengajuan-peminjaman/edit-pengajuan"
               element={<UserEditVU />}
             />
+            <Route path="/user/riwayat-pengajuan" element={<UserHistory />} />
             {/*------------------------------- END USER AS USER PAGES-------------------------------- */}
           </Routes>
         </Router>

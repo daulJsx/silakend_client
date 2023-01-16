@@ -20,6 +20,7 @@ import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 
 // Components
+import { AsideVerifier } from "../../components/aside/AsideVerifier";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
@@ -102,6 +103,12 @@ export const VerifierVUDetail = () => {
       ) : (
         <Container fluid>
           <Row>
+            {/* SIDEBAR */}
+            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
+              <AsideVerifier />
+            </Col>
+            {/* SIDEBAR */}
+
             <Col>
               {/* NAVBAR */}
               <Row>
@@ -113,7 +120,7 @@ export const VerifierVUDetail = () => {
                       name={placement}
                       bc={<FaArrowLeft />}
                       title={"Rincian Data Peminjaman"}
-                      parentLink={"/verifier/data-pengajuan-peminjaman"}
+                      parentLink={"/verifier/pengajuan-saya"}
                     />
                   ))}
                 </Col>
@@ -238,7 +245,11 @@ export const VerifierVUDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">STATUS</div>
-                                        {vu.status}
+                                        {vu.status === "CANCELED" ? (
+                                          <p>Dibatalkan oleh peminjam</p>
+                                        ) : (
+                                          vu.status
+                                        )}
                                       </div>
                                     </ListGroup.Item>
 
@@ -302,7 +313,7 @@ export const VerifierVUDetail = () => {
         </Container>
       )
     ) : (
-      <Navigate to="/verifier/data-pengajuan-peminjaman" />
+      <Navigate to="/verifier/pengajuan-saya" />
     )
   ) : (
     <Navigate to="/silakend-login" />

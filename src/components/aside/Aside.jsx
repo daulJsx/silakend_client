@@ -1,5 +1,8 @@
 import { React } from "react";
 
+// get current user auth data
+import { useAuthUser } from "react-auth-kit";
+
 // React Bootstrap
 import { Nav } from "react-bootstrap";
 
@@ -30,6 +33,8 @@ import polmanLogo from "./../../assets/polman.webp";
 // import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
 export const Aside = () => {
+  const auth = useAuthUser();
+
   return (
     <Nav variant="pills" className="nav-pills flex-column" as="ul">
       {/* SIDEBAR BRAND START */}
@@ -64,17 +69,21 @@ export const Aside = () => {
           link="/perbaikan-kendaraan"
         />
 
-        <AsideMenu
-          icon={<TbUsers />}
-          title="Data Pengguna"
-          link="/data-pengguna"
-        />
+        {auth().user_level === 1 ? (
+          <>
+            <AsideMenu
+              icon={<TbUsers />}
+              title="Data Pengguna"
+              link="/data-pengguna"
+            />
 
-        <AsideMenu
-          icon={<CgUserList />}
-          title="Peran Pengguna"
-          link="/data-peran"
-        />
+            <AsideMenu
+              icon={<CgUserList />}
+              title="Peran Pengguna"
+              link="/data-peran"
+            />
+          </>
+        ) : null}
 
         <AsideMenu
           icon={<FaUserTie />}
@@ -94,11 +103,15 @@ export const Aside = () => {
           link="/data-kendaraan"
         />
 
-        <AsideMenu
-          icon={<RiCommunityLine />}
-          title="Unit Kerja"
-          link="/unit-kerja"
-        />
+        {auth().user_level === 1 ? (
+          <>
+            <AsideMenu
+              icon={<RiCommunityLine />}
+              title="Unit Kerja"
+              link="/unit-kerja"
+            />
+          </>
+        ) : null}
       </div>
       {/* SIDEBAR MENU END */}
     </Nav>

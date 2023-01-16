@@ -46,7 +46,6 @@ export const RejectVU = async (order) => {
     dangerMode: true,
   }).then(async (willDelete) => {
     if (willDelete) {
-      console.log(body);
       swal({
         icon: "info",
         text: "Harap Masukkan Keterangan",
@@ -75,6 +74,7 @@ export const RejectVU = async (order) => {
                 });
               });
           } catch (error) {
+            console.log(error.response.data);
             if (error.response) {
               const { message, msg } = error.response.data;
               if (message) {

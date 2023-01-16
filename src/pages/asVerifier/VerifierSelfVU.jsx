@@ -38,7 +38,7 @@ import { FaInfo } from "react-icons/fa";
 // Notify
 import { Toaster } from "react-hot-toast";
 
-export const MainVerifier = () => {
+export const VerifierSelfVU = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -108,7 +108,6 @@ export const MainVerifier = () => {
                         <thead>
                           <tr>
                             <th>No</th>
-                            <th>PEMINJAM</th>
                             <th>KATEGORI PEMINJAMAN</th>
                             <th>DESTINASI</th>
                             <th>WAKTU PINJAM</th>
@@ -119,10 +118,9 @@ export const MainVerifier = () => {
                         <tbody>
                           {ordersData.map((orders) => {
                             return orders.status !== "DONE" &&
-                              orders.user.name !== auth().user_name ? (
+                              orders.user.name === auth().user_name ? (
                               <tr key={orders.usage_id}>
                                 <td>{(index += 1)}</td>
-                                <td>{orders.user.name}</td>
                                 <td>{orders.category.name}</td>
                                 <td>{orders.destination}</td>
                                 <td>
@@ -145,26 +143,14 @@ export const MainVerifier = () => {
                                         : "success"
                                     }
                                   >
-                                    {orders.status === "CANCELED"
-                                      ? "Batal"
-                                      : orders.status === "REJECTED"
-                                      ? "Ditolak"
-                                      : orders.status === "WAITING"
-                                      ? "Diajukan"
-                                      : orders.status === "READY"
-                                      ? "Siap Berangkat"
-                                      : orders.status === "APPROVED"
-                                      ? "Disetujui"
-                                      : orders.status === "PROGRESS"
-                                      ? "Berlangsung"
-                                      : "Selesai"}
+                                    {orders.status}
                                   </Badge>
                                 </td>
 
                                 <td align="center">
                                   <NavLink
                                     to={
-                                      "/verifier/pengajuan-pegawai/rincian-pengajuan"
+                                      "/verifier/pengajuan-saya/rincian-pengajuan"
                                     }
                                   >
                                     <Button

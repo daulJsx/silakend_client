@@ -25,6 +25,7 @@ import "./navtop.css";
 
 import { Aside } from "./../aside/Aside";
 import { AsideUser } from "../aside/AsideUser";
+import { AsideVerifier } from "../aside/AsideVerifier";
 
 export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
   const [show, setShow] = useState(false);
@@ -121,7 +122,9 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                 <Offcanvas.Body>
                   {auth().user_level === 1 ? (
                     <Aside />
-                  ) : auth().user_level === 3 ? null : (
+                  ) : auth().user_level === 3 ? (
+                    <AsideVerifier />
+                  ) : (
                     <AsideUser />
                   )}
                 </Offcanvas.Body>

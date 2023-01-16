@@ -40,8 +40,9 @@ import toast, { Toaster } from "react-hot-toast";
 
 // icons
 import { FiSend } from "react-icons/fi";
+import { AsideVerifier } from "../../components/aside/AsideVerifier";
 
-export const UserCreateVU = () => {
+export const VerifierCreateVU = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -65,6 +66,7 @@ export const UserCreateVU = () => {
   });
 
   const postNewOrder = async (e) => {
+    console.log(orderData);
     e.preventDefault();
 
     const config = {
@@ -89,19 +91,13 @@ export const UserCreateVU = () => {
           .then((response) => {
             if (response.status === 200) {
               const { msg } = response.data;
-              navigate("/user/data-pengajuan-peminjaman");
-
-              swal({
-                title: "Berhasil!",
-                text: msg,
-                icon: "success",
-                button: false,
-                timer: 2000,
-              });
+              navigate("/verifier/pengajuan-saya");
+              toast.success(msg);
             }
           });
       } catch (error) {
         if (error.response) {
+          navigate("/verifier/pengajuan-saya");
           const { message, msg } = error.response.data;
           if (message) {
             swal("Ups!", message, "error");
@@ -123,7 +119,7 @@ export const UserCreateVU = () => {
   };
 
   return token ? (
-    auth().user_level === 5 ? (
+    auth().user_level === 3 ? (
       <Container fluid>
         <Toaster position="bottom-right" reverseOrder={false} />
         <Row>
@@ -132,7 +128,7 @@ export const UserCreateVU = () => {
             xs="auto"
             className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
           >
-            <AsideUser />
+            <AsideVerifier />
           </Col>
           {/* SIDEBAR */}
 

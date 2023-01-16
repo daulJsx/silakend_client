@@ -12,9 +12,9 @@ import "./Aside.css";
 import "./../../App.css";
 
 // Icons
-
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { FiClock } from "react-icons/fi";
+import { FiUsers } from "react-icons/fi";
 import { FiSend } from "react-icons/fi";
 
 // assets
@@ -22,7 +22,7 @@ import polmanLogo from "./../../assets/polman.webp";
 
 // import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
-export const AsideUser = () => {
+export const AsideVerifier = () => {
   return (
     <Nav variant="pills" className="nav-pills flex-column" as="ul">
       {/* SIDEBAR BRAND START */}
@@ -34,19 +34,24 @@ export const AsideUser = () => {
         <AsideMenu
           icon={<FiSend />}
           title="Buat Pengajuan"
-          link="/user/buat-pengajuan"
+          link="/verifier/buat-pengajuan"
         />
-
         <AsideMenu
           icon={<HiOutlineClipboardList />}
           title="Data Pengajuan Saya"
-          link="/user/pengajuan-saya"
+          link="/verifier/pengajuan-saya"
+        />
+
+        <AsideMenu
+          icon={<FiUsers />}
+          title="Data Pengajuan Pegawai"
+          link="/verifier/pengajuan-pegawai"
         />
 
         <AsideMenu
           icon={<FiClock />}
           title="Riwayat Pengajuan "
-          link="/user/riwayat-pengajuan"
+          link="/verifier/riwayat-pengajuan"
         />
       </div>
       {/* SIDEBAR MENU END */}

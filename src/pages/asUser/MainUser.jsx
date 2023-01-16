@@ -14,6 +14,7 @@ import { useAuthUser } from "react-auth-kit";
 
 // Functions
 import { GetOrderId } from "../../functions/GetOrderId";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Navigating
 import { NavLink } from "react-router-dom";
@@ -59,166 +60,185 @@ export const MainUser = () => {
   return token ? (
     isError ? (
       <div>{error.message}</div>
-    ) : isLoading ? (
-      <div className="loading-io">
-        <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-          <div className="ldio-c0sicszbk9i">
-            <div></div>
-            <div></div>
+    ) : auth().user_level === 5 ? (
+      isLoading ? (
+        <div className="loading-io">
+          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+            <div className="ldio-c0sicszbk9i">
+              <div></div>
+              <div></div>
+            </div>
           </div>
         </div>
-      </div>
-    ) : (
-      <Container fluid>
-        <Toaster position="bottom-right" reverseOrder={false} />
-        <Row>
-          <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
-            <AsideUser />
-          </Col>
-          <Col>
-            {/* NAVBAR */}
-            <Row>
-              <Col>
-                {["end"].map((placement, idx) => (
-                  <NavTop
-                    key={idx}
-                    placement={placement}
-                    name={placement}
-                    bc={<HiOutlineClipboardList />}
-                  />
-                ))}
-              </Col>
-            </Row>
-            {/* NAVBAR */}
+      ) : (
+        <Container fluid>
+          <Toaster position="bottom-right" reverseOrder={false} />
+          <Row>
+            {/* SIDEBAR */}
+            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
+              <AsideUser />
+            </Col>
+            {/* SIDEBAR */}
 
-            <main className="px-2 min-vh-100 d-flex flex-column gap-3">
+            <Col>
+              {/* NAVBAR */}
               <Row>
                 <Col>
-                  {ordersData.length === 0 ? (
-                    <Alert variant="warning" style={{ border: "none" }}>
-                      <Alert.Heading>
-                        Anda Belum Mengajukan Peminjaman Kendaraan Dinas
-                      </Alert.Heading>
-                      <p>
-                        Silahkan buat pengajuan kendaraan pada halaman buat
-                        pengajuan.
-                      </p>
-                    </Alert>
-                  ) : (
-                    <Card>
-                      <Card.Body>
-                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                          <span className="me-2">
-                            Data Pengajuan Peminjaman Kendaraan Dinas Anda
-                          </span>
-                        </Card.Title>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<HiOutlineClipboardList />}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
 
-                        <Table bordered hover responsive>
-                          <thead>
-                            <tr>
-                              <th>No</th>
-                              <th>KATEGORI PEMINJAMAN</th>
-                              <th>DESTINASI</th>
-                              <th>WAKTU PINJAM</th>
-                              <th>STATUS</th>
-                              <th>EDIT</th>
-                              <th>RINCIAN</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {ordersData.map((orders) => {
-                              return orders.status !== "DONE" ? (
-                                <tr key={orders.usage_id}>
-                                  <td>{(index += 1)}</td>
-                                  <td>{orders.category.name}</td>
-                                  <td>{orders.destination}</td>
-                                  <td>
-                                    {orders.start_date} s/d {orders.end_date}
-                                  </td>
-                                  <td align="center">
-                                    <Badge
-                                      bg={
-                                        orders.status === "CANCELED" ||
-                                        orders.status === "REJECTED"
-                                          ? "danger"
+              <main className="px-2 min-vh-100 d-flex flex-column gap-3">
+                <Row>
+                  <Col>
+                    {ordersData.length === 0 ? (
+                      <Alert variant="warning" style={{ border: "none" }}>
+                        <Alert.Heading>
+                          Anda Belum Mengajukan Peminjaman Kendaraan Dinas
+                        </Alert.Heading>
+                        <p>
+                          Silahkan buat pengajuan kendaraan pada halaman buat
+                          pengajuan.
+                        </p>
+                      </Alert>
+                    ) : (
+                      <Card>
+                        <Card.Body>
+                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                            <span className="me-2">
+                              Data Pengajuan Peminjaman Kendaraan Dinas Anda
+                            </span>
+                          </Card.Title>
+
+                          <Table bordered hover responsive>
+                            <thead>
+                              <tr>
+                                <th>No</th>
+                                <th>DESTINASI</th>
+                                <th>WAKTU PINJAM</th>
+                                <th>STATUS</th>
+                                <th>EDIT</th>
+                                <th>PENGEMUDI</th>
+                                <th>KENDARAAN</th>
+                                <th>RINCIAN</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {ordersData.map((orders) => {
+                                return orders.status !== "DONE" ? (
+                                  <tr key={orders.usage_id}>
+                                    <td>{(index += 1)}</td>
+                                    <td>{orders.destination}</td>
+                                    <td>
+                                      {orders.start_date} s/d {orders.end_date}
+                                    </td>
+                                    <td align="center">
+                                      <Badge
+                                        bg={
+                                          orders.status === "CANCELED" ||
+                                          orders.status === "REJECTED"
+                                            ? "danger"
+                                            : orders.status === "WAITING"
+                                            ? "warning"
+                                            : orders.status === "READY"
+                                            ? "primary"
+                                            : orders.status === "APPROVED"
+                                            ? "info"
+                                            : orders.status === "PROGRESS"
+                                            ? "secondary"
+                                            : "success"
+                                        }
+                                      >
+                                        {orders.status === "CANCELED"
+                                          ? "Batal"
+                                          : orders.status === "REJECTED"
+                                          ? "Ditolak"
                                           : orders.status === "WAITING"
-                                          ? "warning"
+                                          ? "Diajukan"
                                           : orders.status === "READY"
-                                          ? "primary"
+                                          ? "Siap Berangkat"
                                           : orders.status === "APPROVED"
-                                          ? "info"
+                                          ? "Disetujui"
                                           : orders.status === "PROGRESS"
-                                          ? "secondary"
-                                          : "success"
-                                      }
-                                    >
-                                      {orders.status === "CANCELED"
-                                        ? "Batal"
-                                        : orders.status === "REJECTED"
-                                        ? "Ditolak"
-                                        : orders.status === "WAITING"
-                                        ? "Verifying"
-                                        : orders.status === "READY"
-                                        ? "Siap Berangkat"
-                                        : orders.status === "APPROVED"
-                                        ? "Disetujui"
-                                        : orders.status === "PROGRESS"
-                                        ? "Berlangsung"
-                                        : "Selesai"}
-                                    </Badge>
-                                  </td>
+                                          ? "Berlangsung"
+                                          : "Selesai"}
+                                      </Badge>
+                                    </td>
 
-                                  <td align="center">
-                                    {orders.status !== "CANCELED" ? (
+                                    <td align="center">
+                                      {orders.status === "WAITING" ? (
+                                        <NavLink
+                                          to={
+                                            "/user/data-pengajuan-peminjaman/edit-pengajuan"
+                                          }
+                                        >
+                                          <Button
+                                            className="btn btn-edit"
+                                            onClick={() => GetOrderId(orders)}
+                                          >
+                                            <AiFillEdit className="fs-6" />
+                                          </Button>
+                                        </NavLink>
+                                      ) : null}
+                                    </td>
+
+                                    <td>
+                                      {orders.driver
+                                        ? orders.driver.name
+                                        : null}
+                                    </td>
+
+                                    <td>
+                                      {orders.vehicle
+                                        ? orders.vehicle.name
+                                        : null}
+                                    </td>
+
+                                    <td align="center">
                                       <NavLink
                                         to={
-                                          "/user/data-pengajuan-peminjaman/edit-pengajuan"
+                                          "/user/data-pengajuan-peminjaman/rincian-peminjaman"
                                         }
                                       >
                                         <Button
-                                          className="btn btn-edit"
                                           onClick={() => GetOrderId(orders)}
+                                          className="btn btn-detail"
                                         >
-                                          <AiFillEdit className="fs-6" />
+                                          <FaInfo className="fs-6" />
                                         </Button>
                                       </NavLink>
-                                    ) : null}
-                                  </td>
+                                    </td>
+                                  </tr>
+                                ) : null;
+                              })}
+                            </tbody>
+                          </Table>
+                        </Card.Body>
+                      </Card>
+                    )}
+                  </Col>
+                </Row>
+              </main>
 
-                                  <td align="center">
-                                    <NavLink
-                                      to={
-                                        "/user/data-pengajuan-peminjaman/rincian-peminjaman"
-                                      }
-                                    >
-                                      <Button
-                                        onClick={() => GetOrderId(orders)}
-                                        className="btn btn-detail"
-                                      >
-                                        <FaInfo className="fs-6" />
-                                      </Button>
-                                    </NavLink>
-                                  </td>
-                                </tr>
-                              ) : null;
-                            })}
-                          </tbody>
-                        </Table>
-                      </Card.Body>
-                    </Card>
-                  )}
+              <Row>
+                <Col>
+                  <Footer />
                 </Col>
               </Row>
-            </main>
-
-            <Row>
-              <Col>
-                <Footer />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
+            </Col>
+          </Row>
+        </Container>
+      )
+    ) : (
+      SecuringPage()
     )
   ) : (
     <Navigate to="/silakend-login" />

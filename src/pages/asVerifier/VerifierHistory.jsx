@@ -29,15 +29,18 @@ import Alert from "react-bootstrap/Alert";
 import Badge from "react-bootstrap/Badge";
 
 // Components
-import { AsideUser } from "../../components/aside/AsideUser";
+import { AsideVerifier } from "../../components/aside/AsideVerifier";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
 // icons
+import { HiOutlineClipboardList } from "react-icons/hi";
 import { FaInfo } from "react-icons/fa";
-import { FiClock } from "react-icons/fi";
+import { AiFillEdit } from "react-icons/ai";
 
-export const UserHistory = () => {
+import toast, { Toaster } from "react-hot-toast";
+
+export const VerifierHistory = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -60,7 +63,7 @@ export const UserHistory = () => {
   });
 
   return token ? (
-    auth().user_level === 5 ? (
+    auth().user_level === 3 ? (
       isError ? (
         <div>{error.message}</div>
       ) : isLoading ? (
@@ -74,9 +77,10 @@ export const UserHistory = () => {
         </div>
       ) : (
         <Container fluid>
+          <Toaster position="bottom-right" reverseOrder={false} />
           <Row>
             <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
-              <AsideUser />
+              <AsideVerifier />
             </Col>
             <Col>
               {/* NAVBAR */}
@@ -87,7 +91,7 @@ export const UserHistory = () => {
                       key={idx}
                       placement={placement}
                       name={placement}
-                      bc={<FiClock />}
+                      bc={<HiOutlineClipboardList />}
                     />
                   ))}
                 </Col>
@@ -140,7 +144,7 @@ export const UserHistory = () => {
                                     <td align="center">
                                       <NavLink
                                         to={
-                                          "/user/data-pengajuan-peminjaman/rincian-peminjaman"
+                                          "/verifier/data-pengajuan-peminjaman/rincian-peminjaman"
                                         }
                                       >
                                         <Button

@@ -10,26 +10,29 @@ import axios from "axios";
 import { useAuthUser } from "react-auth-kit";
 import { Navigate } from "react-router-dom";
 
-// Functions
-import { SecuringPage } from "../../functions/Securing/SecuringPage";
+// Function
+import { ApproveVU } from "../../functions/Update/ApproveVU";
+import { RejectVU } from "../../functions/Update/RejectVU";
 
-// Bootstrap components
-import { Container, Row, Col } from "react-bootstrap";
+// bootstrap components
+import { Container, Row, Col, Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 
 // Components
-import { AsideUser } from "../../components/aside/AsideUser";
+import { AsideVerifier } from "../../components/aside/AsideVerifier";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
 // icons
 import { FaArrowLeft } from "react-icons/fa";
+import { FiCheckCircle } from "react-icons/fi";
+import { FiXCircle } from "react-icons/fi";
 
 // React Notification
 import swal from "sweetalert";
 
-export const UserVUDetail = () => {
+export const EmpVUDetail = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -87,59 +90,66 @@ export const UserVUDetail = () => {
   }, []);
 
   return token ? (
-    auth().user_level === 5 ? (
-      usageId ? (
-        isLoading ? (
-          <div className="loading-io">
-            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-              <div className="ldio-c0sicszbk9i">
-                <div></div>
-                <div></div>
-              </div>
+    usageId ? (
+      isLoading ? (
+        <div className="loading-io">
+          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+            <div className="ldio-c0sicszbk9i">
+              <div></div>
+              <div></div>
             </div>
           </div>
-        ) : (
-          <Container fluid>
-            <Row>
-              {/* SIDEBAR */}
-              <Col
-                xs="auto"
-                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
-              >
-                <AsideUser />
-              </Col>
-              {/* SIDEBAR */}
+        </div>
+      ) : (
+        <Container fluid>
+          <Row>
+            {/* SIDEBAR */}
+            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
+              <AsideVerifier />
+            </Col>
+            {/* SIDEBAR */}
 
-              <Col>
-                {/* NAVBAR */}
+            <Col>
+              {/* NAVBAR */}
+              <Row>
+                <Col>
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<FaArrowLeft />}
+                      title={"Rincian Data Peminjaman"}
+                      parentLink={"/verifier/pengajuan-pegawai"}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+
+              <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
                 <Row>
                   <Col>
-                    {["end"].map((placement, idx) => (
-                      <NavTop
-                        key={idx}
-                        placement={placement}
-                        name={placement}
-                        bc={<FaArrowLeft />}
-                        title={"Rincian Data Peminjaman"}
-                        parentLink={"/user/pengajuan-saya"}
-                      />
-                    ))}
-                  </Col>
-                </Row>
-                {/* NAVBAR */}
-
-                <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
-                  <Row>
-                    <Col>
-                      <Card>
-                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                          Rincian Data Peminjaman Anda
-                        </Card.Title>
-                        <Card.Body className="d-flex flex-column gap-3">
-                          <ListGroup as="ol" numbered className="mb-2">
-                            {vUDetail !== null
-                              ? vUDetail.map((userOrder, index) => (
+                    <Card>
+                      {vUDetail !== null
+                        ? vUDetail.map((vu, index) => (
+                            <>
+                              <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                                Rincian Data Peminjaman
+                              </Card.Title>
+                              <Card.Body className="d-flex flex-column gap-3">
+                                <ListGroup as="ol" numbered className="mb-2">
                                   <>
+                                    <ListGroup.Item
+                                      key={index}
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">PEMINJAM</div>
+                                        {vu.user !== null ? vu.user.name : null}
+                                      </div>
+                                    </ListGroup.Item>
                                     <ListGroup.Item
                                       key={index}
                                       as="li"
@@ -149,8 +159,8 @@ export const UserVUDetail = () => {
                                         <div className="fw-bold">
                                           KATEGORI PEMINJAMAN
                                         </div>
-                                        {userOrder.category !== null
-                                          ? userOrder.category.name
+                                        {vu.category !== null
+                                          ? vu.category.name
                                           : null}
                                       </div>
                                     </ListGroup.Item>
@@ -163,7 +173,7 @@ export const UserVUDetail = () => {
                                         <div className="fw-bold">
                                           DESKRIPSI PEMINJAMAN
                                         </div>
-                                        {userOrder.usage_description}
+                                        {vu.usage_description}
                                       </div>
                                     </ListGroup.Item>
 
@@ -175,7 +185,7 @@ export const UserVUDetail = () => {
                                         <div className="fw-bold">
                                           JUMLAH PERSONIL
                                         </div>
-                                        {userOrder.personel_count} Orang
+                                        {vu.personel_count} Orang
                                       </div>
                                     </ListGroup.Item>
 
@@ -185,7 +195,7 @@ export const UserVUDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">DESTINASI</div>
-                                        {userOrder.destination}
+                                        {vu.destination}
                                       </div>
                                     </ListGroup.Item>
 
@@ -197,38 +207,11 @@ export const UserVUDetail = () => {
                                         <div className="fw-bold">
                                           WAKTU PEMINJAMAN
                                         </div>
-                                        {userOrder.start_date} s/d{" "}
-                                        {userOrder.end_date}
+                                        {vu.start_date} s/d {vu.end_date}
                                       </div>
                                     </ListGroup.Item>
 
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">STATUS</div>
-                                        {userOrder.status}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">
-                                          KETERANGAN
-                                        </div>
-                                        {userOrder.status_description ? (
-                                          userOrder.status_description
-                                        ) : (
-                                          <p>Belum ada keterangan</p>
-                                        )}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    {userOrder.vehicle && userOrder.driver ? (
+                                    {vu.vehicle && vu.driver ? (
                                       <>
                                         <ListGroup.Item
                                           as="li"
@@ -238,7 +221,7 @@ export const UserVUDetail = () => {
                                             <div className="fw-bold">
                                               PENGEMUDI
                                             </div>
-                                            {userOrder.driver.name}
+                                            {vu.driver.name}
                                           </div>
                                         </ListGroup.Item>
 
@@ -250,35 +233,87 @@ export const UserVUDetail = () => {
                                             <div className="fw-bold">
                                               KENDARAAN
                                             </div>
-                                            {userOrder.vehicle.name}
+                                            {vu.vehicle.name}
                                           </div>
                                         </ListGroup.Item>
                                       </>
                                     ) : null}
-                                  </>
-                                ))
-                              : null}
-                          </ListGroup>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  </Row>
-                </main>
 
-                <Row>
-                  <Col>
-                    <Footer />
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">STATUS</div>
+                                        {vu.status === "CANCELED" ? (
+                                          <p>Dibatalkan oleh peminjam</p>
+                                        ) : (
+                                          vu.status
+                                        )}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          KETERANGAN
+                                        </div>
+
+                                        {vu.status_description ? (
+                                          vu.status_description
+                                        ) : (
+                                          <p>Belum ada keterangan</p>
+                                        )}
+                                      </div>
+                                    </ListGroup.Item>
+                                  </>
+                                </ListGroup>
+                              </Card.Body>
+                              {vu.status === "WAITING" ? (
+                                <Card.Footer className="d-flex gap-2">
+                                  <Button
+                                    onClick={() => ApproveVU(vu)}
+                                    variant="success"
+                                  >
+                                    <div className="d-flex gap-2">
+                                      Approve
+                                      <FiCheckCircle className="fs-4" />
+                                    </div>
+                                  </Button>
+
+                                  <Button
+                                    onClick={() => RejectVU(vu)}
+                                    variant="danger"
+                                  >
+                                    <div className="d-flex gap-2">
+                                      Reject
+                                      <FiXCircle className="fs-4" />
+                                    </div>
+                                  </Button>
+                                </Card.Footer>
+                              ) : null}
+                            </>
+                          ))
+                        : null}
+                    </Card>
                   </Col>
                 </Row>
-              </Col>
-            </Row>
-          </Container>
-        )
-      ) : (
-        <Navigate to="/user/data-pengajuan-peminjaman" />
+              </main>
+
+              <Row>
+                <Col>
+                  <Footer />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Container>
       )
     ) : (
-      SecuringPage()
+      <Navigate to="/verifier/pengajuan-pegawai" />
     )
   ) : (
     <Navigate to="/silakend-login" />

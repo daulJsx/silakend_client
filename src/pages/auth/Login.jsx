@@ -67,12 +67,11 @@ export const Login = (props) => {
             user_level === 1 || user_level === 2
               ? navigate("/")
               : user_level === 3
-              ? navigate("/verifier/data-pengajuan-peminjaman")
-              : navigate("/user/data-pengajuan-peminjaman");
+              ? navigate("/verifier/pengajuan-pegawai")
+              : navigate("/user/pengajuan-saya");
           }
         }
       } catch (error) {
-        console.log(error.response.data);
         if (error.response) {
           const { message, msg } = error.response.data;
           if (message) {

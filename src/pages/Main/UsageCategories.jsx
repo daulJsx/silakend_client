@@ -55,7 +55,7 @@ export const UsageCategories = () => {
   const token = Cookies.get("token");
 
   return token ? (
-    auth().user_level === 1 ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
       isError ? (
         <div>{error.message}</div>
       ) : isLoading ? (

@@ -8,8 +8,11 @@ import Cookies from "js-cookie";
 import swal from "sweetalert";
 
 export const ApproveVU = async (order) => {
+  console.log(order);
   let {
     ucategory_id,
+    vehicle_id,
+    driver_id,
     destination,
     start_date,
     end_date,
@@ -18,6 +21,7 @@ export const ApproveVU = async (order) => {
     usage_id,
     user_id,
   } = order;
+
   // Get access token
   const token = Cookies.get("token");
 
@@ -26,6 +30,8 @@ export const ApproveVU = async (order) => {
   };
 
   const body = {
+    vehicle_id: vehicle_id ? vehicle_id : null,
+    driver_id: driver_id ? driver_id : null,
     user_id: user_id,
     usage_id: usage_id,
     ucategory_id: ucategory_id,
@@ -45,53 +51,37 @@ export const ApproveVU = async (order) => {
     buttons: true,
     dangerMode: true,
   }).then(async (willDelete) => {
+    console.log(body);
     if (willDelete) {
-      console.log(body);
-      swal({
-        icon: "info",
-        text: "Harap Masukkan Keterangan",
-        buttons: true,
-        dangerMode: true,
-        content: {
-          element: "input",
-        },
-      }).then(async (status_description) => {
-        if (status_description) {
-          body.status_description = status_description;
-          try {
-            await axios
-              .put(
-                `https://silakend-server.xyz/api/vehicleusages/${usage_id}`,
-                body,
-                config
-              )
-              .then((response) => {
-                redirect("/verifier/data-pengajuan-peminjaman");
-                swal({
-                  title: "Berhasil!",
-                  text: response.data.msg,
-                  icon: "success",
-                  button: "Tutup",
-                });
-              });
-          } catch (error) {
-            if (error.response) {
-              const { message, msg } = error.response.data;
-              if (message) {
-                swal("Ups!", message, "error");
-              } else {
-                swal("Ups!", msg, "error");
-              }
-            } else {
-              swal("Ups!", "Something went wrong", "error");
-            }
+      try {
+        await axios
+          .put(
+            `https://silakend-server.xyz/api/vehicleusages/${usage_id}`,
+            body,
+            config
+          )
+          .then((response) => {
+            redirect("/verifier/data-pengajuan-peminjaman");
+            swal({
+              title: "Berhasil!",
+              text: response.data.msg,
+              icon: "success",
+              button: "Tutup",
+            });
+          });
+      } catch (error) {
+        console.log(error.response.data);
+        if (error.response) {
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
+          } else {
+            swal("Ups!", msg, "error");
           }
         } else {
-          swal({
-            text: "Harap isi keterangan",
-          });
+          swal("Ups!", "Something went wrong", "error");
         }
-      });
+      }
     } else {
       swal({
         text: "Aksi dibatalkan",

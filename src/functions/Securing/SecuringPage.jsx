@@ -16,8 +16,12 @@ export const SecuringPage = () => {
   });
 
   return auth().user_level === 5 ? (
-    <Navigate to="/user/data-pengajuan-peminjaman" />
+    <Navigate to="/user/pengajuan-saya" />
+  ) : auth().user_level === 4 ? (
+    <Navigate to="/driver/daftar-tugas" />
+  ) : auth().user_level === 3 ? (
+    <Navigate to="/verifier/pengajuan-pegawai" />
   ) : (
-    <Navigate to="/silakend-login" />
+    <Navigate to="/" />
   );
 };

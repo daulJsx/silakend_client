@@ -116,6 +116,8 @@ export const VehicleUsages = () => {
                               <th>No</th>
                               <th>PEMINJAM</th>
                               <th>WAKTU PINJAM</th>
+                              <th>DESTINASI</th>
+                              <th>KATEGORI PEMINJAMAN</th>
                               <th>STATUS</th>
                               <th>AKSI</th>
                               <th>RINCIAN</th>
@@ -130,6 +132,8 @@ export const VehicleUsages = () => {
                                   <td>
                                     {orders.start_date} s/d {orders.end_date}
                                   </td>
+                                  <td>{orders.destination}</td>
+                                  <td>{orders.category.name}</td>
 
                                   <td align="center">
                                     <Badge

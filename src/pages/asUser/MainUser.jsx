@@ -125,8 +125,6 @@ export const MainUser = () => {
                                 <th>DESTINASI</th>
                                 <th>WAKTU PINJAM</th>
                                 <th>STATUS</th>
-                                <th>PENGEMUDI</th>
-                                <th>KENDARAAN</th>
                                 <th>EDIT</th>
                                 <th>RINCIAN</th>
                               </tr>
@@ -173,17 +171,6 @@ export const MainUser = () => {
                                       </Badge>
                                     </td>
 
-                                    <td>
-                                      {orders.driver
-                                        ? orders.driver.name
-                                        : null}
-                                    </td>
-
-                                    <td>
-                                      {orders.vehicle
-                                        ? orders.vehicle.name
-                                        : null}
-                                    </td>
                                     <td align="center">
                                       {orders.status === "WAITING" ? (
                                         <NavLink
@@ -209,8 +196,20 @@ export const MainUser = () => {
                                       >
                                         <Button
                                           onClick={() => GetOrderId(orders)}
-                                          className="btn btn-detail"
+                                          className="btn btn-detail position-relative"
                                         >
+                                          {orders.vehicle &&
+                                          orders.driver &&
+                                          orders.status === "READY" ? (
+                                            <Badge
+                                              className="position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle"
+                                              bg="danger"
+                                            >
+                                              <span class="visually-hidden">
+                                                New alerts
+                                              </span>
+                                            </Badge>
+                                          ) : null}
                                           <FaInfo className="fs-6" />
                                         </Button>
                                       </NavLink>

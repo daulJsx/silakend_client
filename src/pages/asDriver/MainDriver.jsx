@@ -29,15 +29,18 @@ import Alert from "react-bootstrap/Alert";
 import Badge from "react-bootstrap/Badge";
 
 // Components
-import { AsideUser } from "../../components/aside/AsideUser";
+import { AsideDriver } from "../../components/aside/AsideDriver";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
 // icons
-import { FaInfo } from "react-icons/fa";
-import { FiClock } from "react-icons/fi";
 
-export const UserHistory = () => {
+import { TbSteeringWheel } from "react-icons/tb";
+import { FaInfo } from "react-icons/fa";
+
+import toast, { Toaster } from "react-hot-toast";
+
+export const MainDriver = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -54,16 +57,11 @@ export const UserHistory = () => {
   // Numbering row
   let index = 0;
 
-  // Condition if there are orders with status are DONE
-  const orderHistory = ordersData?.map((orders) => {
-    return orders.status === "DONE";
-  });
-
   return token ? (
-    auth().user_level === 5 ? (
-      isError ? (
-        <div>{error.message}</div>
-      ) : isLoading ? (
+    isError ? (
+      <div>{error.message}</div>
+    ) : auth().user_level === 4 ? (
+      isLoading ? (
         <div className="loading-io">
           <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
             <div className="ldio-c0sicszbk9i">
@@ -74,10 +72,14 @@ export const UserHistory = () => {
         </div>
       ) : (
         <Container fluid>
+          <Toaster position="bottom-right" reverseOrder={false} />
           <Row>
+            {/* SIDEBAR */}
             <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
-              <AsideUser />
+              <AsideDriver />
             </Col>
+            {/* SIDEBAR */}
+
             <Col>
               {/* NAVBAR */}
               <Row>
@@ -87,7 +89,7 @@ export const UserHistory = () => {
                       key={idx}
                       placement={placement}
                       name={placement}
-                      bc={<FiClock />}
+                      bc={<TbSteeringWheel />}
                     />
                   ))}
                 </Col>
@@ -97,56 +99,91 @@ export const UserHistory = () => {
               <main className="px-2 min-vh-100 d-flex flex-column gap-3">
                 <Row>
                   <Col>
-                    {orderHistory ? (
-                      <Alert variant="secondary" style={{ border: "none" }}>
-                        <p>Belum ada riwayat pengajuan</p>
+                    {ordersData.length === 0 ? (
+                      <Alert variant="warning" style={{ border: "none" }}>
+                        <p>Belum ada tugas masuk.</p>
                       </Alert>
                     ) : (
                       <Card>
                         <Card.Body>
                           <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            <span className="me-2">
-                              Riwayat Pengajuan Peminjaman Kendaraan Dinas Anda
-                            </span>
+                            <span className="me-2">Daftar Tugas Masuk</span>
                           </Card.Title>
 
                           <Table bordered hover responsive>
                             <thead>
                               <tr>
                                 <th>No</th>
-                                <th>KATEGORI PEMINJAMAN</th>
+                                <th>PEMINJAM</th>
                                 <th>DESTINASI</th>
                                 <th>WAKTU PINJAM</th>
                                 <th>STATUS</th>
+
                                 <th>RINCIAN</th>
                               </tr>
                             </thead>
                             <tbody>
                               {ordersData.map((orders) => {
-                                return orders.status === "DONE" ? (
+                                return orders.status !== "DONE" ? (
                                   <tr key={orders.usage_id}>
                                     <td>{(index += 1)}</td>
-                                    <td>{orders.category.name}</td>
+                                    <td>{orders.user.name}</td>
                                     <td>{orders.destination}</td>
                                     <td>
                                       {orders.start_date} s/d {orders.end_date}
                                     </td>
                                     <td align="center">
-                                      <Badge bg={"success"}>
-                                        {orders.status}
+                                      <Badge
+                                        bg={
+                                          orders.status === "CANCELED" ||
+                                          orders.status === "REJECTED"
+                                            ? "danger"
+                                            : orders.status === "WAITING"
+                                            ? "warning"
+                                            : orders.status === "READY"
+                                            ? "primary"
+                                            : orders.status === "APPROVED"
+                                            ? "info"
+                                            : orders.status === "PROGRESS"
+                                            ? "secondary"
+                                            : "success"
+                                        }
+                                      >
+                                        {orders.status === "CANCELED"
+                                          ? "Batal"
+                                          : orders.status === "REJECTED"
+                                          ? "Ditolak"
+                                          : orders.status === "WAITING"
+                                          ? "Diajukan"
+                                          : orders.status === "READY"
+                                          ? "Siap Berangkat"
+                                          : orders.status === "APPROVED"
+                                          ? "Disetujui"
+                                          : orders.status === "PROGRESS"
+                                          ? "Berlangsung"
+                                          : "Selesai"}
                                       </Badge>
                                     </td>
 
                                     <td align="center">
                                       <NavLink
-                                        to={
-                                          "/user/pengajuan-saya/rincian-pengajuan"
-                                        }
+                                        to={"/driver/tugas-masuk/rincian-tugas"}
                                       >
                                         <Button
                                           onClick={() => GetOrderId(orders)}
-                                          className="btn btn-detail"
+                                          className="btn btn-detail position-relative"
                                         >
+                                          {orders.status === "PROGRESS" ||
+                                          orders.status === "READY" ? (
+                                            <Badge
+                                              className="position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle"
+                                              bg="danger"
+                                            >
+                                              <span class="visually-hidden">
+                                                New alerts
+                                              </span>
+                                            </Badge>
+                                          ) : null}
                                           <FaInfo className="fs-6" />
                                         </Button>
                                       </NavLink>

@@ -26,6 +26,7 @@ import "./navtop.css";
 import { Aside } from "./../aside/Aside";
 import { AsideUser } from "../aside/AsideUser";
 import { AsideVerifier } from "../aside/AsideVerifier";
+import { AsideDriver } from "../aside/AsideDriver";
 
 export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
   const [show, setShow] = useState(false);
@@ -124,6 +125,8 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                     <Aside />
                   ) : auth().user_level === 3 ? (
                     <AsideVerifier />
+                  ) : auth().user_level === 4 ? (
+                    <AsideDriver />
                   ) : (
                     <AsideUser />
                   )}

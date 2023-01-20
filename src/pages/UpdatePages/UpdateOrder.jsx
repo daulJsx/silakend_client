@@ -426,8 +426,9 @@ export const UpdateOrder = () => {
 
                                   <Form.Group className="py-1">
                                     <Form.Label>
-                                      {orderToUpdate.depart_date ||
-                                      orderToUpdate.depart_time ? (
+                                      {orderToUpdate.depart_date &&
+                                      orderToUpdate.depart_time &&
+                                      orderToUpdate.status === "READY" ? (
                                         <>
                                           <p>Waktu berangkat saat ini:</p>{" "}
                                           <span className="fw-bold text-dark">
@@ -489,8 +490,9 @@ export const UpdateOrder = () => {
 
                                   <Form.Group className="py-1">
                                     <Form.Label>
-                                      {orderToUpdate.arrive_date ||
-                                      orderToUpdate.arrive_time ? (
+                                      {orderToUpdate.arrive_date &&
+                                      orderToUpdate.arrive_time &&
+                                      orderToUpdate.status === "DONE" ? (
                                         <>
                                           <p>Waktu pulang saat ini:</p>{" "}
                                           <span className="fw-bold text-dark">
@@ -556,9 +558,7 @@ export const UpdateOrder = () => {
                                       orderToUpdate.distance_count_in ? (
                                         <p>ODOMETER</p>
                                       ) : (
-                                        <p className="text-warning">
-                                          ODOMETER BELUM DIMASUKKAN
-                                        </p>
+                                        <p>Odometer diisi oleh supir</p>
                                       )}
                                     </Form.Label>
                                     <InputGroup className="mb-3">
@@ -609,8 +609,8 @@ export const UpdateOrder = () => {
                                     </InputGroup>
                                   </Form.Group>
 
-                                  {orderToMap.status === "WAITING" ||
-                                  orderToMap.status === "APPROVED" ? (
+                                  {orderToUpdate.driver !== "" ||
+                                  orderToUpdate.vehicle !== "" ? (
                                     <Alert variant="warning">
                                       <Alert.Heading>
                                         Tugaskan Pengemudi Dan Kendaraan
@@ -693,7 +693,8 @@ export const UpdateOrder = () => {
                                     </Alert>
                                   ) : null}
                                 </Card.Body>
-                                {orderToUpdate.status === "WAITING" ? (
+                                {orderToUpdate.driver !== "" ||
+                                orderToUpdate.vehicle !== "" ? (
                                   <Card.Footer className="d-flex gap-2">
                                     <Button
                                       onClick={() => ApproveVU(orderToUpdate)}

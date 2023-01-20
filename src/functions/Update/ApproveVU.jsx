@@ -8,11 +8,10 @@ import Cookies from "js-cookie";
 import swal from "sweetalert";
 
 export const ApproveVU = async (order) => {
-  console.log(order);
   let {
-    ucategory_id,
     vehicle_id,
     driver_id,
+    ucategory_id,
     destination,
     start_date,
     end_date,
@@ -20,6 +19,12 @@ export const ApproveVU = async (order) => {
     usage_description,
     usage_id,
     user_id,
+    distance_count_in,
+    distance_count_out,
+    arrive_date,
+    arrive_time,
+    depart_date,
+    depart_time,
   } = order;
 
   // Get access token
@@ -37,6 +42,12 @@ export const ApproveVU = async (order) => {
     destination: destination,
     start_date: start_date,
     end_date: end_date,
+    depart_date: depart_date,
+    depart_time: depart_time,
+    arrive_date: arrive_date,
+    arrive_time: arrive_time,
+    distance_count_out: distance_count_out,
+    distance_count_in: distance_count_in,
     usage_description: usage_description,
     personel_count: personel_count,
     status: vehicle_id && driver_id ? "READY" : "APPROVED",

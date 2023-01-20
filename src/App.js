@@ -83,6 +83,11 @@ import { VerifierCreateVU } from "./pages/asVerifier/VerifierCreateVU";
 import { VerifierSelfVU } from "./pages/asVerifier/VerifierSelfVU";
 import { EmpVUDetail } from "./pages/asVerifier/EmpVUDetail";
 
+// ---------------------- USER AS DRIVER -----------------------
+import { MainDriver } from "./pages/asDriver/MainDriver";
+import { DriverHistory } from "./pages/asDriver/DriverHistory";
+import { TaskInfo } from "./pages/asDriver/TaskInfo";
+
 function App() {
   // window.Pusher = Pusher;
   // window.Echo = new Echo({
@@ -322,7 +327,22 @@ function App() {
               path="/verifier/buat-pengajuan"
               element={<VerifierCreateVU />}
             />
+
             {/*------------------------------- END USER AS VERIFIER PAGES-------------------------------- */}
+
+            {/*------------------------------- START USER AS DRIVER PAGES-------------------------------- */}
+            <Route exact path="/driver/tugas-masuk" element={<MainDriver />} />
+            <Route
+              exact
+              path="/driver/riwayat-tugas"
+              element={<DriverHistory />}
+            />
+            <Route
+              exact
+              path="/driver/tugas-masuk/rincian-tugas"
+              element={<TaskInfo />}
+            />
+            {/*------------------------------- END USER AS DRIVER PAGES-------------------------------- */}
 
             {/*------------------------------- START USER AS USER PAGES-------------------------------- */}
             <Route exact path="/user/pengajuan-saya" element={<MainUser />} />

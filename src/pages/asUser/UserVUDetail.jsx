@@ -255,6 +255,35 @@ export const UserVUDetail = () => {
                                         </ListGroup.Item>
                                       </>
                                     ) : null}
+
+                                    {userOrder.distance_count_out &&
+                                    userOrder.distance_count_in ? (
+                                      <>
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="fw-bold">
+                                              ODOMETER PERGI
+                                            </div>
+                                            {userOrder.distance_count_out}
+                                          </div>
+                                        </ListGroup.Item>
+
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="fw-bold">
+                                              ODOMETER PULANG
+                                            </div>
+                                            {userOrder.distance_count_in}
+                                          </div>
+                                        </ListGroup.Item>
+                                      </>
+                                    ) : null}
                                   </>
                                 ))
                               : null}

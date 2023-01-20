@@ -29,7 +29,7 @@ import Alert from "react-bootstrap/Alert";
 import Badge from "react-bootstrap/Badge";
 
 // Components
-import { AsideUser } from "../../components/aside/AsideUser";
+import { AsideDriver } from "../../components/aside/AsideDriver";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
@@ -37,7 +37,7 @@ import { Footer } from "../../components/footer/Footer";
 import { FaInfo } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
 
-export const UserHistory = () => {
+export const DriverHistory = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -60,7 +60,7 @@ export const UserHistory = () => {
   });
 
   return token ? (
-    auth().user_level === 5 ? (
+    auth().user_level === 4 ? (
       isError ? (
         <div>{error.message}</div>
       ) : isLoading ? (
@@ -76,7 +76,7 @@ export const UserHistory = () => {
         <Container fluid>
           <Row>
             <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
-              <AsideUser />
+              <AsideDriver />
             </Col>
             <Col>
               {/* NAVBAR */}
@@ -99,21 +99,20 @@ export const UserHistory = () => {
                   <Col>
                     {orderHistory ? (
                       <Alert variant="secondary" style={{ border: "none" }}>
-                        <p>Belum ada riwayat pengajuan</p>
+                        <p>Belum ada riwayat tugas</p>
                       </Alert>
                     ) : (
                       <Card>
                         <Card.Body>
                           <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            <span className="me-2">
-                              Riwayat Pengajuan Peminjaman Kendaraan Dinas Anda
-                            </span>
+                            <span className="me-2">Daftar Riwayat Tugas</span>
                           </Card.Title>
 
                           <Table bordered hover responsive>
                             <thead>
                               <tr>
                                 <th>No</th>
+                                <th>PEMINJAM</th>
                                 <th>KATEGORI PEMINJAMAN</th>
                                 <th>DESTINASI</th>
                                 <th>WAKTU PINJAM</th>
@@ -126,6 +125,7 @@ export const UserHistory = () => {
                                 return orders.status === "DONE" ? (
                                   <tr key={orders.usage_id}>
                                     <td>{(index += 1)}</td>
+                                    <td>{orders.user.name}</td>
                                     <td>{orders.category.name}</td>
                                     <td>{orders.destination}</td>
                                     <td>
@@ -140,7 +140,7 @@ export const UserHistory = () => {
                                     <td align="center">
                                       <NavLink
                                         to={
-                                          "/user/pengajuan-saya/rincian-pengajuan"
+                                          "/driver/riwayat-tugas/rincian-tugas"
                                         }
                                       >
                                         <Button

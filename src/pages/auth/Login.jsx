@@ -68,6 +68,8 @@ export const Login = (props) => {
               ? navigate("/")
               : user_level === 3
               ? navigate("/verifier/pengajuan-pegawai")
+              : user_level === 4
+              ? navigate("/driver/tugas-masuk")
               : navigate("/user/pengajuan-saya");
           }
         }

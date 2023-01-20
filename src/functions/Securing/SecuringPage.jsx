@@ -18,7 +18,7 @@ export const SecuringPage = () => {
   return auth().user_level === 5 ? (
     <Navigate to="/user/pengajuan-saya" />
   ) : auth().user_level === 4 ? (
-    <Navigate to="/driver/daftar-tugas" />
+    <Navigate to="/driver/tugas-masuk" />
   ) : auth().user_level === 3 ? (
     <Navigate to="/verifier/pengajuan-pegawai" />
   ) : (

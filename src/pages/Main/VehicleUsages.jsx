@@ -84,18 +84,20 @@ export const VehicleUsages = () => {
               </Row>
               {/* NAVBAR */}
 
-              <div className="me-1 d-flex justify-content-end">
-                <Row className="py-4 mb-2">
-                  <Col>
-                    <NavLink to={"/pengajuan-peminjaman/buat-pengajuan"}>
-                      <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                        Buat pengajuan Baru
-                        <HiPlusSm className="fs-3" />
-                      </Button>
-                    </NavLink>
-                  </Col>
-                </Row>
-              </div>
+              {auth().user_level === 1 ? (
+                <div className="me-1 d-flex justify-content-end">
+                  <Row className="py-4 mb-2">
+                    <Col>
+                      <NavLink to={"/pengajuan-peminjaman/buat-pengajuan"}>
+                        <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                          Buat pengajuan Baru
+                          <HiPlusSm className="fs-3" />
+                        </Button>
+                      </NavLink>
+                    </Col>
+                  </Row>
+                </div>
+              ) : null}
 
               <main className="px-2 min-vh-100">
                 <Row>
@@ -151,7 +153,7 @@ export const VehicleUsages = () => {
                                         : orders.status === "REJECTED"
                                         ? "Ditolak"
                                         : orders.status === "WAITING"
-                                        ? "Verifying"
+                                        ? "Diajukan"
                                         : orders.status === "READY"
                                         ? "Siap berangkat"
                                         : orders.status === "APPROVED"
@@ -171,8 +173,19 @@ export const VehicleUsages = () => {
                                       >
                                         <Button
                                           onClick={() => GetOrderId(orders)}
-                                          className="btn btn-edit"
+                                          className="btn btn-edit position-relative"
                                         >
+                                          {orders.vehicle ||
+                                          orders.driver ||
+                                          orders.status ===
+                                            "REJECTED" ? null : (
+                                            <Badge
+                                              className="position-absolute top-0 start-100 translate-middle rounded-pill"
+                                              bg="danger"
+                                            >
+                                              !
+                                            </Badge>
+                                          )}
                                           <AiFillEdit className="fs-6" />
                                         </Button>
                                       </NavLink>

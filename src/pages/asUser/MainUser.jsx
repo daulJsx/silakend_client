@@ -125,9 +125,9 @@ export const MainUser = () => {
                                 <th>DESTINASI</th>
                                 <th>WAKTU PINJAM</th>
                                 <th>STATUS</th>
-                                <th>EDIT</th>
                                 <th>PENGEMUDI</th>
                                 <th>KENDARAAN</th>
+                                <th>EDIT</th>
                                 <th>RINCIAN</th>
                               </tr>
                             </thead>
@@ -173,11 +173,22 @@ export const MainUser = () => {
                                       </Badge>
                                     </td>
 
+                                    <td>
+                                      {orders.driver
+                                        ? orders.driver.name
+                                        : null}
+                                    </td>
+
+                                    <td>
+                                      {orders.vehicle
+                                        ? orders.vehicle.name
+                                        : null}
+                                    </td>
                                     <td align="center">
                                       {orders.status === "WAITING" ? (
                                         <NavLink
                                           to={
-                                            "/user/data-pengajuan-peminjaman/edit-pengajuan"
+                                            "/user/pengajuan-saya/edit-pengajuan"
                                           }
                                         >
                                           <Button
@@ -190,22 +201,10 @@ export const MainUser = () => {
                                       ) : null}
                                     </td>
 
-                                    <td>
-                                      {orders.driver
-                                        ? orders.driver.name
-                                        : null}
-                                    </td>
-
-                                    <td>
-                                      {orders.vehicle
-                                        ? orders.vehicle.name
-                                        : null}
-                                    </td>
-
                                     <td align="center">
                                       <NavLink
                                         to={
-                                          "/user/data-pengajuan-peminjaman/rincian-peminjaman"
+                                          "/user/pengajuan-saya/rincian-pengajuan"
                                         }
                                       >
                                         <Button

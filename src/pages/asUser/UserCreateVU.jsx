@@ -79,37 +79,46 @@ export const UserCreateVU = () => {
       orderData.start_date !== "" &&
       orderData.end_date !== ""
     ) {
-      try {
-        await axios
-          .post(
-            "https://silakend-server.xyz/api/vehicleusages",
-            orderData,
-            config
-          )
-          .then((response) => {
-            if (response.status === 200) {
-              const { msg } = response.data;
-              navigate("/user/data-pengajuan-peminjaman");
+      if (orderData.personel_count <= 0) {
+        swal({
+          title: "Peringatan",
+          text: "Harap isi jumlah personil dengan benar!",
+          icon: "warning",
+          button: "Tutup",
+        });
+      } else {
+        try {
+          await axios
+            .post(
+              "https://silakend-server.xyz/api/vehicleusages",
+              orderData,
+              config
+            )
+            .then((response) => {
+              if (response.status === 200) {
+                const { msg } = response.data;
+                navigate("/user/data-pengajuan-peminjaman");
 
-              swal({
-                title: "Berhasil!",
-                text: msg,
-                icon: "success",
-                button: false,
-                timer: 2000,
-              });
+                swal({
+                  title: "Berhasil!",
+                  text: msg,
+                  icon: "success",
+                  button: false,
+                  timer: 2000,
+                });
+              }
+            });
+        } catch (error) {
+          if (error.response) {
+            const { message, msg } = error.response.data;
+            if (message) {
+              swal("Ups!", message, "error");
+            } else {
+              swal("Ups!", msg, "error");
             }
-          });
-      } catch (error) {
-        if (error.response) {
-          const { message, msg } = error.response.data;
-          if (message) {
-            swal("Ups!", message, "error");
           } else {
-            swal("Ups!", msg, "error");
+            swal("Ups!", "Something went wrong", "error");
           }
-        } else {
-          swal("Ups!", "Something went wrong", "error");
         }
       }
     } else {

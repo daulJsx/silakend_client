@@ -609,7 +609,8 @@ export const UpdateOrder = () => {
                                     </InputGroup>
                                   </Form.Group>
 
-                                  {orderToMap.status === "WAITING" ? (
+                                  {orderToMap.status === "WAITING" ||
+                                  orderToMap.status === "APPROVED" ? (
                                     <Alert variant="warning">
                                       <Alert.Heading>
                                         Tugaskan Pengemudi Dan Kendaraan

@@ -169,8 +169,16 @@ export const MainVerifier = () => {
                                   >
                                     <Button
                                       onClick={() => GetOrderId(orders)}
-                                      className="btn btn-detail"
+                                      className="btn btn-detail position-relative"
                                     >
+                                      {orders.status === "WAITING" ? (
+                                        <Badge
+                                          className="position-absolute top-0 start-100 translate-middle rounded-pill"
+                                          bg="danger"
+                                        >
+                                          !
+                                        </Badge>
+                                      ) : null}
                                       <FaInfo className="fs-6" />
                                     </Button>
                                   </NavLink>

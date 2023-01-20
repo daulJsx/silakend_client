@@ -34,7 +34,7 @@ export const RejectVU = async (order) => {
     end_date: end_date,
     usage_description: usage_description,
     personel_count: personel_count,
-    status: "REJECTED",
+    status: "",
     status_description: "",
   };
 
@@ -56,6 +56,7 @@ export const RejectVU = async (order) => {
         },
       }).then(async (status_description) => {
         if (status_description) {
+          body.status = "REJECTED";
           body.status_description = status_description;
           try {
             await axios

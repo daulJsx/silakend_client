@@ -11,7 +11,6 @@ import { useQuery } from "react-query";
 import FetchUsageCat from "../../consAPI/FetchUsageCat";
 
 // Functions
-import { CancelVU } from "../../functions/Update/CancelVU";
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Navigating
@@ -88,15 +87,17 @@ export const UserEditVU = () => {
     destination: newDestination === "" ? currentDestination : newDestination,
     start_date: newStartDate === "" ? currentStartDate : newStartDate,
     end_date: newEndDate === "" ? currentEndDate : newEndDate,
-    status: "WAITING",
+    status: "",
+    status_description: "",
+  };
+
+  // Variable to assign access token
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
   };
 
   const handleUpdateOrder = async (e) => {
-    console.log(body);
     e.preventDefault();
-    const config = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
 
     swal({
       title: "Yakin?",
@@ -106,6 +107,8 @@ export const UserEditVU = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
+        body.status = "WAITING";
+
         try {
           await axios
             .put(
@@ -134,6 +137,70 @@ export const UserEditVU = () => {
         }
       } else {
         swal("Data pengajuan aman!");
+      }
+    });
+  };
+
+  const CancelVU = async (e) => {
+    e.preventDefault();
+    swal({
+      title: "Batalkan Pengajuan?",
+      text: "Klik ok untuk melanjutkan aksi ini",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        swal({
+          icon: "info",
+          text: "Jelaskan mengapa anda membatalkan pengajuan ini",
+          buttons: true,
+          dangerMode: true,
+          content: {
+            element: "input",
+          },
+        }).then(async (status_description) => {
+          if (status_description) {
+            body.status_description = status_description;
+            body.status = "CANCELED";
+
+            try {
+              await axios
+                .put(
+                  `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
+                  body,
+                  config
+                )
+                .then((response) => {
+                  swal({
+                    title: "Berhasil!",
+                    text: response.data.msg,
+                    icon: "success",
+                    button: "Tutup",
+                  });
+                });
+            } catch (error) {
+              if (error.response) {
+                const { message, msg } = error.response.data;
+                if (message) {
+                  swal("Ups!", message, "error");
+                } else {
+                  swal("Ups!", msg, "error");
+                }
+              } else {
+                swal("Ups!", "Something went wrong", "error");
+              }
+            }
+          } else {
+            swal({
+              text: "Pengajuan peminjaman kendaraan tidak dibatalkan",
+            });
+          }
+        });
+      } else {
+        swal({
+          text: "Aksi dibatalkan",
+        });
       }
     });
   };
@@ -341,12 +408,7 @@ export const UserEditVU = () => {
                                     </div>
                                   </Button>
                                   {orderToUpdate.status === "WAITING" ? (
-                                    <Button
-                                      variant="danger"
-                                      onClick={() =>
-                                        CancelVU(orderToUpdate, auth().user_id)
-                                      }
-                                    >
+                                    <Button variant="danger" onClick={CancelVU}>
                                       <div className="d-flex gap-2">
                                         Batalkan Pengajuan
                                         <FiXCircle className="fs-4" />

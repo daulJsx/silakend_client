@@ -30,17 +30,16 @@ export const ApproveVU = async (order) => {
   };
 
   const body = {
-    vehicle_id: vehicle_id ? vehicle_id : null,
-    driver_id: driver_id ? driver_id : null,
+    vehicle_id: vehicle_id,
+    driver_id: driver_id,
     user_id: user_id,
-    usage_id: usage_id,
     ucategory_id: ucategory_id,
     destination: destination,
     start_date: start_date,
     end_date: end_date,
     usage_description: usage_description,
     personel_count: personel_count,
-    status: "APPROVED",
+    status: vehicle_id && driver_id ? "READY" : "APPROVED",
     status_description: "",
   };
 
@@ -61,7 +60,7 @@ export const ApproveVU = async (order) => {
             config
           )
           .then((response) => {
-            redirect("/verifier/data-pengajuan-peminjaman");
+            redirect("/verifier/pengajuan-pegawai");
             swal({
               title: "Berhasil!",
               text: response.data.msg,

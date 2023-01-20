@@ -211,34 +211,6 @@ export const EmpVUDetail = () => {
                                       </div>
                                     </ListGroup.Item>
 
-                                    {vu.vehicle && vu.driver ? (
-                                      <>
-                                        <ListGroup.Item
-                                          as="li"
-                                          className="d-flex justify-content-between align-items-start"
-                                        >
-                                          <div className="ms-2 me-auto">
-                                            <div className="fw-bold">
-                                              PENGEMUDI
-                                            </div>
-                                            {vu.driver.name}
-                                          </div>
-                                        </ListGroup.Item>
-
-                                        <ListGroup.Item
-                                          as="li"
-                                          className="d-flex justify-content-between align-items-start"
-                                        >
-                                          <div className="ms-2 me-auto">
-                                            <div className="fw-bold">
-                                              KENDARAAN
-                                            </div>
-                                            {vu.vehicle.name}
-                                          </div>
-                                        </ListGroup.Item>
-                                      </>
-                                    ) : null}
-
                                     <ListGroup.Item
                                       as="li"
                                       className="d-flex justify-content-between align-items-start"
@@ -269,6 +241,34 @@ export const EmpVUDetail = () => {
                                         )}
                                       </div>
                                     </ListGroup.Item>
+
+                                    {vu.vehicle && vu.driver ? (
+                                      <>
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="fw-bold">
+                                              PENGEMUDI
+                                            </div>
+                                            {vu.driver.name}
+                                          </div>
+                                        </ListGroup.Item>
+
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="fw-bold">
+                                              KENDARAAN
+                                            </div>
+                                            {vu.vehicle.name}
+                                          </div>
+                                        </ListGroup.Item>
+                                      </>
+                                    ) : null}
                                   </>
                                 </ListGroup>
                               </Card.Body>

@@ -583,7 +583,7 @@ export const UpdateOrderHistory = () => {
           </Row>
         </Container>
       ) : (
-        <Navigate to="/pengajuan-peminjaman" />
+        <Navigate to="/riwayat-peminjaman" />
       )
     ) : (
       SecuringPage()

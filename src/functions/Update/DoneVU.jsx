@@ -21,25 +21,7 @@ export const DoneVU = async (order) => {
     user_id,
     distance_count_in,
     distance_count_out,
-    arrive_date,
-    arrive_time,
-    depart_date,
-    depart_time,
   } = order;
-
-  const departTimeFromMap = depart_time;
-  const getDepartDate = new Date(`1970-01-01T${departTimeFromMap}Z`);
-  const departHours = getDepartDate.getUTCHours().toString().padStart(2, "0");
-  const departMinutes = getDepartDate
-    .getUTCMinutes()
-    .toString()
-    .padStart(2, "0");
-  const formattedDepartTime = `${departHours}:${departMinutes}`;
-
-  const arriveTimeFromMap = arrive_time || null;
-  const formattedArriveTime = arriveTimeFromMap
-    ? new Date(`1970-01-01T${arriveTimeFromMap}Z`).toISOString().substr(11, 5)
-    : null;
 
   // Get access token
   const token = Cookies.get("token");
@@ -58,10 +40,6 @@ export const DoneVU = async (order) => {
     destination: destination,
     start_date: start_date,
     end_date: end_date,
-    depart_date: depart_date,
-    depart_time: formattedDepartTime,
-    arrive_date: arrive_date,
-    arrive_time: formattedArriveTime,
     distance_count_out: distance_count_out,
     distance_count_in: "",
     status: "",

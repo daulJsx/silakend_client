@@ -137,10 +137,7 @@ export const UpdateOrder = () => {
     destination: destination === "" ? currentDestination : destination,
     start_date: startDate === "" ? currentStartDate : startDate,
     end_date: endDate === "" ? currentEndDate : endDate,
-    depart_date: departDate === "" ? currentDepartDate : departDate,
-    depart_time: departTime === "" ? formattedDepartTime : departTime,
-    arrive_date: arriveDate === "" ? currentArriveDate : arriveDate,
-    arrive_time: arriveTime === "" ? formattedArriveTime : arriveTime,
+
     distance_count_out: dco === "" ? currentDCO : dco,
     distance_count_in: dci === "" ? currentDCI : dci,
     status: "",
@@ -469,128 +466,6 @@ export const UpdateOrder = () => {
                                         type="date"
                                         onChange={(e) =>
                                           setEndDate(e.target.value)
-                                        }
-                                      />
-                                    </InputGroup>
-                                  </Form.Group>
-
-                                  <Form.Group className="py-1">
-                                    <Form.Label>
-                                      {orderToUpdate.depart_date &&
-                                      orderToUpdate.depart_time ? (
-                                        <>
-                                          Waktu berangkat saat ini:{" "}
-                                          <span className="fw-bold text-dark">
-                                            {orderToUpdate.depart_date} Pukul{" "}
-                                            {orderToUpdate.depart_time}
-                                          </span>
-                                        </>
-                                      ) : (
-                                        <p>Waktu berangkat belum ditentukan</p>
-                                      )}
-                                    </Form.Label>
-                                    <InputGroup className="mb-3">
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Tanggal
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="date"
-                                        onChange={(e) =>
-                                          setDepartDate(e.target.value)
-                                        }
-                                      />
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Pukul
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="time"
-                                        onChange={(e) =>
-                                          setDepartTime(e.target.value)
-                                        }
-                                      />
-                                    </InputGroup>
-                                  </Form.Group>
-
-                                  <Form.Group className="py-1">
-                                    <Form.Label>
-                                      {orderToUpdate.arrive_date &&
-                                      orderToUpdate.arrive_time ? (
-                                        <>
-                                          Waktu pulang saat ini:{" "}
-                                          <span className="fw-bold text-dark">
-                                            {orderToUpdate.arrive_date} Pukul{" "}
-                                            {orderToUpdate.arrive_time}
-                                          </span>
-                                        </>
-                                      ) : (
-                                        <p>Waktu tiba belum dimasukkan</p>
-                                      )}
-                                    </Form.Label>
-                                    <InputGroup className="mb-3">
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Tanggal
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="date"
-                                        onChange={(e) =>
-                                          setArriveDate(e.target.value)
-                                        }
-                                      />
-                                      <InputGroup.Text
-                                        style={{
-                                          border: "none",
-                                        }}
-                                        id="basic-addon2"
-                                      >
-                                        Pukul
-                                      </InputGroup.Text>
-                                      <Form.Control
-                                        required
-                                        className="input form-custom"
-                                        style={{
-                                          backgroundColor: "#F5F7FC",
-                                          border: "none",
-                                          padding: "15px",
-                                        }}
-                                        type="time"
-                                        onChange={(e) =>
-                                          setArriveTime(e.target.value)
                                         }
                                       />
                                     </InputGroup>

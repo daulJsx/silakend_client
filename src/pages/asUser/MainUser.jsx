@@ -96,11 +96,15 @@ export const MainUser = () => {
               </Row>
               {/* NAVBAR */}
 
-              <main className="px-2 min-vh-100 d-flex flex-column gap-3">
+              <main className="px-2 min-vh-100 d-flex flex-column gap-3 mt-4">
                 <Row>
                   <Col>
                     {ordersData.length === 0 ? (
-                      <Alert variant="warning" style={{ border: "none" }}>
+                      <Alert
+                        variant="warning"
+                        className="mt-4"
+                        style={{ border: "none" }}
+                      >
                         <Alert.Heading>
                           Anda Belum Mengajukan Peminjaman Kendaraan Dinas
                         </Alert.Heading>

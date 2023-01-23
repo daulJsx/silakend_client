@@ -49,6 +49,7 @@ export const ProgressVU = async (order) => {
   };
 
   const body = {
+    usage_id: usage_id,
     vehicle_id: vehicle_id,
     driver_id: driver_id,
     user_id: user_id,

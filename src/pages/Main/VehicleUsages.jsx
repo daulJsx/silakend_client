@@ -99,7 +99,7 @@ export const VehicleUsages = () => {
                 </div>
               ) : null}
 
-              <main className="px-2 min-vh-100">
+              <main className="px-2 min-vh-100 mt-3">
                 <Row>
                   <Col>
                     <Card>

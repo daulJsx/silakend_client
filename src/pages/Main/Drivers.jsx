@@ -33,6 +33,7 @@ import { FaUserTie } from "react-icons/fa";
 
 export const Drivers = () => {
   const auth = useAuthUser();
+
   // Fetching users as driver
   const {
     data: usersData,
@@ -102,9 +103,9 @@ export const Drivers = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {usersData?.map((users) =>
+                            {usersData.map((users) =>
                               users.role.map((userAsDriver) => {
-                                return userAsDriver.name == "Driver" ? (
+                                return userAsDriver.level === 4 ? (
                                   <tr key={users.user_id}>
                                     <td>{(index += 1)}</td>
                                     <td>{users.name}</td>

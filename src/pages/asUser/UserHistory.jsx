@@ -98,7 +98,11 @@ export const UserHistory = () => {
                 <Row>
                   <Col>
                     {orderHistory ? (
-                      <Alert variant="secondary" style={{ border: "none" }}>
+                      <Alert
+                        variant="primary"
+                        className="mt-4"
+                        style={{ border: "none" }}
+                      >
                         <p>Belum ada riwayat pengajuan</p>
                       </Alert>
                     ) : (

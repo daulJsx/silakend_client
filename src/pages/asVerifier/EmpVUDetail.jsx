@@ -31,6 +31,7 @@ import { FiXCircle } from "react-icons/fi";
 
 // React Notification
 import swal from "sweetalert";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 export const EmpVUDetail = () => {
   // Get access token
@@ -90,230 +91,307 @@ export const EmpVUDetail = () => {
   }, []);
 
   return token ? (
-    usageId ? (
-      isLoading ? (
-        <div className="loading-io">
-          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-            <div className="ldio-c0sicszbk9i">
-              <div></div>
-              <div></div>
+    auth().user_level === 3 ? (
+      usageId ? (
+        isLoading ? (
+          <div className="loading-io">
+            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+              <div className="ldio-c0sicszbk9i">
+                <div></div>
+                <div></div>
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <Container fluid>
-          <Row>
-            {/* SIDEBAR */}
-            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
-              <AsideVerifier />
-            </Col>
-            {/* SIDEBAR */}
+        ) : (
+          <Container fluid>
+            <Row>
+              {/* SIDEBAR */}
+              <Col
+                xs="auto"
+                className="d-none d-lg-block d-flex min-vh-100 px-4"
+              >
+                <AsideVerifier />
+              </Col>
+              {/* SIDEBAR */}
 
-            <Col>
-              {/* NAVBAR */}
-              <Row>
-                <Col>
-                  {["end"].map((placement, idx) => (
-                    <NavTop
-                      key={idx}
-                      placement={placement}
-                      name={placement}
-                      bc={<FaArrowLeft />}
-                      title={"Rincian Data Peminjaman"}
-                      parentLink={"/verifier/pengajuan-pegawai"}
-                    />
-                  ))}
-                </Col>
-              </Row>
-              {/* NAVBAR */}
-
-              <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
+              <Col>
+                {/* NAVBAR */}
                 <Row>
                   <Col>
-                    <Card>
-                      {vUDetail !== null
-                        ? vUDetail.map((vu, index) => (
-                            <>
-                              <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                                Rincian Data Peminjaman
-                              </Card.Title>
-                              <Card.Body className="d-flex flex-column gap-3">
-                                <ListGroup as="ol" numbered className="mb-2">
-                                  <>
-                                    <ListGroup.Item
-                                      key={index}
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">PEMINJAM</div>
-                                        {vu.user !== null ? vu.user.name : null}
-                                      </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                      key={index}
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">
-                                          KATEGORI PEMINJAMAN
-                                        </div>
-                                        {vu.category !== null
-                                          ? vu.category.name
-                                          : null}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">
-                                          DESKRIPSI PEMINJAMAN
-                                        </div>
-                                        {vu.usage_description}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">
-                                          JUMLAH PERSONIL
-                                        </div>
-                                        {vu.personel_count} Orang
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">DESTINASI</div>
-                                        {vu.destination}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">
-                                          WAKTU PEMINJAMAN
-                                        </div>
-                                        {vu.start_date} s/d {vu.end_date}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">STATUS</div>
-                                        {vu.status === "CANCELED" ? (
-                                          <p>Dibatalkan oleh peminjam</p>
-                                        ) : (
-                                          vu.status
-                                        )}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">
-                                          KETERANGAN
-                                        </div>
-
-                                        {vu.status_description ? (
-                                          vu.status_description
-                                        ) : (
-                                          <p>Belum ada keterangan</p>
-                                        )}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    {vu.vehicle && vu.driver ? (
-                                      <>
-                                        <ListGroup.Item
-                                          as="li"
-                                          className="d-flex justify-content-between align-items-start"
-                                        >
-                                          <div className="ms-2 me-auto">
-                                            <div className="fw-bold">
-                                              PENGEMUDI
-                                            </div>
-                                            {vu.driver.name}
-                                          </div>
-                                        </ListGroup.Item>
-
-                                        <ListGroup.Item
-                                          as="li"
-                                          className="d-flex justify-content-between align-items-start"
-                                        >
-                                          <div className="ms-2 me-auto">
-                                            <div className="fw-bold">
-                                              KENDARAAN
-                                            </div>
-                                            {vu.vehicle.name}
-                                          </div>
-                                        </ListGroup.Item>
-                                      </>
-                                    ) : null}
-                                  </>
-                                </ListGroup>
-                              </Card.Body>
-                              {vu.status === "WAITING" ? (
-                                <Card.Footer className="d-flex gap-2">
-                                  <Button
-                                    onClick={() => ApproveVU(vu)}
-                                    variant="success"
-                                  >
-                                    <div className="d-flex gap-2">
-                                      Approve
-                                      <FiCheckCircle className="fs-4" />
-                                    </div>
-                                  </Button>
-
-                                  <Button
-                                    onClick={() => RejectVU(vu)}
-                                    variant="danger"
-                                  >
-                                    <div className="d-flex gap-2">
-                                      Reject
-                                      <FiXCircle className="fs-4" />
-                                    </div>
-                                  </Button>
-                                </Card.Footer>
-                              ) : null}
-                            </>
-                          ))
-                        : null}
-                    </Card>
+                    {["end"].map((placement, idx) => (
+                      <NavTop
+                        key={idx}
+                        placement={placement}
+                        name={placement}
+                        bc={<FaArrowLeft />}
+                        title={"Rincian Data Peminjaman"}
+                        parentLink={"/verifier/pengajuan-pegawai"}
+                      />
+                    ))}
                   </Col>
                 </Row>
-              </main>
+                {/* NAVBAR */}
 
-              <Row>
-                <Col>
-                  <Footer />
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+                <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
+                  <Row>
+                    <Col>
+                      <Card>
+                        {vUDetail !== null
+                          ? vUDetail.map((vu, index) => (
+                              <>
+                                <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                                  Rincian Data Peminjaman
+                                </Card.Title>
+                                <Card.Body className="d-flex flex-column gap-3">
+                                  <ListGroup
+                                    as="ol"
+                                    variant="flush"
+                                    className="mb-2"
+                                  >
+                                    <>
+                                      <ListGroup.Item
+                                        key={index}
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            PEMINJAM
+                                          </div>
+                                          {vu.user.name}
+                                        </div>
+                                      </ListGroup.Item>
+                                      <ListGroup.Item
+                                        key={index}
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            JUMLAH PERSONIL
+                                          </div>
+                                          {vu.personel_count} Orang
+                                        </div>
+                                      </ListGroup.Item>
+                                      <ListGroup.Item
+                                        key={index}
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            KATEGORI PEMINJAMAN
+                                          </div>
+                                          {vu.category.name}
+                                        </div>
+                                      </ListGroup.Item>
+
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            DESKRIPSI PEMINJAMAN
+                                          </div>
+                                          {vu.usage_description}
+                                        </div>
+                                      </ListGroup.Item>
+
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            DESTINASI
+                                          </div>
+                                          {vu.destination}
+                                        </div>
+                                      </ListGroup.Item>
+
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            WAKTU PEMINJAMAN
+                                          </div>
+                                          {vu.start_date} s/d {vu.end_date}
+                                        </div>
+                                      </ListGroup.Item>
+
+                                      <ListGroup.Item
+                                        as="li"
+                                        variant={
+                                          vu.status === "CANCELED" ||
+                                          vu.status === "REJECTED"
+                                            ? "danger"
+                                            : vu.status === "WAITING"
+                                            ? "warning"
+                                            : vu.status === "READY"
+                                            ? "primary"
+                                            : vu.status === "APPROVED"
+                                            ? "info"
+                                            : vu.status === "PROGRESS"
+                                            ? "secondary"
+                                            : "success"
+                                        }
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">STATUS</div>
+                                          {vu.status === "CANCELED"
+                                            ? `Dibatalkan peminjam karena ${vu.status_description}`
+                                            : vu.status === "REJECTED"
+                                            ? `Ditolak karena ${vu.status_description}`
+                                            : vu.status === "WAITING"
+                                            ? "Diajukan"
+                                            : vu.status === "READY"
+                                            ? "Siap Berangkat"
+                                            : vu.status === "APPROVED"
+                                            ? "Disetujui"
+                                            : vu.status === "PROGRESS"
+                                            ? "Berlangsung"
+                                            : "Selesai"}
+                                        </div>
+                                      </ListGroup.Item>
+
+                                      {vu.vehicle && vu.driver ? (
+                                        <>
+                                          <ListGroup.Item
+                                            as="li"
+                                            className="d-flex justify-content-between align-items-start"
+                                          >
+                                            <div className="ms-2 me-auto">
+                                              <div className="fw-bold">
+                                                PENGEMUDI
+                                              </div>
+                                              {vu.driver.name}
+                                            </div>
+                                          </ListGroup.Item>
+
+                                          <ListGroup.Item
+                                            as="li"
+                                            className="d-flex justify-content-between align-items-start"
+                                          >
+                                            <div className="ms-2 me-auto">
+                                              <div className="fw-bold">
+                                                KENDARAAN
+                                              </div>
+                                              {vu.vehicle.name}
+                                            </div>
+                                          </ListGroup.Item>
+                                        </>
+                                      ) : null}
+
+                                      {vu.depart_date && vu.depart_time ? (
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="fw-bold">
+                                              WAKTU BERANGKAT
+                                            </div>
+                                            {vu.depart_date} PUKUL{" "}
+                                            {vu.depart_time}
+                                          </div>
+                                        </ListGroup.Item>
+                                      ) : null}
+
+                                      {vu.distance_count_out &&
+                                      vu.distance_count_in ? (
+                                        <>
+                                          <ListGroup.Item
+                                            as="li"
+                                            className="d-flex justify-content-between align-items-start"
+                                          >
+                                            <div className="ms-2 me-auto">
+                                              <div className="fw-bold">
+                                                ODOMETER PERGI
+                                              </div>
+                                              {vu.distance_count_out}
+                                            </div>
+                                          </ListGroup.Item>
+
+                                          <ListGroup.Item
+                                            as="li"
+                                            className="d-flex justify-content-between align-items-start"
+                                          >
+                                            <div className="ms-2 me-auto">
+                                              <div className="fw-bold">
+                                                ODOMETER PULANG
+                                              </div>
+                                              {vu.distance_count_in}
+                                            </div>
+                                          </ListGroup.Item>
+                                        </>
+                                      ) : null}
+
+                                      {vu.arrive_date && vu.arrive_time ? (
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="fw-bold">
+                                              WAKTU SAMPAI
+                                            </div>
+                                            {vu.arrive_date} PUKUL{" "}
+                                            {vu.arrive_time}
+                                          </div>
+                                        </ListGroup.Item>
+                                      ) : null}
+                                    </>
+                                  </ListGroup>
+                                </Card.Body>
+                                {vu.status === "WAITING" ? (
+                                  <Card.Footer className="d-flex gap-2">
+                                    <Button
+                                      onClick={() => ApproveVU(vu)}
+                                      variant="success"
+                                    >
+                                      <div className="d-flex gap-2">
+                                        Approve
+                                        <FiCheckCircle className="fs-4" />
+                                      </div>
+                                    </Button>
+
+                                    <Button
+                                      onClick={() => RejectVU(vu)}
+                                      variant="danger"
+                                    >
+                                      <div className="d-flex gap-2">
+                                        Reject
+                                        <FiXCircle className="fs-4" />
+                                      </div>
+                                    </Button>
+                                  </Card.Footer>
+                                ) : null}
+                              </>
+                            ))
+                          : null}
+                      </Card>
+                    </Col>
+                  </Row>
+                </main>
+
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Container>
+        )
+      ) : (
+        <Navigate to="/verifier/pengajuan-pegawai" />
       )
     ) : (
-      <Navigate to="/verifier/pengajuan-pegawai" />
+      SecuringPage()
     )
   ) : (
     <Navigate to="/silakend-login" />

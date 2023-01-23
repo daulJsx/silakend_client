@@ -37,6 +37,7 @@ import { Footer } from "../../components/footer/Footer";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { FaInfo } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
+import { FiClock } from "react-icons/fi";
 
 import toast, { Toaster } from "react-hot-toast";
 
@@ -91,19 +92,21 @@ export const VerifierHistory = () => {
                       key={idx}
                       placement={placement}
                       name={placement}
-                      bc={<HiOutlineClipboardList />}
+                      bc={<FiClock />}
                     />
                   ))}
                 </Col>
               </Row>
               {/* NAVBAR */}
 
-              <main className="px-2 min-vh-100 d-flex flex-column gap-3">
+              <main className="px-2 min-vh-100 d-flex flex-column gap-3 mt-3">
                 <Row>
                   <Col>
                     {orderHistory ? (
-                      <Alert variant="secondary" style={{ border: "none" }}>
-                        <p>Belum ada riwayat pengajuan</p>
+                      <Alert variant="primary" style={{ border: "none" }}>
+                        <p className="fs-5 fw-semibold">
+                          Belum ada riwayat pengajuan
+                        </p>
                       </Alert>
                     ) : (
                       <Card>

@@ -42,7 +42,7 @@ export const UserVUDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   // catch the fetching vehicle details
-  const [vUDetail, setVUDetail] = useState(null);
+  const [userOrderDetail, setuserOrderDetail] = useState(null);
 
   useEffect(() => {
     const accessToken = Cookies.get("token");
@@ -53,7 +53,7 @@ export const UserVUDetail = () => {
       },
     };
 
-    async function fetchVUById() {
+    async function fetchuserOrderById() {
       try {
         await axios
           .get(
@@ -63,9 +63,9 @@ export const UserVUDetail = () => {
           .then((response) => {
             if (response.status === 200) {
               setIsLoading(false);
-              const vUDetail = response.data;
-              if (vUDetail.length !== 0) {
-                setVUDetail(vUDetail);
+              const userOrderDetail = response.data;
+              if (userOrderDetail.length !== 0) {
+                setuserOrderDetail(userOrderDetail);
               }
             }
           });
@@ -83,7 +83,7 @@ export const UserVUDetail = () => {
       }
     }
 
-    fetchVUById();
+    fetchuserOrderById();
   }, []);
 
   return token ? (
@@ -136,9 +136,9 @@ export const UserVUDetail = () => {
                           Rincian Data Peminjaman Anda
                         </Card.Title>
                         <Card.Body className="d-flex flex-column gap-3">
-                          <ListGroup as="ol" numbered className="mb-2">
-                            {vUDetail !== null
-                              ? vUDetail.map((userOrder, index) => (
+                          <ListGroup as="ol" variant="flush" className="mb-2">
+                            {userOrderDetail !== null
+                              ? userOrderDetail.map((userOrder, index) => (
                                   <>
                                     <ListGroup.Item
                                       key={index}
@@ -204,27 +204,37 @@ export const UserVUDetail = () => {
 
                                     <ListGroup.Item
                                       as="li"
+                                      variant={
+                                        userOrder.status === "CANCELED" ||
+                                        userOrder.status === "REJECTED"
+                                          ? "danger"
+                                          : userOrder.status === "WAITING"
+                                          ? "warning"
+                                          : userOrder.status === "READY"
+                                          ? "primary"
+                                          : userOrder.status === "APPROVED"
+                                          ? "info"
+                                          : userOrder.status === "PROGRESS"
+                                          ? "secondary"
+                                          : "success"
+                                      }
                                       className="d-flex justify-content-between align-items-start"
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">STATUS</div>
-                                        {userOrder.status}
-                                      </div>
-                                    </ListGroup.Item>
-
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">
-                                          KETERANGAN
-                                        </div>
-                                        {userOrder.status_description ? (
-                                          userOrder.status_description
-                                        ) : (
-                                          <p>Belum ada keterangan</p>
-                                        )}
+                                        {userOrder.status === "CANCELED"
+                                          ? `Dibatalkan peminjam karena ${userOrder.status_description}`
+                                          : userOrder.status === "REJECTED"
+                                          ? `Ditolak karena ${userOrder.status_description}`
+                                          : userOrder.status === "WAITING"
+                                          ? "Diajukan"
+                                          : userOrder.status === "READY"
+                                          ? "Siap Berangkat"
+                                          : userOrder.status === "APPROVED"
+                                          ? "Disetujui"
+                                          : userOrder.status === "PROGRESS"
+                                          ? "Berlangsung"
+                                          : "Selesai"}
                                       </div>
                                     </ListGroup.Item>
 
@@ -256,6 +266,22 @@ export const UserVUDetail = () => {
                                       </>
                                     ) : null}
 
+                                    {userOrder.depart_date &&
+                                    userOrder.depart_time ? (
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            WAKTU BERANGKAT
+                                          </div>
+                                          {userOrder.depart_date} PUKUL{" "}
+                                          {userOrder.depart_time}
+                                        </div>
+                                      </ListGroup.Item>
+                                    ) : null}
+
                                     {userOrder.distance_count_out &&
                                     userOrder.distance_count_in ? (
                                       <>
@@ -283,6 +309,22 @@ export const UserVUDetail = () => {
                                           </div>
                                         </ListGroup.Item>
                                       </>
+                                    ) : null}
+
+                                    {userOrder.arrive_date &&
+                                    userOrder.arrive_time ? (
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            WAKTU SAMPAI
+                                          </div>
+                                          {userOrder.arrive_date} PUKUL{" "}
+                                          {userOrder.arrive_time}
+                                        </div>
+                                      </ListGroup.Item>
                                     ) : null}
                                   </>
                                 ))

@@ -116,20 +116,12 @@ export const UpdateOrder = () => {
   );
   const [currentDCO] = [orderToMap].map((dco) => dco.distance_count_out);
   const [currentDCI] = [orderToMap].map((dci) => dci.distance_count_in);
-  const [currentStatus] = [orderToMap].map((status) => status.status);
-  const [currentStatusDesc] = [orderToMap].map(
-    (status) => status.status_description
-  );
 
   // format the time to hh:mm, caused by the orderToMap time format is h:i:s
-  const departTimeFromMap = currentDepartTime;
-  const getDepartDate = new Date(`1970-01-01T${departTimeFromMap}Z`);
-  const departHours = getDepartDate.getUTCHours().toString().padStart(2, "0");
-  const departMinutes = getDepartDate
-    .getUTCMinutes()
-    .toString()
-    .padStart(2, "0");
-  const formattedDepartTime = `${departHours}:${departMinutes}`;
+  const departTimeFromMap = currentDepartTime || null;
+  const formattedDepartTime = departTimeFromMap
+    ? new Date(`1970-01-01T${departTimeFromMap}Z`).toISOString().substr(11, 5)
+    : null;
 
   const arriveTimeFromMap = currentArriveTime || null;
   const formattedArriveTime = arriveTimeFromMap
@@ -153,12 +145,14 @@ export const UpdateOrder = () => {
     arrive_time: arriveTime === "" ? formattedArriveTime : arriveTime,
     distance_count_out: dco === "" ? currentDCO : dco,
     distance_count_in: dci === "" ? currentDCI : dci,
-    status: status === "" ? currentStatus : status,
-    status_description: statusDesc === "" ? currentStatusDesc : statusDesc,
+    status: "",
+    status_description: "",
   };
 
-  const handleUpdateOrder = async (e) => {
+  const handleReady = async (e) => {
     e.preventDefault();
+
+    console.log(body);
 
     const config = {
       headers: { Authorization: `Bearer ${token}` },
@@ -172,6 +166,7 @@ export const UpdateOrder = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
+        body.status = "READY";
         try {
           await axios
             .put(
@@ -204,6 +199,77 @@ export const UpdateOrder = () => {
         }
       } else {
         swal("Data peminjaman aman!");
+      }
+    });
+  };
+  const handleReject = async (e) => {
+    e.preventDefault();
+
+    console.log(body);
+
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+
+    swal({
+      title: "Tolak Pengajuan?",
+      text: "Klik ok untuk melanjutkan aksi ini",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then(async (willDelete) => {
+      if (willDelete) {
+        swal({
+          icon: "info",
+          text: "Harap Masukkan Keterangan",
+          buttons: true,
+          dangerMode: true,
+          content: {
+            element: "input",
+          },
+        }).then(async (status_description) => {
+          if (status_description) {
+            body.status = "REJECTED";
+            body.status_description = status_description;
+            try {
+              await axios
+                .put(
+                  `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
+                  body,
+                  config
+                )
+                .then((response) => {
+                  navigate("/pengajuan-peminjaman");
+                  swal({
+                    title: "Berhasil!",
+                    text: response.data.msg,
+                    icon: "success",
+                    button: "Tutup",
+                  });
+                });
+            } catch (error) {
+              console.log(error.response.data);
+              if (error.response) {
+                const { message, msg } = error.response.data;
+                if (message) {
+                  swal("Ups!", message, "error");
+                } else {
+                  swal("Ups!", msg, "error");
+                }
+              } else {
+                swal("Ups!", "Something went wrong", "error");
+              }
+            }
+          } else {
+            swal({
+              text: "Harap isi keterangan",
+            });
+          }
+        });
+      } else {
+        swal({
+          text: "Aksi dibatalkan",
+        });
       }
     });
   };
@@ -243,7 +309,7 @@ export const UpdateOrder = () => {
                 <Row>
                   <Col>
                     <Card>
-                      <Form onSubmit={handleUpdateOrder}>
+                      <Form>
                         {orderToMap
                           ? [orderToMap]?.map((orderToUpdate) => (
                               <>
@@ -270,20 +336,6 @@ export const UpdateOrder = () => {
                                       <option value={orderToUpdate.user_id}>
                                         {orderToUpdate.user.name}
                                       </option>
-                                      {auth().user_level === 1
-                                        ? usersData?.map((users) =>
-                                            users.role.map((userAsSuper) => {
-                                              return userAsSuper.level != 1 ? (
-                                                <option
-                                                  value={users.user_id}
-                                                  key={users.user_id}
-                                                >
-                                                  {users.name}
-                                                </option>
-                                              ) : null;
-                                            })
-                                          )
-                                        : null}
                                     </Form.Select>
                                   </Form.Group>
 
@@ -427,19 +479,16 @@ export const UpdateOrder = () => {
                                   <Form.Group className="py-1">
                                     <Form.Label>
                                       {orderToUpdate.depart_date &&
-                                      orderToUpdate.depart_time &&
-                                      orderToUpdate.status === "READY" ? (
+                                      orderToUpdate.depart_time ? (
                                         <>
-                                          <p>Waktu berangkat saat ini:</p>{" "}
+                                          Waktu berangkat saat ini:{" "}
                                           <span className="fw-bold text-dark">
                                             {orderToUpdate.depart_date} Pukul{" "}
                                             {orderToUpdate.depart_time}
                                           </span>
                                         </>
                                       ) : (
-                                        <p className="text-warning">
-                                          Waktu berangkat belum ditentukan
-                                        </p>
+                                        <p>Waktu berangkat belum ditentukan</p>
                                       )}
                                     </Form.Label>
                                     <InputGroup className="mb-3">
@@ -491,19 +540,16 @@ export const UpdateOrder = () => {
                                   <Form.Group className="py-1">
                                     <Form.Label>
                                       {orderToUpdate.arrive_date &&
-                                      orderToUpdate.arrive_time &&
-                                      orderToUpdate.status === "DONE" ? (
+                                      orderToUpdate.arrive_time ? (
                                         <>
-                                          <p>Waktu pulang saat ini:</p>{" "}
+                                          Waktu pulang saat ini:{" "}
                                           <span className="fw-bold text-dark">
                                             {orderToUpdate.arrive_date} Pukul{" "}
                                             {orderToUpdate.arrive_time}
                                           </span>
                                         </>
                                       ) : (
-                                        <p className="text-warning">
-                                          Waktu tiba belum dimasukkan
-                                        </p>
+                                        <p>Waktu tiba belum dimasukkan</p>
                                       )}
                                     </Form.Label>
                                     <InputGroup className="mb-3">
@@ -609,12 +655,93 @@ export const UpdateOrder = () => {
                                     </InputGroup>
                                   </Form.Group>
 
-                                  {orderToUpdate.driver !== "" ||
-                                  orderToUpdate.vehicle !== "" ? (
-                                    <Alert variant="warning">
-                                      <Alert.Heading>
-                                        Tugaskan Pengemudi Dan Kendaraan
-                                      </Alert.Heading>{" "}
+                                  {orderToUpdate.driver === null &&
+                                  orderToUpdate.vehicle === null ? (
+                                    <>
+                                      <Alert variant="warning">
+                                        <Alert.Heading>
+                                          Tugaskan Pengemudi Dan Kendaraan
+                                        </Alert.Heading>{" "}
+                                        <Form.Group className="mb-3">
+                                          <Form.Label>Kendaraan</Form.Label>
+                                          <Form.Select
+                                            required
+                                            style={{
+                                              backgroundColor: "#F5F7FC",
+                                              border: "none",
+                                              padding: "17px",
+                                            }}
+                                            aria-label="Default select example"
+                                            onChange={(e) =>
+                                              setVehicleId(e.target.value)
+                                            }
+                                          >
+                                            <option
+                                              value={
+                                                orderToUpdate.vehicle_id
+                                                  ? orderToUpdate.vehicle_id
+                                                  : null
+                                              }
+                                            >
+                                              {orderToUpdate.vehicle !==
+                                              null ? (
+                                                orderToUpdate.vehicle.name
+                                              ) : (
+                                                <p>-- Pilih Kendaraan --</p>
+                                              )}
+                                            </option>
+                                            {vehiclesData?.map((vehicles) => (
+                                              <option
+                                                key={vehicles.vehicle_id}
+                                                value={vehicles.vehicle_id}
+                                              >
+                                                {vehicles.name}
+                                              </option>
+                                            ))}
+                                          </Form.Select>
+                                        </Form.Group>
+                                        <Form.Group className="mb-3">
+                                          <Form.Label>Pengemudi</Form.Label>
+                                          <Form.Select
+                                            required
+                                            style={{
+                                              backgroundColor: "#F5F7FC",
+                                              border: "none",
+                                              padding: "17px",
+                                            }}
+                                            aria-label="Default select example"
+                                            onChange={(e) =>
+                                              setDriverId(e.target.value)
+                                            }
+                                          >
+                                            <option
+                                              value={orderToUpdate.driver_id}
+                                            >
+                                              {orderToUpdate.driver !== null ? (
+                                                orderToUpdate.driver.name
+                                              ) : (
+                                                <p>-- Pilih Pengemudi --</p>
+                                              )}
+                                            </option>
+                                            {usersData?.map((users) =>
+                                              users.role.map((userAsDriver) => {
+                                                return userAsDriver.level ===
+                                                  4 ? (
+                                                  <option
+                                                    value={users.user_id}
+                                                    key={users.user_id}
+                                                  >
+                                                    {users.name}
+                                                  </option>
+                                                ) : null;
+                                              })
+                                            )}
+                                          </Form.Select>
+                                        </Form.Group>
+                                      </Alert>
+                                    </>
+                                  ) : (
+                                    <>
                                       <Form.Group className="mb-3">
                                         <Form.Label>Kendaraan</Form.Label>
                                         <Form.Select
@@ -671,33 +798,29 @@ export const UpdateOrder = () => {
                                               <p>-- Pilih Pengemudi --</p>
                                             )}
                                           </option>
-                                          {auth().user_level === 1
-                                            ? usersData?.map((users) =>
-                                                users.role.map(
-                                                  (userAsDriver) => {
-                                                    return userAsDriver.name ==
-                                                      "Driver" ? (
-                                                      <option
-                                                        value={users.user_id}
-                                                        key={users.user_id}
-                                                      >
-                                                        {users.name}
-                                                      </option>
-                                                    ) : null;
-                                                  }
-                                                )
-                                              )
-                                            : null}
+                                          {usersData?.map((users) =>
+                                            users.role.map((userAsDriver) => {
+                                              return userAsDriver.level ===
+                                                4 ? (
+                                                <option
+                                                  value={users.user_id}
+                                                  key={users.user_id}
+                                                >
+                                                  {users.name}
+                                                </option>
+                                              ) : null;
+                                            })
+                                          )}
                                         </Form.Select>
                                       </Form.Group>
-                                    </Alert>
-                                  ) : null}
+                                    </>
+                                  )}
                                 </Card.Body>
-                                {orderToUpdate.driver !== "" ||
-                                orderToUpdate.vehicle !== "" ? (
+                                {orderToUpdate.status === "WAITING" ||
+                                orderToUpdate.status === "APPROVED" ? (
                                   <Card.Footer className="d-flex gap-2">
                                     <Button
-                                      onClick={() => ApproveVU(orderToUpdate)}
+                                      onClick={handleReady}
                                       variant="success"
                                     >
                                       <div className="d-flex gap-2">
@@ -707,7 +830,7 @@ export const UpdateOrder = () => {
                                     </Button>
 
                                     <Button
-                                      onClick={() => RejectVU(orderToUpdate)}
+                                      onClick={handleReject}
                                       variant="danger"
                                     >
                                       <div className="d-flex gap-2">

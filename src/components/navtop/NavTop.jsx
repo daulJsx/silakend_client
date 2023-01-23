@@ -92,7 +92,6 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                 show={show}
                 onHide={handleClose}
                 {...props}
-                responsive="lg"
                 className="sidebar-mobile d-xl-none d-lg-none"
               >
                 <Offcanvas.Header closeButton>
@@ -121,7 +120,7 @@ export const NavTop = ({ bc, parentLink, onClick, title, name, ...props }) => {
                 </Offcanvas.Header>
 
                 <Offcanvas.Body>
-                  {auth().user_level === 1 ? (
+                  {auth().user_level === 1 || auth().user_level === 2 ? (
                     <Aside />
                   ) : auth().user_level === 3 ? (
                     <AsideVerifier />

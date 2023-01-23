@@ -147,7 +147,7 @@ export const VerifierCreateVU = () => {
               </Col>
             </Row>
             {/* NAVBAR */}
-            <main className="min-vh-100 px-2 mt-4">
+            <main className="min-vh-100 px-2 mt-3">
               <Row>
                 <Col>
                   <Card>

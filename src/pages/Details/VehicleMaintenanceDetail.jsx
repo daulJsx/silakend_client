@@ -142,7 +142,7 @@ export const VehicleMaintenancesDetail = () => {
                   </Col>
                 </Row>
                 {/* NAVBAR */}
-                <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
+                <main className="min-vh-100 px-2 mt-3 d-flex flex-column gap-2">
                   {maintenanceDetails === null ? (
                     <Alert variant="warning" className="d-flex bd-highlight">
                       <div className="fs-5 me-auto bd-highlight">

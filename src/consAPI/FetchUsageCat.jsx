@@ -35,7 +35,6 @@ async function FetchUsageCat() {
     } else {
       console.log(msg);
     }
-    throw error;
   }
 }
 

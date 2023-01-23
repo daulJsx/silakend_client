@@ -34,7 +34,6 @@ async function FetchUsers(limit) {
     return response.data;
   } catch (error) {
     console.log(error);
-    throw error;
   }
 }
 

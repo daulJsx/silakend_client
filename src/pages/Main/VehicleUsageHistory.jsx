@@ -24,9 +24,7 @@ import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
 // Icons
-import { HiOutlineClipboardCopy } from "react-icons/hi";
-import { FiArchive } from "react-icons/fi";
-import { AiFillEdit } from "react-icons/ai";
+import { FiClock } from "react-icons/fi";
 import { FaInfo } from "react-icons/fa";
 
 // Functions
@@ -48,6 +46,9 @@ export const VehicleUsageHistory = () => {
 
   // Get access token
   const token = Cookies.get("token");
+
+  // Numbering row
+  let index = 0;
 
   return token ? (
     auth().user_level === 1 || auth().user_level === 2 ? (
@@ -77,14 +78,14 @@ export const VehicleUsageHistory = () => {
                       key={idx}
                       placement={placement}
                       name={placement}
-                      bc={<FiArchive />}
+                      bc={<FiClock />}
                     />
                   ))}
                 </Col>
               </Row>
               {/* NAVBAR */}
 
-              <main className="px-2 min-vh-100">
+              <main className="px-2 min-vh-100 mt-3">
                 <Row>
                   <Col>
                     <Card>
@@ -106,10 +107,10 @@ export const VehicleUsageHistory = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {ordersData?.map((orders, index) => {
+                            {ordersData?.map((orders) => {
                               return orders.status === "DONE" ? (
                                 <tr key={orders.usage_id}>
-                                  <td>{index + 1}</td>
+                                  <td>{(index += 1)}</td>
                                   <td>{orders.user.name}</td>
                                   <td>
                                     {orders.start_date} s/d {orders.end_date}

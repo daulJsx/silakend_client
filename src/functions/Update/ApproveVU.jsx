@@ -34,6 +34,16 @@ export const ApproveVU = async (order) => {
     headers: { Authorization: `Bearer ${token}` },
   };
 
+  const departTimeFromMap = depart_time || null;
+  const formattedDepartTime = departTimeFromMap
+    ? new Date(`1970-01-01T${departTimeFromMap}Z`).toISOString().substr(11, 5)
+    : null;
+
+  const arriveTimeFromMap = arrive_time || null;
+  const formattedArriveTime = arriveTimeFromMap
+    ? new Date(`1970-01-01T${arriveTimeFromMap}Z`).toISOString().substr(11, 5)
+    : null;
+
   const body = {
     vehicle_id: vehicle_id,
     driver_id: driver_id,
@@ -43,9 +53,9 @@ export const ApproveVU = async (order) => {
     start_date: start_date,
     end_date: end_date,
     depart_date: depart_date,
-    depart_time: depart_time,
+    depart_time: formattedDepartTime,
     arrive_date: arrive_date,
-    arrive_time: arrive_time,
+    arrive_time: formattedArriveTime,
     distance_count_out: distance_count_out,
     distance_count_in: distance_count_in,
     usage_description: usage_description,

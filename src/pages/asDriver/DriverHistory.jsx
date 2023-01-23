@@ -54,11 +54,6 @@ export const DriverHistory = () => {
   // Numbering row
   let index = 0;
 
-  // Condition if there are orders with status are DONE
-  const orderHistory = ordersData?.map((orders) => {
-    return orders.status === "DONE";
-  });
-
   return token ? (
     auth().user_level === 4 ? (
       isError ? (
@@ -94,71 +89,63 @@ export const DriverHistory = () => {
               </Row>
               {/* NAVBAR */}
 
-              <main className="px-2 min-vh-100 d-flex flex-column gap-3">
+              <main className="px-2 min-vh-100 d-flex flex-column gap-3 mt-3">
                 <Row>
                   <Col>
-                    {orderHistory ? (
-                      <Alert variant="secondary" style={{ border: "none" }}>
-                        <p>Belum ada riwayat tugas</p>
-                      </Alert>
-                    ) : (
-                      <Card>
-                        <Card.Body>
-                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            <span className="me-2">Daftar Riwayat Tugas</span>
-                          </Card.Title>
+                    <Card>
+                      <Card.Body>
+                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                          <span className="me-2">Daftar Riwayat Tugas</span>
+                        </Card.Title>
 
-                          <Table bordered hover responsive>
-                            <thead>
-                              <tr>
-                                <th>No</th>
-                                <th>PEMINJAM</th>
-                                <th>KATEGORI PEMINJAMAN</th>
-                                <th>DESTINASI</th>
-                                <th>WAKTU PINJAM</th>
-                                <th>STATUS</th>
-                                <th>RINCIAN</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {ordersData.map((orders) => {
-                                return orders.status === "DONE" ? (
-                                  <tr key={orders.usage_id}>
-                                    <td>{(index += 1)}</td>
-                                    <td>{orders.user.name}</td>
-                                    <td>{orders.category.name}</td>
-                                    <td>{orders.destination}</td>
-                                    <td>
-                                      {orders.start_date} s/d {orders.end_date}
-                                    </td>
-                                    <td align="center">
-                                      <Badge bg={"success"}>
-                                        {orders.status}
-                                      </Badge>
-                                    </td>
+                        <Table bordered hover responsive>
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>PEMINJAM</th>
+                              <th>KATEGORI PEMINJAMAN</th>
+                              <th>DESTINASI</th>
+                              <th>WAKTU PINJAM</th>
+                              <th>STATUS</th>
+                              <th>RINCIAN</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {ordersData.map((orders) => {
+                              return orders.status === "DONE" ? (
+                                <tr key={orders.usage_id}>
+                                  <td>{(index += 1)}</td>
+                                  <td>{orders.user.name}</td>
+                                  <td>{orders.category.name}</td>
+                                  <td>{orders.destination}</td>
+                                  <td>
+                                    {orders.start_date} s/d {orders.end_date}
+                                  </td>
+                                  <td align="center">
+                                    <Badge bg={"success"}>
+                                      {orders.status}
+                                    </Badge>
+                                  </td>
 
-                                    <td align="center">
-                                      <NavLink
-                                        to={
-                                          "/driver/riwayat-tugas/rincian-tugas"
-                                        }
+                                  <td align="center">
+                                    <NavLink
+                                      to={"/driver/tugas-masuk/rincian-tugas"}
+                                    >
+                                      <Button
+                                        onClick={() => GetOrderId(orders)}
+                                        className="btn btn-detail"
                                       >
-                                        <Button
-                                          onClick={() => GetOrderId(orders)}
-                                          className="btn btn-detail"
-                                        >
-                                          <FaInfo className="fs-6" />
-                                        </Button>
-                                      </NavLink>
-                                    </td>
-                                  </tr>
-                                ) : null;
-                              })}
-                            </tbody>
-                          </Table>
-                        </Card.Body>
-                      </Card>
-                    )}
+                                        <FaInfo className="fs-6" />
+                                      </Button>
+                                    </NavLink>
+                                  </td>
+                                </tr>
+                              ) : null;
+                            })}
+                          </tbody>
+                        </Table>
+                      </Card.Body>
+                    </Card>
                   </Col>
                 </Row>
               </main>

@@ -96,7 +96,7 @@ export const MainDriver = () => {
               </Row>
               {/* NAVBAR */}
 
-              <main className="px-2 min-vh-100 d-flex flex-column gap-3">
+              <main className="px-2 min-vh-100 d-flex flex-column gap-3 mt-3">
                 <Row>
                   <Col>
                     {ordersData.length === 0 ? (

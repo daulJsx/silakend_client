@@ -33,6 +33,7 @@ import { UserDetail } from "./pages/Details/UserDetail";
 import { VehicleUsages } from "./pages/Main/VehicleUsages";
 import { CreateOrder } from "./pages/CreatePages/CreateOrder";
 import { UpdateOrder } from "./pages/UpdatePages/UpdateOrder";
+import { UpdateOrderHistory } from "./pages/UpdatePages/UpdateOrderHistory";
 import { VehicleUsageDetail } from "./pages/Details/VehicleUsageDetail";
 import { VehicleUsageHistory } from "./pages/Main/VehicleUsageHistory";
 
@@ -167,8 +168,13 @@ function App() {
               element={<VehicleUsageDetail />}
             />
             <Route
-              path="/riwayat-pengajuan"
+              exact
+              path="/riwayat-peminjaman"
               element={<VehicleUsageHistory />}
+            />
+            <Route
+              path="/riwayat-peminjaman/edit-riwayat-peminjaman"
+              element={<UpdateOrderHistory />}
             />
             {/*----- END ORDER PAGES---- */}
 

@@ -337,7 +337,7 @@ export const VerifierVUDetail = () => {
                                         >
                                           <div className="ms-2 me-auto">
                                             <div className="fw-bold">
-                                              WAKTU SAMPAI
+                                              WAKTU PULANG
                                             </div>
                                             {vu.arrive_date} PUKUL{" "}
                                             {vu.arrive_time}

@@ -143,7 +143,19 @@ export const VerifierSelfVU = () => {
                                         : "success"
                                     }
                                   >
-                                    {orders.status}
+                                    {orders.status === "CANCELED"
+                                      ? "Batal"
+                                      : orders.status === "REJECTED"
+                                      ? "Ditolak"
+                                      : orders.status === "WAITING"
+                                      ? "Diajukan"
+                                      : orders.status === "READY"
+                                      ? "Siap Berangkat"
+                                      : orders.status === "APPROVED"
+                                      ? "Disetujui"
+                                      : orders.status === "PROGRESS"
+                                      ? "Berlangsung"
+                                      : "Selesai"}
                                   </Badge>
                                 </td>
 
@@ -155,9 +167,21 @@ export const VerifierSelfVU = () => {
                                   >
                                     <Button
                                       onClick={() => GetOrderId(orders)}
-                                      className="btn btn-detail"
+                                      className="btn btn-detail position-relative"
                                     >
                                       <FaInfo className="fs-6" />
+                                      {orders.vehicle &&
+                                      orders.driver &&
+                                      orders.status === "READY" ? (
+                                        <Badge
+                                          className="position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle"
+                                          bg="danger"
+                                        >
+                                          <span class="visually-hidden">
+                                            New alerts
+                                          </span>
+                                        </Badge>
+                                      ) : null}
                                     </Button>
                                   </NavLink>
                                 </td>

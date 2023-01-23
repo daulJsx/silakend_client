@@ -205,9 +205,6 @@ export const VehicleUsageDetail = () => {
 
                                     <ListGroup.Item
                                       as="li"
-                                      variant={
-                                        currentUsage.driver ? null : "warning"
-                                      }
                                       className="d-flex justify-content-between align-items-start"
                                     >
                                       <div className="ms-2 me-auto">
@@ -215,9 +212,8 @@ export const VehicleUsageDetail = () => {
                                         {currentUsage.driver ? (
                                           currentUsage.driver.name
                                         ) : (
-                                          <p>
-                                            Pengemudi belum ditugaskan untuk
-                                            pengajuan ini
+                                          <p className="text-muted">
+                                            Belum ada pengemudi yang ditugaskan
                                           </p>
                                         )}
                                       </div>
@@ -225,9 +221,6 @@ export const VehicleUsageDetail = () => {
 
                                     <ListGroup.Item
                                       as="li"
-                                      variant={
-                                        currentUsage.vehicle ? null : "warning"
-                                      }
                                       className="d-flex justify-content-between align-items-start"
                                     >
                                       <div className="ms-2 me-auto">
@@ -235,9 +228,8 @@ export const VehicleUsageDetail = () => {
                                         {currentUsage.vehicle ? (
                                           currentUsage.vehicle.name
                                         ) : (
-                                          <p>
-                                            Kendaraan belum ditugaskan untuk
-                                            pengajuan ini
+                                          <p className="text-muted">
+                                            Belum ada kendaraan yang ditugaskan
                                           </p>
                                         )}
                                       </div>
@@ -249,7 +241,7 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">
-                                          WAKTU KEBERANGKATAN
+                                          WAKTU BERANGKAT
                                         </div>
                                         {currentUsage.depart_date &&
                                         currentUsage.depart_time ? (
@@ -258,9 +250,8 @@ export const VehicleUsageDetail = () => {
                                             {currentUsage.depart_time}
                                           </>
                                         ) : (
-                                          <p>
-                                            Waktu keberangkatan belum dimasukkan
-                                            untuk pengajuan ini
+                                          <p className="text-muted">
+                                            Waktu berangkat belum ditentukan
                                           </p>
                                         )}
                                       </div>
@@ -272,7 +263,7 @@ export const VehicleUsageDetail = () => {
                                     >
                                       <div className="ms-2 me-auto">
                                         <div className="fw-bold">
-                                          WAKTU KEPULANGAN
+                                          WAKTU PULANG
                                         </div>
                                         {currentUsage.arrive_date &&
                                         currentUsage.arrive_time ? (
@@ -281,9 +272,8 @@ export const VehicleUsageDetail = () => {
                                             {currentUsage.arrive_time}
                                           </>
                                         ) : (
-                                          <p>
-                                            Waktu kepulangan belum dimasukkan
-                                            untuk pengajuan ini
+                                          <p className="text-muted">
+                                            Waktu pulang belum ditentukan
                                           </p>
                                         )}
                                       </div>
@@ -317,7 +307,7 @@ export const VehicleUsageDetail = () => {
                                             </div>
                                           </>
                                         ) : (
-                                          <p>
+                                          <p className="text-muted">
                                             Odometer belum dimasukkan dalam
                                             pengajuan ini
                                           </p>

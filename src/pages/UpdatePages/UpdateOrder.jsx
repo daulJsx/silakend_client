@@ -8,8 +8,6 @@ import axios from "axios";
 
 // Functions
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
-import { ApproveVU } from "../../functions/Update/ApproveVU";
-import { RejectVU } from "../../functions/Update/RejectVU";
 
 // Fetch Requirements
 import { useQuery } from "react-query";
@@ -159,8 +157,8 @@ export const UpdateOrder = () => {
     };
 
     swal({
-      title: "Yakin?",
-      text: "Pastikan kembali perubahan data peminjaman",
+      title: "Yakin ?",
+      text: "Pastikan kembali pengajuan, sebelum ditindak lanjuti",
       icon: "warning",
       buttons: true,
       dangerMode: true,

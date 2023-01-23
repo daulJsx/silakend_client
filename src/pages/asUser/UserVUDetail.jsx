@@ -14,9 +14,7 @@ import { Navigate } from "react-router-dom";
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Bootstrap components
-import { Container, Row, Col } from "react-bootstrap";
-import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
+import { Container, Row, Col, Card, ListGroup } from "react-bootstrap";
 
 // Components
 import { AsideUser } from "../../components/aside/AsideUser";
@@ -242,7 +240,7 @@ export const UserVUDetail = () => {
                                       <>
                                         <ListGroup.Item
                                           as="li"
-                                          className="d-flex justify-content-between align-items-start"
+                                          className="d-flex justify-content-between align-items-start position-relative"
                                         >
                                           <div className="ms-2 me-auto">
                                             <div className="fw-bold">
@@ -319,7 +317,7 @@ export const UserVUDetail = () => {
                                       >
                                         <div className="ms-2 me-auto">
                                           <div className="fw-bold">
-                                            WAKTU SAMPAI
+                                            WAKTU PULANG
                                           </div>
                                           {userOrder.arrive_date} PUKUL{" "}
                                           {userOrder.arrive_time}

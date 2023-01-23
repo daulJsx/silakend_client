@@ -59,8 +59,8 @@ export const Aside = () => {
 
         <AsideMenu
           icon={<FiClock />}
-          title="Riwayat Pengajuan "
-          link="/riwayat-pengajuan"
+          title="Riwayat Peminjaman "
+          link="/riwayat-peminjaman"
         />
 
         <AsideMenu

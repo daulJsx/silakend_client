@@ -8,13 +8,14 @@ import axios from "axios";
 
 // Redirecting
 import { useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -23,6 +24,8 @@ import { Footer } from "../../components/footer/Footer";
 
 // icons
 import { FaArrowLeft } from "react-icons/fa";
+import { HiOutlineClipboardList } from "react-icons/hi";
+import { FiChevronRight } from "react-icons/fi";
 
 // React Notification
 import swal from "sweetalert";
@@ -122,19 +125,50 @@ export const CreateUsageCategories = () => {
               </Col>
             </Row>
             {/* NAVBAR */}
-            <main className="min-vh-10 px-2 mt-4">
+
+            <main className="px-2 min-vh-100 mt-4">
               <Row>
                 <Col>
-                  <Card>
-                    <Form onSubmit={postNewUsageCat}>
-                      <Card.Body>
-                        <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                          Silahkan Tambah Kategori Peminjaman Baru Disini
-                        </Card.Title>
+                  <Card className="shadow rounded bg__primary">
+                    <Card.Header>
+                      <Container>
+                        <Row className="gap-3 mt-4">
+                          <Col>
+                            <h3 className="main__title">Kategori Peminjaman</h3>
+                            <Breadcrumb className="breadcrumb__item mt-3">
+                              <Breadcrumb.Item
+                                className="breadcrumb__item"
+                                href="#"
+                              >
+                                <div className="d-flex justify-content-center align-items-center gap-2">
+                                  <NavLink
+                                    to={"/kategori-peminjaman"}
+                                    className="d-flex justify-content-center align-items-center text-muted gap-2"
+                                  >
+                                    <HiOutlineClipboardList className="fs-5" />
+                                    Data
+                                  </NavLink>
 
-                        <Container>
-                          <Row>
-                            <Col>
+                                  <FiChevronRight className="fs-6 breadcrumb__divider" />
+                                  <span className="color-primary">
+                                    Tambah Kategori Peminjaman
+                                  </span>
+                                </div>
+                              </Breadcrumb.Item>
+                            </Breadcrumb>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Header>
+
+                    <Card.Body className="p-4">
+                      <Container
+                        className="p-4"
+                        style={{ background: "#fff", borderRadius: "10px" }}
+                      >
+                        <Row>
+                          <Col>
+                            <Form onSubmit={postNewUsageCat}>
                               <Form.Group className="mb-3">
                                 <Form.Label>Nama kategori</Form.Label>
                                 <Form.Control
@@ -149,29 +183,30 @@ export const CreateUsageCategories = () => {
                                   }
                                 />
                               </Form.Group>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </Card.Body>
-                      <Card.Footer>
-                        <Button
-                          className="btn-post"
-                          onClick={postNewUsageCat}
-                          type="submit"
-                        >
-                          Tambahkan
-                        </Button>
-                      </Card.Footer>
-                    </Form>
+                              <Form.Group>
+                                <Button
+                                  className="btn-post"
+                                  onClick={postNewUsageCat}
+                                  type="submit"
+                                >
+                                  Tambahkan
+                                </Button>
+                              </Form.Group>
+                            </Form>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Body>
                   </Card>
                 </Col>
               </Row>
-              <Row>
-                <Col>
-                  <Footer />
-                </Col>
-              </Row>
             </main>
+
+            <Row>
+              <Col>
+                <Footer />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Container>

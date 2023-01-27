@@ -34,6 +34,7 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Custom Style
 import "../CustomStyles/dash.css";
+import "../CustomStyles/bsOverride.css";
 
 export const Dashboard = () => {
   // get access token

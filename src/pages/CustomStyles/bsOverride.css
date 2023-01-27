@@ -1,0 +1,119 @@
+.card {
+  border: none;
+  border-radius: 15px;
+}
+
+.bg__primary {
+  background: var(--bg-primary);
+}
+
+.card-header {
+  border-radius: 15px;
+  background: var(--bg-primary);
+  border: none;
+}
+
+.btn-add {
+  background-image: linear-gradient(
+    to bottom,
+    #0c75c0,
+    #0d7cd1,
+    #1a81db,
+    #2681e2,
+    #388af8
+  );
+  box-shadow: 1px 1px 50px #0966a82d, -1px -1px 50px #0966a829;
+  color: var(--white);
+  border-radius: 10px;
+  border: none;
+  margin-left: 0.5rem;
+  transition: 250ms;
+  transform: translateY(-0.3rem);
+}
+
+.btn-add:hover {
+  background: #1777cd;
+  outline: none;
+  color: var(--white);
+  box-shadow: none;
+}
+
+.btn-edit {
+  background: linear-gradient(145deg, #dfffff, #bbdae6);
+  color: #04297a;
+  border: none;
+}
+
+.btn-detail {
+  background: linear-gradient(145deg, #dfffff, #91dafc);
+  color: #25abf3;
+  border: none;
+}
+
+.btn-delete {
+  background: linear-gradient(145deg, #fff7e8, #e6d0c3);
+  color: #7a0c2e;
+  border: none;
+}
+
+.alert-update-user {
+  transform: translateY(-2rem);
+}
+
+.rolesList {
+  margin-left: -1.9rem;
+}
+
+.main__title {
+  font-size: 23px;
+  line-height: 20px;
+}
+
+.breadcrumb__item {
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.breadcrumb__divider {
+  color: #666666;
+}
+
+input.input.form-custom {
+  background: var(--bg-primary);
+  border: none;
+  padding: 1rem;
+}
+
+textarea.textarea-custom {
+  resize: none;
+  background-color: var(--bg-primary);
+  border: none;
+  height: 3rem;
+}
+
+button.btn-post {
+  background-image: linear-gradient(
+    to bottom,
+    #0c75c0,
+    #0d7cd1,
+    #1a81db,
+    #2681e2,
+    #388af8
+  );
+  box-shadow: 1px 1px 50px #0966a82d, -1px -1px 50px #0966a829;
+  border: none;
+  padding: 0.7rem;
+  transition: var(--transition);
+}
+
+button.btn-post:hover {
+  background-image: linear-gradient(
+    to bottom,
+    #0962a272,
+    #0c6db76e,
+    #1778cd6a,
+    #2681e269,
+    #388bf863
+  );
+  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+}

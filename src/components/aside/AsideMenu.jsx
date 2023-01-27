@@ -13,9 +13,9 @@ export const AsideMenu = ({ icon, title, link }) => {
   return (
     <Nav.Item className="side-menu" as="li">
       <NavLink to={link} exact className="nav-link">
-        <div className="d-flex">
+        <div className="d-flex align-items-center gap-3">
           <span className="fs-4">{icon}</span>
-          <span className="ms-3 mt-2">{title}</span>
+          <span>{title}</span>
         </div>
       </NavLink>
     </Nav.Item>

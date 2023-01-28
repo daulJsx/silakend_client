@@ -122,7 +122,7 @@ export const VehicleDetail = () => {
                 </Row>
                 {/* NAVBAR */}
 
-                <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
+                <main className="min-vh-100 px-2 mt-3 d-flex flex-column gap-2">
                   <Row>
                     <Col>
                       <Card>

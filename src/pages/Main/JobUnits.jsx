@@ -21,6 +21,7 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -32,6 +33,7 @@ import { RiCommunityLine } from "react-icons/ri";
 import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
+import { FiChevronRight } from "react-icons/fi";
 
 export const JobUnits = () => {
   const auth = useAuthUser();
@@ -93,72 +95,98 @@ export const JobUnits = () => {
               </Row>
               {/* NAVBAR */}
 
-              <div className="me-1 d-flex justify-content-end">
-                <Row className="py-4 mb-2">
-                  <Col>
-                    <NavLink to={"/unit-kerja/tambah-unit-kerja"}>
-                      <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                        Tambah Unit Kerja
-                        <HiPlusSm className="fs-3" />
-                      </Button>
-                    </NavLink>
-                  </Col>
-                </Row>
-              </div>
-
-              <main className="min-vh-100 px-2">
+              <main className="px-2 min-vh-100 mt-4">
                 <Row>
                   <Col>
-                    <Card>
-                      <Card.Body>
-                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                          Data Unit Kerja
-                        </Card.Title>
-
-                        <Table bordered hover responsive>
-                          <thead>
-                            <tr>
-                              <th>No</th>
-                              <th>NAMA UNIT KERJA</th>
-                              <th>KODE</th>
-                              <th>AKSI</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {jobsData?.map((jobUnits, index) => (
-                              <tr key={jobUnits.unit_id}>
-                                <td>{index + 1}</td>
-                                <td>{jobUnits.name}</td>
-                                <td>{jobUnits.unit_account}</td>
-                                <td>
-                                  <div className="d-flex gap-1 justify-content-center">
-                                    <NavLink to={"/unit-kerja/edit-unit-kerja"}>
-                                      <Button
-                                        className="btn btn-edit"
-                                        onClick={() => GetJobUnitById(jobUnits)}
-                                      >
-                                        <AiFillEdit className="fs-6" />
-                                      </Button>
-                                    </NavLink>
-                                    <Button
-                                      className="btn-danger btn-delete"
-                                      onClick={() =>
-                                        DeleteJobUnit(jobUnits.unit_id)
-                                      }
-                                    >
-                                      <FaTrashAlt className="fs-6" />
-                                    </Button>
+                    <Card className="shadow rounded bg__primary">
+                      <Card.Header>
+                        <Container>
+                          <Row className="gap-3 mt-4">
+                            <Col>
+                              <h3 className="main__title">Unit Kerja</h3>
+                              <Breadcrumb className="breadcrumb__item mt-3">
+                                <Breadcrumb.Item
+                                  className="breadcrumb__item"
+                                  href="#"
+                                >
+                                  <div className="d-flex color-primary justify-content-center align-items-center gap-2 breadcrumb__text">
+                                    <RiCommunityLine className="fs-5" />
+                                    Data
+                                    <FiChevronRight className="fs-6 breadcrumb__divider" />
                                   </div>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </Table>
+                                </Breadcrumb.Item>
+                              </Breadcrumb>
+                            </Col>
+                            <Col md={2} className="me-2">
+                              <NavLink to={"/unit-kerja/tambah-unit-kerja"}>
+                                <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                                  Tambah
+                                  <HiPlusSm className="fs-3" />
+                                </Button>
+                              </NavLink>
+                            </Col>
+                          </Row>
+                        </Container>
+                      </Card.Header>
+                      <Card.Body className="p-4">
+                        <Container
+                          className="p-4"
+                          style={{ background: "#fff", borderRadius: "10px" }}
+                        >
+                          <Row>
+                            <Col>
+                              <Table hover responsive>
+                                <thead>
+                                  <tr>
+                                    <th>No</th>
+                                    <th>NAMA UNIT KERJA</th>
+                                    <th>KODE</th>
+                                    <th>AKSI</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {jobsData?.map((jobUnits, index) => (
+                                    <tr key={jobUnits.unit_id}>
+                                      <td>{index + 1}</td>
+                                      <td>{jobUnits.name}</td>
+                                      <td>{jobUnits.unit_account}</td>
+                                      <td>
+                                        <div className="d-flex gap-1 justify-content-center">
+                                          <NavLink
+                                            to={"/unit-kerja/edit-unit-kerja"}
+                                          >
+                                            <Button
+                                              className="btn btn-edit"
+                                              onClick={() =>
+                                                GetJobUnitById(jobUnits)
+                                              }
+                                            >
+                                              <AiFillEdit className="fs-6" />
+                                            </Button>
+                                          </NavLink>
+                                          <Button
+                                            className="btn-danger btn-delete"
+                                            onClick={() =>
+                                              DeleteJobUnit(jobUnits.unit_id)
+                                            }
+                                          >
+                                            <FaTrashAlt className="fs-6" />
+                                          </Button>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </Table>
+                            </Col>
+                          </Row>
+                        </Container>
                       </Card.Body>
                     </Card>
                   </Col>
                 </Row>
               </main>
+
               <Row>
                 <Col>
                   <Footer />

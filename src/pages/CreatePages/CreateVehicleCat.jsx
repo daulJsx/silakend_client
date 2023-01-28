@@ -95,7 +95,7 @@ export const CreateVehicleCat = () => {
   };
 
   return token ? (
-    auth().user_level === 1 ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
       <Container fluid>
         <Row>
           {/* SIDEBAR */}

@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 // React Notification
 import swal from "sweetalert";
 
-export const UpdateVUAsUser = async (order) => {
+export const CancelVU = async (order) => {
   let {
     ucategory_id,
     destination,
@@ -59,7 +59,6 @@ export const UpdateVUAsUser = async (order) => {
         if (status_description) {
           body.status_description = status_description;
           try {
-            console.log(body);
             await axios
               .put(
                 `https://silakend-server.xyz/api/vehicleusages/${usage_id}`,

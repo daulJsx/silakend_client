@@ -9,12 +9,6 @@ import axios from "axios";
 // Functions
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
-// Fetch Requirements
-import { useQuery } from "react-query";
-import FetchVehicles from "../../consAPI/FetchVehicles";
-import FetchUsers from "../../consAPI/FetchUsers";
-import FetchUsageCat from "../../consAPI/FetchUsageCat";
-
 // Navigating
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
@@ -42,10 +36,9 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useAuthUser } from "react-auth-kit";
 
 // Icons
-import { FiXCircle } from "react-icons/fi";
 import { FiCheckCircle } from "react-icons/fi";
 
-export const UpdateOrder = () => {
+export const UpdateOrderHistory = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -59,11 +52,6 @@ export const UpdateOrder = () => {
   const orderString = localStorage.getItem("orderToMap");
   // Parse the JSON string into a JavaScript object
   const orderToMap = JSON.parse(orderString);
-
-  // Fetching requirement data
-  const { data: vehiclesData } = useQuery("vehicles", FetchVehicles);
-  const { data: usageCatData } = useQuery("usageCat", FetchUsageCat);
-  const { data: usersData } = useQuery(["users"], FetchUsers);
 
   // dynamically variable value for update
   const [vehicleId, setVehicleId] = useState("");
@@ -115,6 +103,8 @@ export const UpdateOrder = () => {
   const [currentDCO] = [orderToMap].map((dco) => dco.distance_count_out);
   const [currentDCI] = [orderToMap].map((dci) => dci.distance_count_in);
 
+  const [currentStatus] = [orderToMap].map((status) => status.status);
+
   // format the time to hh:mm, caused by the orderToMap time format is h:i:s
   const departTimeFromMap = currentDepartTime || null;
   const formattedDepartTime = departTimeFromMap
@@ -137,17 +127,18 @@ export const UpdateOrder = () => {
     destination: destination === "" ? currentDestination : destination,
     start_date: startDate === "" ? currentStartDate : startDate,
     end_date: endDate === "" ? currentEndDate : endDate,
-
+    depart_date: departDate === "" ? currentDepartDate : departDate,
+    depart_time: departTime === "" ? formattedDepartTime : departTime,
+    arrive_date: arriveDate === "" ? currentArriveDate : arriveDate,
+    arrive_time: arriveTime === "" ? formattedArriveTime : arriveTime,
     distance_count_out: dco === "" ? currentDCO : dco,
     distance_count_in: dci === "" ? currentDCI : dci,
-    status: "",
+    status: currentStatus,
     status_description: "",
   };
 
-  const handleReady = async (e) => {
+  const handleFinal = async (e) => {
     e.preventDefault();
-
-    console.log(body);
 
     const config = {
       headers: { Authorization: `Bearer ${token}` },
@@ -155,13 +146,12 @@ export const UpdateOrder = () => {
 
     swal({
       title: "Yakin ?",
-      text: "Pastikan kembali pengajuan, sebelum ditindak lanjuti",
+      text: "Aksi ini akan menyelesaikan proses peminjaman kendaraan dinas",
       icon: "warning",
       buttons: true,
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        body.status = "READY";
         try {
           await axios
             .put(
@@ -171,7 +161,7 @@ export const UpdateOrder = () => {
             )
             .then((response) => {
               if (response.status === 200) {
-                navigate("/pengajuan-peminjaman");
+                navigate("/riwayat-pengajuan");
                 swal({
                   title: "Berhasil!",
                   text: response.data.msg,
@@ -194,77 +184,6 @@ export const UpdateOrder = () => {
         }
       } else {
         swal("Data peminjaman aman!");
-      }
-    });
-  };
-  const handleReject = async (e) => {
-    e.preventDefault();
-
-    console.log(body);
-
-    const config = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
-
-    swal({
-      title: "Tolak Pengajuan?",
-      text: "Klik ok untuk melanjutkan aksi ini",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then(async (willDelete) => {
-      if (willDelete) {
-        swal({
-          icon: "info",
-          text: "Harap Masukkan Keterangan",
-          buttons: true,
-          dangerMode: true,
-          content: {
-            element: "input",
-          },
-        }).then(async (status_description) => {
-          if (status_description) {
-            body.status = "REJECTED";
-            body.status_description = status_description;
-            try {
-              await axios
-                .put(
-                  `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
-                  body,
-                  config
-                )
-                .then((response) => {
-                  navigate("/pengajuan-peminjaman");
-                  swal({
-                    title: "Berhasil!",
-                    text: response.data.msg,
-                    icon: "success",
-                    button: "Tutup",
-                  });
-                });
-            } catch (error) {
-              console.log(error.response.data);
-              if (error.response) {
-                const { message, msg } = error.response.data;
-                if (message) {
-                  swal("Ups!", message, "error");
-                } else {
-                  swal("Ups!", msg, "error");
-                }
-              } else {
-                swal("Ups!", "Something went wrong", "error");
-              }
-            }
-          } else {
-            swal({
-              text: "Harap isi keterangan",
-            });
-          }
-        });
-      } else {
-        swal({
-          text: "Aksi dibatalkan",
-        });
       }
     });
   };
@@ -293,8 +212,8 @@ export const UpdateOrder = () => {
                       placement={placement}
                       name={placement}
                       bc={<FaArrowLeft />}
-                      title={"Edit Pengajuan Peminjaman Kendaraan"}
-                      parentLink={"/pengajuan-peminjaman"}
+                      title={"Riwayat Peminjaman Kendaraan"}
+                      parentLink={"/riwayat-pengajuan"}
                     />
                   ))}
                 </Col>
@@ -304,20 +223,18 @@ export const UpdateOrder = () => {
                 <Row>
                   <Col>
                     <Card>
-                      <Form>
+                      <Form onSubmit={handleFinal}>
                         {orderToMap
                           ? [orderToMap]?.map((orderToUpdate) => (
                               <>
                                 <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                                  Silahkan Edit Data Peminjaman Kendaraan Dinas
-                                  Disini
+                                  Rincian Riwayat
                                 </Card.Title>
                                 <Card.Body>
                                   <Form.Group className="mb-3">
                                     <Form.Label>Peminjam</Form.Label>
                                     <Form.Select
                                       disabled
-                                      required
                                       style={{
                                         backgroundColor: "#ced4da",
                                         border: "none",
@@ -333,12 +250,10 @@ export const UpdateOrder = () => {
                                       </option>
                                     </Form.Select>
                                   </Form.Group>
-
                                   <Form.Group className="mb-3">
                                     <Form.Label>Kategori Peminjaman</Form.Label>
                                     <Form.Select
                                       disabled
-                                      required
                                       style={{
                                         backgroundColor: "#ced4da",
                                         border: "none",
@@ -354,17 +269,8 @@ export const UpdateOrder = () => {
                                       >
                                         {orderToUpdate.category.name}
                                       </option>
-                                      {usageCatData?.map((usageCat) => (
-                                        <option
-                                          value={usageCat.ucategory_id}
-                                          key={usageCat.ucategory_id}
-                                        >
-                                          {usageCat.name}
-                                        </option>
-                                      ))}
                                     </Form.Select>
                                   </Form.Group>
-
                                   <Form.Group
                                     className="mb-3"
                                     controlId="exampleForm.ControlTextarea1"
@@ -383,7 +289,6 @@ export const UpdateOrder = () => {
                                       }}
                                     />
                                   </Form.Group>
-
                                   <Form.Group>
                                     <Form.Label>Jumlah Personil</Form.Label>
                                     <InputGroup className="mb-3">
@@ -408,7 +313,6 @@ export const UpdateOrder = () => {
                                       </InputGroup.Text>
                                     </InputGroup>
                                   </Form.Group>
-
                                   <Form.Group className="mb-3">
                                     <Form.Label>Destinasi</Form.Label>
                                     <Form.Control
@@ -424,24 +328,17 @@ export const UpdateOrder = () => {
                                       type="text"
                                     />
                                   </Form.Group>
-
                                   <Form.Group className="py-1">
-                                    <Form.Label>
-                                      Tanggal pinjam yang diajukan :{" "}
-                                      <span className="fw-bold text-dark">
-                                        {orderToUpdate.start_date} s/d{" "}
-                                        {orderToUpdate.end_date}
-                                      </span>
-                                    </Form.Label>
+                                    <Form.Label>waktu pinjam</Form.Label>
                                     <InputGroup className="mb-3">
                                       <Form.Control
-                                        required
-                                        className="input form-custom"
+                                        disabled
                                         style={{
-                                          backgroundColor: "#F5F7FC",
+                                          backgroundColor: "#ced4da",
                                           border: "none",
-                                          padding: "15px",
+                                          padding: "17px",
                                         }}
+                                        value={orderToUpdate.start_date}
                                         type="date"
                                         onChange={(e) =>
                                           setStartDate(e.target.value)
@@ -456,30 +353,70 @@ export const UpdateOrder = () => {
                                         s/d
                                       </InputGroup.Text>
                                       <Form.Control
+                                        disabled
                                         required
-                                        className="input form-custom"
                                         style={{
-                                          backgroundColor: "#F5F7FC",
+                                          backgroundColor: "#ced4da",
                                           border: "none",
-                                          padding: "15px",
+                                          padding: "17px",
                                         }}
                                         type="date"
                                         onChange={(e) =>
                                           setEndDate(e.target.value)
                                         }
+                                        value={orderToUpdate.end_date}
                                       />
                                     </InputGroup>
                                   </Form.Group>
-
+                                  <Form.Group className="py-1">
+                                    <Form.Label>waktu berangkat</Form.Label>
+                                    <InputGroup className="mb-3">
+                                      <InputGroup.Text
+                                        style={{
+                                          border: "none",
+                                        }}
+                                        id="basic-addon2"
+                                      >
+                                        Tanggal
+                                      </InputGroup.Text>
+                                      <Form.Control
+                                        disabled
+                                        style={{
+                                          backgroundColor: "#ced4da",
+                                          border: "none",
+                                          padding: "17px",
+                                        }}
+                                        type="date"
+                                        onChange={(e) =>
+                                          setDepartDate(e.target.value)
+                                        }
+                                        value={orderToUpdate.depart_date}
+                                      />
+                                      <InputGroup.Text
+                                        style={{
+                                          border: "none",
+                                        }}
+                                        id="basic-addon2"
+                                      >
+                                        Pukul
+                                      </InputGroup.Text>
+                                      <Form.Control
+                                        value={orderToUpdate.depart_time}
+                                        disabled
+                                        style={{
+                                          backgroundColor: "#ced4da",
+                                          border: "none",
+                                          padding: "17px",
+                                        }}
+                                        type="time"
+                                        onChange={(e) =>
+                                          setDepartTime(e.target.value)
+                                        }
+                                      />
+                                    </InputGroup>
+                                  </Form.Group>
                                   <Form.Group>
-                                    <Form.Label>
-                                      {orderToUpdate.distance_count_out ||
-                                      orderToUpdate.distance_count_in ? (
-                                        <p>ODOMETER</p>
-                                      ) : (
-                                        <p>Odometer diisi oleh supir</p>
-                                      )}
-                                    </Form.Label>
+                                    <Form.Label>odometer</Form.Label>
                                     <InputGroup className="mb-3">
                                       <InputGroup.Text
                                         style={{
@@ -490,16 +427,13 @@ export const UpdateOrder = () => {
                                         Jumlah Kilometer Pergi
                                       </InputGroup.Text>
                                       <Form.Control
-                                        required
-                                        placeholder={
-                                          orderToUpdate.distance_count_out
-                                        }
-                                        className="input form-custom"
+                                        disabled
                                         style={{
-                                          backgroundColor: "#F5F7FC",
+                                          backgroundColor: "#ced4da",
                                           border: "none",
-                                          padding: "15px",
+                                          padding: "17px",
                                         }}
+                                        value={orderToUpdate.distance_count_out}
                                         type="number"
                                         onChange={(e) => setDco(e.target.value)}
                                       />
@@ -512,10 +446,13 @@ export const UpdateOrder = () => {
                                         Jumlah Kilometer Pulang
                                       </InputGroup.Text>
                                       <Form.Control
-                                        required
-                                        placeholder={
-                                          orderToUpdate.distance_count_in
-                                        }
+                                        disabled
+                                        style={{
+                                          backgroundColor: "#ced4da",
+                                          border: "none",
+                                          padding: "17px",
+                                        }}
+                                        value={orderToUpdate.distance_count_in}
                                         className="input form-custom"
                                         style={{
                                           backgroundColor: "#F5F7FC",
@@ -527,192 +464,108 @@ export const UpdateOrder = () => {
                                       />
                                     </InputGroup>
                                   </Form.Group>
+                                  <Form.Group className="mb-3">
+                                    <Form.Label>Kendaraan</Form.Label>
+                                    <Form.Select
+                                      disabled
+                                      style={{
+                                        backgroundColor: "#ced4da",
+                                        border: "none",
+                                        padding: "17px",
+                                      }}
+                                      aria-label="Default select example"
+                                      onChange={(e) =>
+                                        setVehicleId(e.target.value)
+                                      }
+                                    >
+                                      <option value={orderToUpdate.vehicle_id}>
+                                        {orderToUpdate.vehicle.name}
+                                      </option>
+                                    </Form.Select>
+                                  </Form.Group>
+                                  <Form.Group className="mb-3">
+                                    <Form.Label>Pengemudi</Form.Label>
+                                    <Form.Select
+                                      disabled
+                                      style={{
+                                        backgroundColor: "#ced4da",
+                                        border: "none",
+                                        padding: "17px",
+                                      }}
+                                      aria-label="Default select example"
+                                      onChange={(e) =>
+                                        setDriverId(e.target.value)
+                                      }
+                                    >
+                                      <option value={orderToUpdate.driver_id}>
+                                        {orderToUpdate.driver.name}
+                                      </option>
+                                    </Form.Select>
+                                  </Form.Group>
 
-                                  {orderToUpdate.driver === null &&
-                                  orderToUpdate.vehicle === null ? (
-                                    <>
-                                      <Alert variant="warning">
-                                        <Alert.Heading>
-                                          Tugaskan Pengemudi Dan Kendaraan
-                                        </Alert.Heading>{" "}
-                                        <Form.Group className="mb-3">
-                                          <Form.Label>Kendaraan</Form.Label>
-                                          <Form.Select
-                                            required
-                                            style={{
-                                              backgroundColor: "#F5F7FC",
-                                              border: "none",
-                                              padding: "17px",
-                                            }}
-                                            aria-label="Default select example"
-                                            onChange={(e) =>
-                                              setVehicleId(e.target.value)
-                                            }
-                                          >
-                                            <option
-                                              value={
-                                                orderToUpdate.vehicle_id
-                                                  ? orderToUpdate.vehicle_id
-                                                  : null
-                                              }
-                                            >
-                                              {orderToUpdate.vehicle !==
-                                              null ? (
-                                                orderToUpdate.vehicle.name
-                                              ) : (
-                                                <p>-- Pilih Kendaraan --</p>
-                                              )}
-                                            </option>
-                                            {vehiclesData?.map((vehicles) => (
-                                              <option
-                                                key={vehicles.vehicle_id}
-                                                value={vehicles.vehicle_id}
-                                              >
-                                                {vehicles.name}
-                                              </option>
-                                            ))}
-                                          </Form.Select>
-                                        </Form.Group>
-                                        <Form.Group className="mb-3">
-                                          <Form.Label>Pengemudi</Form.Label>
-                                          <Form.Select
-                                            required
-                                            style={{
-                                              backgroundColor: "#F5F7FC",
-                                              border: "none",
-                                              padding: "17px",
-                                            }}
-                                            aria-label="Default select example"
-                                            onChange={(e) =>
-                                              setDriverId(e.target.value)
-                                            }
-                                          >
-                                            <option
-                                              value={orderToUpdate.driver_id}
-                                            >
-                                              {orderToUpdate.driver !== null ? (
-                                                orderToUpdate.driver.name
-                                              ) : (
-                                                <p>-- Pilih Pengemudi --</p>
-                                              )}
-                                            </option>
-                                            {usersData?.map((users) =>
-                                              users.role.map((userAsDriver) => {
-                                                return userAsDriver.level ===
-                                                  4 ? (
-                                                  <option
-                                                    value={users.user_id}
-                                                    key={users.user_id}
-                                                  >
-                                                    {users.name}
-                                                  </option>
-                                                ) : null;
-                                              })
-                                            )}
-                                          </Form.Select>
-                                        </Form.Group>
-                                      </Alert>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <Form.Group className="mb-3">
-                                        <Form.Label>Kendaraan</Form.Label>
-                                        <Form.Select
+                                  <Alert variant="warning">
+                                    <Alert.Heading>
+                                      Masukkan waktu pulang
+                                    </Alert.Heading>{" "}
+                                    <Form.Group className="py-1">
+                                      <InputGroup className="mb-3">
+                                        <InputGroup.Text
+                                          style={{
+                                            border: "none",
+                                          }}
+                                          id="basic-addon2"
+                                        >
+                                          Tanggal
+                                        </InputGroup.Text>
+                                        <Form.Control
                                           required
+                                          className="input form-custom"
                                           style={{
                                             backgroundColor: "#F5F7FC",
                                             border: "none",
-                                            padding: "17px",
+                                            padding: "15px",
                                           }}
-                                          aria-label="Default select example"
+                                          type="date"
                                           onChange={(e) =>
-                                            setVehicleId(e.target.value)
+                                            setArriveDate(e.target.value)
                                           }
+                                        />
+                                        <InputGroup.Text
+                                          style={{
+                                            border: "none",
+                                          }}
+                                          id="basic-addon2"
                                         >
-                                          <option
-                                            value={orderToUpdate.vehicle_id}
-                                          >
-                                            {orderToUpdate.vehicle !== null ? (
-                                              orderToUpdate.vehicle.name
-                                            ) : (
-                                              <p>-- Pilih Kendaraan --</p>
-                                            )}
-                                          </option>
-                                          {vehiclesData?.map((vehicles) => (
-                                            <option
-                                              key={vehicles.vehicle_id}
-                                              value={vehicles.vehicle_id}
-                                            >
-                                              {vehicles.name}
-                                            </option>
-                                          ))}
-                                        </Form.Select>
-                                      </Form.Group>
-                                      <Form.Group className="mb-3">
-                                        <Form.Label>Pengemudi</Form.Label>
-                                        <Form.Select
+                                          Pukul
+                                        </InputGroup.Text>
+                                        <Form.Control
                                           required
+                                          className="input form-custom"
                                           style={{
                                             backgroundColor: "#F5F7FC",
                                             border: "none",
-                                            padding: "17px",
+                                            padding: "15px",
                                           }}
-                                          aria-label="Default select example"
+                                          type="time"
                                           onChange={(e) =>
-                                            setDriverId(e.target.value)
+                                            setArriveTime(e.target.value)
                                           }
-                                        >
-                                          <option
-                                            value={orderToUpdate.driver_id}
-                                          >
-                                            {orderToUpdate.driver !== null ? (
-                                              orderToUpdate.driver.name
-                                            ) : (
-                                              <p>-- Pilih Pengemudi --</p>
-                                            )}
-                                          </option>
-                                          {usersData?.map((users) =>
-                                            users.role.map((userAsDriver) => {
-                                              return userAsDriver.level ===
-                                                4 ? (
-                                                <option
-                                                  value={users.user_id}
-                                                  key={users.user_id}
-                                                >
-                                                  {users.name}
-                                                </option>
-                                              ) : null;
-                                            })
-                                          )}
-                                        </Form.Select>
-                                      </Form.Group>
-                                    </>
-                                  )}
+                                        />
+                                      </InputGroup>
+                                    </Form.Group>
+                                  </Alert>
                                 </Card.Body>
-                                {orderToUpdate.status === "WAITING" ||
-                                orderToUpdate.status === "APPROVED" ? (
-                                  <Card.Footer className="d-flex gap-2">
-                                    <Button
-                                      onClick={handleReady}
-                                      variant="success"
-                                    >
-                                      <div className="d-flex gap-2">
-                                        Approve
-                                        <FiCheckCircle className="fs-4" />
-                                      </div>
-                                    </Button>
-
-                                    <Button
-                                      onClick={handleReject}
-                                      variant="danger"
-                                    >
-                                      <div className="d-flex gap-2">
-                                        Reject
-                                        <FiXCircle className="fs-4" />
-                                      </div>
-                                    </Button>
-                                  </Card.Footer>
-                                ) : null}
+                                <Card.Footer className="d-flex gap-2">
+                                  <Button
+                                    onClick={handleFinal}
+                                    className="btn-post"
+                                  >
+                                    <div className="d-flex gap-2">
+                                      Simpan
+                                      <FiCheckCircle className="fs-4" />
+                                    </div>
+                                  </Button>
+                                </Card.Footer>
                               </>
                             ))
                           : null}
@@ -730,7 +583,7 @@ export const UpdateOrder = () => {
           </Row>
         </Container>
       ) : (
-        <Navigate to="/pengajuan-peminjaman" />
+        <Navigate to="/riwayat-peminjaman" />
       )
     ) : (
       SecuringPage()

@@ -34,9 +34,6 @@ import ConfirmPasswordInputField from "../../components/passVal/ConfirmPasswordI
 // icons
 import { FaArrowLeft } from "react-icons/fa";
 
-// custom styles
-import "../CustomStyles/formCustom.css";
-
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 

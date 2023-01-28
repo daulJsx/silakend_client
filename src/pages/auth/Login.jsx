@@ -63,14 +63,17 @@ export const Login = (props) => {
           });
 
           // Perform RBAC logic
-          if (user_level === 1) {
-            navigate("/");
-          } else {
-            navigate("/user/data-pengajuan-peminjaman");
+          {
+            user_level === 1 || user_level === 2
+              ? navigate("/")
+              : user_level === 3
+              ? navigate("/verifier/pengajuan-pegawai")
+              : user_level === 4
+              ? navigate("/driver/tugas-masuk")
+              : navigate("/user/pengajuan-saya");
           }
         }
       } catch (error) {
-        console.log(error.response.data);
         if (error.response) {
           const { message, msg } = error.response.data;
           if (message) {

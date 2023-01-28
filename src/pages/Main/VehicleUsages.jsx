@@ -17,8 +17,7 @@ import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Popover from "react-bootstrap/Popover";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -29,13 +28,11 @@ import { Footer } from "../../components/footer/Footer";
 import { HiOutlineClipboardCopy } from "react-icons/hi";
 import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
-import { FaTrashAlt } from "react-icons/fa";
 import { FaInfo } from "react-icons/fa";
-import { FaEye } from "react-icons/fa";
+import { FiChevronRight } from "react-icons/fi";
 
 // Functions
 import { GetOrderId } from "../../functions/GetOrderId";
-import { DeleteVU } from "../../functions/Delete/DeleteVU";
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // For checking user have done in authentication
@@ -89,127 +86,167 @@ export const VehicleUsages = () => {
               </Row>
               {/* NAVBAR */}
 
-              <div className="me-1 d-flex justify-content-end">
-                <Row className="py-4 mb-2">
-                  <Col>
-                    <NavLink to={"/pengajuan-peminjaman/buat-pengajuan"}>
-                      <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                        Buat pengajuan Baru
-                        <HiPlusSm className="fs-3" />
-                      </Button>
-                    </NavLink>
-                  </Col>
-                </Row>
-              </div>
-
-              <main className="px-2 min-vh-100">
+              <main className="px-2 min-vh-100 mt-4">
                 <Row>
                   <Col>
-                    <Card>
-                      <Card.Body>
-                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                          <span className="me-2">
-                            Data Pengajuan Peminjaman Kendaraan Dinas
-                          </span>
-                        </Card.Title>
-
-                        <Table bordered hover responsive>
-                          <thead>
-                            <tr>
-                              <th>No</th>
-                              <th>PEMINJAM</th>
-                              <th>WAKTU PINJAM</th>
-
-                              <th>STATUS</th>
-                              <th>AKSI</th>
-                              <th>RINCIAN</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {ordersData?.map((orders, index) => (
-                              <tr key={orders.usage_id}>
-                                <td>{index + 1}</td>
-                                <td>{orders.user.name}</td>
-                                <td>
-                                  {orders.start_date} s/d {orders.end_date}
-                                </td>
-
-                                <td align="center">
-                                  <Badge
-                                    bg={
-                                      orders.status === "CANCELED" ||
-                                      orders.status === "REJECTED"
-                                        ? "danger"
-                                        : orders.status === "WAITING"
-                                        ? "warning"
-                                        : orders.status === "READY"
-                                        ? "primary"
-                                        : orders.status === "APPROVED"
-                                        ? "info"
-                                        : orders.status === "PROGRESS"
-                                        ? "secondary"
-                                        : "success"
-                                    }
-                                  >
-                                    {orders.status === "CANCELED"
-                                      ? "Batal"
-                                      : orders.status === "REJECTED"
-                                      ? "Ditolak"
-                                      : orders.status === "WAITING"
-                                      ? "Verifying"
-                                      : orders.status === "READY"
-                                      ? "Siap berangkat"
-                                      : orders.status === "APPROVED"
-                                      ? "Disetujui"
-                                      : orders.status === "PROGRESS"
-                                      ? "Berlangsung"
-                                      : "Selesai"}
-                                  </Badge>
-                                </td>
-
-                                <td>
-                                  <div className="d-flex gap-1 justify-content-center">
-                                    <NavLink
-                                      to={
-                                        "/pengajuan-peminjaman/edit-pengajuan"
-                                      }
-                                    >
-                                      <Button
-                                        onClick={() => GetOrderId(orders)}
-                                        className="btn btn-edit"
-                                      >
-                                        <AiFillEdit className="fs-6" />
-                                      </Button>
-                                    </NavLink>
-
-                                    <Button
-                                      onClick={() => DeleteVU(orders.usage_id)}
-                                      className="btn-danger btn-delete"
-                                    >
-                                      <FaTrashAlt className="fs-6" />
-                                    </Button>
+                    <Card className="shadow rounded bg__primary">
+                      <Card.Header>
+                        <Container>
+                          <Row className="gap-3 mt-4">
+                            <Col>
+                              <h3 className="main__title">
+                                Pengajuan Peminjaman Kendaraan Dinas
+                              </h3>
+                              <Breadcrumb className="breadcrumb__item mt-3">
+                                <Breadcrumb.Item
+                                  className="breadcrumb__item"
+                                  href="#"
+                                >
+                                  <div className="d-flex color-primary justify-content-center align-items-center gap-2 breadcrumb__text">
+                                    <HiOutlineClipboardCopy className="fs-5" />
+                                    Data
+                                    <FiChevronRight className="fs-6 breadcrumb__divider" />
                                   </div>
-                                </td>
-                                <td align="center">
-                                  <>
-                                    <NavLink
-                                      to={
-                                        "/pengajuan-peminjaman/rincian-pengajuan"
-                                      }
-                                    >
-                                      <Button
-                                        onClick={() => GetOrderId(orders)}
-                                        className="btn btn-detail"
-                                      >
-                                        <FaInfo className="fs-6" />
-                                      </Button>
-                                    </NavLink>
-                                  </>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </Table>
+                                </Breadcrumb.Item>
+                              </Breadcrumb>
+                            </Col>
+                            <Col md={2} className="me-2">
+                              {auth().user_level === 1 ? (
+                                <NavLink
+                                  to={"/pengajuan-peminjaman/buat-pengajuan"}
+                                >
+                                  <Button className="btn btn-add d-flex gap-1 align-items-center justify-content-center">
+                                    Tambah
+                                    <HiPlusSm className="fs-3" />
+                                  </Button>
+                                </NavLink>
+                              ) : null}
+                            </Col>
+                          </Row>
+                        </Container>
+                      </Card.Header>
+                      <Card.Body className="p-4">
+                        <Container
+                          className="p-4"
+                          style={{ background: "#fff", borderRadius: "10px" }}
+                        >
+                          <Row>
+                            <Col>
+                              <Table hover responsive>
+                                <thead>
+                                  <tr>
+                                    <th>No</th>
+                                    <th>peminjam</th>
+                                    <th>waktu pinjam</th>
+                                    <th>destinasi</th>
+                                    <th>kategori</th>
+                                    <th>status</th>
+                                    <th>aksi</th>
+                                    <th>rincian</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {ordersData?.map((orders, index) => {
+                                    return orders.status !== "DONE" ? (
+                                      <tr key={orders.usage_id}>
+                                        <td>{index + 1}</td>
+                                        <td>{orders.user.name}</td>
+                                        <td>
+                                          {orders.start_date} s/d{" "}
+                                          {orders.end_date}
+                                        </td>
+                                        <td>{orders.destination}</td>
+                                        <td>{orders.category.name}</td>
+
+                                        <td>
+                                          <Badge
+                                            bg={
+                                              orders.status === "CANCELED" ||
+                                              orders.status === "REJECTED"
+                                                ? "danger"
+                                                : orders.status === "WAITING"
+                                                ? "warning"
+                                                : orders.status === "READY"
+                                                ? "primary"
+                                                : orders.status === "APPROVED"
+                                                ? "info"
+                                                : orders.status === "PROGRESS"
+                                                ? "secondary"
+                                                : "success"
+                                            }
+                                          >
+                                            {orders.status === "CANCELED"
+                                              ? "Batal"
+                                              : orders.status === "REJECTED"
+                                              ? "Ditolak"
+                                              : orders.status === "WAITING"
+                                              ? "Diajukan"
+                                              : orders.status === "READY"
+                                              ? "Siap berangkat"
+                                              : orders.status === "APPROVED"
+                                              ? "Disetujui"
+                                              : orders.status === "PROGRESS"
+                                              ? "Berlangsung"
+                                              : "Selesai"}
+                                          </Badge>
+                                        </td>
+
+                                        <td align="center">
+                                          {orders.status !== "CANCELED" ? (
+                                            <NavLink
+                                              to={
+                                                "/pengajuan-peminjaman/edit-pengajuan"
+                                              }
+                                            >
+                                              <Button
+                                                onClick={() =>
+                                                  GetOrderId(orders)
+                                                }
+                                                className="btn btn-edit position-relative"
+                                              >
+                                                {orders.vehicle ||
+                                                orders.driver ||
+                                                orders.status ===
+                                                  "REJECTED" ? null : (
+                                                  <Badge
+                                                    className="position-absolute top-0 start-100 translate-middle rounded-pill"
+                                                    bg="danger"
+                                                  >
+                                                    !
+                                                  </Badge>
+                                                )}
+                                                <AiFillEdit className="fs-6" />
+                                              </Button>
+                                            </NavLink>
+                                          ) : null}
+                                        </td>
+
+                                        <td align="center">
+                                          <>
+                                            <NavLink
+                                              to={
+                                                "/pengajuan-peminjaman/rincian-pengajuan"
+                                              }
+                                            >
+                                              <Button
+                                                onClick={() =>
+                                                  GetOrderId(orders)
+                                                }
+                                                className="btn btn-detail"
+                                              >
+                                                <FaInfo className="fs-6" />
+                                              </Button>
+                                            </NavLink>
+                                          </>
+                                        </td>
+                                      </tr>
+                                    ) : null;
+                                  })}
+                                </tbody>
+                              </Table>
+                            </Col>
+                          </Row>
+                        </Container>
                       </Card.Body>
                     </Card>
                   </Col>

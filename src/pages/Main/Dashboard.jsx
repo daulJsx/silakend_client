@@ -34,6 +34,7 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Custom Style
 import "../CustomStyles/dash.css";
+import "../CustomStyles/bsOverride.css";
 
 export const Dashboard = () => {
   // get access token
@@ -63,7 +64,7 @@ export const Dashboard = () => {
             </Row>
             {/* NAVBAR */}
 
-            <main className="px-2 d-flex flex-column gap-4 mb-3 min-vh-100">
+            <main className="px-2 d-flex flex-column gap-4 mb-3 min-vh-100 mt-3">
               <Row>
                 <Col>
                   <Card>

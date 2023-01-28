@@ -14,7 +14,7 @@ import { useAuthUser } from "react-auth-kit";
 
 // Functions
 import { GetOrderId } from "../../functions/GetOrderId";
-import { UpdateVUAsUser } from "../../functions/Update/UpdateVUAsUser";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Navigating
 import { NavLink } from "react-router-dom";
@@ -26,9 +26,10 @@ import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
+import Badge from "react-bootstrap/Badge";
 
 // Components
-import { AsideUser } from "../../components/aside/AsideUser";
+import { AsideVerifier } from "../../components/aside/AsideVerifier";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
@@ -36,10 +37,11 @@ import { Footer } from "../../components/footer/Footer";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { FaInfo } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
+import { FiClock } from "react-icons/fi";
 
 import toast, { Toaster } from "react-hot-toast";
 
-export const UserVUsages = () => {
+export const VerifierHistory = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -53,60 +55,53 @@ export const UserVUsages = () => {
     isError,
   } = useQuery("orders", FetchVehicleUsages);
 
+  // Numbering row
+  let index = 0;
+
   return token ? (
-    isError ? (
-      <div>{error.message}</div>
-    ) : isLoading ? (
-      <div className="loading-io">
-        <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-          <div className="ldio-c0sicszbk9i">
-            <div></div>
-            <div></div>
+    auth().user_level === 3 ? (
+      isError ? (
+        <div>{error.message}</div>
+      ) : isLoading ? (
+        <div className="loading-io">
+          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+            <div className="ldio-c0sicszbk9i">
+              <div></div>
+              <div></div>
+            </div>
           </div>
         </div>
-      </div>
-    ) : (
-      <Container fluid>
-        <Toaster position="bottom-right" reverseOrder={false} />
-        <Row>
-          <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
-            <AsideUser />
-          </Col>
-          <Col>
-            {/* NAVBAR */}
-            <Row>
-              <Col>
-                {["end"].map((placement, idx) => (
-                  <NavTop
-                    key={idx}
-                    placement={placement}
-                    name={placement}
-                    bc={<HiOutlineClipboardList />}
-                  />
-                ))}
-              </Col>
-            </Row>
-            {/* NAVBAR */}
-
-            <main className="px-2 min-vh-100">
+      ) : (
+        <Container fluid>
+          <Toaster position="bottom-right" reverseOrder={false} />
+          <Row>
+            <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
+              <AsideVerifier />
+            </Col>
+            <Col>
+              {/* NAVBAR */}
               <Row>
                 <Col>
-                  {ordersData.length === 0 ? (
-                    <Alert variant="warning" style={{ border: "none" }}>
-                      <Alert.Heading>
-                        Anda Belum Mengajukan Peminjaman Kendaraan Dinas
-                      </Alert.Heading>
-                      <p>
-                        Silahkan buat pengajuan kendaraan pada halaman buat
-                        pengajuan.
-                      </p>
-                    </Alert>
-                  ) : (
+                  {["end"].map((placement, idx) => (
+                    <NavTop
+                      key={idx}
+                      placement={placement}
+                      name={placement}
+                      bc={<FiClock />}
+                    />
+                  ))}
+                </Col>
+              </Row>
+              {/* NAVBAR */}
+
+              <main className="px-2 min-vh-100 d-flex flex-column gap-3 mt-3">
+                <Row>
+                  <Col>
                     <Card>
                       <Card.Body>
                         <Card.Title className="fs-4 p-4 fw-semibold color-primary">
                           <span className="me-2">
-                            Data Pengajuan Peminjaman Kendaraan Dinas Anda
+                            Riwayat Pengajuan Peminjaman Kendaraan Dinas Anda
                           </span>
                         </Card.Title>
 
@@ -117,39 +112,30 @@ export const UserVUsages = () => {
                               <th>KATEGORI PEMINJAMAN</th>
                               <th>DESTINASI</th>
                               <th>WAKTU PINJAM</th>
-                              <th>EDIT</th>
+                              <th>STATUS</th>
                               <th>RINCIAN</th>
-                              <th>BATALKAN PENGAJUAN</th>
                             </tr>
                           </thead>
                           <tbody>
-                            {ordersData.map((orders, index) => {
-                              return orders.status !== "CANCELED" ? (
+                            {ordersData.map((orders) => {
+                              return orders.status === "DONE" ? (
                                 <tr key={orders.usage_id}>
-                                  <td>{index + 1}</td>
+                                  <td>{(index += 1)}</td>
                                   <td>{orders.category.name}</td>
                                   <td>{orders.destination}</td>
                                   <td>
                                     {orders.start_date} s/d {orders.end_date}
                                   </td>
-                                  <td>
-                                    <NavLink
-                                      to={
-                                        "/user/data-pengajuan-peminjaman/edit-pengajuan"
-                                      }
-                                    >
-                                      <Button
-                                        className="btn btn-edit"
-                                        onClick={() => GetOrderId(orders)}
-                                      >
-                                        <AiFillEdit className="fs-6" />
-                                      </Button>
-                                    </NavLink>
+                                  <td align="center">
+                                    <Badge bg={"success"}>
+                                      {orders.status}
+                                    </Badge>
                                   </td>
+
                                   <td align="center">
                                     <NavLink
                                       to={
-                                        "/user/data-pengajuan-peminjaman/rincian-peminjaman"
+                                        "/verifier/data-pengajuan-peminjaman/rincian-peminjaman"
                                       }
                                     >
                                       <Button
@@ -160,16 +146,6 @@ export const UserVUsages = () => {
                                       </Button>
                                     </NavLink>
                                   </td>
-                                  <td align="center" className="bg-danger">
-                                    <Button
-                                      className="btn-danger btn-delete"
-                                      onClick={() =>
-                                        UpdateVUAsUser(orders, auth().user_id)
-                                      }
-                                    >
-                                      Batalkan
-                                    </Button>
-                                  </td>
                                 </tr>
                               ) : null;
                             })}
@@ -177,19 +153,21 @@ export const UserVUsages = () => {
                         </Table>
                       </Card.Body>
                     </Card>
-                  )}
+                  </Col>
+                </Row>
+              </main>
+
+              <Row>
+                <Col>
+                  <Footer />
                 </Col>
               </Row>
-            </main>
-
-            <Row>
-              <Col>
-                <Footer />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
+            </Col>
+          </Row>
+        </Container>
+      )
+    ) : (
+      SecuringPage()
     )
   ) : (
     <Navigate to="/silakend-login" />

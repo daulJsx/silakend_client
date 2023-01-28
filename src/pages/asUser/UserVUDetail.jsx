@@ -10,10 +10,11 @@ import axios from "axios";
 import { useAuthUser } from "react-auth-kit";
 import { Navigate } from "react-router-dom";
 
-// bootstrap components
-import { Container, Row, Col } from "react-bootstrap";
-import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
+// Functions
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
+
+// Bootstrap components
+import { Container, Row, Col, Card, ListGroup } from "react-bootstrap";
 
 // Components
 import { AsideUser } from "../../components/aside/AsideUser";
@@ -39,7 +40,7 @@ export const UserVUDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   // catch the fetching vehicle details
-  const [vUDetail, setVUDetail] = useState(null);
+  const [userOrderDetail, setuserOrderDetail] = useState(null);
 
   useEffect(() => {
     const accessToken = Cookies.get("token");
@@ -50,7 +51,7 @@ export const UserVUDetail = () => {
       },
     };
 
-    async function fetchVUById() {
+    async function fetchuserOrderById() {
       try {
         await axios
           .get(
@@ -60,9 +61,9 @@ export const UserVUDetail = () => {
           .then((response) => {
             if (response.status === 200) {
               setIsLoading(false);
-              const vUDetail = response.data;
-              if (vUDetail.length !== 0) {
-                setVUDetail(vUDetail);
+              const userOrderDetail = response.data;
+              if (userOrderDetail.length !== 0) {
+                setuserOrderDetail(userOrderDetail);
               }
             }
           });
@@ -80,144 +81,273 @@ export const UserVUDetail = () => {
       }
     }
 
-    fetchVUById();
+    fetchuserOrderById();
   }, []);
 
   return token ? (
-    usageId ? (
-      isLoading ? (
-        <div className="loading-io">
-          <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
-            <div className="ldio-c0sicszbk9i">
-              <div></div>
-              <div></div>
+    auth().user_level === 5 ? (
+      usageId ? (
+        isLoading ? (
+          <div className="loading-io">
+            <div className="loadingio-spinner-ripple-bc4s1fo5ntn">
+              <div className="ldio-c0sicszbk9i">
+                <div></div>
+                <div></div>
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <Container fluid>
-          <Row>
-            {/* SIDEBAR */}
-            <Col
-              xs="auto"
-              className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
-            >
-              <AsideUser />
-            </Col>
-            {/* SIDEBAR */}
+        ) : (
+          <Container fluid>
+            <Row>
+              {/* SIDEBAR */}
+              <Col
+                xs="auto"
+                className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
+              >
+                <AsideUser />
+              </Col>
+              {/* SIDEBAR */}
 
-            <Col>
-              {/* NAVBAR */}
-              <Row>
-                <Col>
-                  {["end"].map((placement, idx) => (
-                    <NavTop
-                      key={idx}
-                      placement={placement}
-                      name={placement}
-                      bc={<FaArrowLeft />}
-                      title={"Rincian Data Peminjaman"}
-                      parentLink={"/user/data-pengajuan-peminjaman"}
-                    />
-                  ))}
-                </Col>
-              </Row>
-              {/* NAVBAR */}
-
-              <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
+              <Col>
+                {/* NAVBAR */}
                 <Row>
                   <Col>
-                    <Card>
-                      <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                        Rincian Data Peminjaman Anda
-                      </Card.Title>
-                      <Card.Body className="d-flex flex-column gap-3">
-                        <ListGroup as="ol" numbered className="mb-2">
-                          {vUDetail !== null
-                            ? vUDetail.map((userOrder, index) => (
-                                <>
-                                  <ListGroup.Item
-                                    key={index}
-                                    as="li"
-                                    className="d-flex justify-content-between align-items-start"
-                                  >
-                                    <div className="ms-2 me-auto">
-                                      <div className="fw-bold">
-                                        KATEGORI PEMINJAMAN
-                                      </div>
-                                      {userOrder.category !== null
-                                        ? userOrder.category.name
-                                        : null}
-                                    </div>
-                                  </ListGroup.Item>
-
-                                  <ListGroup.Item
-                                    as="li"
-                                    className="d-flex justify-content-between align-items-start"
-                                  >
-                                    <div className="ms-2 me-auto">
-                                      <div className="fw-bold">
-                                        DESKRIPSI PEMINJAMAN
-                                      </div>
-                                      {userOrder.usage_description}
-                                    </div>
-                                  </ListGroup.Item>
-
-                                  <ListGroup.Item
-                                    as="li"
-                                    className="d-flex justify-content-between align-items-start"
-                                  >
-                                    <div className="ms-2 me-auto">
-                                      <div className="fw-bold">
-                                        JUMLAH PERSONIL
-                                      </div>
-                                      {userOrder.personel_count} Orang
-                                    </div>
-                                  </ListGroup.Item>
-
-                                  <ListGroup.Item
-                                    as="li"
-                                    className="d-flex justify-content-between align-items-start"
-                                  >
-                                    <div className="ms-2 me-auto">
-                                      <div className="fw-bold">DESTINASI</div>
-                                      {userOrder.destination}
-                                    </div>
-                                  </ListGroup.Item>
-
-                                  <ListGroup.Item
-                                    as="li"
-                                    className="d-flex justify-content-between align-items-start"
-                                  >
-                                    <div className="ms-2 me-auto">
-                                      <div className="fw-bold">
-                                        WAKTU PEMINJAMAN
-                                      </div>
-                                      {userOrder.start_date} s/d{" "}
-                                      {userOrder.end_date}
-                                    </div>
-                                  </ListGroup.Item>
-                                </>
-                              ))
-                            : null}
-                        </ListGroup>
-                      </Card.Body>
-                    </Card>
+                    {["end"].map((placement, idx) => (
+                      <NavTop
+                        key={idx}
+                        placement={placement}
+                        name={placement}
+                        bc={<FaArrowLeft />}
+                        title={"Rincian Data Peminjaman"}
+                        parentLink={"/user/pengajuan-saya"}
+                      />
+                    ))}
                   </Col>
                 </Row>
-              </main>
+                {/* NAVBAR */}
 
-              <Row>
-                <Col>
-                  <Footer />
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Container>
+                <main className="min-vh-100 px-2 mt-4 d-flex flex-column gap-2">
+                  <Row>
+                    <Col>
+                      <Card>
+                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
+                          Rincian Data Peminjaman Anda
+                        </Card.Title>
+                        <Card.Body className="d-flex flex-column gap-3">
+                          <ListGroup as="ol" variant="flush" className="mb-2">
+                            {userOrderDetail !== null
+                              ? userOrderDetail.map((userOrder, index) => (
+                                  <>
+                                    <ListGroup.Item
+                                      key={index}
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          KATEGORI PEMINJAMAN
+                                        </div>
+                                        {userOrder.category !== null
+                                          ? userOrder.category.name
+                                          : null}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          DESKRIPSI PEMINJAMAN
+                                        </div>
+                                        {userOrder.usage_description}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          JUMLAH PERSONIL
+                                        </div>
+                                        {userOrder.personel_count} Orang
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">DESTINASI</div>
+                                        {userOrder.destination}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">
+                                          WAKTU PEMINJAMAN
+                                        </div>
+                                        {userOrder.start_date} s/d{" "}
+                                        {userOrder.end_date}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    <ListGroup.Item
+                                      as="li"
+                                      variant={
+                                        userOrder.status === "CANCELED" ||
+                                        userOrder.status === "REJECTED"
+                                          ? "danger"
+                                          : userOrder.status === "WAITING"
+                                          ? "warning"
+                                          : userOrder.status === "READY"
+                                          ? "primary"
+                                          : userOrder.status === "APPROVED"
+                                          ? "info"
+                                          : userOrder.status === "PROGRESS"
+                                          ? "secondary"
+                                          : "success"
+                                      }
+                                      className="d-flex justify-content-between align-items-start"
+                                    >
+                                      <div className="ms-2 me-auto">
+                                        <div className="fw-bold">STATUS</div>
+                                        {userOrder.status === "CANCELED"
+                                          ? `Dibatalkan peminjam karena ${userOrder.status_description}`
+                                          : userOrder.status === "REJECTED"
+                                          ? `Ditolak karena ${userOrder.status_description}`
+                                          : userOrder.status === "WAITING"
+                                          ? "Diajukan"
+                                          : userOrder.status === "READY"
+                                          ? "Siap Berangkat"
+                                          : userOrder.status === "APPROVED"
+                                          ? "Disetujui"
+                                          : userOrder.status === "PROGRESS"
+                                          ? "Berlangsung"
+                                          : "Selesai"}
+                                      </div>
+                                    </ListGroup.Item>
+
+                                    {userOrder.vehicle && userOrder.driver ? (
+                                      <>
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start position-relative"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="fw-bold">
+                                              PENGEMUDI
+                                            </div>
+                                            {userOrder.driver.name}
+                                          </div>
+                                        </ListGroup.Item>
+
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="fw-bold">
+                                              KENDARAAN
+                                            </div>
+                                            {userOrder.vehicle.name}
+                                          </div>
+                                        </ListGroup.Item>
+                                      </>
+                                    ) : null}
+
+                                    {userOrder.depart_date &&
+                                    userOrder.depart_time ? (
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            WAKTU BERANGKAT
+                                          </div>
+                                          {userOrder.depart_date} PUKUL{" "}
+                                          {userOrder.depart_time}
+                                        </div>
+                                      </ListGroup.Item>
+                                    ) : null}
+
+                                    {userOrder.distance_count_out &&
+                                    userOrder.distance_count_in ? (
+                                      <>
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="fw-bold">
+                                              ODOMETER PERGI
+                                            </div>
+                                            {userOrder.distance_count_out}
+                                          </div>
+                                        </ListGroup.Item>
+
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="fw-bold">
+                                              ODOMETER PULANG
+                                            </div>
+                                            {userOrder.distance_count_in}
+                                          </div>
+                                        </ListGroup.Item>
+                                      </>
+                                    ) : null}
+
+                                    {userOrder.arrive_date &&
+                                    userOrder.arrive_time ? (
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="fw-bold">
+                                            WAKTU PULANG
+                                          </div>
+                                          {userOrder.arrive_date} PUKUL{" "}
+                                          {userOrder.arrive_time}
+                                        </div>
+                                      </ListGroup.Item>
+                                    ) : null}
+                                  </>
+                                ))
+                              : null}
+                          </ListGroup>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  </Row>
+                </main>
+
+                <Row>
+                  <Col>
+                    <Footer />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Container>
+        )
+      ) : (
+        <Navigate to="/user/data-pengajuan-peminjaman" />
       )
     ) : (
-      <Navigate to="/user/data-pengajuan-peminjaman" />
+      SecuringPage()
     )
   ) : (
     <Navigate to="/silakend-login" />

@@ -13,16 +13,15 @@ import "./../../App.css";
 
 // Icons
 
-import { HiOutlineClipboardList } from "react-icons/hi";
+import { TbSteeringWheel } from "react-icons/tb";
 import { FiClock } from "react-icons/fi";
-import { FiSend } from "react-icons/fi";
 
 // assets
 import polmanLogo from "./../../assets/polman.webp";
 
 // import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
-export const AsideUser = () => {
+export const AsideDriver = () => {
   return (
     <Nav variant="pills" className="nav-pills flex-column" as="ul">
       {/* SIDEBAR BRAND START */}
@@ -32,21 +31,15 @@ export const AsideUser = () => {
       {/* SIDEBAR MENU START */}
       <div className="d-flex gap-3 flex-column mx-auto ">
         <AsideMenu
-          icon={<FiSend />}
-          title="Buat Pengajuan"
-          link="/user/buat-pengajuan"
-        />
-
-        <AsideMenu
-          icon={<HiOutlineClipboardList />}
-          title="Data Pengajuan Saya"
-          link="/user/pengajuan-saya"
+          icon={<TbSteeringWheel />}
+          title="Daftar Tugas Masuk"
+          link="/driver/tugas-masuk"
         />
 
         <AsideMenu
           icon={<FiClock />}
-          title="Riwayat Pengajuan "
-          link="/user/riwayat-pengajuan"
+          title="Riwayat Tugas "
+          link="/driver/riwayat-tugas"
         />
       </div>
       {/* SIDEBAR MENU END */}

@@ -30,12 +30,8 @@ a.brand-icon:hover {
   color: var(--color-primary);
 }
 
-.side-menu,
-.dropdown__menu,
-.submenu__title {
-  color: var(--gray-500);
-  font-size: 0.8rem;
-  font-weight: 600;
+.side-menu {
+  font-size: 15px;
   transition: var(--transition);
 }
 
@@ -51,7 +47,7 @@ a.brand-icon:hover {
   );
   text-decoration: none;
   box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
-  transform: scale(1.05, 1.05);
+  transform: scale(1.02, 1.02);
 }
 
 .nav-pills .side-menu .nav-link {
@@ -67,20 +63,11 @@ a.brand-icon:hover {
   );
   text-decoration: none;
   box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
-  transform: scale(1.05, 1.05);
+  transform: scale(1.02, 1.02);
 }
-/* .nav-pills .side-menu .nav-link {
-  color: var(--color-primary);
-  border-radius: 14px;
-  background: linear-gradient(145deg, #dddee3, #ffffff);
-  box-shadow: 7px 7px 14px #e4e6ea, -7px -7px 14px #ffffff;
-  text-decoration: none;
-
-  transform: scale(1.05, 1.05);
-} */
 
 .nav-pills .side-menu .nav-link:not(.active) {
-  color: var(--gray-400);
+  color: var(--gray-500);
   text-decoration: none;
   background: transparent;
   box-shadow: none;

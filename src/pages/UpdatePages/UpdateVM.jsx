@@ -130,7 +130,7 @@ export const UpdateVM = () => {
   };
 
   return token ? (
-    auth().user_level === 1 ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
       maintenanceId ? (
         <Container fluid>
           <Row>

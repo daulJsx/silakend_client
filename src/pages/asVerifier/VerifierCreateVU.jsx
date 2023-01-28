@@ -40,8 +40,9 @@ import toast, { Toaster } from "react-hot-toast";
 
 // icons
 import { FiSend } from "react-icons/fi";
+import { AsideVerifier } from "../../components/aside/AsideVerifier";
 
-export const UserCreateVU = () => {
+export const VerifierCreateVU = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -65,6 +66,7 @@ export const UserCreateVU = () => {
   });
 
   const postNewOrder = async (e) => {
+    console.log(orderData);
     e.preventDefault();
 
     const config = {
@@ -79,46 +81,31 @@ export const UserCreateVU = () => {
       orderData.start_date !== "" &&
       orderData.end_date !== ""
     ) {
-      if (orderData.personel_count <= 0) {
-        swal({
-          title: "Peringatan",
-          text: "Harap isi jumlah personil dengan benar!",
-          icon: "warning",
-          button: "Tutup",
-        });
-      } else {
-        try {
-          await axios
-            .post(
-              "https://silakend-server.xyz/api/vehicleusages",
-              orderData,
-              config
-            )
-            .then((response) => {
-              if (response.status === 200) {
-                const { msg } = response.data;
-                navigate("/user/data-pengajuan-peminjaman");
-
-                swal({
-                  title: "Berhasil!",
-                  text: msg,
-                  icon: "success",
-                  button: false,
-                  timer: 2000,
-                });
-              }
-            });
-        } catch (error) {
-          if (error.response) {
-            const { message, msg } = error.response.data;
-            if (message) {
-              swal("Ups!", message, "error");
-            } else {
-              swal("Ups!", msg, "error");
+      try {
+        await axios
+          .post(
+            "https://silakend-server.xyz/api/vehicleusages",
+            orderData,
+            config
+          )
+          .then((response) => {
+            if (response.status === 200) {
+              const { msg } = response.data;
+              navigate("/verifier/pengajuan-saya");
+              toast.success(msg);
             }
+          });
+      } catch (error) {
+        if (error.response) {
+          navigate("/verifier/pengajuan-saya");
+          const { message, msg } = error.response.data;
+          if (message) {
+            swal("Ups!", message, "error");
           } else {
-            swal("Ups!", "Something went wrong", "error");
+            swal("Ups!", msg, "error");
           }
+        } else {
+          swal("Ups!", "Something went wrong", "error");
         }
       }
     } else {
@@ -132,7 +119,7 @@ export const UserCreateVU = () => {
   };
 
   return token ? (
-    auth().user_level === 5 ? (
+    auth().user_level === 3 ? (
       <Container fluid>
         <Toaster position="bottom-right" reverseOrder={false} />
         <Row>
@@ -141,7 +128,7 @@ export const UserCreateVU = () => {
             xs="auto"
             className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
           >
-            <AsideUser />
+            <AsideVerifier />
           </Col>
           {/* SIDEBAR */}
 
@@ -160,7 +147,7 @@ export const UserCreateVU = () => {
               </Col>
             </Row>
             {/* NAVBAR */}
-            <main className="min-vh-100 px-2 mt-4">
+            <main className="min-vh-100 px-2 mt-3">
               <Row>
                 <Col>
                   <Card>

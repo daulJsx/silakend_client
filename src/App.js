@@ -33,7 +33,9 @@ import { UserDetail } from "./pages/Details/UserDetail";
 import { VehicleUsages } from "./pages/Main/VehicleUsages";
 import { CreateOrder } from "./pages/CreatePages/CreateOrder";
 import { UpdateOrder } from "./pages/UpdatePages/UpdateOrder";
+import { UpdateOrderHistory } from "./pages/UpdatePages/UpdateOrderHistory";
 import { VehicleUsageDetail } from "./pages/Details/VehicleUsageDetail";
+import { VehicleUsageHistory } from "./pages/Main/VehicleUsageHistory";
 
 import { Vehicles } from "./pages/Main/Vehicles";
 import { CreateVehicle } from "./pages/CreatePages/CreateVehicle";
@@ -70,8 +72,22 @@ import { Login } from "./pages/auth/Login";
 // ---------------------- USER AS USER ---------------------------
 import { UserCreateVU } from "./pages/asUser/UserCreateVU";
 import { UserVUDetail } from "./pages/asUser/UserVUDetail";
-import { UserVUsages } from "./pages/asUser/UserVUsages";
+import { MainUser } from "./pages/asUser/MainUser";
 import { UserEditVU } from "./pages/asUser/UserEditVU";
+import { UserHistory } from "./pages/asUser/UserHistory";
+
+// ---------------------- USER AS VERIFIER -----------------------
+import { MainVerifier } from "./pages/asVerifier/MainVerifier";
+import { VerifierVUDetail } from "./pages/asVerifier/VerifierDetailVU";
+import { VerifierHistory } from "./pages/asVerifier/VerifierHistory";
+import { VerifierCreateVU } from "./pages/asVerifier/VerifierCreateVU";
+import { VerifierSelfVU } from "./pages/asVerifier/VerifierSelfVU";
+import { EmpVUDetail } from "./pages/asVerifier/EmpVUDetail";
+
+// ---------------------- USER AS DRIVER -----------------------
+import { MainDriver } from "./pages/asDriver/MainDriver";
+import { DriverHistory } from "./pages/asDriver/DriverHistory";
+import { TaskInfo } from "./pages/asDriver/TaskInfo";
 
 function App() {
   // window.Pusher = Pusher;
@@ -150,6 +166,15 @@ function App() {
             <Route
               path="/pengajuan-peminjaman/rincian-pengajuan"
               element={<VehicleUsageDetail />}
+            />
+            <Route
+              exact
+              path="/riwayat-peminjaman"
+              element={<VehicleUsageHistory />}
+            />
+            <Route
+              path="/riwayat-peminjaman/edit-riwayat-peminjaman"
+              element={<UpdateOrderHistory />}
             />
             {/*----- END ORDER PAGES---- */}
 
@@ -281,24 +306,62 @@ function App() {
 
             {/*----- END AUTH PAGES---- */}
 
-            {/*------------------------------- START USER AS USER PAGES-------------------------------- */}
+            {/*------------------------------- START USER AS VERIFIER PAGES-------------------------------- */}
             <Route
               exact
-              path="/user/data-pengajuan-peminjaman"
-              element={<UserVUsages />}
+              path="/verifier/pengajuan-pegawai"
+              element={<MainVerifier />}
             />
             <Route
-              path="/user/pengajuan-peminjaman"
-              element={<UserCreateVU />}
+              exact
+              path="/verifier/pengajuan-saya"
+              element={<VerifierSelfVU />}
             />
             <Route
-              path="/user/data-pengajuan-peminjaman/rincian-peminjaman"
+              path="/verifier/pengajuan-saya/rincian-pengajuan"
+              element={<VerifierVUDetail />}
+            />
+            <Route
+              path="/verifier/pengajuan-pegawai/rincian-pengajuan"
+              element={<EmpVUDetail />}
+            />
+            <Route
+              path="/verifier/riwayat-pengajuan"
+              element={<VerifierHistory />}
+            />
+            <Route
+              path="/verifier/buat-pengajuan"
+              element={<VerifierCreateVU />}
+            />
+
+            {/*------------------------------- END USER AS VERIFIER PAGES-------------------------------- */}
+
+            {/*------------------------------- START USER AS DRIVER PAGES-------------------------------- */}
+            <Route exact path="/driver/tugas-masuk" element={<MainDriver />} />
+            <Route
+              exact
+              path="/driver/riwayat-tugas"
+              element={<DriverHistory />}
+            />
+            <Route
+              exact
+              path="/driver/tugas-masuk/rincian-tugas"
+              element={<TaskInfo />}
+            />
+            {/*------------------------------- END USER AS DRIVER PAGES-------------------------------- */}
+
+            {/*------------------------------- START USER AS USER PAGES-------------------------------- */}
+            <Route exact path="/user/pengajuan-saya" element={<MainUser />} />
+            <Route path="/user/buat-pengajuan" element={<UserCreateVU />} />
+            <Route
+              path="/user/pengajuan-saya/rincian-pengajuan"
               element={<UserVUDetail />}
             />
             <Route
-              path="/user/data-pengajuan-peminjaman/edit-pengajuan"
+              path="/user/pengajuan-saya/edit-pengajuan"
               element={<UserEditVU />}
             />
+            <Route path="/user/riwayat-pengajuan" element={<UserHistory />} />
             {/*------------------------------- END USER AS USER PAGES-------------------------------- */}
           </Routes>
         </Router>

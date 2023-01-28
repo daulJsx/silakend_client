@@ -40,9 +40,6 @@ import { FaArrowLeft } from "react-icons/fa";
 // React Notification
 import swal from "sweetalert";
 
-// CSS
-import "../CustomStyles/users.css";
-
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 

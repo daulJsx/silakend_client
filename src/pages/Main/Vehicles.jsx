@@ -17,6 +17,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -29,6 +30,7 @@ import { HiPlusSm } from "react-icons/hi";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import { FaInfo } from "react-icons/fa";
+import { FiChevronRight } from "react-icons/fi";
 
 // Functions
 import { GetVehicleById } from "../../functions/GetVehicleById";
@@ -97,95 +99,125 @@ export const Vehicles = () => {
               </Row>
               {/* NAVBAR */}
 
-              <div className="me-1 d-flex justify-content-end">
-                <Row className="py-4 mb-2">
-                  <Col>
-                    <NavLink to={"/data-kendaraan/tambah-kendaraan"}>
-                      <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                        Tambah Kendaraan
-                        <HiPlusSm className="fs-3" />
-                      </Button>
-                    </NavLink>
-                  </Col>
-                </Row>
-              </div>
-
-              <main className="min-vh-100 px-2">
+              <main className="px-2 min-vh-100 mt-4">
                 <Row>
                   <Col>
-                    <Card>
-                      <Card.Body>
-                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                          Data Kendaraan Dinas
-                        </Card.Title>
-
-                        <Table bordered hover responsive>
-                          <thead>
-                            <tr>
-                              <th>No</th>
-                              <th>NAMA KENDARAAN</th>
-                              <th>NO POLISI</th>
-                              <th>TAHUN PEMBUATAN</th>
-                              <th>WAKTU PAJAK</th>
-                              <th>KATEGORI</th>
-                              <th align="center">AKSI</th>
-                              <th align="center">RINCIAN</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {vehiclesData?.map((vehicles, index) => (
-                              <tr key={vehicles.vehicle_id}>
-                                <td>{index + 1}</td>
-                                <td>{vehicles.name}</td>
-                                <td>{vehicles.license_number}</td>
-                                <td>{vehicles.year}</td>
-                                <td>{vehicles.tax_date}</td>
-                                <td>{vehicles.category.name}</td>
-                                <td>
-                                  <div className="d-flex gap-1 justify-content-center">
-                                    <NavLink
-                                      to={"/data-kendaraan/edit-kendaraan"}
-                                    >
-                                      <Button
-                                        className="btn btn-edit"
-                                        onClick={() => GetVehicleById(vehicles)}
-                                      >
-                                        <AiFillEdit className="fs-6" />
-                                      </Button>
-                                    </NavLink>
-                                    <Button
-                                      className="btn-danger btn-delete"
-                                      onClick={() =>
-                                        DeleteVehicle(vehicles.vehicle_id)
-                                      }
-                                    >
-                                      <FaTrashAlt className="fs-6" />
-                                    </Button>
+                    <Card className="shadow rounded bg__primary">
+                      <Card.Header>
+                        <Container>
+                          <Row className="gap-3 mt-4">
+                            <Col>
+                              <h3 className="main__title">Kendaraan Dinas</h3>
+                              <Breadcrumb className="breadcrumb__item mt-3">
+                                <Breadcrumb.Item
+                                  className="breadcrumb__item"
+                                  href="#"
+                                >
+                                  <div className="d-flex color-primary justify-content-center align-items-center gap-2 breadcrumb__text">
+                                    <RiCarLine className="fs-5" />
+                                    Data
+                                    <FiChevronRight className="fs-6 breadcrumb__divider" />
                                   </div>
-                                </td>
-                                <td align="center">
-                                  <NavLink
-                                    to={"/data-kendaraan/rincian-kendaraan"}
-                                  >
-                                    <Button
-                                      onClick={() => {
-                                        handleInfoVehicle(vehicles.vehicle_id);
-                                      }}
-                                      className="btn-info btn-detail"
-                                    >
-                                      <FaInfo className="fs-6" />
-                                    </Button>
-                                  </NavLink>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </Table>
+                                </Breadcrumb.Item>
+                              </Breadcrumb>
+                            </Col>
+                            <Col md={2} className="me-2">
+                              <NavLink to={"/data-kendaraan/tambah-kendaraan"}>
+                                <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                                  Tambah
+                                  <HiPlusSm className="fs-3" />
+                                </Button>
+                              </NavLink>
+                            </Col>
+                          </Row>
+                        </Container>
+                      </Card.Header>
+                      <Card.Body className="p-4">
+                        <Container
+                          className="p-4"
+                          style={{ background: "#fff", borderRadius: "10px" }}
+                        >
+                          <Row>
+                            <Col>
+                              <Table hover responsive>
+                                <thead>
+                                  <tr>
+                                    <th>No</th>
+                                    <th>NAMA KENDARAAN</th>
+                                    <th>NO POLISI</th>
+                                    <th>TAHUN PEMBUATAN</th>
+                                    <th>WAKTU PAJAK</th>
+                                    <th>KATEGORI</th>
+                                    <th align="center">AKSI</th>
+                                    <th align="center">RINCIAN</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {vehiclesData?.map((vehicles, index) => (
+                                    <tr key={vehicles.vehicle_id}>
+                                      <td>{index + 1}</td>
+                                      <td>{vehicles.name}</td>
+                                      <td>{vehicles.license_number}</td>
+                                      <td>{vehicles.year}</td>
+                                      <td>{vehicles.tax_date}</td>
+                                      <td>{vehicles.category.name}</td>
+                                      <td>
+                                        <div className="d-flex gap-1 justify-content-center">
+                                          <NavLink
+                                            to={
+                                              "/data-kendaraan/edit-kendaraan"
+                                            }
+                                          >
+                                            <Button
+                                              className="btn btn-edit"
+                                              onClick={() =>
+                                                GetVehicleById(vehicles)
+                                              }
+                                            >
+                                              <AiFillEdit className="fs-6" />
+                                            </Button>
+                                          </NavLink>
+                                          <Button
+                                            className="btn-danger btn-delete"
+                                            onClick={() =>
+                                              DeleteVehicle(vehicles.vehicle_id)
+                                            }
+                                          >
+                                            <FaTrashAlt className="fs-6" />
+                                          </Button>
+                                        </div>
+                                      </td>
+                                      <td align="center">
+                                        <NavLink
+                                          to={
+                                            "/data-kendaraan/rincian-kendaraan"
+                                          }
+                                        >
+                                          <Button
+                                            onClick={() => {
+                                              handleInfoVehicle(
+                                                vehicles.vehicle_id
+                                              );
+                                            }}
+                                            className="btn-info btn-detail"
+                                          >
+                                            <FaInfo className="fs-6" />
+                                          </Button>
+                                        </NavLink>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </Table>
+                            </Col>
+                          </Row>
+                        </Container>
                       </Card.Body>
                     </Card>
                   </Col>
                 </Row>
               </main>
+
               <Row>
                 <Col>
                   <Footer />

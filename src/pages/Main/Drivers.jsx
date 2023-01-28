@@ -22,6 +22,7 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -30,9 +31,11 @@ import { Footer } from "../../components/footer/Footer";
 
 // Icons
 import { FaUserTie } from "react-icons/fa";
+import { FiChevronRight } from "react-icons/fi";
 
 export const Drivers = () => {
   const auth = useAuthUser();
+
   // Fetching users as driver
   const {
     data: usersData,
@@ -43,6 +46,8 @@ export const Drivers = () => {
 
   // Get access token
   const token = Cookies.get("token");
+
+  let index = 0;
 
   return token ? (
     auth().user_level === 1 || auth().user_level === 2 ? (
@@ -82,42 +87,58 @@ export const Drivers = () => {
                 </Col>
               </Row>
               {/* NAVBAR */}
-              <main className="min-vh-100 px-2 mt-4">
+
+              <main className="px-2 min-vh-100 mt-4">
                 <Row>
                   <Col>
-                    <Card>
-                      <Card.Body>
-                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                          Data Pengemudi
-                        </Card.Title>
-
-                        <Table bordered hover responsive>
-                          <thead>
-                            <tr>
-                              <th>No</th>
-                              <th>NAMA PENGEMUDI</th>
-                              <th>PERAN</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {usersData?.map((users, index) =>
-                              users.role.map((userAsDriver) => {
-                                return userAsDriver.name == "Driver" ? (
-                                  <tr key={users.user_id}>
-                                    <td>{index + 1}</td>
-                                    <td>{users.name}</td>
-                                    <td>{userAsDriver.name}</td>
+                    <Card className="shadow rounded bg__primary">
+                      <Card.Header>
+                        <Container>
+                          <Row className="gap-3 mt-4">
+                            <Col>
+                              <h3 className="main__title"> Pengemudi</h3>
+                            </Col>
+                          </Row>
+                        </Container>
+                      </Card.Header>
+                      <Card.Body className="p-4">
+                        <Container
+                          className="p-4"
+                          style={{ background: "#fff", borderRadius: "10px" }}
+                        >
+                          <Row>
+                            <Col>
+                              <Table hover responsive>
+                                <thead>
+                                  <tr>
+                                    <th>No</th>
+                                    <th>NAMA PENGEMUDI</th>
+                                    <th>PERAN</th>
                                   </tr>
-                                ) : null;
-                              })
-                            )}
-                          </tbody>
-                        </Table>
+                                </thead>
+                                <tbody>
+                                  {usersData.map((users) =>
+                                    users.role.map((userAsDriver) => {
+                                      return userAsDriver.level === 4 ? (
+                                        <tr key={users.user_id}>
+                                          <td>{(index += 1)}</td>
+                                          <td>{users.name}</td>
+                                          <td>{userAsDriver.name}</td>
+                                        </tr>
+                                      ) : null;
+                                    })
+                                  )}
+                                </tbody>
+                              </Table>
+                            </Col>
+                          </Row>
+                        </Container>
                       </Card.Body>
                     </Card>
                   </Col>
                 </Row>
               </main>
+
               <Row>
                 <Col>
                   <Footer />

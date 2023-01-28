@@ -97,7 +97,7 @@ export const UserCreateVU = () => {
             .then((response) => {
               if (response.status === 200) {
                 const { msg } = response.data;
-                navigate("/user/data-pengajuan-peminjaman");
+                navigate("/user/pengajuan-saya");
 
                 swal({
                   title: "Berhasil!",

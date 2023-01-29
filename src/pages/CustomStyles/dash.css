@@ -21,33 +21,29 @@ th {
 }
 
 .primary {
-  background: #d1e9fc;
-  color: #061b64;
-}
-
-.primary-icon,
-.success-icon,
-.warning-icon,
-.info-icon {
-  background-color: rgba(255, 255, 255, 0.614);
-  box-shadow: 16px 16px 32px #94a5b39b, -16px -16px 32px #ffffff;
-  border-radius: 14px;
-  text-align: center;
-  padding: 0.3rem 0 0.5rem 0;
+  background: #4f55da;
+  color: #eff0ff;
+  border-radius: var(--borderRadius);
+  box-shadow: rgba(80, 102, 225, 0.45) 0px 2px 8px 0px;
 }
 
 .success {
-  color: var(--bg-white);
-  background-color: #d0f2ff;
-  color: #04297a;
+  background: #4fc9da;
+  color: #eff0ff;
+  border-radius: var(--borderRadius);
+  box-shadow: rgba(80, 213, 225, 0.45) 0px 2px 8px 0px;
 }
 
 .warning {
-  background-color: #fff7cd;
-  color: #7a4f01;
+  background: #e8c444;
+  color: #eff0ff;
+  border-radius: var(--borderRadius);
+  box-shadow: rgba(225, 198, 80, 0.45) 0px 2px 8px 0px;
 }
 
 .info {
-  background-color: #ffe7d9;
-  color: #7a0c2e;
+  background: #f06445;
+  color: #eff0ff;
+  border-radius: var(--borderRadius);
+  box-shadow: rgba(225, 80, 80, 0.45) 0px 2px 8px 0px;
 }

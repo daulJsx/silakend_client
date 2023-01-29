@@ -27,7 +27,6 @@ import { Footer } from "../../components/footer/Footer";
 // Icons
 import { FiClock } from "react-icons/fi";
 import { FaInfo } from "react-icons/fa";
-import { AiFillEdit } from "react-icons/ai";
 import { FiChevronRight } from "react-icons/fi";
 
 // Functions
@@ -143,17 +142,17 @@ export const VehicleUsageHistory = () => {
                                           {orders.end_date}
                                         </td>
 
-                                        <td align="center">
+                                        <td>
                                           <Badge bg={"success"}>
                                             {orders.status}
                                           </Badge>
                                         </td>
 
-                                        <td align="center">
+                                        <td>
                                           <>
                                             <NavLink
                                               to={
-                                                "/pengajuan-peminjaman/rincian-pengajuan"
+                                                "/riwayat-peminjaman/rincian-peminjaman"
                                               }
                                             >
                                               <Button
@@ -167,32 +166,6 @@ export const VehicleUsageHistory = () => {
                                             </NavLink>
                                           </>
                                         </td>
-
-                                        {orders.arrive_date ||
-                                        orders.arrive_time ? null : (
-                                          <td align="center">
-                                            <NavLink
-                                              to={
-                                                "/pengajuan-peminjaman/edit-pengajuan"
-                                              }
-                                            >
-                                              <Button
-                                                onClick={() =>
-                                                  GetOrderId(orders)
-                                                }
-                                                className="btn btn-edit position-relative"
-                                              >
-                                                <Badge
-                                                  className="position-absolute top-0 start-100 translate-middle rounded-pill"
-                                                  bg="danger"
-                                                >
-                                                  !
-                                                </Badge>
-                                                <AiFillEdit className="fs-6" />
-                                              </Button>
-                                            </NavLink>
-                                          </td>
-                                        )}
                                       </tr>
                                     ) : null;
                                   })}

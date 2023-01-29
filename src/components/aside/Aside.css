@@ -46,7 +46,7 @@ a.brand-icon:hover {
     #388af8
   );
   text-decoration: none;
-  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+  box-shadow: rgba(80, 102, 225, 0.45) 0px 2px 8px 0px;
   transform: scale(1.02, 1.02);
 }
 
@@ -62,7 +62,7 @@ a.brand-icon:hover {
     #388af8
   );
   text-decoration: none;
-  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+  box-shadow: rgba(80, 102, 225, 0.45) 0px 2px 8px 0px;
   transform: scale(1.02, 1.02);
 }
 

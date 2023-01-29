@@ -101,7 +101,7 @@ export const VehicleCategories = () => {
                     <Card className="shadow rounded bg__primary">
                       <Card.Header>
                         <Container>
-                          <Row className="gap-3 mt-4">
+                          <Row className="gap-3 mt-4 me-3">
                             <Col>
                               <h3 className="main__title">
                                 Kategori Kendaraan
@@ -119,7 +119,7 @@ export const VehicleCategories = () => {
                                 </Breadcrumb.Item>
                               </Breadcrumb>
                             </Col>
-                            <Col md={2} className="me-2">
+                            <Col md={2}>
                               <NavLink
                                 to={
                                   "/kategori-kendaraan/tambah-kategori-kendaraan"
@@ -155,14 +155,14 @@ export const VehicleCategories = () => {
                                       <td>{index + 1}</td>
                                       <td>{vehicleCat.name}</td>
                                       <td>
-                                        <div className="d-flex gap-1 justify-content-center">
+                                        <div className="d-flex gap-1">
                                           <NavLink
                                             to={
                                               "/kategori-kendaraan/edit-kategori-kendaraan"
                                             }
                                           >
                                             <Button
-                                              className="btn btn-edit"
+                                              className="btn-warning btn-edit"
                                               onClick={() =>
                                                 GetVehicleCatById(vehicleCat)
                                               }

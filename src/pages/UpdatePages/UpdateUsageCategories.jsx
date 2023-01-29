@@ -73,12 +73,13 @@ export const UpdateUsageCategories = () => {
           )
           .then((response) => {
             if (response.status === 200) {
+              const { msg } = response.data;
               navigate("/kategori-peminjaman");
               swal({
-                title: "Berhasil!",
-                text: response.data.msg,
+                text: msg,
                 icon: "success",
-                button: "Tutup",
+                button: false,
+                timer: 2000,
               });
             }
           });

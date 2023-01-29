@@ -9,8 +9,7 @@ import { useQuery } from "react-query";
 import FetchVehicles from "../../consAPI/FetchVehicles";
 
 // Navigating
-import { NavLink } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { NavLink, Navigate } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -105,7 +104,7 @@ export const Vehicles = () => {
                     <Card className="shadow rounded bg__primary">
                       <Card.Header>
                         <Container>
-                          <Row className="gap-3 mt-4">
+                          <Row className="gap-3 mt-4 me-3">
                             <Col>
                               <h3 className="main__title">Kendaraan Dinas</h3>
                               <Breadcrumb className="breadcrumb__item mt-3">
@@ -121,7 +120,7 @@ export const Vehicles = () => {
                                 </Breadcrumb.Item>
                               </Breadcrumb>
                             </Col>
-                            <Col md={2} className="me-2">
+                            <Col md={2}>
                               <NavLink to={"/data-kendaraan/tambah-kendaraan"}>
                                 <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
                                   Tambah
@@ -169,7 +168,7 @@ export const Vehicles = () => {
                                             }
                                           >
                                             <Button
-                                              className="btn btn-edit"
+                                              className="btn-warning btn-edit"
                                               onClick={() =>
                                                 GetVehicleById(vehicles)
                                               }
@@ -199,7 +198,7 @@ export const Vehicles = () => {
                                                 vehicles.vehicle_id
                                               );
                                             }}
-                                            className="btn-info btn-detail"
+                                            className="btn-detail"
                                           >
                                             <FaInfo className="fs-6" />
                                           </Button>

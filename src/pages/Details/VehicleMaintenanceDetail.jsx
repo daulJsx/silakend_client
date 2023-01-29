@@ -20,6 +20,7 @@ import { Container, Row, Col, Table, Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import Alert from "react-bootstrap/Alert";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "./../../components/aside/Aside";
@@ -31,6 +32,10 @@ import { FaArrowLeft } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
 import { FaTrashAlt } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
+import { HiPlusSm } from "react-icons/hi";
+import { BiCog } from "react-icons/bi";
+import { FiChevronRight } from "react-icons/fi";
+import { FiList } from "react-icons/fi";
 
 // React Notification
 import swal from "sweetalert";
@@ -135,17 +140,17 @@ export const VehicleMaintenancesDetail = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaArrowLeft />}
-                        title={"Rincian Data Perbaikan Kendaraan"}
                         parentLink={"/perbaikan-kendaraan"}
                       />
                     ))}
                   </Col>
                 </Row>
                 {/* NAVBAR */}
-                <main className="min-vh-100 px-2 mt-3 d-flex flex-column gap-2">
+
+                <main className="px-2 min-vh-100 mt-4">
                   {maintenanceDetails === null ? (
-                    <Alert variant="warning" className="d-flex bd-highlight">
-                      <div className="fs-5 me-auto bd-highlight">
+                    <Alert className="alert__customPrimary d-flex align-items-center bd-highlight">
+                      <div className="me-auto">
                         Data perbaikan ini belum ada rincian!
                       </div>
 
@@ -155,84 +160,121 @@ export const VehicleMaintenancesDetail = () => {
                             "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/tambah-rincian"
                           }
                         >
-                          <Button variant="warning" size="sm">
-                            Tambahkan Rincian <FaPlus />
+                          <Button className="btn__primary" size="sm">
+                            Tambah Rincian <FaPlus />
                           </Button>
                         </NavLink>
                       </div>
                     </Alert>
                   ) : null}
-
                   <Row>
                     <Col>
-                      <Card>
-                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                          Data Perbaikan Kendaraan
-                        </Card.Title>
-                        <Card.Body className="d-flex flex-column gap-3">
-                          <ListGroup as="ol" numbered className="mb-2">
-                            {VMToMap != ""
-                              ? [VMToMap].map((currentVM) => (
-                                  <>
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">KENDARAAN</div>
-                                        {currentVM.vehicle.name}
-                                      </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">
-                                          JENIS PERBAIKAN
+                      <Card className="shadow bg__primary">
+                        <Card.Header>
+                          <Container>
+                            <Row className="gap-3 mt-4">
+                              <Col>
+                                <h3 className="main__title">
+                                  Perbaikan Kendaraan
+                                </h3>
+                                <Breadcrumb className="breadcrumb__item mt-3">
+                                  <Breadcrumb.Item className="breadcrumb__item">
+                                    <div className="d-flex justify-content-center align-items-center gap-2">
+                                      <NavLink
+                                        to={"/perbaikan-kendaraan"}
+                                        className="d-flex justify-content-center align-items-center text-muted gap-2"
+                                      >
+                                        <BiCog className="fs-5" />
+                                        Data
+                                      </NavLink>
+
+                                      <FiChevronRight className="fs-6 breadcrumb__divider" />
+                                      <span className="color-primary">
+                                        Rincian Perbaikan
+                                      </span>
+                                    </div>
+                                  </Breadcrumb.Item>
+                                </Breadcrumb>
+                              </Col>
+                            </Row>
+                          </Container>
+                        </Card.Header>
+
+                        <Card.Body className="p-4">
+                          <Container
+                            className="p-4"
+                            style={{ background: "#fff", borderRadius: "10px" }}
+                          >
+                            <ListGroup as="ol" variant="flush" className="mb-2">
+                              {VMToMap != ""
+                                ? [VMToMap].map((currentVM) => (
+                                    <>
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="list__title">
+                                            KENDARAAN
+                                          </div>
+                                          {currentVM.vehicle.name}
                                         </div>
-                                        {currentVM.category}
-                                      </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">TANGGAL</div>
-                                        {currentVM.date}
-                                      </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">DESKRIPSI</div>
-                                        {currentVM.description}
-                                      </div>
-                                    </ListGroup.Item>
-                                    <ListGroup.Item
-                                      as="li"
-                                      className="d-flex justify-content-between align-items-start"
-                                    >
-                                      <div className="ms-2 me-auto">
-                                        <div className="fw-bold">
-                                          PENGELUARAN
+                                      </ListGroup.Item>
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="list__title">
+                                            JENIS PERBAIKAN
+                                          </div>
+                                          {currentVM.category}
                                         </div>
-                                        {currentVM.total_cost.toLocaleString(
-                                          "id-ID",
-                                          {
-                                            style: "currency",
-                                            currency: "IDR",
-                                          }
-                                        )}
-                                      </div>
-                                    </ListGroup.Item>
-                                  </>
-                                ))
-                              : null}
-                          </ListGroup>
+                                      </ListGroup.Item>
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="list__title">
+                                            TANGGAL
+                                          </div>
+                                          {currentVM.date}
+                                        </div>
+                                      </ListGroup.Item>
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="list__title">
+                                            DESKRIPSI
+                                          </div>
+                                          {currentVM.description}
+                                        </div>
+                                      </ListGroup.Item>
+                                      <ListGroup.Item
+                                        as="li"
+                                        className="d-flex justify-content-between align-items-start"
+                                      >
+                                        <div className="ms-2 me-auto">
+                                          <div className="list__title">
+                                            PENGELUARAN
+                                          </div>
+                                          {currentVM.total_cost.toLocaleString(
+                                            "id-ID",
+                                            {
+                                              style: "currency",
+                                              currency: "IDR",
+                                            }
+                                          )}
+                                        </div>
+                                      </ListGroup.Item>
+                                    </>
+                                  ))
+                                : null}
+                            </ListGroup>
+                          </Container>
                         </Card.Body>
                       </Card>
                     </Col>
@@ -241,99 +283,139 @@ export const VehicleMaintenancesDetail = () => {
                   {maintenanceDetails !== null ? (
                     <Row>
                       <Col>
-                        <Card>
-                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            Rincian Data Perbaikan Kendaraan
-                          </Card.Title>
-                          <Card.Body className="d-flex flex-column gap-3">
-                            <div className="me-1 d-flex justify-content-end">
-                              <NavLink
-                                to={
-                                  "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/tambah-rincian"
-                                }
-                              >
-                                <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
-                                  Tambah Rincian
-                                  <FaPlus className="fs-3" />
-                                </Button>
-                              </NavLink>
-                            </div>
-                            <Table responsive bordered hover>
-                              <thead>
-                                <tr>
-                                  <th>No</th>
-                                  <th>SPARE PART</th>
-                                  <th>JUMLAH SPARE PART</th>
-                                  <th>SATUAN</th>
-                                  <th>HARGA SPARE PART</th>
-                                  <th>HARGA TOTAL</th>
-                                  <th>AKSI</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {maintenanceDetails.map((vmd, index) => (
-                                  <tr>
-                                    <td key={vmd.detail_id}>{index + 1}</td>
-                                    <td>{vmd.item_name}</td>
-                                    <td>{vmd.item_qty}</td>
-                                    <td>{vmd.item_unit}</td>
-                                    <td>
-                                      {vmd.item_price
-                                        ? vmd.item_price.toLocaleString(
-                                            "id-ID",
-                                            {
-                                              style: "currency",
-                                              currency: "IDR",
-                                            }
-                                          )
-                                        : null}
-                                    </td>
-                                    <td>
-                                      {vmd.price_total
-                                        ? vmd.price_total.toLocaleString(
-                                            "id-ID",
-                                            {
-                                              style: "currency",
-                                              currency: "IDR",
-                                            }
-                                          )
-                                        : null}
-                                    </td>
-                                    <td>
-                                      <div className="d-flex gap-1 justify-content-center">
+                        <Card className="shadow rounded bg__primary mt-3">
+                          <Card.Header>
+                            <Container>
+                              <Row className="gap-3 mt-4">
+                                <Col>
+                                  <h3 className="main__title">
+                                    Data Rincian Perbaikan
+                                  </h3>
+                                  <Breadcrumb className="breadcrumb__item mt-3">
+                                    <Breadcrumb.Item className="breadcrumb__item">
+                                      <div className="d-flex justify-content-center align-items-center gap-2">
                                         <NavLink
                                           to={
-                                            "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/edit-rincian"
+                                            "/perbaikan-kendaraan/rincian-perbaikan-kendaraan"
                                           }
+                                          className="d-flex justify-content-center align-items-center color-primary gap-2"
                                         >
-                                          <Button
-                                            className="btn btn-edit"
-                                            onClick={() => GetVMDId(vmd)}
-                                          >
-                                            <AiFillEdit className="fs-6" />
-                                          </Button>
+                                          <FiList className="fs-5" />
+                                          Data
                                         </NavLink>
 
-                                        <Button
-                                          onClick={() =>
-                                            DeleteVMD(vmd.detail_id)
-                                          }
-                                          className="btn-danger btn-delete"
-                                        >
-                                          <FaTrashAlt className="fs-6" />
-                                        </Button>
+                                        <FiChevronRight className="fs-6 breadcrumb__divider" />
                                       </div>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </Table>
+                                    </Breadcrumb.Item>
+                                  </Breadcrumb>
+                                </Col>
+                                <Col md={2} className="me-2">
+                                  <NavLink
+                                    to={
+                                      "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/tambah-rincian"
+                                    }
+                                  >
+                                    <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
+                                      Tambah
+                                      <HiPlusSm className="fs-3" />
+                                    </Button>
+                                  </NavLink>
+                                </Col>
+                              </Row>
+                            </Container>
+                          </Card.Header>
+                          <Card.Body className="px-4 mb-3">
+                            <Container
+                              className="p-4"
+                              style={{
+                                background: "#fff",
+                                borderRadius: "10px",
+                              }}
+                            >
+                              <Row>
+                                <Col>
+                                  <Table hover responsive>
+                                    <thead>
+                                      <tr>
+                                        <th>No</th>
+                                        <th>SPARE PART</th>
+                                        <th>JUMLAH SPARE PART</th>
+                                        <th>SATUAN</th>
+                                        <th>HARGA SPARE PART</th>
+                                        <th>HARGA TOTAL</th>
+                                        <th>AKSI</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {maintenanceDetails.map((vmd, index) => (
+                                        <tr>
+                                          <td key={vmd.detail_id}>
+                                            {index + 1}
+                                          </td>
+                                          <td>{vmd.item_name}</td>
+                                          <td>{vmd.item_qty}</td>
+                                          <td>{vmd.item_unit}</td>
+                                          <td>
+                                            {vmd.item_price
+                                              ? vmd.item_price.toLocaleString(
+                                                  "id-ID",
+                                                  {
+                                                    style: "currency",
+                                                    currency: "IDR",
+                                                  }
+                                                )
+                                              : null}
+                                          </td>
+                                          <td>
+                                            {vmd.price_total
+                                              ? vmd.price_total.toLocaleString(
+                                                  "id-ID",
+                                                  {
+                                                    style: "currency",
+                                                    currency: "IDR",
+                                                  }
+                                                )
+                                              : null}
+                                          </td>
+                                          <td>
+                                            <div className="d-flex gap-1 justify-content-center">
+                                              <NavLink
+                                                to={
+                                                  "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/edit-rincian"
+                                                }
+                                              >
+                                                <Button
+                                                  className="btn btn-edit"
+                                                  onClick={() => GetVMDId(vmd)}
+                                                >
+                                                  <AiFillEdit className="fs-6" />
+                                                </Button>
+                                              </NavLink>
+
+                                              <Button
+                                                onClick={() =>
+                                                  DeleteVMD(vmd.detail_id)
+                                                }
+                                                className="btn-danger btn-delete"
+                                              >
+                                                <FaTrashAlt className="fs-6" />
+                                              </Button>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </Table>
+                                </Col>
+                              </Row>
+                            </Container>
                           </Card.Body>
                         </Card>
                       </Col>
                     </Row>
                   ) : null}
                 </main>
+
                 <Row>
                   <Col>
                     <Footer />

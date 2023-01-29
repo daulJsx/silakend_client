@@ -17,7 +17,7 @@ a {
     #6ac2ff
   );
   text-decoration: none;
-  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
+  box-shadow: rgba(80, 102, 225, 0.45) 0px 2px 8px 0px;
   color: var(--bg-primary);
   border-radius: 50%;
   padding: 0.8rem 0.8rem;

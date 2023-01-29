@@ -105,7 +105,7 @@ export const VehicleMaintenances = () => {
                     <Card className="shadow rounded bg__primary">
                       <Card.Header>
                         <Container>
-                          <Row className="gap-3 mt-4">
+                          <Row className="gap-3 mt-4 me-3">
                             <Col>
                               <h3 className="main__title">
                                 Perbaikan Kendaraan
@@ -123,7 +123,7 @@ export const VehicleMaintenances = () => {
                                 </Breadcrumb.Item>
                               </Breadcrumb>
                             </Col>
-                            <Col md={2} className="me-2">
+                            <Col md={2}>
                               <NavLink
                                 to={
                                   "/perbaikan-kendaraan/tambah-perbaikan-kendaraan"

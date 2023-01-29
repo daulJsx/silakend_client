@@ -101,7 +101,7 @@ export const JobUnits = () => {
                     <Card className="shadow rounded bg__primary">
                       <Card.Header>
                         <Container>
-                          <Row className="gap-3 mt-4">
+                          <Row className="gap-3 mt-4 me-3">
                             <Col>
                               <h3 className="main__title">Unit Kerja</h3>
                               <Breadcrumb className="breadcrumb__item mt-3">
@@ -117,7 +117,7 @@ export const JobUnits = () => {
                                 </Breadcrumb.Item>
                               </Breadcrumb>
                             </Col>
-                            <Col md={2} className="me-2">
+                            <Col md={2}>
                               <NavLink to={"/unit-kerja/tambah-unit-kerja"}>
                                 <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
                                   Tambah
@@ -151,12 +151,12 @@ export const JobUnits = () => {
                                       <td>{jobUnits.name}</td>
                                       <td>{jobUnits.unit_account}</td>
                                       <td>
-                                        <div className="d-flex gap-1 justify-content-center">
+                                        <div className="d-flex gap-1">
                                           <NavLink
                                             to={"/unit-kerja/edit-unit-kerja"}
                                           >
                                             <Button
-                                              className="btn btn-edit"
+                                              className="btn-warning btn-edit"
                                               onClick={() =>
                                                 GetJobUnitById(jobUnits)
                                               }

@@ -92,7 +92,7 @@ export const VehicleUsages = () => {
                     <Card className="shadow rounded bg__primary">
                       <Card.Header>
                         <Container>
-                          <Row className="gap-3 mt-4">
+                          <Row className="gap-3 mt-4 me-3">
                             <Col>
                               <h3 className="main__title">
                                 Pengajuan Peminjaman Kendaraan Dinas
@@ -110,7 +110,7 @@ export const VehicleUsages = () => {
                                 </Breadcrumb.Item>
                               </Breadcrumb>
                             </Col>
-                            <Col md={2} className="me-2">
+                            <Col md={2}>
                               {auth().user_level === 1 ? (
                                 <NavLink
                                   to={"/pengajuan-peminjaman/buat-pengajuan"}

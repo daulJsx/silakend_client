@@ -12,8 +12,7 @@ import { useQuery } from "react-query";
 import FetchVM from "../../consAPI/FetchVM";
 
 // Redirecting
-import { useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { useNavigate, Navigate, NavLink } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -21,6 +20,7 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -29,6 +29,8 @@ import { Footer } from "../../components/footer/Footer";
 
 // icons
 import { FaArrowLeft } from "react-icons/fa";
+import { FiChevronRight } from "react-icons/fi";
+import { FiList } from "react-icons/fi";
 
 // React Notification
 import swal from "sweetalert";
@@ -102,12 +104,13 @@ export const UpdateVMDetail = () => {
             )
             .then((response) => {
               if (response.status === 200) {
-                navigate("/perbaikan-kendaraan/rincian-perbaikan-kendaraan/");
+                const { msg } = response.data;
+                navigate("/perbaikan-kendaraan/rincian-perbaikan-kendaraan");
                 swal({
-                  title: "Berhasil!",
-                  text: response.data.msg,
+                  text: msg,
                   icon: "success",
-                  button: "Tutup",
+                  button: false,
+                  timer: 2000,
                 });
               }
             });
@@ -168,145 +171,202 @@ export const UpdateVMDetail = () => {
                 </Col>
               </Row>
               {/* NAVBAR */}
-              <main className="min-vh-100 px-2 mt-4">
+
+              <main className="px-2 min-vh-100 mt-4">
                 <Row>
                   <Col>
-                    <Card>
-                      <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                        Silahkan Edit Rincian Perbaikan Kendaraan Disini
-                      </Card.Title>
-                      <Card.Body className="d-flex flex-column gap-3">
-                        {VMDToMap != ""
-                          ? [VMDToMap].map((currentVMD) => (
-                              <>
-                                <Form.Group>
-                                  <Form.Label>nama spare part</Form.Label>
-
-                                  <Form.Control
-                                    required
-                                    placeholder={currentVMD.item_name}
-                                    className="input form-custom"
-                                    style={{
-                                      backgroundColor: "#F5F7FC",
-                                      border: "none",
-                                      padding: "15px",
-                                    }}
-                                    type="text"
-                                    onChange={(e) =>
-                                      setNewItemName(e.target.value)
-                                    }
-                                  />
-                                </Form.Group>
-
-                                <Form.Group>
-                                  <Form.Label>jumlah spare part</Form.Label>
-
-                                  <Form.Control
-                                    required
-                                    placeholder={currentVMD.item_qty}
-                                    className="input form-custom"
-                                    style={{
-                                      backgroundColor: "#F5F7FC",
-                                      border: "none",
-                                      padding: "15px",
-                                    }}
-                                    type="number"
-                                    onChange={(e) =>
-                                      setNewItemQty(e.target.value)
-                                    }
-                                  />
-                                </Form.Group>
-
-                                <Form.Group>
-                                  <Form.Label>satuan spare part</Form.Label>
-                                  <Form.Control
-                                    required
-                                    placeholder={currentVMD.item_unit}
-                                    className="input form-custom"
-                                    style={{
-                                      backgroundColor: "#F5F7FC",
-                                      border: "none",
-                                      padding: "15px",
-                                    }}
-                                    type="text"
-                                    onChange={(e) =>
-                                      setNewItemUnit(e.target.value)
-                                    }
-                                  />
-                                </Form.Group>
-
-                                <Form.Group>
-                                  <Form.Label>harga spare part</Form.Label>
-                                  <InputGroup>
-                                    <InputGroup.Text
-                                      style={{
-                                        border: "none",
-                                      }}
-                                      id="basic-addon2"
-                                    >
-                                      Rp.
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                      required
-                                      placeholder={currentVMD.item_price}
-                                      className="input form-custom"
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "15px",
-                                      }}
-                                      type="number"
-                                      onChange={(e) =>
-                                        setNewItemPrice(e.target.value)
+                    <Card className="shadow rounded bg__primary">
+                      <Card.Header>
+                        <Container>
+                          <Row className="gap-3 mt-4">
+                            <Col>
+                              <h3 className="main__title">
+                                Data Rincian Perbaikan
+                              </h3>
+                              <Breadcrumb className="breadcrumb__item mt-3">
+                                <Breadcrumb.Item
+                                  className="breadcrumb__item"
+                                  href="#"
+                                >
+                                  <div className="d-flex justify-content-center align-items-center gap-2">
+                                    <NavLink
+                                      to={
+                                        "/perbaikan-kendaraan/rincian-perbaikan-kendaraan"
                                       }
-                                    />
-                                  </InputGroup>
-                                </Form.Group>
-
-                                <Form.Group>
-                                  <Form.Label>harga total</Form.Label>
-                                  <InputGroup>
-                                    <InputGroup.Text
-                                      style={{
-                                        border: "none",
-                                      }}
-                                      id="basic-addon2"
+                                      className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
-                                      Rp.
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                      required
-                                      placeholder={currentVMD.price_total}
-                                      className="input form-custom"
-                                      style={{
-                                        backgroundColor: "#F5F7FC",
-                                        border: "none",
-                                        padding: "15px",
-                                      }}
-                                      type="number"
-                                      onChange={(e) =>
-                                        setNewPriceTotal(e.target.value)
-                                      }
-                                    />
-                                  </InputGroup>
-                                </Form.Group>
-                              </>
-                            ))
-                          : null}
-                      </Card.Body>
-                      <Card.Footer>
-                        <Button
-                          className="btn-post"
-                          type="submit"
-                          onClick={updateVehicleMD}
+                                      <FiList className="fs-5" />
+                                      Data
+                                    </NavLink>
+
+                                    <FiChevronRight className="fs-6 breadcrumb__divider" />
+                                    <span className="color-primary">
+                                      Edit Rincian Perbaikan
+                                    </span>
+                                  </div>
+                                </Breadcrumb.Item>
+                              </Breadcrumb>
+                            </Col>
+                          </Row>
+                        </Container>
+                      </Card.Header>
+
+                      <Card.Body className="p-4">
+                        <Container
+                          className="p-4"
+                          style={{ background: "#fff", borderRadius: "10px" }}
                         >
-                          Simpan
-                        </Button>
-                      </Card.Footer>
+                          <Row>
+                            <Col>
+                              <Form onSubmit={updateVehicleMD}>
+                                {VMDToMap != ""
+                                  ? [VMDToMap].map((currentVMD) => (
+                                      <>
+                                        <Form.Group className="mb-3">
+                                          <Form.Label>
+                                            nama spare part
+                                          </Form.Label>
+
+                                          <Form.Control
+                                            required
+                                            placeholder={currentVMD.item_name}
+                                            className="input form-custom"
+                                            style={{
+                                              backgroundColor: "#F5F7FC",
+                                              border: "none",
+                                              padding: "15px",
+                                            }}
+                                            type="text"
+                                            onChange={(e) =>
+                                              setNewItemName(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3">
+                                          <Form.Label>
+                                            jumlah spare part
+                                          </Form.Label>
+
+                                          <Form.Control
+                                            required
+                                            placeholder={currentVMD.item_qty}
+                                            className="input form-custom"
+                                            style={{
+                                              backgroundColor: "#F5F7FC",
+                                              border: "none",
+                                              padding: "15px",
+                                            }}
+                                            type="number"
+                                            onChange={(e) =>
+                                              setNewItemQty(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3">
+                                          <Form.Label>
+                                            satuan spare part
+                                          </Form.Label>
+                                          <Form.Control
+                                            required
+                                            placeholder={currentVMD.item_unit}
+                                            className="input form-custom"
+                                            style={{
+                                              backgroundColor: "#F5F7FC",
+                                              border: "none",
+                                              padding: "15px",
+                                            }}
+                                            type="text"
+                                            onChange={(e) =>
+                                              setNewItemUnit(e.target.value)
+                                            }
+                                          />
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3">
+                                          <Form.Label>
+                                            harga spare part
+                                          </Form.Label>
+                                          <InputGroup>
+                                            <InputGroup.Text
+                                              style={{
+                                                border: "none",
+                                              }}
+                                              id="basic-addon2"
+                                            >
+                                              Rp.
+                                            </InputGroup.Text>
+                                            <Form.Control
+                                              required
+                                              placeholder={
+                                                currentVMD.item_price
+                                              }
+                                              className="input form-custom"
+                                              style={{
+                                                backgroundColor: "#F5F7FC",
+                                                border: "none",
+                                                padding: "15px",
+                                              }}
+                                              type="number"
+                                              onChange={(e) =>
+                                                setNewItemPrice(e.target.value)
+                                              }
+                                            />
+                                          </InputGroup>
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-4">
+                                          <Form.Label>harga total</Form.Label>
+                                          <InputGroup>
+                                            <InputGroup.Text
+                                              style={{
+                                                border: "none",
+                                              }}
+                                              id="basic-addon2"
+                                            >
+                                              Rp.
+                                            </InputGroup.Text>
+                                            <Form.Control
+                                              required
+                                              placeholder={
+                                                currentVMD.price_total
+                                              }
+                                              className="input form-custom"
+                                              style={{
+                                                backgroundColor: "#F5F7FC",
+                                                border: "none",
+                                                padding: "15px",
+                                              }}
+                                              type="number"
+                                              onChange={(e) =>
+                                                setNewPriceTotal(e.target.value)
+                                              }
+                                            />
+                                          </InputGroup>
+                                        </Form.Group>
+                                      </>
+                                    ))
+                                  : null}
+                                <Form.Group>
+                                  <Button
+                                    className="btn-post"
+                                    type="submit"
+                                    onClick={updateVehicleMD}
+                                  >
+                                    Simpan
+                                  </Button>
+                                </Form.Group>
+                              </Form>
+                            </Col>
+                          </Row>
+                        </Container>
+                      </Card.Body>
                     </Card>
                   </Col>
                 </Row>
               </main>
+
               <Row>
                 <Col>
                   <Footer />
@@ -316,7 +376,7 @@ export const UpdateVMDetail = () => {
           </Row>
         </Container>
       ) : (
-        <Navigate to="/rincian-perbaikan" />
+        <Navigate to="/perbaikan-kendaraan" />
       )
     ) : (
       SecuringPage()

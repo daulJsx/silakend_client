@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+
+// Realtime requirements
+import Push from "push.js";
 
 // Cookies JS
 import Cookies from "js-cookie";
@@ -36,6 +39,22 @@ import { FaTrashAlt } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 
 export const JobUnits = () => {
+  useEffect(() => {
+    window.Echo.channel("jobunit").listen("JobUnitUpdate", (e) => {
+      Push.create("Info Data Peminjaman", {
+        body: e.jobUnit,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
+      });
+      // Setelah tampil, refetch data
+      FetchJobUnits();
+    });
+  }, []);
+
   const auth = useAuthUser();
 
   // Fetching job units

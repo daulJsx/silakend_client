@@ -1,9 +1,5 @@
 import React from "react";
 
-// Realtime requirements
-import Echo from "laravel-echo";
-import Pusher from "pusher-js";
-
 // Routing between pages
 import {
   BrowserRouter as Router,

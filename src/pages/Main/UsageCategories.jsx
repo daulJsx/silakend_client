@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 
+// Push notify
+import Push from "push.js";
+
 // fetch data requirement
 import { useQuery } from "react-query";
 import FetchUsageCat from "../../consAPI/FetchUsageCat";

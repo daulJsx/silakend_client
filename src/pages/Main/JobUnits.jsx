@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-// Realtime requirements
+// Push notify
 import Push from "push.js";
 
 // Cookies JS

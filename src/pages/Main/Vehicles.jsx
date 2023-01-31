@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 
+// Push notify
+import Push from "push.js";
+
 // Cookies JS
 import Cookies from "js-cookie";
 

@@ -385,7 +385,7 @@ export const VehicleMaintenancesDetail = () => {
                                                 }
                                               >
                                                 <Button
-                                                  className="btn btn-edit"
+                                                  className="btn-warning btn-edit"
                                                   onClick={() => GetVMDId(vmd)}
                                                 >
                                                   <AiFillEdit className="fs-6" />

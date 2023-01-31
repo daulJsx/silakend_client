@@ -43,11 +43,12 @@ export const DeleteVU = async (usageId, setAuthUser) => {
             config
           )
           .then((response) => {
+            const { msg } = response.data;
             swal({
-              title: "Berhasil!",
-              text: response.data.msg,
+              text: msg,
               icon: "success",
-              button: "Tutup",
+              button: false,
+              timer: 2000,
             });
             window.location.reload();
             FetchVehicleUsages();
@@ -65,9 +66,7 @@ export const DeleteVU = async (usageId, setAuthUser) => {
         }
       }
     } else {
-      userLevel === 5
-        ? swal("Pengajuan peminjaman anda aman!")
-        : swal("Data peminjaman aman!");
+      swal("Aksi dibatalkan");
     }
   });
 };

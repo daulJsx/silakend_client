@@ -67,10 +67,10 @@ export const CancelVU = async (order) => {
               )
               .then((response) => {
                 swal({
-                  title: "Berhasil!",
                   text: response.data.msg,
                   icon: "success",
-                  button: "Tutup",
+                  button: false,
+                  timer: 2000,
                 });
 
                 FetchVehicleUsages();

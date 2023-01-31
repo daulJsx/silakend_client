@@ -26,11 +26,12 @@ export async function DeleteRole(roleId) {
         await axios
           .delete(`https://silakend-server.xyz/api/roles/${roleId}`, config)
           .then((response) => {
+            const { msg } = response.data;
             swal({
-              title: "Berhasil!",
-              text: response.data.msg,
+              text: msg,
               icon: "success",
-              button: "Tutup",
+              button: false,
+              timer: 2000,
             });
             window.location.reload();
           });
@@ -47,7 +48,7 @@ export async function DeleteRole(roleId) {
         }
       }
     } else {
-      swal("Data peran aman!");
+      swal("Aksi dibatalkan");
     }
   });
 }

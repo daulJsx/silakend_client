@@ -3,8 +3,6 @@ import axios from "axios";
 // Cookies JS
 import Cookies from "js-cookie";
 
-import FetchUsageCat from "../../consAPI/FetchUsageCat";
-
 // React Notification
 import swal from "sweetalert";
 
@@ -18,7 +16,7 @@ export async function DeleteUsageCat(usageCatId) {
 
   swal({
     title: "Yakin?",
-    text: "Data peminjaman yang dihapus, tidak dapat kembali!",
+    text: "Kategori peminjaman yang dihapus, tidak dapat kembali!",
     icon: "warning",
     buttons: true,
     dangerMode: true,
@@ -31,14 +29,14 @@ export async function DeleteUsageCat(usageCatId) {
             config
           )
           .then((response) => {
+            const { msg } = response.data;
             swal({
-              title: "Berhasil!",
-              text: response.data.msg,
+              text: msg,
               icon: "success",
-              button: "Tutup",
+              button: false,
+              timer: 2000,
             });
             window.location.reload();
-            FetchUsageCat();
           });
       } catch (error) {
         if (error.response) {
@@ -53,7 +51,7 @@ export async function DeleteUsageCat(usageCatId) {
         }
       }
     } else {
-      swal("Data peminjaman aman!");
+      swal("Aksi dibatalkan");
     }
   });
 }

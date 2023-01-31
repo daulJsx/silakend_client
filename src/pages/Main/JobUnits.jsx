@@ -39,21 +39,21 @@ import { FaTrashAlt } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 
 export const JobUnits = () => {
-  useEffect(() => {
-    window.Echo.channel("jobunit").listen("JobUnitUpdate", (e) => {
-      Push.create("Info Data Unit Kerja", {
-        body: e.jobUnit,
-        icon: "/polman.ico",
-        timeout: 4000,
-        onClick: function () {
-          window.focus();
-          this.close();
-        },
-      });
-      // Setelah tampil, refetch data
-      FetchJobUnits();
-    });
-  }, []);
+  // useEffect(() => {
+  //   window.Echo.channel("jobunit").listen("JobUnitUpdate", (e) => {
+  //     Push.create("Info Data Unit Kerja", {
+  //       body: e.jobUnit,
+  //       icon: "/polman.ico",
+  //       timeout: 4000,
+  //       onClick: function () {
+  //         window.focus();
+  //         this.close();
+  //       },
+  //     });
+  //     // Setelah tampil, refetch data
+  //     FetchJobUnits();
+  //   });
+  // }, []);
 
   const auth = useAuthUser();
 

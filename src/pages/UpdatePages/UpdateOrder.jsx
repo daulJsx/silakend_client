@@ -79,14 +79,6 @@ export const UpdateOrder = () => {
   const [destination, setDestination] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [departDate, setDepartDate] = useState("");
-  const [departTime, setDepartTime] = useState("");
-  const [arriveDate, setArriveDate] = useState("");
-  const [arriveTime, setArriveTime] = useState("");
-  const [dco, setDco] = useState("");
-  const [dci, setDci] = useState("");
-  const [status, setStatus] = useState("");
-  const [statusDesc, setStatusDesc] = useState("");
 
   // if update necessary
   const [currentVehicleId] = [orderToMap].map((vId) => vId.vehicle_id);
@@ -98,60 +90,34 @@ export const UpdateOrder = () => {
     (pCount) => pCount.personel_count
   );
   const [currentDestination] = [orderToMap].map((dest) => dest.destination);
-
   const [currentStartDate] = [orderToMap].map(
     (startDate) => startDate.start_date
   );
 
   const [currentEndDate] = [orderToMap].map((endDate) => endDate.end_date);
-  const [currentDepartDate] = [orderToMap].map(
-    (departDate) => departDate.depart_date
-  );
-  const [currentDepartTime] = [orderToMap].map(
-    (departTime) => departTime.depart_time
-  );
-  const [currentArriveDate] = [orderToMap].map(
-    (arriveDate) => arriveDate.arrive_date
-  );
-  const [currentArriveTime] = [orderToMap].map(
-    (arriveTime) => arriveTime.arrive_time
-  );
-  const [currentDCO] = [orderToMap].map((dco) => dco.distance_count_out);
-  const [currentDCI] = [orderToMap].map((dci) => dci.distance_count_in);
 
   // format the time to hh:mm, caused by the orderToMap time format is h:i:s
-  const departTimeFromMap = currentDepartTime || null;
-  const formattedDepartTime = departTimeFromMap
-    ? new Date(`1970-01-01T${departTimeFromMap}Z`).toISOString().substr(11, 5)
-    : null;
+  // const departTimeFromMap = currentDepartTime || null;
+  // const formattedDepartTime = departTimeFromMap
+  //   ? new Date(`1970-01-01T${departTimeFromMap}Z`).toISOString().substr(11, 5)
+  //   : null;
 
-  const arriveTimeFromMap = currentArriveTime || null;
-  const formattedArriveTime = arriveTimeFromMap
-    ? new Date(`1970-01-01T${arriveTimeFromMap}Z`).toISOString().substr(11, 5)
-    : null;
+  // const arriveTimeFromMap = currentArriveTime || null;
+  // const formattedArriveTime = arriveTimeFromMap
+  //   ? new Date(`1970-01-01T${arriveTimeFromMap}Z`).toISOString().substr(11, 5)
+  //   : null;
 
   const body = {
     vehicle_id: vehicleId === "" ? currentVehicleId : vehicleId,
     driver_id: driverId === "" ? currentDriverId : driverId,
-    user_id: userId === "" ? currentUserId : userId,
-    ucategory_id: ucategoryId === "" ? currentUCatId : ucategoryId,
-    usage_description:
-      usageDescription === "" ? currentUDesc : usageDescription,
-    personel_count: personelCount === "" ? currentPersonelCount : personelCount,
-    destination: destination === "" ? currentDestination : destination,
     start_date: startDate === "" ? currentStartDate : startDate,
     end_date: endDate === "" ? currentEndDate : endDate,
-
-    distance_count_out: dco === "" ? currentDCO : dco,
-    distance_count_in: dci === "" ? currentDCI : dci,
     status: "",
     status_description: "",
   };
 
   const handleReady = async (e) => {
     e.preventDefault();
-
-    console.log(body);
 
     const config = {
       headers: { Authorization: `Bearer ${token}` },
@@ -176,12 +142,12 @@ export const UpdateOrder = () => {
             .then((response) => {
               if (response.status === 200) {
                 const { msg } = response.data;
-                navigate("/pengajuan-peminjaman");
+                navigate(-1);
                 swal({
                   text: msg,
                   icon: "success",
                   button: false,
-                  timer: 2000,
+                  timer: 3000,
                 });
               }
             });
@@ -204,8 +170,6 @@ export const UpdateOrder = () => {
   };
   const handleReject = async (e) => {
     e.preventDefault();
-
-    console.log(body);
 
     const config = {
       headers: { Authorization: `Bearer ${token}` },
@@ -240,7 +204,7 @@ export const UpdateOrder = () => {
                 )
                 .then((response) => {
                   const { msg } = response.data;
-                  navigate("/pengajuan-peminjaman");
+                  navigate(-1);
                   swal({
                     text: msg,
                     icon: "success",
@@ -318,10 +282,7 @@ export const UpdateOrder = () => {
                                 Pengajuan Peminjaman Kendaraan Dinas
                               </h3>
                               <Breadcrumb className="breadcrumb__item mt-3">
-                                <Breadcrumb.Item
-                                  className="breadcrumb__item"
-                                  href="#"
-                                >
+                                <Breadcrumb.Item className="breadcrumb__item">
                                   <div className="d-flex justify-content-center align-items-center gap-2">
                                     <NavLink
                                       to={"/pengajuan-peminjaman"}
@@ -556,66 +517,10 @@ export const UpdateOrder = () => {
                                           </InputGroup>
                                         </Form.Group>
 
-                                        <Form.Group>
-                                          <Form.Label>
-                                            jumlah kilometer (odometer)
-                                          </Form.Label>
-                                          <InputGroup className="mb-3">
-                                            <InputGroup.Text
-                                              style={{
-                                                border: "none",
-                                              }}
-                                              id="basic-addon2"
-                                            >
-                                              Pergi
-                                            </InputGroup.Text>
-                                            <Form.Control
-                                              required
-                                              placeholder={
-                                                orderToUpdate.distance_count_out
-                                              }
-                                              className="input form-custom"
-                                              style={{
-                                                backgroundColor: "#F5F7FC",
-                                                border: "none",
-                                                padding: "15px",
-                                              }}
-                                              type="number"
-                                              onChange={(e) =>
-                                                setDco(e.target.value)
-                                              }
-                                            />
-                                            <InputGroup.Text
-                                              style={{
-                                                border: "none",
-                                              }}
-                                              id="basic-addon2"
-                                            >
-                                              Pulang
-                                            </InputGroup.Text>
-                                            <Form.Control
-                                              required
-                                              placeholder={
-                                                orderToUpdate.distance_count_in
-                                              }
-                                              className="input form-custom"
-                                              style={{
-                                                backgroundColor: "#F5F7FC",
-                                                border: "none",
-                                                padding: "15px",
-                                              }}
-                                              type="number"
-                                              onChange={(e) =>
-                                                setDci(e.target.value)
-                                              }
-                                            />
-                                          </InputGroup>
-                                        </Form.Group>
-
                                         {orderToUpdate.driver === null &&
                                         orderToUpdate.vehicle === null ? (
                                           <>
-                                            <Alert className="alert__custom">
+                                            <Alert className="alert__outlinePrimary">
                                               <Container>
                                                 <span className="fs-5">
                                                   Tugaskan Pengemudi Dan
@@ -629,8 +534,7 @@ export const UpdateOrder = () => {
                                                   <Form.Select
                                                     required
                                                     style={{
-                                                      backgroundColor:
-                                                        "#F5F7FC",
+                                                      backgroundColor: "#fff",
                                                       border: "none",
                                                       padding: "17px",
                                                     }}
@@ -681,8 +585,7 @@ export const UpdateOrder = () => {
                                                   <Form.Select
                                                     required
                                                     style={{
-                                                      backgroundColor:
-                                                        "#F5F7FC",
+                                                      backgroundColor: "#fff",
                                                       border: "none",
                                                       padding: "17px",
                                                     }}
@@ -824,10 +727,10 @@ export const UpdateOrder = () => {
 
                                         {orderToUpdate.status === "WAITING" ||
                                         orderToUpdate.status === "APPROVED" ? (
-                                          <Form.Group className="d-flex gap-2">
+                                          <Form.Group className="d-flex gap-2 mt-5">
                                             <Button
                                               onClick={handleReady}
-                                              variant="success"
+                                              className="btn__primary"
                                             >
                                               <div className="d-flex gap-2">
                                                 Approve
@@ -837,7 +740,7 @@ export const UpdateOrder = () => {
 
                                             <Button
                                               onClick={handleReject}
-                                              variant="danger"
+                                              className="btn__danger"
                                             >
                                               <div className="d-flex gap-2">
                                                 Reject

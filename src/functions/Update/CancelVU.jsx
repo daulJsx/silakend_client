@@ -9,16 +9,8 @@ import Cookies from "js-cookie";
 import swal from "sweetalert";
 
 export const CancelVU = async (order) => {
-  let {
-    ucategory_id,
-    destination,
-    start_date,
-    end_date,
-    personel_count,
-    usage_description,
-    usage_id,
-    user_id,
-  } = order;
+  let { usage_id } = order;
+
   // Get access token
   const token = Cookies.get("token");
 
@@ -27,15 +19,9 @@ export const CancelVU = async (order) => {
   };
 
   const body = {
-    user_id: user_id,
-    usage_id: usage_id,
-    ucategory_id: ucategory_id,
-    destination: destination,
-    start_date: start_date,
-    end_date: end_date,
-    usage_description: usage_description,
-    personel_count: personel_count,
-    status: "CANCELED",
+    distance_count_out: distance_count_out,
+    distance_count_in: "",
+    status: "",
     status_description: "",
   };
 
@@ -58,6 +44,7 @@ export const CancelVU = async (order) => {
       }).then(async (status_description) => {
         if (status_description) {
           body.status_description = status_description;
+          body.status = "CANCELED";
           try {
             await axios
               .put(

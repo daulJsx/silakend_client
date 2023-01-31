@@ -16,7 +16,6 @@ export const RejectVU = async (order) => {
     personel_count,
     usage_description,
     usage_id,
-    user_id,
   } = order;
   // Get access token
   const token = Cookies.get("token");

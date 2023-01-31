@@ -170,7 +170,7 @@ export const VehicleUsageDetail = () => {
                             style={{ background: "#fff", borderRadius: "10px" }}
                           >
                             <ListGroup as="ol" variant="flush" className="mb-2">
-                              {vUsageToMap != ""
+                              {vUsageToMap !== ""
                                 ? vUsageToMap.map((currentUsage) => (
                                     <>
                                       <ListGroup.Item

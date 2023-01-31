@@ -144,10 +144,40 @@ button.btn-post:hover {
 }
 
 .btn__primary {
-  background: #eff0ff;
-  color: #4f55da;
+  background: #4f55da;
+  color: #f8f6f2;
   border-radius: var(--borderRadius);
   padding: 10px;
+  box-shadow: rgba(80, 102, 225, 0.45) 0px 2px 8px 0px;
+  border: none;
+  transition: var(--transition);
+}
+
+.btn__danger {
+  background: #f23333;
+  color: #eff0ff;
+  box-shadow: rgba(225, 80, 80, 0.45) 0px 2px 8px 0px;
+  border-radius: var(--borderRadius);
+  padding: 10px;
+  border: none;
+  transition: var(--transition);
+}
+
+.btn__danger:hover {
+  background: #eff0ff;
+  color: #f23333;
+  box-shadow: none;
+  border-radius: var(--borderRadius);
+  padding: 10px;
+  border: none;
+  transition: var(--transition);
+}
+
+.btn__primary:hover {
+  background: #eff0ff;
+  color: #4f55da;
+  box-shadow: none;
+  border: none;
 }
 
 .alert__outlinePrimary {

@@ -1,5 +1,6 @@
+import React from "react";
 import axios from "axios";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Cookies JS
 import Cookies from "js-cookie";
@@ -9,8 +10,6 @@ import swal from "sweetalert";
 
 export const ApproveVU = async (order) => {
   let {
-    vehicle_id,
-    driver_id,
     ucategory_id,
     destination,
     start_date,
@@ -18,10 +17,9 @@ export const ApproveVU = async (order) => {
     personel_count,
     usage_description,
     usage_id,
-    user_id,
-    distance_count_in,
-    distance_count_out,
   } = order;
+
+  const navigate = useNavigate();
 
   // Get access token
   const token = Cookies.get("token");
@@ -37,7 +35,7 @@ export const ApproveVU = async (order) => {
     end_date: end_date,
     usage_description: usage_description,
     personel_count: personel_count,
-    status: "",
+    status: "APPROVED",
     status_description: "",
   };
 
@@ -48,7 +46,6 @@ export const ApproveVU = async (order) => {
     buttons: true,
     dangerMode: true,
   }).then(async (willDelete) => {
-    console.log(body);
     if (willDelete) {
       try {
         await axios
@@ -58,7 +55,7 @@ export const ApproveVU = async (order) => {
             config
           )
           .then((response) => {
-            redirect("/verifier/pengajuan-pegawai");
+            navigate(-1);
             swal({
               text: response.data.msg,
               icon: "success",

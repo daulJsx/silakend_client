@@ -61,7 +61,7 @@ export const CreateJobUnit = () => {
           .then((response) => {
             if (response.status === 200) {
               const { msg } = response.data;
-              navigate("/unit-kerja");
+              navigate(-1);
               swal({
                 text: msg,
                 icon: "success",

@@ -25,7 +25,7 @@ export async function DeleteVM(VMId) {
       try {
         await axios
           .delete(
-            `https://silakend-server.xyz/api/vehiclemaintenances/${VMId}`,
+            `http://silakend-server-realtime.test/api/vehiclemaintenances/${VMId}`,
             config
           )
           .then((response) => {

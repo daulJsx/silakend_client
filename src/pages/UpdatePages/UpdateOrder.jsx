@@ -133,17 +133,6 @@ export const UpdateOrder = () => {
   const body = {
     vehicle_id: vehicleId === "" ? currentVehicleId : vehicleId,
     driver_id: driverId === "" ? currentDriverId : driverId,
-    user_id: userId === "" ? currentUserId : userId,
-    ucategory_id: ucategoryId === "" ? currentUCatId : ucategoryId,
-    usage_description:
-      usageDescription === "" ? currentUDesc : usageDescription,
-    personel_count: personelCount === "" ? currentPersonelCount : personelCount,
-    destination: destination === "" ? currentDestination : destination,
-    start_date: startDate === "" ? currentStartDate : startDate,
-    end_date: endDate === "" ? currentEndDate : endDate,
-
-    distance_count_out: dco === "" ? currentDCO : dco,
-    distance_count_in: dci === "" ? currentDCI : dci,
     status: "",
     status_description: "",
   };
@@ -169,7 +158,7 @@ export const UpdateOrder = () => {
         try {
           await axios
             .put(
-              `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
+              `http://silakend-server-realtime.test/api/vehicleusages/${usageId}`,
               body,
               config
             )
@@ -234,7 +223,7 @@ export const UpdateOrder = () => {
             try {
               await axios
                 .put(
-                  `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
+                  `http://silakend-server-realtime.test/api/vehicleusages/${usageId}`,
                   body,
                   config
                 )

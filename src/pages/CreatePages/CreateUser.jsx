@@ -85,7 +85,7 @@ export const CreateUser = () => {
     ) {
       try {
         const response = await axios.post(
-          "https://silakend-server.xyz/api/users",
+          "http://silakend-server-realtime.test/api/users",
           newUser,
           config
         );

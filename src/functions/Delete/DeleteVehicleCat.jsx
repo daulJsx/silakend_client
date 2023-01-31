@@ -24,7 +24,7 @@ export async function DeleteVehicleCat(vCatId) {
       try {
         await axios
           .delete(
-            `https://silakend-server.xyz/api/vehiclecategories/${vCatId}`,
+            `http://silakend-server-realtime.test/api/vehiclecategories/${vCatId}`,
             config
           )
           .then((response) => {

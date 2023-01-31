@@ -59,7 +59,7 @@ export const VehicleDetail = () => {
     async function fetchData() {
       try {
         await axios
-          .get(`https://silakend-server.xyz/api/vehicles/${vehicleId}`, config)
+          .get(`http://silakend-server-realtime.test/api/vehicles/${vehicleId}`, config)
           .then((response) => {
             if (response.status === 200) {
               setIsLoading(false);

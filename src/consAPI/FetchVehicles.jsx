@@ -17,7 +17,7 @@ async function FetchVehicles() {
     };
 
     const response = await axios.get(
-      "https://silakend-server.xyz/api/vehicles",
+      "http://silakend-server-realtime.test/api/vehicles",
       config
     );
 

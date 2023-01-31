@@ -39,7 +39,7 @@ export const DeleteVU = async (usageId, setAuthUser) => {
       try {
         await axios
           .delete(
-            `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
+            `http://silakend-server-realtime.test/api/vehicleusages/${usageId}`,
             config
           )
           .then((response) => {

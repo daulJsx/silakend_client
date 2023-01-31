@@ -58,7 +58,7 @@ export const CreateRole = () => {
     if (newRole.name !== "" || newRole.level !== "") {
       try {
         await axios
-          .post("https://silakend-server.xyz/api/roles", newRole, config)
+          .post("http://silakend-server-realtime.test/api/roles", newRole, config)
           .then((response) => {
             if (response.status === 200) {
               const { msg } = response.data;

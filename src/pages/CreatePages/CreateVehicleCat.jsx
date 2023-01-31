@@ -57,7 +57,7 @@ export const CreateVehicleCat = () => {
       try {
         await axios
           .post(
-            "https://silakend-server.xyz/api/vehiclecategories",
+            "http://silakend-server-realtime.test/api/vehiclecategories",
             newVehicleCat,
             config
           )

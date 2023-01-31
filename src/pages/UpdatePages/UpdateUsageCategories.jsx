@@ -67,7 +67,7 @@ export const UpdateUsageCategories = () => {
       try {
         await axios
           .put(
-            `https://silakend-server.xyz/api/usagecategories/${uCatId}`,
+            `http://silakend-server-realtime.test/api/usagecategories/${uCatId}`,
             curUsageCat,
             config
           )

@@ -75,7 +75,7 @@ export const CreateVehicle = () => {
     ) {
       try {
         await axios
-          .post("https://silakend-server.xyz/api/vehicles", vehicleData, config)
+          .post("http://silakend-server-realtime.test/api/vehicles", vehicleData, config)
           .then((response) => {
             if (response.status === 200) {
               const { msg } = response.data;

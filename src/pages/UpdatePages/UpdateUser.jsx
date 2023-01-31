@@ -91,7 +91,7 @@ export const UpdateUser = () => {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-    const getRoleByIdApi = `https://silakend-server.xyz/api/roles/${selectedRole}`;
+    const getRoleByIdApi = `http://silakend-server-realtime.test/api/roles/${selectedRole}`;
     const response = await axios
       .get(getRoleByIdApi, config)
       .then((response) => {
@@ -134,7 +134,7 @@ export const UpdateUser = () => {
         try {
           await axios
             .put(
-              `https://silakend-server.xyz/api/users/${userId}`,
+              `http://silakend-server-realtime.test/api/users/${userId}`,
               body,
               config
             )

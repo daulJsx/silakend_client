@@ -24,7 +24,7 @@ export async function DeleteUser(userId) {
     if (willDelete) {
       try {
         await axios
-          .delete(`https://silakend-server.xyz/api/users/${userId}`, config)
+          .delete(`http://silakend-server-realtime.test/api/users/${userId}`, config)
           .then((response) => {
             const { msg } = response.data;
             swal({

@@ -65,7 +65,7 @@ export const VehicleMaintenancesDetail = () => {
       try {
         await axios
           .get(
-            `https://silakend-server.xyz/api/maintenancedetails/${maintenanceId}`,
+            `http://silakend-server-realtime.test/api/maintenancedetails/${maintenanceId}`,
             config
           )
           .then((response) => {

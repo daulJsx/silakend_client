@@ -57,7 +57,7 @@ export const CreateUsageCategories = () => {
       try {
         await axios
           .post(
-            "https://silakend-server.xyz/api/usagecategories",
+            "http://silakend-server-realtime.test/api/usagecategories",
             newUsageCat,
             config
           )

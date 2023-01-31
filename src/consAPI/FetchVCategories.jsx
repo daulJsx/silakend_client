@@ -16,7 +16,7 @@ async function FetchVCategories() {
     };
 
     const response = await axios.get(
-      "https://silakend-server.xyz/api/vehiclecategories",
+      "http://silakend-server-realtime.test/api/vehiclecategories",
       config
     );
 

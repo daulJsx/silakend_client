@@ -31,19 +31,9 @@ export const DoneVU = async (order) => {
   };
 
   const body = {
-    vehicle_id: vehicle_id,
-    driver_id: driver_id,
-    user_id: user_id,
-    ucategory_id: ucategory_id,
-    usage_description: usage_description,
-    personel_count: personel_count,
-    destination: destination,
-    start_date: start_date,
-    end_date: end_date,
     distance_count_out: distance_count_out,
     distance_count_in: "",
     status: "",
-    status_description: "",
   };
 
   swal({
@@ -69,7 +59,7 @@ export const DoneVU = async (order) => {
           try {
             await axios
               .put(
-                `https://silakend-server.xyz/api/vehicleusages/${usage_id}`,
+                `http://silakend-server-realtime.test/api/vehicleusages/${usage_id}`,
                 body,
                 config
               )

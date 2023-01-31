@@ -32,7 +32,7 @@ export const RejectVU = async (order) => {
     end_date: end_date,
     usage_description: usage_description,
     personel_count: personel_count,
-    status: "",
+    status: "REJECTED",
     status_description: "",
   };
 
@@ -59,7 +59,7 @@ export const RejectVU = async (order) => {
           try {
             await axios
               .put(
-                `https://silakend-server.xyz/api/vehicleusages/${usage_id}`,
+                `http://silakend-server-realtime.test/api/vehicleusages/${usage_id}`,
                 body,
                 config
               )

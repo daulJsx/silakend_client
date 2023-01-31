@@ -16,7 +16,7 @@ async function FetchJobUnits() {
     };
 
     const response = await axios.get(
-      "https://silakend-server.xyz/api/jobunits",
+      "http://silakend-server-realtime.test/api/jobunits",
       config
     );
 

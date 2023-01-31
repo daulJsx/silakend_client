@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 // Cookies JS
 import Cookies from "js-cookie";
@@ -39,8 +39,24 @@ import { TbSteeringWheel } from "react-icons/tb";
 import { FaInfo } from "react-icons/fa";
 
 import toast, { Toaster } from "react-hot-toast";
+import Push from "push.js";
 
 export const MainDriver = () => {
+  useEffect(() => {
+    window.Echo.channel("vehicleusage").listen("VehicleUsageUpdate", (e) => {
+      Push.create("Info Data Peminjaman", {
+        body: e.vehicleUsage,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
+      });
+      // Setelah tampil, refetch data
+      FetchVehicleUsages();
+    });
+  }, []);
   // Get access token
   const token = Cookies.get("token");
 

@@ -105,7 +105,7 @@ export const UpdateVMDetail = () => {
             .then((response) => {
               if (response.status === 200) {
                 const { msg } = response.data;
-                navigate("/perbaikan-kendaraan/rincian-perbaikan-kendaraan");
+                navigate(-1);
                 swal({
                   text: msg,
                   icon: "success",

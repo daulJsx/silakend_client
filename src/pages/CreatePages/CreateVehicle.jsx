@@ -79,9 +79,9 @@ export const CreateVehicle = () => {
           .then((response) => {
             if (response.status === 200) {
               const { msg } = response.data;
-              navigate("/data-kendaraan");
+              navigate(-1);
               swal({
-                title: msg,
+                text: msg,
                 icon: "success",
                 button: false,
                 timer: 2000,

@@ -99,7 +99,7 @@ export const CreateUser = () => {
               timer: 2000,
             })
           : console.error(msg);
-        navigate("/data-pengguna");
+        navigate(-1);
       } catch (error) {
         if (error.response) {
           const { message, msg } = error.response.data;

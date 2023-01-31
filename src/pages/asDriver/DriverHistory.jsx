@@ -27,6 +27,7 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import Badge from "react-bootstrap/Badge";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { AsideDriver } from "../../components/aside/AsideDriver";
@@ -34,6 +35,7 @@ import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
 // icons
+import { FiChevronRight } from "react-icons/fi";
 import { FaInfo } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
 
@@ -89,61 +91,89 @@ export const DriverHistory = () => {
               </Row>
               {/* NAVBAR */}
 
-              <main className="px-2 min-vh-100 d-flex flex-column gap-3 mt-3">
+              <main className="px-2 min-vh-100 mt-4">
                 <Row>
                   <Col>
-                    <Card>
-                      <Card.Body>
-                        <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                          <span className="me-2">Daftar Riwayat Tugas</span>
-                        </Card.Title>
+                    <Card className="shadow rounded bg__primary">
+                      <Card.Header>
+                        <Container>
+                          <Row className="gap-3 mt-4 me-3">
+                            <Col>
+                              <h3 className="main__title">
+                                Daftar Riwayat Tugas
+                              </h3>
+                              <Breadcrumb className="breadcrumb__item mt-3">
+                                <Breadcrumb.Item className="breadcrumb__item">
+                                  <div className="d-flex color-primary justify-content-center align-items-center gap-2 breadcrumb__text">
+                                    <FiClock className="fs-5" />
+                                    Data
+                                    <FiChevronRight className="fs-6 breadcrumb__divider" />
+                                  </div>
+                                </Breadcrumb.Item>
+                              </Breadcrumb>
+                            </Col>
+                          </Row>
+                        </Container>
+                      </Card.Header>
+                      <Card.Body className="p-4">
+                        <Container
+                          className="p-4"
+                          style={{ background: "#fff", borderRadius: "10px" }}
+                        >
+                          <Row>
+                            <Col>
+                              <Table hover responsive>
+                                <thead>
+                                  <tr>
+                                    <th>No</th>
+                                    <th>PEMINJAM</th>
+                                    <th>KATEGORI PEMINJAMAN</th>
+                                    <th>DESTINASI</th>
+                                    <th>WAKTU PINJAM</th>
+                                    <th>STATUS</th>
+                                    <th>RINCIAN</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {ordersData.map((orders) => {
+                                    return orders.status === "DONE" ? (
+                                      <tr key={orders.usage_id}>
+                                        <td>{(index += 1)}</td>
+                                        <td>{orders.user.name}</td>
+                                        <td>{orders.category.name}</td>
+                                        <td>{orders.destination}</td>
+                                        <td>
+                                          {orders.start_date} s/d{" "}
+                                          {orders.end_date}
+                                        </td>
+                                        <td align="center">
+                                          <Badge bg={"success"}>
+                                            {orders.status}
+                                          </Badge>
+                                        </td>
 
-                        <Table bordered hover responsive>
-                          <thead>
-                            <tr>
-                              <th>No</th>
-                              <th>PEMINJAM</th>
-                              <th>KATEGORI PEMINJAMAN</th>
-                              <th>DESTINASI</th>
-                              <th>WAKTU PINJAM</th>
-                              <th>STATUS</th>
-                              <th>RINCIAN</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {ordersData.map((orders) => {
-                              return orders.status === "DONE" ? (
-                                <tr key={orders.usage_id}>
-                                  <td>{(index += 1)}</td>
-                                  <td>{orders.user.name}</td>
-                                  <td>{orders.category.name}</td>
-                                  <td>{orders.destination}</td>
-                                  <td>
-                                    {orders.start_date} s/d {orders.end_date}
-                                  </td>
-                                  <td align="center">
-                                    <Badge bg={"success"}>
-                                      {orders.status}
-                                    </Badge>
-                                  </td>
-
-                                  <td align="center">
-                                    <NavLink
-                                      to={"/driver/tugas-masuk/rincian-tugas"}
-                                    >
-                                      <Button
-                                        onClick={() => GetOrderId(orders)}
-                                        className="btn btn-detail"
-                                      >
-                                        <FaInfo className="fs-6" />
-                                      </Button>
-                                    </NavLink>
-                                  </td>
-                                </tr>
-                              ) : null;
-                            })}
-                          </tbody>
-                        </Table>
+                                        <td align="center">
+                                          <NavLink
+                                            to={
+                                              "/driver/tugas-masuk/rincian-tugas"
+                                            }
+                                          >
+                                            <Button
+                                              onClick={() => GetOrderId(orders)}
+                                              className="btn btn-detail"
+                                            >
+                                              <FaInfo className="fs-6" />
+                                            </Button>
+                                          </NavLink>
+                                        </td>
+                                      </tr>
+                                    ) : null;
+                                  })}
+                                </tbody>
+                              </Table>
+                            </Col>
+                          </Row>
+                        </Container>
                       </Card.Body>
                     </Card>
                   </Col>

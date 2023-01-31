@@ -9,8 +9,6 @@ import swal from "sweetalert";
 
 export const ProgressVU = async (order) => {
   let {
-    vehicle_id,
-    driver_id,
     ucategory_id,
     destination,
     start_date,
@@ -18,9 +16,6 @@ export const ProgressVU = async (order) => {
     personel_count,
     usage_description,
     usage_id,
-    user_id,
-    distance_count_in,
-    distance_count_out,
   } = order;
 
   // Get access token
@@ -65,7 +60,7 @@ export const ProgressVU = async (order) => {
                 config
               )
               .then((response) => {
-                redirect("/driver/tugas-masuk");
+                redirect(-1);
                 swal({
                   text: response.data.msg,
                   icon: "success",

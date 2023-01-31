@@ -89,7 +89,7 @@ export const UpdateRole = () => {
             .then((response) => {
               if (response.status === 200) {
                 const { msg } = response.data;
-                navigate("/data-peran");
+                navigate(-1);
                 swal({
                   title: msg,
                   icon: "success",

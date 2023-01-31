@@ -34,7 +34,7 @@ export async function DeleteVehicle(vehicleId) {
               text: msg,
               icon: "success",
               button: false,
-              timer: 2000,
+              timer: 3000,
             });
             window.location.reload();
           });

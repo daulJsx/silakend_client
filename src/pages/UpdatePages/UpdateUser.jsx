@@ -141,7 +141,7 @@ export const UpdateUser = () => {
             .then((response) => {
               if (response.status === 200) {
                 const { msg } = response.data;
-                navigate("/data-pengguna");
+                navigate(-1);
                 swal({
                   title: "Berhasil!",
                   text: msg,

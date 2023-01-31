@@ -1,6 +1,7 @@
 // Axios
 import axios from "axios";
 import { redirect } from "react-router-dom";
+
 // Cookies JS
 import Cookies from "js-cookie";
 import swal from "sweetalert";
@@ -22,7 +23,6 @@ export const LogOut = async () => {
       .then((response) => {
         if (response.status === 200) {
           swal({
-            title: "Berhasil Logout!",
             text: response.data.msg,
             icon: "success",
             buttons: false,

@@ -101,13 +101,14 @@ export const UpdateVM = () => {
               config
             )
             .then((response) => {
-              navigate("/perbaikan-kendaraan");
               if (response.status === 200) {
+                const { msg } = response.data;
+                navigate(-1);
                 swal({
-                  title: "Berhasil!",
-                  text: response.data.msg,
+                  text: msg,
                   icon: "success",
-                  button: "Tutup",
+                  button: false,
+                  timer: 2000,
                 });
               }
             });

@@ -33,6 +33,7 @@ import swal from "sweetalert";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
+// Functions
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 export const CreateUsageCategories = () => {
@@ -62,10 +63,10 @@ export const CreateUsageCategories = () => {
           )
           .then((response) => {
             if (response.status === 200) {
+              const { msg } = response.data;
               navigate("/kategori-peminjaman");
               swal({
-                title: "Berhasil!",
-                text: response.data.msg,
+                title: msg,
                 icon: "success",
                 button: false,
                 timer: 2000,
@@ -136,10 +137,7 @@ export const CreateUsageCategories = () => {
                           <Col>
                             <h3 className="main__title">Kategori Peminjaman</h3>
                             <Breadcrumb className="breadcrumb__item mt-3">
-                              <Breadcrumb.Item
-                                className="breadcrumb__item"
-                                href="#"
-                              >
+                              <Breadcrumb.Item className="breadcrumb__item">
                                 <div className="d-flex justify-content-center align-items-center gap-2">
                                   <NavLink
                                     to={"/kategori-peminjaman"}
@@ -189,7 +187,7 @@ export const CreateUsageCategories = () => {
                                   onClick={postNewUsageCat}
                                   type="submit"
                                 >
-                                  Tambahkan
+                                  Tambah
                                 </Button>
                               </Form.Group>
                             </Form>

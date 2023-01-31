@@ -42,21 +42,21 @@ import Push from "push.js"
 
 export const Users = () => {
   useEffect(() => {
-    window.Echo.channel('user').listen('UserUpdate', (e) => {
-      Push.create("User updated", {
-          body: "A User just got updated",
-          icon: '/polman.ico',
-          timeout: 4000,
-          onClick: function () {
-              window.focus();
-              this.close();
-          }
+    window.Echo.channel("user").listen("UserUpdate", (e) => {
+      Push.create("Info Data Pengguna", {
+        body: e.user,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
       });
-      //setelah tampil notif, fetch ulang dari event yang diterima.
-      FetchUsers()
-    })
+      // Setelah tampil, refetch data
+      FetchUsers();
+    });
   }, []);
-  
+
   const auth = useAuthUser();
   // Fetching users data
   const {
@@ -114,7 +114,7 @@ export const Users = () => {
                     <Card className="shadow rounded bg__primary">
                       <Card.Header>
                         <Container>
-                          <Row className="gap-3 mt-4">
+                          <Row className="gap-3 mt-4 me-3">
                             <Col>
                               <h3 className="main__title">Pengguna</h3>
                               <Breadcrumb className="breadcrumb__item mt-3">
@@ -130,7 +130,7 @@ export const Users = () => {
                                 </Breadcrumb.Item>
                               </Breadcrumb>
                             </Col>
-                            <Col md={2} className="me-2">
+                            <Col md={2}>
                               <NavLink to={"/data-pengguna/tambah-pengguna"}>
                                 <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
                                   Tambah
@@ -144,7 +144,10 @@ export const Users = () => {
                       <Card.Body className="p-4">
                         <Container
                           className="p-4"
-                          style={{ background: "#fff", borderRadius: "10px" }}
+                          style={{
+                            background: "#fff",
+                            borderRadius: "12px",
+                          }}
                         >
                           <Row>
                             <Col>
@@ -174,6 +177,7 @@ export const Users = () => {
                                             <Button
                                               onClick={() => GetUserById(users)}
                                               className="btn btn-edit"
+                                              variant="warning"
                                             >
                                               <AiFillEdit className="fs-6" />
                                             </Button>
@@ -197,7 +201,7 @@ export const Users = () => {
                                             }
                                           >
                                             <Button
-                                              className="btn-info btn-detail"
+                                              className="btn-primary btn-detail"
                                               onClick={() => GetUserById(users)}
                                             >
                                               <FaInfo className="fs-6" />

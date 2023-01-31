@@ -11,8 +11,7 @@ import { useQuery } from "react-query";
 import FetchVehicles from "../../consAPI/FetchVehicles";
 
 // Redirecting
-import { useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { useNavigate, Navigate, NavLink } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -20,6 +19,7 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -28,6 +28,8 @@ import { Footer } from "../../components/footer/Footer";
 
 // icons
 import { FaArrowLeft } from "react-icons/fa";
+import { BiCog } from "react-icons/bi";
+import { FiChevronRight } from "react-icons/fi";
 
 // React Notification
 import swal from "sweetalert";
@@ -74,10 +76,10 @@ export const CreateVM = () => {
           )
           .then((response) => {
             if (response.status === 200) {
+              const { msg } = response.data;
               navigate("/perbaikan-kendaraan");
               swal({
-                title: "Berhasil!",
-                text: response.data.msg,
+                text: msg,
                 icon: "success",
                 button: false,
                 timer: 2000,
@@ -133,159 +135,197 @@ export const CreateVM = () => {
                     placement={placement}
                     name={placement}
                     bc={<FaArrowLeft />}
-                    title={"Tambah Data Perbaikan Kendaraan"}
                     parentLink={"/perbaikan-kendaraan"}
                   />
                 ))}
               </Col>
             </Row>
             {/* NAVBAR */}
-            <main className="min-vh-100 px-2 mt-4">
+
+            <main className="px-2 min-vh-100 mt-4">
               <Row>
                 <Col>
-                  <Card>
-                    <Form onSubmit={postNewVehicleM}>
-                      <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                        Silahkan Tambah Perbaikan Kendaraan Disini
-                      </Card.Title>
-                      <Card.Body className="d-flex flex-column gap-3">
-                        <Form.Group>
-                          <Form.Label>Kendaraan</Form.Label>
-                          <Form.Select
-                            required
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "17px",
-                            }}
-                            aria-label="Default select example"
-                            onChange={(e) =>
-                              setVehicleMData({
-                                ...vehicleMData,
-                                vehicle_id: e.target.value,
-                              })
-                            }
-                          >
-                            <option>-- Pilih Kendaraan --</option>
-                            {vehiclesData?.map((vehicles) => (
-                              <option
-                                key={vehicles.vehicle_id}
-                                value={vehicles.vehicle_id}
+                  <Card className="shadow rounded bg__primary">
+                    <Card.Header>
+                      <Container>
+                        <Row className="gap-3 mt-4">
+                          <Col>
+                            <h3 className="main__title">Perbaikan Kendaraan</h3>
+                            <Breadcrumb className="breadcrumb__item mt-3">
+                              <Breadcrumb.Item
+                                className="breadcrumb__item"
+                                href="#"
                               >
-                                {vehicles.name}
-                              </option>
-                            ))}
-                          </Form.Select>
-                        </Form.Group>
+                                <div className="d-flex justify-content-center align-items-center gap-2">
+                                  <NavLink
+                                    to={"/perbaikan-kendaraan"}
+                                    className="d-flex justify-content-center align-items-center text-muted gap-2"
+                                  >
+                                    <BiCog className="fs-5" />
+                                    Data
+                                  </NavLink>
 
-                        <Form.Group>
-                          <Form.Label>Tanggal Perbaikan</Form.Label>
+                                  <FiChevronRight className="fs-6 breadcrumb__divider" />
+                                  <span className="color-primary">
+                                    Tambah Data Perbaikan Kendaraan
+                                  </span>
+                                </div>
+                              </Breadcrumb.Item>
+                            </Breadcrumb>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Header>
 
-                          <Form.Control
-                            required
-                            className="input form-custom"
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "15px",
-                            }}
-                            type="date"
-                            onChange={(e) =>
-                              setVehicleMData({
-                                ...vehicleMData,
-                                date: e.target.value,
-                              })
-                            }
-                          />
-                        </Form.Group>
+                    <Card.Body className="p-4">
+                      <Container
+                        className="p-4"
+                        style={{ background: "#fff", borderRadius: "10px" }}
+                      >
+                        <Row>
+                          <Col>
+                            <Form onSubmit={postNewVehicleM}>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Kendaraan</Form.Label>
+                                <Form.Select
+                                  required
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "17px",
+                                  }}
+                                  aria-label="Default select example"
+                                  onChange={(e) =>
+                                    setVehicleMData({
+                                      ...vehicleMData,
+                                      vehicle_id: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option>-- Pilih Kendaraan --</option>
+                                  {vehiclesData?.map((vehicles) => (
+                                    <option
+                                      key={vehicles.vehicle_id}
+                                      value={vehicles.vehicle_id}
+                                    >
+                                      {vehicles.name}
+                                    </option>
+                                  ))}
+                                </Form.Select>
+                              </Form.Group>
 
-                        <Form.Group>
-                          <Form.Label>masukkan nama perbaikan</Form.Label>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Tanggal Perbaikan</Form.Label>
 
-                          <Form.Control
-                            required
-                            className="input form-custom"
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "15px",
-                            }}
-                            type="text"
-                            onChange={(e) =>
-                              setVehicleMData({
-                                ...vehicleMData,
-                                category: e.target.value,
-                              })
-                            }
-                          />
-                        </Form.Group>
+                                <Form.Control
+                                  required
+                                  className="input form-custom"
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "15px",
+                                  }}
+                                  type="date"
+                                  onChange={(e) =>
+                                    setVehicleMData({
+                                      ...vehicleMData,
+                                      date: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
 
-                        <Form.Group>
-                          <Form.Label>deskripsi kategori</Form.Label>
-                          <Form.Control
-                            required
-                            as="textarea"
-                            rows={3}
-                            className="input form-custom"
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "15px",
-                            }}
-                            type="text"
-                            onChange={(e) =>
-                              setVehicleMData({
-                                ...vehicleMData,
-                                description: e.target.value,
-                              })
-                            }
-                          />
-                        </Form.Group>
+                              <Form.Group className="mb-3">
+                                <Form.Label>masukkan nama perbaikan</Form.Label>
 
-                        <Form.Group>
-                          <Form.Label>Jumlah Pengeluaran</Form.Label>
-                          <InputGroup>
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              Rp.
-                            </InputGroup.Text>
-                            <Form.Control
-                              required
-                              className="input form-custom"
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="number"
-                              onChange={(e) =>
-                                setVehicleMData({
-                                  ...vehicleMData,
-                                  total_cost: e.target.value,
-                                })
-                              }
-                            />
-                          </InputGroup>
-                        </Form.Group>
-                      </Card.Body>
-                      <Card.Footer>
-                        <Button
-                          className="btn-post"
-                          type="submit"
-                          onClick={postNewVehicleM}
-                        >
-                          Tambah Perbaikan
-                        </Button>
-                      </Card.Footer>
-                    </Form>
+                                <Form.Control
+                                  required
+                                  className="input form-custom"
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "15px",
+                                  }}
+                                  type="text"
+                                  onChange={(e) =>
+                                    setVehicleMData({
+                                      ...vehicleMData,
+                                      category: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
+
+                              <Form.Group className="mb-3">
+                                <Form.Label>deskripsi kategori</Form.Label>
+                                <Form.Control
+                                  required
+                                  as="textarea"
+                                  rows={3}
+                                  className="input form-custom"
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "15px",
+                                  }}
+                                  type="text"
+                                  onChange={(e) =>
+                                    setVehicleMData({
+                                      ...vehicleMData,
+                                      description: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
+
+                              <Form.Group className="mb-4">
+                                <Form.Label>Jumlah Pengeluaran</Form.Label>
+                                <InputGroup>
+                                  <InputGroup.Text
+                                    style={{
+                                      border: "none",
+                                    }}
+                                    id="basic-addon2"
+                                  >
+                                    Rp.
+                                  </InputGroup.Text>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "15px",
+                                    }}
+                                    type="number"
+                                    onChange={(e) =>
+                                      setVehicleMData({
+                                        ...vehicleMData,
+                                        total_cost: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </InputGroup>
+                              </Form.Group>
+                              <Form.Group>
+                                <Button
+                                  className="btn-post"
+                                  type="submit"
+                                  onClick={postNewVehicleM}
+                                >
+                                  Tambah
+                                </Button>
+                              </Form.Group>
+                            </Form>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Body>
                   </Card>
                 </Col>
               </Row>
             </main>
+
             <Row>
               <Col>
                 <Footer />

@@ -10,14 +10,14 @@ import Cookies from "js-cookie";
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Redirecting
-import { useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { useNavigate, Navigate, NavLink } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -26,6 +26,8 @@ import { Footer } from "../../components/footer/Footer";
 
 // icons
 import { FaArrowLeft } from "react-icons/fa";
+import { RiCarWashingLine } from "react-icons/ri";
+import { FiChevronRight } from "react-icons/fi";
 
 // React Notification
 import swal from "sweetalert";
@@ -70,12 +72,13 @@ export const UpdateVehicleCat = () => {
           )
           .then((response) => {
             if (response.status === 200) {
+              const { msg } = response.data;
               navigate("/kategori-kendaraan");
               swal({
-                title: "Berhasil!",
-                text: response.data.msg,
+                title: msg,
                 icon: "success",
-                button: "Tutup",
+                button: false,
+                timer: 2000,
               });
             }
           });
@@ -125,67 +128,93 @@ export const UpdateVehicleCat = () => {
                       placement={placement}
                       name={placement}
                       bc={<FaArrowLeft />}
-                      title={"Edit Kategori Kendaraan"}
                       parentLink={"/kategori-kendaraan"}
                     />
                   ))}
                 </Col>
               </Row>
               {/* NAVBAR */}
-              <main className="min-vh-10 px-2 mt-4">
+
+              <main className="px-2 min-vh-100 mt-4">
                 <Row>
                   <Col>
-                    <Card>
-                      <Form onSubmit={updateVCat}>
-                        <Card.Body>
-                          <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                            Silahkan Edit Kategori Kendaraan Disini
-                          </Card.Title>
-                          <Container>
-                            <Row>
-                              <Col>
-                                {vCategoryToMap != ""
-                                  ? [vCategoryToMap].map((vCat) => (
-                                      <Form.Group className="mb-3">
-                                        <Form.Label>Nama kategori</Form.Label>
-                                        <Form.Control
-                                          required
-                                          placeholder={vCat.name}
-                                          className="input form-custom"
-                                          type="text"
-                                          onChange={(e) =>
-                                            setCurVCat({
-                                              ...curVCat,
-                                              name: e.target.value,
-                                            })
-                                          }
-                                        />
-                                      </Form.Group>
-                                    ))
-                                  : null}
-                              </Col>
-                            </Row>
-                          </Container>
-                        </Card.Body>
-                        <Card.Footer>
-                          <Button
-                            className="btn-post"
-                            onClick={updateVCat}
-                            type="submit"
-                          >
-                            Simpan
-                          </Button>
-                        </Card.Footer>
-                      </Form>
+                    <Card className="shadow rounded bg__primary">
+                      <Card.Header>
+                        <Container>
+                          <Row className="gap-3 mt-4">
+                            <Col>
+                              <h3 className="main__title">
+                                Kategori Kendaraan
+                              </h3>
+                              <Breadcrumb className="breadcrumb__item mt-3">
+                                <Breadcrumb.Item className="breadcrumb__item">
+                                  <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
+                                    <NavLink
+                                      to={"/kategori-kendaraan"}
+                                      className="d-flex justify-content-center align-items-center text-muted gap-2"
+                                    >
+                                      <RiCarWashingLine className="fs-5" />
+                                      Data
+                                    </NavLink>
+
+                                    <FiChevronRight className="fs-6 breadcrumb__divider" />
+                                    <span className="color-primary">
+                                      Tambah Kategori
+                                    </span>
+                                  </div>
+                                </Breadcrumb.Item>
+                              </Breadcrumb>
+                            </Col>
+                          </Row>
+                        </Container>
+                      </Card.Header>
+                      <Card.Body className="p-4">
+                        <Container
+                          className="p-4"
+                          style={{ background: "#fff", borderRadius: "10px" }}
+                        >
+                          <Form onSubmit={updateVCat}>
+                            {vCategoryToMap != ""
+                              ? [vCategoryToMap].map((vCat) => (
+                                  <Form.Group className="mb-3">
+                                    <Form.Label>Nama kategori</Form.Label>
+                                    <Form.Control
+                                      required
+                                      placeholder={vCat.name}
+                                      className="input form-custom"
+                                      type="text"
+                                      onChange={(e) =>
+                                        setCurVCat({
+                                          ...curVCat,
+                                          name: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  </Form.Group>
+                                ))
+                              : null}
+                            <Form.Group>
+                              <Button
+                                className="btn-post"
+                                onClick={updateVCat}
+                                type="submit"
+                              >
+                                Simpan
+                              </Button>
+                            </Form.Group>
+                          </Form>
+                        </Container>
+                      </Card.Body>
                     </Card>
                   </Col>
                 </Row>
-                <Row>
-                  <Col>
-                    <Footer />
-                  </Col>
-                </Row>
               </main>
+
+              <Row>
+                <Col>
+                  <Footer />
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Container>

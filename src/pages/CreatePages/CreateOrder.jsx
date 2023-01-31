@@ -13,7 +13,7 @@ import FetchUsers from "../../consAPI/FetchUsers";
 import FetchUsageCat from "../../consAPI/FetchUsageCat";
 
 // Navigating
-import { Navigate } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -21,6 +21,7 @@ import { Card } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import InputGroup from "react-bootstrap/InputGroup";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -35,6 +36,8 @@ import swal from "sweetalert";
 
 // icons
 import { FaArrowLeft } from "react-icons/fa";
+import { HiOutlineClipboardCopy } from "react-icons/hi";
+import { FiChevronRight } from "react-icons/fi";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
@@ -91,11 +94,7 @@ export const CreateOrder = () => {
       orderData.destination !== "" &&
       orderData.start_date !== "" &&
       orderData.end_date !== "" &&
-      orderData.depart_date !== "" &&
-      orderData.depart_time !== "" &&
-      orderData.distance_count_out !== "" &&
-      orderData.status !== "" &&
-      orderData.status_description !== ""
+      orderData.status !== ""
     ) {
       try {
         await axios
@@ -106,10 +105,10 @@ export const CreateOrder = () => {
           )
           .then((response) => {
             if (response.status === 200) {
+              const { msg } = response.data;
               navigate("/pengajuan-peminjaman");
               swal({
-                title: "Berhasil!",
-                text: response.data.msg,
+                text: msg,
                 icon: "success",
                 button: false,
                 timer: 2000,
@@ -171,483 +170,428 @@ export const CreateOrder = () => {
               </Col>
             </Row>
             {/* NAVBAR */}
-            <main className="min-vh-100 px-2 mt-4">
+
+            <main className="px-2 min-vh-100 mt-4">
               <Row>
                 <Col>
-                  <Card>
-                    <Form onSubmit={postNewOrder}>
-                      <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                        Silahkan Ajukan Peminjaman Kendaraan Dinas Disini
-                      </Card.Title>
-                      <Card.Body>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Kendaraan</Form.Label>
-                          <Form.Select
-                            required
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "17px",
-                            }}
-                            aria-label="Default select example"
-                            onChange={(e) =>
-                              setOrderData({
-                                ...orderData,
-                                vehicle_id: e.target.value,
-                              })
-                            }
-                          >
-                            <option>-- Pilih Kendaraan --</option>
-                            {vehiclesData?.map((vehicles) => (
-                              <option
-                                key={vehicles.vehicle_id}
-                                value={vehicles.vehicle_id}
+                  <Card className="shadow rounded bg__primary">
+                    <Card.Header>
+                      <Container>
+                        <Row className="gap-3 mt-4">
+                          <Col>
+                            <h3 className="main__title">
+                              Pengajuan Peminjaman Kendaraan Dinas
+                            </h3>
+                            <Breadcrumb className="breadcrumb__item mt-3">
+                              <Breadcrumb.Item
+                                className="breadcrumb__item"
+                                href="#"
                               >
-                                {vehicles.name}
-                              </option>
-                            ))}
-                          </Form.Select>
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                          <Form.Label>Pengemudi</Form.Label>
-                          <Form.Select
-                            required
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "17px",
-                            }}
-                            aria-label="Default select example"
-                            onChange={(e) =>
-                              setOrderData({
-                                ...orderData,
-                                driver_id: e.target.value,
-                              })
-                            }
-                          >
-                            <option>-- Pilih Pengemudi --</option>
-                            {usersData?.map((users) =>
-                              users.role.map((userAsDriver) => {
-                                return userAsDriver.level === 4 ? (
-                                  <option
-                                    value={users.user_id}
-                                    key={users.user_id}
+                                <div className="d-flex justify-content-center align-items-center gap-2">
+                                  <NavLink
+                                    to={"/pengajuan-peminjaman"}
+                                    className="d-flex justify-content-center align-items-center text-muted gap-2"
                                   >
-                                    {users.nip} - {users.name}
-                                  </option>
-                                ) : null;
-                              })
-                            )}
-                          </Form.Select>
-                        </Form.Group>
+                                    <HiOutlineClipboardCopy className="fs-5" />
+                                    Data
+                                  </NavLink>
 
-                        <Form.Group className="mb-3">
-                          <Form.Label>Peminjam</Form.Label>
-                          <Form.Select
-                            required
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "17px",
-                            }}
-                            aria-label="Default select example"
-                            onChange={(e) =>
-                              setOrderData({
-                                ...orderData,
-                                user_id: e.target.value,
-                              })
-                            }
-                          >
-                            <option>-- Pilih Peminjam --</option>
-                            {usersData?.map((users) =>
-                              users.role.map((userAsSuper) => {
-                                return userAsSuper.level !== 1 ? (
-                                  <option
-                                    value={users.user_id}
-                                    key={users.user_id}
-                                  >
-                                    {users.nip} - {users.name}
-                                  </option>
-                                ) : null;
-                              })
-                            )}
-                          </Form.Select>
-                        </Form.Group>
+                                  <FiChevronRight className="fs-6 breadcrumb__divider" />
+                                  <span className="color-primary">
+                                    Tambah Pengajuan
+                                  </span>
+                                </div>
+                              </Breadcrumb.Item>
+                            </Breadcrumb>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Header>
 
-                        <Form.Group className="mb-3">
-                          <Form.Label>Kategori Peminjaman</Form.Label>
-                          <Form.Select
-                            required
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "17px",
-                            }}
-                            aria-label="Default select example"
-                            onChange={(e) =>
-                              setOrderData({
-                                ...orderData,
-                                ucategory_id: e.target.value,
-                              })
-                            }
-                          >
-                            <option>-- Pilih Kategori Peminjaman --</option>
-                            {usageCatData?.map((usageCat) => (
-                              <option
-                                value={usageCat.ucategory_id}
-                                key={usageCat.ucategory_id}
+                    <Card.Body className="p-4">
+                      <Container
+                        className="p-5"
+                        style={{ background: "#fff", borderRadius: "10px" }}
+                      >
+                        <Row>
+                          <Col>
+                            <Form onSubmit={postNewOrder}>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Kendaraan</Form.Label>
+                                <Form.Select
+                                  required
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "17px",
+                                  }}
+                                  aria-label="Default select example"
+                                  onChange={(e) =>
+                                    setOrderData({
+                                      ...orderData,
+                                      vehicle_id: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option value="">
+                                    -- Pilih Kendaraan --
+                                  </option>
+                                  {vehiclesData?.map((vehicles) => (
+                                    <option
+                                      key={vehicles.vehicle_id}
+                                      value={vehicles.vehicle_id}
+                                    >
+                                      {vehicles.name}
+                                    </option>
+                                  ))}
+                                </Form.Select>
+                              </Form.Group>
+
+                              <Form.Group className="mb-3">
+                                <Form.Label>Pengemudi</Form.Label>
+                                <Form.Select
+                                  required
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "17px",
+                                  }}
+                                  aria-label="Default select example"
+                                  onChange={(e) =>
+                                    setOrderData({
+                                      ...orderData,
+                                      driver_id: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option value="">
+                                    -- Pilih Pengemudi --
+                                  </option>
+                                  {usersData?.map((users) =>
+                                    users.role.map((userAsDriver) => {
+                                      return userAsDriver.level === 4 ? (
+                                        <option
+                                          value={users.user_id}
+                                          key={users.user_id}
+                                        >
+                                          {users.nip} - {users.name}
+                                        </option>
+                                      ) : null;
+                                    })
+                                  )}
+                                </Form.Select>
+                              </Form.Group>
+
+                              <Form.Group className="mb-3">
+                                <Form.Label>Peminjam</Form.Label>
+                                <Form.Select
+                                  required
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "17px",
+                                  }}
+                                  aria-label="Default select example"
+                                  onChange={(e) =>
+                                    setOrderData({
+                                      ...orderData,
+                                      user_id: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option value="">-- Pilih Peminjam --</option>
+                                  {usersData?.map((users) =>
+                                    users.role.map((userAsSuper) => {
+                                      return userAsSuper.level !== 1 ? (
+                                        <option
+                                          value={users.user_id}
+                                          key={users.user_id}
+                                        >
+                                          {users.nip} - {users.name}
+                                        </option>
+                                      ) : null;
+                                    })
+                                  )}
+                                </Form.Select>
+                              </Form.Group>
+
+                              <Form.Group className="mb-3">
+                                <Form.Label>Kategori Peminjaman</Form.Label>
+                                <Form.Select
+                                  required
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "17px",
+                                  }}
+                                  aria-label="Default select example"
+                                  onChange={(e) =>
+                                    setOrderData({
+                                      ...orderData,
+                                      ucategory_id: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option value="">
+                                    -- Pilih Kategori Peminjaman --
+                                  </option>
+                                  {usageCatData?.map((usageCat) => (
+                                    <option
+                                      value={usageCat.ucategory_id}
+                                      key={usageCat.ucategory_id}
+                                    >
+                                      {usageCat.name}
+                                    </option>
+                                  ))}
+                                </Form.Select>
+                              </Form.Group>
+
+                              <Form.Group
+                                className="mb-3"
+                                controlId="exampleForm.ControlTextarea1"
                               >
-                                {usageCat.name}
-                              </option>
-                            ))}
-                          </Form.Select>
-                        </Form.Group>
+                                <Form.Label>Deskripsi Peminjaman</Form.Label>
+                                <Form.Control
+                                  as="textarea"
+                                  rows={3}
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                  }}
+                                  onChange={(e) =>
+                                    setOrderData({
+                                      ...orderData,
+                                      usage_description: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
 
-                        <Form.Group
-                          className="mb-3"
-                          controlId="exampleForm.ControlTextarea1"
-                        >
-                          <Form.Label>Deskripsi Peminjaman</Form.Label>
-                          <Form.Control
-                            as="textarea"
-                            rows={3}
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                            }}
-                            onChange={(e) =>
-                              setOrderData({
-                                ...orderData,
-                                usage_description: e.target.value,
-                              })
-                            }
-                          />
-                        </Form.Group>
+                              <Form.Group>
+                                <Form.Label>Jumlah Personil</Form.Label>
+                                <InputGroup className="mb-3">
+                                  <Form.Control
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "15px",
+                                    }}
+                                    type="number"
+                                    aria-describedby="basic-addon2"
+                                    onChange={(e) =>
+                                      setOrderData({
+                                        ...orderData,
+                                        personel_count: e.target.value,
+                                      })
+                                    }
+                                  />
+                                  <InputGroup.Text
+                                    style={{
+                                      border: "none",
+                                    }}
+                                    id="basic-addon2"
+                                  >
+                                    Orang
+                                  </InputGroup.Text>
+                                </InputGroup>
+                              </Form.Group>
 
-                        <Form.Group>
-                          <Form.Label>Jumlah Personil</Form.Label>
-                          <InputGroup className="mb-3">
-                            <Form.Control
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="number"
-                              aria-describedby="basic-addon2"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  personel_count: e.target.value,
-                                })
-                              }
-                            />
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              Orang
-                            </InputGroup.Text>
-                          </InputGroup>
-                        </Form.Group>
+                              <Form.Group className="mb-3">
+                                <Form.Label>Destinasi</Form.Label>
+                                <Form.Control
+                                  required
+                                  className="input form-custom"
+                                  style={{
+                                    backgroundColor: "#F5F7FC",
+                                    border: "none",
+                                    padding: "15px",
+                                  }}
+                                  type="text"
+                                  onChange={(e) =>
+                                    setOrderData({
+                                      ...orderData,
+                                      destination: e.target.value,
+                                    })
+                                  }
+                                />
+                              </Form.Group>
 
-                        <Form.Group className="mb-3">
-                          <Form.Label>Destinasi</Form.Label>
-                          <Form.Control
-                            required
-                            className="input form-custom"
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "15px",
-                            }}
-                            type="text"
-                            onChange={(e) =>
-                              setOrderData({
-                                ...orderData,
-                                destination: e.target.value,
-                              })
-                            }
-                          />
-                        </Form.Group>
+                              <Form.Group>
+                                <Form.Label>Tanggal Pinjam</Form.Label>
+                                <InputGroup className="mb-3">
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "15px",
+                                    }}
+                                    type="date"
+                                    onChange={(e) =>
+                                      setOrderData({
+                                        ...orderData,
+                                        start_date: e.target.value,
+                                      })
+                                    }
+                                  />
+                                  <InputGroup.Text
+                                    style={{
+                                      border: "none",
+                                    }}
+                                    id="basic-addon2"
+                                  >
+                                    s/d
+                                  </InputGroup.Text>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "15px",
+                                    }}
+                                    type="date"
+                                    onChange={(e) =>
+                                      setOrderData({
+                                        ...orderData,
+                                        end_date: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </InputGroup>
+                              </Form.Group>
 
-                        <Form.Group>
-                          <Form.Label>Tanggal Pinjam</Form.Label>
-                          <InputGroup className="mb-3">
-                            <Form.Control
-                              required
-                              className="input form-custom"
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="date"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  start_date: e.target.value,
-                                })
-                              }
-                            />
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              s/d
-                            </InputGroup.Text>
-                            <Form.Control
-                              required
-                              className="input form-custom"
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="date"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  end_date: e.target.value,
-                                })
-                              }
-                            />
-                          </InputGroup>
-                        </Form.Group>
-
-                        <Form.Group>
-                          <Form.Label>Waktu Berangkat</Form.Label>
-                          <InputGroup className="mb-3">
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              Tanggal
-                            </InputGroup.Text>
-                            <Form.Control
-                              required
-                              className="input form-custom"
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="date"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  depart_date: e.target.value,
-                                })
-                              }
-                            />
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              Pukul
-                            </InputGroup.Text>
-                            <Form.Control
-                              required
-                              className="input form-custom"
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="time"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  depart_time: e.target.value,
-                                })
-                              }
-                            />
-                          </InputGroup>
-                        </Form.Group>
-
-                        <Form.Group>
-                          <Form.Label>Waktu Tiba</Form.Label>
-                          <InputGroup className="mb-3">
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              Tanggal
-                            </InputGroup.Text>
-                            <Form.Control
-                              required
-                              className="input form-custom"
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="date"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  arrive_date: e.target.value,
-                                })
-                              }
-                            />
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              Pukul
-                            </InputGroup.Text>
-                            <Form.Control
-                              required
-                              className="input form-custom"
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="time"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  arrive_time: e.target.value,
-                                })
-                              }
-                            />
-                          </InputGroup>
-                        </Form.Group>
-
-                        <Form.Group>
-                          <Form.Label>ODOMETER</Form.Label>
-                          <InputGroup className="mb-3">
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              Jumlah kilometer Pergi
-                            </InputGroup.Text>
-                            <Form.Control
-                              required
-                              className="input form-custom"
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="number"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  distance_count_out: e.target.value,
-                                })
-                              }
-                            />
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              Jarak kilometer Pulang
-                            </InputGroup.Text>
-                            <Form.Control
-                              required
-                              className="input form-custom"
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="number"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  distance_count_in: e.target.value,
-                                })
-                              }
-                            />
-                          </InputGroup>
-                        </Form.Group>
-                        <Form.Group>
-                          <Form.Label>Status</Form.Label>
-                          <InputGroup className="mb-3">
-                            <Form.Select
-                              required
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "17px",
-                              }}
-                              aria-label="Default select example"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  status: e.target.value,
-                                })
-                              }
-                            >
-                              <option>-- Pilih Status --</option>
-                              <option>APPROVED</option>
-                              <option>READY</option>
-                              <option>PROGRESS</option>
-                              <option>DONE</option>
-                              <option>REJECTED</option>
-                              <option>WAITING</option>
-                              <option>CANCEL</option>
-                            </Form.Select>
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              Keterangan
-                            </InputGroup.Text>
-                            <Form.Control
-                              required
-                              as="textarea"
-                              rows={3}
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                              }}
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  status_description: e.target.value,
-                                })
-                              }
-                            />
-                          </InputGroup>
-                        </Form.Group>
-                      </Card.Body>
-                      <Card.Footer>
-                        <Button
-                          className="btn-post"
-                          onClick={postNewOrder}
-                          type="submit"
-                        >
-                          Ajukan
-                        </Button>
-                      </Card.Footer>
-                    </Form>
+                              <Form.Group>
+                                <Form.Label>
+                                  jumlah kilometer (odometer)
+                                </Form.Label>
+                                <InputGroup className="mb-3">
+                                  <InputGroup.Text
+                                    style={{
+                                      border: "none",
+                                    }}
+                                    id="basic-addon2"
+                                  >
+                                    Pergi
+                                  </InputGroup.Text>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "15px",
+                                    }}
+                                    type="number"
+                                    onChange={(e) =>
+                                      setOrderData({
+                                        ...orderData,
+                                        distance_count_out: e.target.value,
+                                      })
+                                    }
+                                  />
+                                  <InputGroup.Text
+                                    style={{
+                                      border: "none",
+                                    }}
+                                    id="basic-addon2"
+                                  >
+                                    Pulang
+                                  </InputGroup.Text>
+                                  <Form.Control
+                                    required
+                                    className="input form-custom"
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "15px",
+                                    }}
+                                    type="number"
+                                    onChange={(e) =>
+                                      setOrderData({
+                                        ...orderData,
+                                        distance_count_in: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </InputGroup>
+                              </Form.Group>
+                              <Form.Group>
+                                <Form.Label>Status</Form.Label>
+                                <InputGroup className="mb-3">
+                                  <Form.Select
+                                    required
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                      padding: "17px",
+                                    }}
+                                    aria-label="Default select example"
+                                    onChange={(e) =>
+                                      setOrderData({
+                                        ...orderData,
+                                        status: e.target.value,
+                                      })
+                                    }
+                                  >
+                                    <option value="">--Status--</option>
+                                    <option value="APPROVED">Diterima</option>
+                                    <option value="READY">
+                                      Siap Berangkat
+                                    </option>
+                                    <option value="PROGRESS">
+                                      Berlangsung
+                                    </option>
+                                    <option value="DONE">Selesai</option>
+                                    <option value="REJECTED">Ditolak</option>
+                                    <option value="WAITING">Diajukan</option>
+                                    <option value="CANCEL">Batal</option>
+                                  </Form.Select>
+                                  <InputGroup.Text
+                                    style={{
+                                      border: "none",
+                                    }}
+                                    id="basic-addon2"
+                                  >
+                                    Keterangan
+                                  </InputGroup.Text>
+                                  <Form.Control
+                                    required
+                                    as="textarea"
+                                    rows={3}
+                                    style={{
+                                      backgroundColor: "#F5F7FC",
+                                      border: "none",
+                                    }}
+                                    onChange={(e) =>
+                                      setOrderData({
+                                        ...orderData,
+                                        status_description: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </InputGroup>
+                              </Form.Group>
+                              <Form.Group>
+                                <Button
+                                  className="btn-post"
+                                  onClick={postNewOrder}
+                                  type="submit"
+                                >
+                                  Ajukan
+                                </Button>
+                              </Form.Group>
+                            </Form>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Body>
                   </Card>
                 </Col>
               </Row>
             </main>
+
             <Row>
               <Col>
                 <Footer />

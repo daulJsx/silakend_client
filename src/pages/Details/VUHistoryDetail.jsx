@@ -30,12 +30,12 @@ import { Footer } from "../../components/footer/Footer";
 // icons
 import { FiChevronRight } from "react-icons/fi";
 import { FaArrowLeft } from "react-icons/fa";
-import { HiOutlineClipboardCopy } from "react-icons/hi";
+import { FiClock } from "react-icons/fi";
 
 // React Notification
 import swal from "sweetalert";
 
-export const VehicleUsageDetail = () => {
+export const VUHistoryDetail = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -123,7 +123,7 @@ export const VehicleUsageDetail = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaArrowLeft />}
-                        parentLink={"/pengajuan-peminjaman"}
+                        parentLink={"/riwayat-peminjaman"}
                       />
                     ))}
                   </Col>
@@ -139,22 +139,22 @@ export const VehicleUsageDetail = () => {
                             <Row className="gap-3 mt-4">
                               <Col>
                                 <h3 className="main__title">
-                                  Pengajuan Peminjaman Kendaraan Dinas
+                                  Riwayat Peminjaman Kendaraan Dinas
                                 </h3>
                                 <Breadcrumb className="breadcrumb__item mt-3">
                                   <Breadcrumb.Item className="breadcrumb__item">
                                     <div className="d-flex justify-content-center align-items-center gap-2">
                                       <NavLink
-                                        to={"/pengajuan-peminjaman"}
+                                        to={"/riwayat-peminjaman"}
                                         className="d-flex justify-content-center align-items-center text-muted gap-2"
                                       >
-                                        <HiOutlineClipboardCopy className="fs-5" />
+                                        <FiClock className="fs-5" />
                                         Data
                                       </NavLink>
 
                                       <FiChevronRight className="fs-6 breadcrumb__divider" />
                                       <span className="color-primary">
-                                        Rincian Pengajuan
+                                        Rincian
                                       </span>
                                     </div>
                                   </Breadcrumb.Item>
@@ -340,7 +340,6 @@ export const VehicleUsageDetail = () => {
                                           {currentUsage.distance_count_out &&
                                           currentUsage.distance_count_in ? (
                                             <>
-                                              {" "}
                                               <div>
                                                 Jumlah Kilometer Pergi :{" "}
                                                 {currentUsage.distance_count_out.toLocaleString(
@@ -366,44 +365,6 @@ export const VehicleUsageDetail = () => {
                                           )}
                                         </div>
                                       </ListGroup.Item>
-
-                                      <ListGroup.Item
-                                        as="li"
-                                        variant={
-                                          currentUsage.status === "CANCELED" ||
-                                          currentUsage.status === "REJECTED"
-                                            ? "danger"
-                                            : currentUsage.status === "WAITING"
-                                            ? "warning"
-                                            : currentUsage.status === "READY"
-                                            ? "primary"
-                                            : currentUsage.status === "APPROVED"
-                                            ? "info"
-                                            : currentUsage.status === "PROGRESS"
-                                            ? "secondary"
-                                            : "success"
-                                        }
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            STATUS
-                                          </div>
-                                          {currentUsage.status === "CANCELED"
-                                            ? `Dibatalkan peminjam karena ${currentUsage.status_description}`
-                                            : currentUsage.status === "REJECTED"
-                                            ? `Ditolak karena ${currentUsage.status_description}`
-                                            : currentUsage.status === "WAITING"
-                                            ? "Diajukan"
-                                            : currentUsage.status === "READY"
-                                            ? "Siap Berangkat"
-                                            : currentUsage.status === "APPROVED"
-                                            ? "Disetujui"
-                                            : currentUsage.status === "PROGRESS"
-                                            ? "Berlangsung"
-                                            : "Selesai"}
-                                        </div>
-                                      </ListGroup.Item>
                                     </>
                                   ))
                                 : null}
@@ -425,7 +386,7 @@ export const VehicleUsageDetail = () => {
           </Container>
         )
       ) : (
-        <Navigate to="/pengajuan-peminjaman" />
+        <Navigate to="/riwayat-peminjaman" />
       )
     ) : (
       SecuringPage()

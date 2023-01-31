@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+
+// Push notify
+import Push from "push.js";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -36,6 +39,22 @@ import { FaTrashAlt } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 
 export const Roles = () => {
+  useEffect(() => {
+    window.Echo.channel("role").listen("RoleUpdate", (e) => {
+      Push.create("Info Data Peran", {
+        body: e.role,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
+      });
+      // Setelah tampil, refetch data
+      FetchRoles();
+    });
+  }, []);
+
   const auth = useAuthUser();
 
   // Fetching roles data
@@ -101,14 +120,11 @@ export const Roles = () => {
                     <Card className="shadow rounded bg__primary">
                       <Card.Header>
                         <Container>
-                          <Row className="gap-3 mt-4">
+                          <Row className="gap-3 mt-4 me-3">
                             <Col>
                               <h3 className="main__title">Peran Pengguna</h3>
                               <Breadcrumb className="breadcrumb__item mt-3">
-                                <Breadcrumb.Item
-                                  className="breadcrumb__item"
-                                  href="#"
-                                >
+                                <Breadcrumb.Item className="breadcrumb__item">
                                   <div className="d-flex color-primary justify-content-center align-items-center gap-2 breadcrumb__text">
                                     <CgUserList className="fs-5" />
                                     Data
@@ -117,7 +133,7 @@ export const Roles = () => {
                                 </Breadcrumb.Item>
                               </Breadcrumb>
                             </Col>
-                            <Col md={2} className="me-2">
+                            <Col md={2}>
                               <NavLink to={"/data-peran/tambah-peran"}>
                                 <Button className="btn btn-add side-menu d-flex gap-1 align-items-center justify-content-senter">
                                   Tambah
@@ -152,12 +168,12 @@ export const Roles = () => {
                                         <td>{roles.name}</td>
                                         <td>{roles.level}</td>
                                         <td>
-                                          <div className="d-flex gap-1 justify-content-center">
+                                          <div className="d-flex gap-1">
                                             <NavLink
                                               to={"/data-peran/edit-peran"}
                                             >
                                               <Button
-                                                className="btn btn-edit"
+                                                className="btn-warning btn-edit"
                                                 onClick={() =>
                                                   GetRolesById(roles)
                                                 }

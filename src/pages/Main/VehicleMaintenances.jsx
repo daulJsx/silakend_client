@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+
+// Push notify
+import Push from "push.js";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -39,6 +42,26 @@ import { DeleteVM } from "../../functions/Delete/DeleteVM";
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 export const VehicleMaintenances = () => {
+  // Listener
+  useEffect(() => {
+    window.Echo.channel("vehiclemaintenance").listen(
+      "VehicleMaintenanceUpdate",
+      (e) => {
+        Push.create("Info Data Perbaikan Kendaraan", {
+          body: e.vehicleMaintenance,
+          icon: "/polman.ico",
+          timeout: 4000,
+          onClick: function () {
+            window.focus();
+            this.close();
+          },
+        });
+        // Setelah tampil, refetch data
+        FetchVM();
+      }
+    );
+  }, []);
+
   const auth = useAuthUser();
 
   // Fetching vm data
@@ -105,7 +128,7 @@ export const VehicleMaintenances = () => {
                     <Card className="shadow rounded bg__primary">
                       <Card.Header>
                         <Container>
-                          <Row className="gap-3 mt-4">
+                          <Row className="gap-3 mt-4 me-3">
                             <Col>
                               <h3 className="main__title">
                                 Perbaikan Kendaraan
@@ -123,7 +146,7 @@ export const VehicleMaintenances = () => {
                                 </Breadcrumb.Item>
                               </Breadcrumb>
                             </Col>
-                            <Col md={2} className="me-2">
+                            <Col md={2}>
                               <NavLink
                                 to={
                                   "/perbaikan-kendaraan/tambah-perbaikan-kendaraan"

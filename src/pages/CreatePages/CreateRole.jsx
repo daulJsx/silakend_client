@@ -7,14 +7,14 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 // Redirecting
-import { useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { useNavigate, Navigate, NavLink } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -23,6 +23,8 @@ import { Footer } from "../../components/footer/Footer";
 
 // icons
 import { FaArrowLeft } from "react-icons/fa";
+import { CgUserList } from "react-icons/cg";
+import { FiChevronRight } from "react-icons/fi";
 
 // React Notification
 import swal from "sweetalert";
@@ -30,6 +32,7 @@ import swal from "sweetalert";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
+// Functions
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 export const CreateRole = () => {
@@ -58,10 +61,10 @@ export const CreateRole = () => {
           .post("https://silakend-server.xyz/api/roles", newRole, config)
           .then((response) => {
             if (response.status === 200) {
+              const { msg } = response.data;
               navigate("/data-peran");
               swal({
-                title: "Berhasil!",
-                text: response.data.msg,
+                title: msg,
                 icon: "success",
                 button: false,
                 timer: 2000,
@@ -114,78 +117,104 @@ export const CreateRole = () => {
                     placement={placement}
                     name={placement}
                     bc={<FaArrowLeft />}
-                    title={"Tambah Peran Pengguna"}
                     parentLink={"/data-peran"}
                   />
                 ))}
               </Col>
             </Row>
             {/* NAVBAR */}
-            <main className="min-vh-10 px-2 mt-4">
+
+            <main className="px-2 min-vh-100 mt-4">
               <Row>
                 <Col>
-                  <Card>
-                    <Form onSubmit={postNewRole}>
-                      <Card.Body>
-                        <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                          Silahkan Tambah Peran Baru Untuk Pengguna Disini
-                        </Card.Title>
+                  <Card className="shadow rounded bg__primary">
+                    <Card.Header>
+                      <Container>
+                        <Row className="gap-3 mt-4">
+                          <Col>
+                            <h3 className="main__title">Peran Pengguna</h3>
+                            <Breadcrumb className="breadcrumb__item mt-3">
+                              <Breadcrumb.Item className="breadcrumb__item">
+                                <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
+                                  <NavLink
+                                    to={"/data-peran"}
+                                    className="d-flex justify-content-center align-items-center text-muted gap-2"
+                                  >
+                                    <CgUserList className="fs-5" />
+                                    Data
+                                  </NavLink>
 
-                        <Container>
-                          <Row>
-                            <Col>
-                              <Form.Group className="mb-3">
-                                <Form.Label>Nama Peran</Form.Label>
-                                <Form.Control
-                                  required
-                                  className="input form-custom"
-                                  type="text"
-                                  onChange={(e) =>
-                                    setNewRole({
-                                      ...newRole,
-                                      name: e.target.value,
-                                    })
-                                  }
-                                />
-                              </Form.Group>
+                                  <FiChevronRight className="fs-6 breadcrumb__divider" />
+                                  <span className="color-primary">
+                                    Tambah Peran
+                                  </span>
+                                </div>
+                              </Breadcrumb.Item>
+                            </Breadcrumb>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Header>
+                    <Card.Body className="p-4">
+                      <Container
+                        className="p-4"
+                        style={{ background: "#fff", borderRadius: "10px" }}
+                      >
+                        <Form onSubmit={postNewRole}>
+                          <Card.Body>
+                            <Form.Group className="mb-3">
+                              <Form.Label>Nama Peran</Form.Label>
+                              <Form.Control
+                                required
+                                className="input form-custom"
+                                type="text"
+                                onChange={(e) =>
+                                  setNewRole({
+                                    ...newRole,
+                                    name: e.target.value,
+                                  })
+                                }
+                              />
+                            </Form.Group>
 
-                              <Form.Group className="mb-3">
-                                <Form.Label>level</Form.Label>
-                                <Form.Control
-                                  required
-                                  className="input form-custom"
-                                  type="number"
-                                  onChange={(e) =>
-                                    setNewRole({
-                                      ...newRole,
-                                      level: e.target.value,
-                                    })
-                                  }
-                                />
-                              </Form.Group>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </Card.Body>
-                      <Card.Footer>
-                        <Button
-                          className="btn-post"
-                          onClick={postNewRole}
-                          type="submit"
-                        >
-                          Tambahkan
-                        </Button>
-                      </Card.Footer>
-                    </Form>
+                            <Form.Group className="mb-4">
+                              <Form.Label>level</Form.Label>
+                              <Form.Control
+                                required
+                                className="input form-custom"
+                                type="number"
+                                onChange={(e) =>
+                                  setNewRole({
+                                    ...newRole,
+                                    level: e.target.value,
+                                  })
+                                }
+                              />
+                            </Form.Group>
+
+                            <Form.Group>
+                              <Button
+                                className="btn-post"
+                                onClick={postNewRole}
+                                type="submit"
+                              >
+                                Tambahkan
+                              </Button>
+                            </Form.Group>
+                          </Card.Body>
+                        </Form>
+                      </Container>
+                    </Card.Body>
                   </Card>
                 </Col>
               </Row>
-              <Row>
-                <Col>
-                  <Footer />
-                </Col>
-              </Row>
             </main>
+
+            <Row>
+              <Col>
+                <Footer />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Container>

@@ -92,7 +92,13 @@ export const VerifierCreateVU = () => {
             if (response.status === 200) {
               const { msg } = response.data;
               navigate("/verifier/pengajuan-saya");
-              toast.success(msg);
+              swal({
+                title: "Berhasil!",
+                text: msg,
+                icon: "success",
+                button: false,
+                timer: 2000,
+              });
             }
           });
       } catch (error) {

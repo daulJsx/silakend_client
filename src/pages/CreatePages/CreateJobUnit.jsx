@@ -7,14 +7,14 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 // Redirecting
-import { useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { useNavigate, Navigate, NavLink } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -23,6 +23,8 @@ import { Footer } from "../../components/footer/Footer";
 
 // icons
 import { FaArrowLeft } from "react-icons/fa";
+import { RiCommunityLine } from "react-icons/ri";
+import { FiChevronRight } from "react-icons/fi";
 
 // React Notification
 import swal from "sweetalert";
@@ -58,10 +60,10 @@ export const CreateJobUnit = () => {
           .post("https://silakend-server.xyz/api/jobunits", newJobUnit, config)
           .then((response) => {
             if (response.status === 200) {
+              const { msg } = response.data;
               navigate("/unit-kerja");
               swal({
-                title: "Berhasil!",
-                text: response.data.msg,
+                text: msg,
                 icon: "success",
                 button: false,
                 timer: 2000,
@@ -114,78 +116,101 @@ export const CreateJobUnit = () => {
                     placement={placement}
                     name={placement}
                     bc={<FaArrowLeft />}
-                    title={"Tambah Data Unit Kerja"}
                     parentLink={"/unit-kerja"}
                   />
                 ))}
               </Col>
             </Row>
             {/* NAVBAR */}
-            <main className="min-vh-10 px-2 mt-4">
+
+            <main className="px-2 min-vh-100 mt-4">
               <Row>
                 <Col>
-                  <Card>
-                    <Form onSubmit={postNewJobUnit}>
-                      <Card.Body>
-                        <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                          Silahkan Tambah Data Unit Kerja Baru Disini
-                        </Card.Title>
+                  <Card className="shadow rounded bg__primary">
+                    <Card.Header>
+                      <Container>
+                        <Row className="gap-3 mt-4">
+                          <Col>
+                            <h3 className="main__title">Unit Kerja</h3>
+                            <Breadcrumb className="breadcrumb__item mt-3">
+                              <Breadcrumb.Item className="breadcrumb__item">
+                                <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
+                                  <NavLink
+                                    to={"/unit-kerja"}
+                                    className="d-flex justify-content-center align-items-center text-muted gap-2"
+                                  >
+                                    <RiCommunityLine className="fs-5" />
+                                    Data
+                                  </NavLink>
 
-                        <Container>
-                          <Row>
-                            <Col>
-                              <Form.Group className="mb-3">
-                                <Form.Label>Nama Unit Kerja</Form.Label>
-                                <Form.Control
-                                  required
-                                  className="input form-custom"
-                                  type="text"
-                                  onChange={(e) =>
-                                    setNewJobUnit({
-                                      ...newJobUnit,
-                                      name: e.target.value,
-                                    })
-                                  }
-                                />
-                              </Form.Group>
+                                  <FiChevronRight className="fs-6 breadcrumb__divider" />
+                                  <span className="color-primary">
+                                    Tambah Unit Kerja
+                                  </span>
+                                </div>
+                              </Breadcrumb.Item>
+                            </Breadcrumb>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Header>
+                    <Card.Body className="p-4">
+                      <Container
+                        className="p-4"
+                        style={{ background: "#fff", borderRadius: "10px" }}
+                      >
+                        <Form onSubmit={postNewJobUnit}>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Nama Unit Kerja</Form.Label>
+                            <Form.Control
+                              required
+                              className="input form-custom"
+                              type="text"
+                              onChange={(e) =>
+                                setNewJobUnit({
+                                  ...newJobUnit,
+                                  name: e.target.value,
+                                })
+                              }
+                            />
+                          </Form.Group>
 
-                              <Form.Group className="mb-3">
-                                <Form.Label>Kode Unit Kerja</Form.Label>
-                                <Form.Control
-                                  required
-                                  className="input form-custom"
-                                  type="text"
-                                  onChange={(e) =>
-                                    setNewJobUnit({
-                                      ...newJobUnit,
-                                      unit_account: e.target.value,
-                                    })
-                                  }
-                                />
-                              </Form.Group>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </Card.Body>
-                      <Card.Footer>
-                        <Button
-                          className="btn-post"
-                          onClick={postNewJobUnit}
-                          type="submit"
-                        >
-                          Tambahkan
-                        </Button>
-                      </Card.Footer>
-                    </Form>
+                          <Form.Group className="mb-4">
+                            <Form.Label>Kode Unit Kerja</Form.Label>
+                            <Form.Control
+                              required
+                              className="input form-custom"
+                              type="text"
+                              onChange={(e) =>
+                                setNewJobUnit({
+                                  ...newJobUnit,
+                                  unit_account: e.target.value,
+                                })
+                              }
+                            />
+                          </Form.Group>
+                          <Form.Group>
+                            <Button
+                              className="btn-post"
+                              onClick={postNewJobUnit}
+                              type="submit"
+                            >
+                              Tambah
+                            </Button>
+                          </Form.Group>
+                        </Form>
+                      </Container>
+                    </Card.Body>
                   </Card>
                 </Col>
               </Row>
-              <Row>
-                <Col>
-                  <Footer />
-                </Col>
-              </Row>
             </main>
+
+            <Row>
+              <Col>
+                <Footer />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Container>

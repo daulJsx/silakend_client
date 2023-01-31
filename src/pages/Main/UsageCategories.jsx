@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+
+// Push notify
+import Push from "push.js";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -36,6 +39,22 @@ import { FaTrashAlt } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 
 export const UsageCategories = () => {
+  useEffect(() => {
+    window.Echo.channel("usagecategory").listen("UsageCategoryUpdate", (e) => {
+      Push.create("Info Data Kategori Peminjaman", {
+        body: e.usageCategory,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
+      });
+      // Setelah tampil, refetch data
+      FetchUsageCat();
+    });
+  }, []);
+
   const auth = useAuthUser();
 
   // Fetching usage categories data
@@ -101,7 +120,7 @@ export const UsageCategories = () => {
                     <Card className="shadow rounded bg__primary">
                       <Card.Header>
                         <Container>
-                          <Row className="gap-3 mt-4">
+                          <Row className="gap-3 mt-4 me-3">
                             <Col>
                               <h3 className="main__title">
                                 Kategori Peminjaman
@@ -119,7 +138,7 @@ export const UsageCategories = () => {
                                 </Breadcrumb.Item>
                               </Breadcrumb>
                             </Col>
-                            <Col md={2} className="me-2">
+                            <Col md={2}>
                               <NavLink
                                 to={
                                   "/kategori-peminjaman/tambah-kategori-peminjaman"
@@ -155,7 +174,7 @@ export const UsageCategories = () => {
                                       <td>{index + 1}</td>
                                       <td>{usageCat.name}</td>
                                       <td>
-                                        <div className="d-flex gap-1 justify-content-center">
+                                        <div className="d-flex gap-1">
                                           <NavLink
                                             to={
                                               "/kategori-peminjaman/edit-kategori-peminjaman"

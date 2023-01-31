@@ -119,8 +119,13 @@ export const UserEditVU = () => {
             .then((response) => {
               if (response.status === 200) {
                 const { msg } = response.data;
-                navigate("/user/data-pengajuan-peminjaman");
-                toast.success(msg);
+                navigate("/user/pengajuan-saya");
+                swal({
+                  title: "Berhasil!",
+                  text: msg,
+                  icon: "success",
+                  button: "Tutup",
+                });
               }
             });
         } catch (error) {
@@ -129,7 +134,7 @@ export const UserEditVU = () => {
             if (message) {
               swal("Ups!", message, "error");
             } else {
-              toast.error(msg);
+              swal("Ups!", msg, "error");
             }
           } else {
             toast.error("Something went wrong");
@@ -172,6 +177,7 @@ export const UserEditVU = () => {
                   config
                 )
                 .then((response) => {
+                  navigate("/user/pengajuan-saya");
                   swal({
                     title: "Berhasil!",
                     text: response.data.msg,

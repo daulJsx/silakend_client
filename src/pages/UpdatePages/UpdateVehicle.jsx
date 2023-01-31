@@ -12,14 +12,14 @@ import FetchVCategories from "../../consAPI/FetchVCategories";
 import { useQuery } from "react-query";
 
 // Redirecting
-import { useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { useNavigate, NavLink, Navigate } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import { Aside } from "../../components/aside/Aside";
@@ -28,6 +28,8 @@ import { Footer } from "../../components/footer/Footer";
 
 // icons
 import { FaArrowLeft } from "react-icons/fa";
+import { RiCarLine } from "react-icons/ri";
+import { FiChevronRight } from "react-icons/fi";
 
 // React Notification
 import swal from "sweetalert";
@@ -104,14 +106,14 @@ export const UpdateVehicle = () => {
             .then((response) => {
               navigate("/data-kendaraan");
               if (response.status === 200) {
+                const { msg } = response.data;
+                navigate("/data-kendaraan");
                 swal({
-                  title: "Berhasil!",
-                  text: response.data.msg,
+                  title: msg,
                   icon: "success",
-                  button: "Tutup",
+                  button: false,
+                  timer: 2000,
                 });
-                const updateV = response.data;
-                return updateV;
               }
             });
         } catch (error) {
@@ -164,189 +166,197 @@ export const UpdateVehicle = () => {
               </Row>
               {/* NAVBAR */}
 
-              <main className="min-vh-100 px-2 mt-4">
+              <main className="px-2 min-vh-100 mt-4">
                 <Row>
                   <Col>
-                    <Card>
-                      <Form onSubmit={handleUpdateV}>
-                        <Card.Body>
-                          <Card.Title className="fs-4 p-4 fw-semibold color-primary">
-                            Silahkan Edit Data Kendaraan Dinas Disini
-                          </Card.Title>
+                    <Card className="shadow rounded bg__primary">
+                      <Card.Header>
+                        <Container>
+                          <Row className="gap-3 mt-4">
+                            <Col>
+                              <h3 className="main__title">Kendaraan Dinas</h3>
+                              <Breadcrumb className="breadcrumb__item mt-3">
+                                <Breadcrumb.Item className="breadcrumb__item">
+                                  <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
+                                    <NavLink
+                                      to={"/data-kendaraan"}
+                                      className="d-flex justify-content-center align-items-center text-muted gap-2"
+                                    >
+                                      <RiCarLine className="fs-5" />
+                                      Data
+                                    </NavLink>
 
-                          <Container>
-                            <Row>
-                              <Col>
-                                <Form.Group className="mb-3 form-floating">
-                                  <Form.Control
-                                    required
-                                    value={name}
-                                    className="input form-custom"
-                                    name="name"
-                                    type="text"
-                                    vehicleId="name"
-                                    placeholder="Nama Kendaraan"
-                                    onChange={(e) => setName(e.target.value)}
-                                  />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="name"
-                                  >
-                                    Nama Kendaraan
-                                  </Form.Label>
-                                </Form.Group>
+                                    <FiChevronRight className="fs-6 breadcrumb__divider" />
+                                    <span className="color-primary">
+                                      Edit Kendaraan
+                                    </span>
+                                  </div>
+                                </Breadcrumb.Item>
+                              </Breadcrumb>
+                            </Col>
+                          </Row>
+                        </Container>
+                      </Card.Header>
+                      <Card.Body className="p-4">
+                        <Container
+                          className="p-4"
+                          style={{ background: "#fff", borderRadius: "10px" }}
+                        >
+                          <Form onSubmit={handleUpdateV}>
+                            <Form.Group className="mb-3 form-floating">
+                              <Form.Control
+                                required
+                                value={name}
+                                className="input form-custom"
+                                name="name"
+                                type="text"
+                                vehicleId="name"
+                                placeholder="Nama Kendaraan"
+                                onChange={(e) => setName(e.target.value)}
+                              />
+                              <Form.Label className="color-primary" for="name">
+                                Nama Kendaraan
+                              </Form.Label>
+                            </Form.Group>
 
-                                <Form.Group className="mb-3 form-floating">
-                                  <Form.Control
-                                    required
-                                    value={licenseNumber}
-                                    className="input form-custom"
-                                    name="license_number"
-                                    type="text"
-                                    vehicleId="license_number"
-                                    placeholder="Nomor Polisi"
-                                    onChange={(e) =>
-                                      setLicenseNumber(e.target.value)
-                                    }
-                                  />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="license_number"
-                                  >
-                                    Nomor Polisi
-                                  </Form.Label>
-                                </Form.Group>
+                            <Form.Group className="mb-3 form-floating">
+                              <Form.Control
+                                required
+                                value={licenseNumber}
+                                className="input form-custom"
+                                name="license_number"
+                                type="text"
+                                vehicleId="license_number"
+                                placeholder="Nomor Polisi"
+                                onChange={(e) =>
+                                  setLicenseNumber(e.target.value)
+                                }
+                              />
+                              <Form.Label
+                                className="color-primary"
+                                for="license_number"
+                              >
+                                Nomor Polisi
+                              </Form.Label>
+                            </Form.Group>
 
-                                <Form.Group className="mb-3 form-floating">
-                                  <Form.Control
-                                    required
-                                    value={year}
-                                    className="input form-custom"
-                                    name="year"
-                                    type="text"
-                                    vehicleId="year"
-                                    placeholder="Tahun Pembuatan"
-                                    onChange={(e) => setYear(e.target.value)}
-                                  />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="year"
-                                  >
-                                    Tahun Pembuatan
-                                  </Form.Label>
-                                </Form.Group>
+                            <Form.Group className="mb-3 form-floating">
+                              <Form.Control
+                                required
+                                value={year}
+                                className="input form-custom"
+                                name="year"
+                                type="text"
+                                vehicleId="year"
+                                placeholder="Tahun Pembuatan"
+                                onChange={(e) => setYear(e.target.value)}
+                              />
+                              <Form.Label className="color-primary" for="year">
+                                Tahun Pembuatan
+                              </Form.Label>
+                            </Form.Group>
 
-                                <Form.Group className="mb-3 form-floating">
-                                  <Form.Control
-                                    required
-                                    value={distanceCount.toLocaleString(
-                                      "id-ID"
-                                    )}
-                                    className="input form-custom"
-                                    name="distance_count"
-                                    type="number"
-                                    vehicleId="distance_count"
-                                    placeholder="Dalam satuan KM"
-                                    onChange={(e) =>
-                                      setDistanceCount(e.target.value)
-                                    }
-                                  />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="distance_count"
+                            <Form.Group className="mb-3 form-floating">
+                              <Form.Control
+                                required
+                                value={distanceCount.toLocaleString("id-ID")}
+                                className="input form-custom"
+                                name="distance_count"
+                                type="number"
+                                vehicleId="distance_count"
+                                placeholder="Dalam satuan KM"
+                                onChange={(e) =>
+                                  setDistanceCount(e.target.value)
+                                }
+                              />
+                              <Form.Label
+                                className="color-primary"
+                                for="distance_count"
+                              >
+                                Jumlah Kilometer Tempuh
+                              </Form.Label>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                              <Form.Select
+                                style={{
+                                  backgroundColor: "#F5F7FC",
+                                  border: "none",
+                                  padding: "17px",
+                                }}
+                                aria-label="Default select example"
+                                onChange={(e) => setVCatId(e.target.value)}
+                              >
+                                <option>-- Pilih Kategori Kendaraan --</option>
+                                {vCategoriesData?.map((vcategories) => (
+                                  <option
+                                    key={vcategories.vcategory_id}
+                                    value={vcategories.vcategory_id}
                                   >
-                                    Jumlah Kilometer Tempuh
-                                  </Form.Label>
-                                </Form.Group>
-                              </Col>
-                              <Col>
-                                <Form.Group className="mb-3">
-                                  <Form.Select
-                                    style={{
-                                      backgroundColor: "#F5F7FC",
-                                      border: "none",
-                                      padding: "17px",
-                                    }}
-                                    aria-label="Default select example"
-                                    onChange={(e) => setVCatId(e.target.value)}
-                                  >
-                                    <option>
-                                      -- Pilih Kategori Kendaraan --
-                                    </option>
-                                    {vCategoriesData?.map((vcategories) => (
-                                      <option
-                                        key={vcategories.vcategory_id}
-                                        value={vcategories.vcategory_id}
-                                      >
-                                        {vcategories.name}
-                                      </option>
-                                    ))}
-                                  </Form.Select>
-                                </Form.Group>
+                                    {vcategories.name}
+                                  </option>
+                                ))}
+                              </Form.Select>
+                            </Form.Group>
 
-                                <Form.Group className="mb-3 form-floating">
-                                  <Form.Control
-                                    className="input form-custom"
-                                    value={taxDate}
-                                    name="tax_date"
-                                    type="date"
-                                    vehicleId="tax_date"
-                                    placeholder="Nama Kendaraan"
-                                    onChange={(e) => setTaxDate(e.target.value)}
-                                  />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="tax_date"
-                                  >
-                                    Waktu Pajak
-                                  </Form.Label>
-                                </Form.Group>
+                            <Form.Group className="mb-3 form-floating">
+                              <Form.Control
+                                className="input form-custom"
+                                value={taxDate}
+                                name="tax_date"
+                                type="date"
+                                vehicleId="tax_date"
+                                placeholder="Nama Kendaraan"
+                                onChange={(e) => setTaxDate(e.target.value)}
+                              />
+                              <Form.Label
+                                className="color-primary"
+                                for="tax_date"
+                              >
+                                Waktu Pajak
+                              </Form.Label>
+                            </Form.Group>
 
-                                <Form.Group className="mb-3 form-floating">
-                                  <Form.Control
-                                    required
-                                    value={validDate}
-                                    className="input form-custom"
-                                    name="valid_date"
-                                    type="date"
-                                    vehicleId="valid_date"
-                                    placeholder="Nama Kendaraan"
-                                    onChange={(e) =>
-                                      setValidDate(e.target.value)
-                                    }
-                                  />
-                                  <Form.Label
-                                    className="color-primary"
-                                    for="valid_date"
-                                  >
-                                    Tanggal Berlaku
-                                  </Form.Label>
-                                </Form.Group>
-                              </Col>
-                            </Row>
-                          </Container>
-                        </Card.Body>
-                        <Card.Footer>
-                          <Container>
-                            <Button
-                              className="btn-post"
-                              onClick={handleUpdateV}
-                              type="submit"
-                            >
-                              Simpan
-                            </Button>
-                          </Container>
-                        </Card.Footer>
-                      </Form>
+                            <Form.Group className="mb-3 form-floating">
+                              <Form.Control
+                                required
+                                value={validDate}
+                                className="input form-custom"
+                                name="valid_date"
+                                type="date"
+                                vehicleId="valid_date"
+                                placeholder="Nama Kendaraan"
+                                onChange={(e) => setValidDate(e.target.value)}
+                              />
+                              <Form.Label
+                                className="color-primary"
+                                for="valid_date"
+                              >
+                                Tanggal Berlaku
+                              </Form.Label>
+                            </Form.Group>
+
+                            <Form.Group>
+                              <Button
+                                className="btn-post"
+                                onClick={handleUpdateV}
+                                type="submit"
+                              >
+                                Simpan
+                              </Button>
+                            </Form.Group>
+                          </Form>
+                        </Container>
+                      </Card.Body>
                     </Card>
                   </Col>
                 </Row>
-                <Row>
-                  <Col>
-                    <Footer />
-                  </Col>
-                </Row>
               </main>
+
+              <Row>
+                <Col>
+                  <Footer />
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Container>

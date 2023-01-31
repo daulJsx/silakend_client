@@ -18,10 +18,10 @@ import { Footer } from "../../components/footer/Footer";
 
 // icons
 import { CgHomeAlt } from "react-icons/cg";
-import { HiClipboardCopy } from "react-icons/hi";
-import { AiFillDashboard } from "react-icons/ai";
-import { RiUserReceivedFill } from "react-icons/ri";
-import { FaUserClock } from "react-icons/fa";
+import { HiOutlineClipboardCopy } from "react-icons/hi";
+import { RiDashboard2Line } from "react-icons/ri";
+import { TbUserCheck } from "react-icons/tb";
+import { FiUsers } from "react-icons/fi";
 
 // Navigating
 import { Navigate } from "react-router-dom";
@@ -41,7 +41,7 @@ export const Dashboard = () => {
   const token = Cookies.get("token");
   const auth = useAuthUser();
 
-  return token ? (
+  return token && auth() ? (
     auth().user_level === 1 || auth().user_level === 2 ? (
       <Container fluid>
         <Row>
@@ -65,7 +65,7 @@ export const Dashboard = () => {
             {/* NAVBAR */}
 
             <main className="px-2 d-flex flex-column gap-4 mb-3 min-vh-100 mt-3">
-              <Row>
+              {/* <Row>
                 <Col>
                   <Card>
                     <Card.Body>
@@ -88,18 +88,16 @@ export const Dashboard = () => {
                     </Card.Body>
                   </Card>
                 </Col>
-              </Row>
+              </Row> */}
 
               <Row className="gap-3">
                 <Col>
                   <Card className="primary">
-                    <Card.Body>
+                    <Card.Body className="d-flex flex-column justify-content-center align-items-center">
                       <Container>
                         <Row>
-                          <Col md={6} className="py-3 mx-auto ">
-                            <div className="primary-icon fs-2">
-                              <HiClipboardCopy className="ms-1" />
-                            </div>
+                          <Col>
+                            <HiOutlineClipboardCopy className="fs-1 mb-3" />
                           </Col>
                         </Row>
                         <Row>
@@ -110,7 +108,7 @@ export const Dashboard = () => {
                         <Row>
                           <Col>
                             <div className="fw-light p-1 mb-3">
-                              Jumlah Order Kendaraan Tahun 2022
+                              Jumlah Pengajuan Peminjaman Kendaraan
                             </div>
                           </Col>
                         </Row>
@@ -120,13 +118,11 @@ export const Dashboard = () => {
                 </Col>
                 <Col>
                   <Card className="success">
-                    <Card.Body>
+                    <Card.Body className="d-flex flex-column justify-content-center align-items-center">
                       <Container>
                         <Row>
-                          <Col md={6} className="py-3 mx-auto fs-2">
-                            <div className="success-icon fs-2 ">
-                              <AiFillDashboard />
-                            </div>
+                          <Col>
+                            <RiDashboard2Line className="fs-1 mb-3" />
                           </Col>
                         </Row>
                         <Row>
@@ -137,7 +133,7 @@ export const Dashboard = () => {
                         <Row>
                           <Col>
                             <div className="fw-light p-1 mb-3">
-                              Jumlah Kilometer Tempuh Kendaraan Tahun 2022
+                              Jumlah Kilometer Tempuh Kendaraan
                             </div>
                           </Col>
                         </Row>
@@ -147,13 +143,11 @@ export const Dashboard = () => {
                 </Col>
                 <Col>
                   <Card className="warning">
-                    <Card.Body>
+                    <Card.Body className="d-flex flex-column justify-content-center align-items-center">
                       <Container>
                         <Row>
-                          <Col md={6} className="py-3 mx-auto ">
-                            <div className="warning-icon fs-2 ">
-                              <RiUserReceivedFill />
-                            </div>
+                          <Col>
+                            <TbUserCheck className="fs-1 mb-3" />
                           </Col>
                         </Row>
                         <Row>
@@ -164,7 +158,7 @@ export const Dashboard = () => {
                         <Row>
                           <Col>
                             <div className="fw-light p-1 mb-3">
-                              Jumlah Order Supir Tahun 2022
+                              Jumlah Penugasan Supir
                             </div>
                           </Col>
                         </Row>
@@ -174,13 +168,11 @@ export const Dashboard = () => {
                 </Col>
                 <Col>
                   <Card className="info">
-                    <Card.Body>
+                    <Card.Body className="d-flex flex-column justify-content-center align-items-center">
                       <Container>
                         <Row>
-                          <Col md={6} className="py-3 mx-auto ">
-                            <div className="info-icon fs-2 ">
-                              <FaUserClock />
-                            </div>
+                          <Col>
+                            <FiUsers className="fs-1 mb-3" />
                           </Col>
                         </Row>
                         <Row>
@@ -190,9 +182,7 @@ export const Dashboard = () => {
                         </Row>
                         <Row>
                           <Col>
-                            <div className="fw-light p-1">
-                              Jumlah Kilometer Tempuh Supir Tahun 2022
-                            </div>
+                            <div className="fw-light p-1">Jumlah Pengguna</div>
                           </Col>
                         </Row>
                       </Container>
@@ -201,7 +191,7 @@ export const Dashboard = () => {
                 </Col>
               </Row>
 
-              <Row>
+              {/* <Row>
                 <Col>
                   <Card>
                     <Card.Body>
@@ -223,7 +213,7 @@ export const Dashboard = () => {
                     </Card.Body>
                   </Card>
                 </Col>
-              </Row>
+              </Row> */}
             </main>
 
             <Row>

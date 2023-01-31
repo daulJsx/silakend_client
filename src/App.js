@@ -1,9 +1,5 @@
 import React from "react";
 
-// Realtime requirements
-import Echo from "laravel-echo";
-import Pusher from "pusher-js";
-
 // Routing between pages
 import {
   BrowserRouter as Router,
@@ -33,9 +29,9 @@ import { UserDetail } from "./pages/Details/UserDetail";
 import { VehicleUsages } from "./pages/Main/VehicleUsages";
 import { CreateOrder } from "./pages/CreatePages/CreateOrder";
 import { UpdateOrder } from "./pages/UpdatePages/UpdateOrder";
-import { UpdateOrderHistory } from "./pages/UpdatePages/UpdateOrderHistory";
 import { VehicleUsageDetail } from "./pages/Details/VehicleUsageDetail";
 import { VehicleUsageHistory } from "./pages/Main/VehicleUsageHistory";
+import { VUHistoryDetail } from "./pages/Details/VUHistoryDetail";
 
 import { Vehicles } from "./pages/Main/Vehicles";
 import { CreateVehicle } from "./pages/CreatePages/CreateVehicle";
@@ -90,16 +86,6 @@ import { DriverHistory } from "./pages/asDriver/DriverHistory";
 import { TaskInfo } from "./pages/asDriver/TaskInfo";
 
 function App() {
-  // window.Pusher = Pusher;
-  // window.Echo = new Echo({
-  //   broadcaster: "pusher",
-  //   key: "ABCDEFGH",
-  //   wsHost: "silakend-server-realtime.test",
-  //   wsPort: 6001,
-  //   forceTLS: false,
-  //   disableStats: true,
-  // });
-
   return (
     <>
       <AuthProvider
@@ -173,8 +159,8 @@ function App() {
               element={<VehicleUsageHistory />}
             />
             <Route
-              path="/riwayat-peminjaman/edit-riwayat-peminjaman"
-              element={<UpdateOrderHistory />}
+              path="/riwayat-peminjaman/rincian-peminjaman"
+              element={<VUHistoryDetail />}
             />
             {/*----- END ORDER PAGES---- */}
 

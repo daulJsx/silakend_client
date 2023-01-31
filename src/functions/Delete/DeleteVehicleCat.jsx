@@ -28,11 +28,12 @@ export async function DeleteVehicleCat(vCatId) {
             config
           )
           .then((response) => {
+            const { msg } = response.data;
             swal({
-              title: "Berhasil!",
-              text: response.data.msg,
+              text: msg,
               icon: "success",
-              button: "Tutup",
+              button: false,
+              timer: 2000,
             });
             window.location.reload();
           });
@@ -49,7 +50,7 @@ export async function DeleteVehicleCat(vCatId) {
         }
       }
     } else {
-      swal("Data kategori kendaraan aman!");
+      swal("Aksi dibatalkan");
     }
   });
 }

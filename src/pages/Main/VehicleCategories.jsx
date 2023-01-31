@@ -39,24 +39,24 @@ import { FaTrashAlt } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 
 export const VehicleCategories = () => {
-  useEffect(() => {
-    window.Echo.channel("vehiclecategory").listen(
-      "VehicleCategoryUpdate",
-      (e) => {
-        Push.create("Info Data Kategori Kendaraan", {
-          body: e.vehicleCategory,
-          icon: "/polman.ico",
-          timeout: 4000,
-          onClick: function () {
-            window.focus();
-            this.close();
-          },
-        });
-        // Setelah tampil, refetch data
-        FetchVCategories();
-      }
-    );
-  }, []);
+  // useEffect(() => {
+  //   window.Echo.channel("vehiclecategory").listen(
+  //     "VehicleCategoryUpdate",
+  //     (e) => {
+  //       Push.create("Info Data Kategori Kendaraan", {
+  //         body: e.vehicleCategory,
+  //         icon: "/polman.ico",
+  //         timeout: 4000,
+  //         onClick: function () {
+  //           window.focus();
+  //           this.close();
+  //         },
+  //       });
+  //       // Setelah tampil, refetch data
+  //       FetchVCategories();
+  //     }
+  //   );
+  // }, []);
 
   const auth = useAuthUser();
 

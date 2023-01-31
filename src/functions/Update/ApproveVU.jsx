@@ -31,18 +31,13 @@ export const ApproveVU = async (order) => {
   };
 
   const body = {
-    vehicle_id: vehicle_id,
-    driver_id: driver_id,
-    user_id: user_id,
     ucategory_id: ucategory_id,
     destination: destination,
     start_date: start_date,
     end_date: end_date,
-    distance_count_out: distance_count_out,
-    distance_count_in: distance_count_in,
     usage_description: usage_description,
     personel_count: personel_count,
-    status: vehicle_id && driver_id ? "READY" : "APPROVED",
+    status: "",
     status_description: "",
   };
 
@@ -65,10 +60,10 @@ export const ApproveVU = async (order) => {
           .then((response) => {
             redirect("/verifier/pengajuan-pegawai");
             swal({
-              title: "Berhasil!",
               text: response.data.msg,
               icon: "success",
-              button: "Tutup",
+              button: false,
+              timer: 2000,
             });
           });
       } catch (error) {

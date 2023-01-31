@@ -29,11 +29,12 @@ export async function DeleteVehicle(vehicleId) {
             config
           )
           .then((response) => {
+            const { msg } = response.data;
             swal({
-              title: "Berhasil!",
-              text: response.data.msg,
+              text: msg,
               icon: "success",
-              button: "Tutup",
+              button: false,
+              timer: 2000,
             });
             window.location.reload();
           });
@@ -50,7 +51,7 @@ export async function DeleteVehicle(vehicleId) {
         }
       }
     } else {
-      swal("Data kendaraan aman!");
+      swal("Aksi dibatalkan");
     }
   });
 }

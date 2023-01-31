@@ -26,8 +26,6 @@ export const RejectVU = async (order) => {
   };
 
   const body = {
-    user_id: user_id,
-    usage_id: usage_id,
     ucategory_id: ucategory_id,
     destination: destination,
     start_date: start_date,
@@ -68,10 +66,10 @@ export const RejectVU = async (order) => {
               .then((response) => {
                 redirect("/verifier/data-pengajuan-peminjaman");
                 swal({
-                  title: "Berhasil!",
                   text: response.data.msg,
                   icon: "success",
-                  button: "Tutup",
+                  button: false,
+                  timer: 2000,
                 });
               });
           } catch (error) {

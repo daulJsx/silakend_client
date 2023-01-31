@@ -66,7 +66,7 @@ export const CreateUsageCategories = () => {
               const { msg } = response.data;
               navigate("/kategori-peminjaman");
               swal({
-                title: msg,
+                text: msg,
                 icon: "success",
                 button: false,
                 timer: 2000,

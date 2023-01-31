@@ -43,24 +43,24 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 export const VehicleMaintenances = () => {
   // Listener
-  useEffect(() => {
-    window.Echo.channel("vehiclemaintenance").listen(
-      "VehicleMaintenanceUpdate",
-      (e) => {
-        Push.create("Info Data Perbaikan Kendaraan", {
-          body: e.vehicleMaintenance,
-          icon: "/polman.ico",
-          timeout: 4000,
-          onClick: function () {
-            window.focus();
-            this.close();
-          },
-        });
-        // Setelah tampil, refetch data
-        FetchVM();
-      }
-    );
-  }, []);
+  // useEffect(() => {
+  //   window.Echo.channel("vehiclemaintenance").listen(
+  //     "VehicleMaintenanceUpdate",
+  //     (e) => {
+  //       Push.create("Info Data Perbaikan Kendaraan", {
+  //         body: e.vehicleMaintenance,
+  //         icon: "/polman.ico",
+  //         timeout: 4000,
+  //         onClick: function () {
+  //           window.focus();
+  //           this.close();
+  //         },
+  //       });
+  //       // Setelah tampil, refetch data
+  //       FetchVM();
+  //     }
+  //   );
+  // }, []);
 
   const auth = useAuthUser();
 
@@ -134,10 +134,7 @@ export const VehicleMaintenances = () => {
                                 Perbaikan Kendaraan
                               </h3>
                               <Breadcrumb className="breadcrumb__item mt-3">
-                                <Breadcrumb.Item
-                                  className="breadcrumb__item"
-                                  href="#"
-                                >
+                                <Breadcrumb.Item className="breadcrumb__item">
                                   <div className="d-flex color-primary justify-content-center align-items-center gap-2 breadcrumb__text">
                                     <BiCog className="fs-5" />
                                     Data
@@ -208,7 +205,7 @@ export const VehicleMaintenances = () => {
                                             }
                                           >
                                             <Button
-                                              className="btn btn-edit"
+                                              className="btn-warning btn-edit"
                                               onClick={() => GetVMId(vm)}
                                             >
                                               <AiFillEdit className="fs-6" />
@@ -235,7 +232,7 @@ export const VehicleMaintenances = () => {
                                             onClick={() => {
                                               GetVMId(vm);
                                             }}
-                                            className="btn-info btn-detail"
+                                            className="btn-primary btn-detail"
                                           >
                                             <FaInfo className="fs-6" />
                                           </Button>

@@ -43,21 +43,21 @@ import { useAuthUser } from "react-auth-kit";
 
 export const VehicleUsages = () => {
   // Listener
-  useEffect(() => {
-    window.Echo.channel("vehicleusage").listen("VehicleUsageUpdate", (e) => {
-      Push.create("Info Data Peminjaman", {
-        body: e.vehicleUsage,
-        icon: "/polman.ico",
-        timeout: 4000,
-        onClick: function () {
-          window.focus();
-          this.close();
-        },
-      });
-      // Setelah tampil, refetch data
-      FetchVehicleUsages();
-    });
-  }, []);
+  // useEffect(() => {
+  //   window.Echo.channel("vehicleusage").listen("VehicleUsageUpdate", (e) => {
+  //     Push.create("Info Data Peminjaman", {
+  //       body: e.vehicleUsage,
+  //       icon: "/polman.ico",
+  //       timeout: 4000,
+  //       onClick: function () {
+  //         window.focus();
+  //         this.close();
+  //       },
+  //     });
+  //     // Setelah tampil, refetch data
+  //     FetchVehicleUsages();
+  //   });
+  // }, []);
 
   const auth = useAuthUser();
   // Fetching orders data
@@ -222,7 +222,7 @@ export const VehicleUsages = () => {
                                                 onClick={() =>
                                                   GetOrderId(orders)
                                                 }
-                                                className="btn btn-edit position-relative"
+                                                className="btn-warning btn-edit position-relative"
                                               >
                                                 {orders.vehicle ||
                                                 orders.driver ||
@@ -252,7 +252,7 @@ export const VehicleUsages = () => {
                                                 onClick={() =>
                                                   GetOrderId(orders)
                                                 }
-                                                className="btn btn-detail"
+                                                className="btn-primary btn-detail"
                                               >
                                                 <FaInfo className="fs-6" />
                                               </Button>

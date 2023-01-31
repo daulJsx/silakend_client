@@ -78,10 +78,10 @@ export const ProgressVU = async (order) => {
               .then((response) => {
                 redirect("/driver/tugas-masuk");
                 swal({
-                  title: "Berhasil!",
                   text: response.data.msg,
                   icon: "success",
-                  button: "Tutup",
+                  button: false,
+                  timer: 2000,
                 });
               });
           } catch (error) {

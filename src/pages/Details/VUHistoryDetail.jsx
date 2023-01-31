@@ -123,7 +123,7 @@ export const VUHistoryDetail = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaArrowLeft />}
-                        parentLink={"/rincian-peminjaman"}
+                        parentLink={"/riwayat-peminjaman"}
                       />
                     ))}
                   </Col>

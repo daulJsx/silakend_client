@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -39,6 +39,23 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 import { useAuthUser } from "react-auth-kit";
 
 export const VehicleUsages = () => {
+  // Listener
+  useEffect(() => {
+    window.Echo.channel("vehicleusage").listen("VehicleUsageUpdate", (e) => {
+      Push.create("Info Data Peminjaman", {
+        body: e.vehicleUsage,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
+      });
+      // Setelah tampil, refetch data
+      FetchVehicleUsages();
+    });
+  }, []);
+
   const auth = useAuthUser();
   // Fetching orders data
   const {

@@ -41,7 +41,7 @@ import { FiChevronRight } from "react-icons/fi";
 export const JobUnits = () => {
   useEffect(() => {
     window.Echo.channel("jobunit").listen("JobUnitUpdate", (e) => {
-      Push.create("Info Data Peminjaman", {
+      Push.create("Info Data Unit Kerja", {
         body: e.jobUnit,
         icon: "/polman.ico",
         timeout: 4000,

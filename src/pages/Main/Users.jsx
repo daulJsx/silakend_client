@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -40,6 +40,22 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 import { useAuthUser } from "react-auth-kit";
 
 export const Users = () => {
+  useEffect(() => {
+    window.Echo.channel("user").listen("UserUpdate", (e) => {
+      Push.create("Info Data Pengguna", {
+        body: e.user,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
+      });
+      // Setelah tampil, refetch data
+      FetchUsers();
+    });
+  }, []);
+
   const auth = useAuthUser();
   // Fetching users data
   const {

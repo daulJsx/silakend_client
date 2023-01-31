@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // Cookies JS
 import Cookies from "js-cookie";
@@ -40,6 +40,23 @@ import { SecuringPage } from "../../functions/Securing/SecuringPage";
 import { useAuthUser } from "react-auth-kit";
 
 export const Vehicles = () => {
+  // Listener
+  useEffect(() => {
+    window.Echo.channel("vehicle").listen("VehicleUpdate", (e) => {
+      Push.create("Info Data Kendaraan", {
+        body: e.vehicle,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
+      });
+      // Setelah tampil, refetch data
+      FetchVehicles();
+    });
+  }, []);
+
   const auth = useAuthUser();
 
   // Get access token

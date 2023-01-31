@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // fetch data requirement
 import { useQuery } from "react-query";
@@ -36,6 +36,22 @@ import { FaTrashAlt } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 
 export const Roles = () => {
+  useEffect(() => {
+    window.Echo.channel("role").listen("RoleUpdate", (e) => {
+      Push.create("Info Data Peran", {
+        body: e.role,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
+      });
+      // Setelah tampil, refetch data
+      FetchRoles();
+    });
+  }, []);
+
   const auth = useAuthUser();
 
   // Fetching roles data

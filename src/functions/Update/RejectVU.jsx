@@ -1,5 +1,4 @@
 import axios from "axios";
-import { redirect } from "react-router-dom";
 
 // Cookies JS
 import Cookies from "js-cookie";
@@ -7,7 +6,7 @@ import Cookies from "js-cookie";
 // React Notification
 import swal from "sweetalert";
 
-export const RejectVU = async (order) => {
+export const RejectVU = async (order, navigate) => {
   let {
     ucategory_id,
     destination,
@@ -63,12 +62,12 @@ export const RejectVU = async (order) => {
                 config
               )
               .then((response) => {
-                redirect("/verifier/data-pengajuan-peminjaman");
+                navigate(-1);
                 swal({
                   text: response.data.msg,
                   icon: "success",
                   button: false,
-                  timer: 2000,
+                  timer: 3000,
                 });
               });
           } catch (error) {

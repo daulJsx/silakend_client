@@ -93,11 +93,10 @@ export const VerifierCreateVU = () => {
               const { msg } = response.data;
               navigate("/verifier/pengajuan-saya");
               swal({
-                title: "Berhasil!",
                 text: msg,
                 icon: "success",
                 button: false,
-                timer: 2000,
+                timer: 3000,
               });
             }
           });
@@ -153,117 +152,109 @@ export const VerifierCreateVU = () => {
               </Col>
             </Row>
             {/* NAVBAR */}
-            <main className="min-vh-100 px-2 mt-3">
+
+            <main className="px-2 min-vh-100 mt-4">
               <Row>
                 <Col>
-                  <Card>
-                    <Form onSubmit={postNewOrder}>
-                      <Card.Title className="fs-4 p-4 mb-4 fw-semibold color-primary">
-                        Silahkan Ajukan Peminjaman Kendaraan Dinas Disini
-                      </Card.Title>
-                      <Card.Body>
-                        <Form.Group className="mb-3">
-                          <Form.Label>Kategori Peminjaman</Form.Label>
-                          <Form.Select
-                            required
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "17px",
-                            }}
-                            aria-label="Default select example"
-                            onChange={(e) =>
-                              setOrderData({
-                                ...orderData,
-                                ucategory_id: e.target.value,
-                              })
-                            }
+                  <Card className="shadow rounded bg__primary">
+                    <Card.Header>
+                      <Container>
+                        <Row className="gap-3 mt-4">
+                          <Col>
+                            <h3 className="main__title">
+                              Halaman Pengajuan Peminjaman Kendaraan Dinas
+                            </h3>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </Card.Header>
+                    <Card.Body className="p-4">
+                      <Container
+                        className="p-4"
+                        style={{ background: "#fff", borderRadius: "10px" }}
+                      >
+                        <Form onSubmit={postNewOrder}>
+                          <Form.Group className="mb-3">
+                            <Form.Label>Kategori Peminjaman</Form.Label>
+                            <Form.Select
+                              required
+                              style={{
+                                backgroundColor: "#F5F7FC",
+                                border: "none",
+                                padding: "17px",
+                              }}
+                              aria-label="Default select example"
+                              onChange={(e) =>
+                                setOrderData({
+                                  ...orderData,
+                                  ucategory_id: e.target.value,
+                                })
+                              }
+                            >
+                              <option>-- Pilih Kategori Peminjaman --</option>
+                              {usageCatData?.map((usageCat) => (
+                                <option
+                                  value={usageCat.ucategory_id}
+                                  key={usageCat.ucategory_id}
+                                >
+                                  {usageCat.name}
+                                </option>
+                              ))}
+                            </Form.Select>
+                          </Form.Group>
+
+                          <Form.Group
+                            className="mb-3"
+                            controlId="exampleForm.ControlTextarea1"
                           >
-                            <option>-- Pilih Kategori Peminjaman --</option>
-                            {usageCatData?.map((usageCat) => (
-                              <option
-                                value={usageCat.ucategory_id}
-                                key={usageCat.ucategory_id}
+                            <Form.Label>Deskripsi Peminjaman</Form.Label>
+                            <Form.Control
+                              as="textarea"
+                              rows={3}
+                              style={{
+                                backgroundColor: "#F5F7FC",
+                                border: "none",
+                              }}
+                              onChange={(e) =>
+                                setOrderData({
+                                  ...orderData,
+                                  usage_description: e.target.value,
+                                })
+                              }
+                            />
+                          </Form.Group>
+
+                          <Form.Group>
+                            <Form.Label>Jumlah Personil</Form.Label>
+                            <InputGroup className="mb-3">
+                              <Form.Control
+                                style={{
+                                  backgroundColor: "#F5F7FC",
+                                  border: "none",
+                                  padding: "15px",
+                                }}
+                                type="number"
+                                aria-describedby="basic-addon2"
+                                onChange={(e) =>
+                                  setOrderData({
+                                    ...orderData,
+                                    personel_count: e.target.value,
+                                  })
+                                }
+                              />
+                              <InputGroup.Text
+                                style={{
+                                  border: "none",
+                                }}
+                                id="basic-addon2"
                               >
-                                {usageCat.name}
-                              </option>
-                            ))}
-                          </Form.Select>
-                        </Form.Group>
+                                Orang
+                              </InputGroup.Text>
+                            </InputGroup>
+                          </Form.Group>
 
-                        <Form.Group
-                          className="mb-3"
-                          controlId="exampleForm.ControlTextarea1"
-                        >
-                          <Form.Label>Deskripsi Peminjaman</Form.Label>
-                          <Form.Control
-                            as="textarea"
-                            rows={3}
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                            }}
-                            onChange={(e) =>
-                              setOrderData({
-                                ...orderData,
-                                usage_description: e.target.value,
-                              })
-                            }
-                          />
-                        </Form.Group>
-
-                        <Form.Group>
-                          <Form.Label>Jumlah Personil</Form.Label>
-                          <InputGroup className="mb-3">
-                            <Form.Control
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="number"
-                              aria-describedby="basic-addon2"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  personel_count: e.target.value,
-                                })
-                              }
-                            />
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
-                            >
-                              Orang
-                            </InputGroup.Text>
-                          </InputGroup>
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                          <Form.Label>Destinasi</Form.Label>
-                          <Form.Control
-                            required
-                            className="input form-custom"
-                            style={{
-                              backgroundColor: "#F5F7FC",
-                              border: "none",
-                              padding: "15px",
-                            }}
-                            type="text"
-                            onChange={(e) =>
-                              setOrderData({
-                                ...orderData,
-                                destination: e.target.value,
-                              })
-                            }
-                          />
-                        </Form.Group>
-
-                        <Form.Group>
-                          <Form.Label>Tanggal Pinjam</Form.Label>
-                          <InputGroup className="mb-3">
+                          <Form.Group className="mb-3">
+                            <Form.Label>Destinasi</Form.Label>
                             <Form.Control
                               required
                               className="input form-custom"
@@ -272,58 +263,82 @@ export const VerifierCreateVU = () => {
                                 border: "none",
                                 padding: "15px",
                               }}
-                              type="date"
+                              type="text"
                               onChange={(e) =>
                                 setOrderData({
                                   ...orderData,
-                                  start_date: e.target.value,
+                                  destination: e.target.value,
                                 })
                               }
                             />
-                            <InputGroup.Text
-                              style={{
-                                border: "none",
-                              }}
-                              id="basic-addon2"
+                          </Form.Group>
+
+                          <Form.Group>
+                            <Form.Label>Tanggal Pinjam</Form.Label>
+                            <InputGroup className="mb-3">
+                              <Form.Control
+                                required
+                                className="input form-custom"
+                                style={{
+                                  backgroundColor: "#F5F7FC",
+                                  border: "none",
+                                  padding: "15px",
+                                }}
+                                type="date"
+                                onChange={(e) =>
+                                  setOrderData({
+                                    ...orderData,
+                                    start_date: e.target.value,
+                                  })
+                                }
+                              />
+                              <InputGroup.Text
+                                style={{
+                                  border: "none",
+                                }}
+                                id="basic-addon2"
+                              >
+                                s/d
+                              </InputGroup.Text>
+                              <Form.Control
+                                required
+                                className="input form-custom"
+                                style={{
+                                  backgroundColor: "#F5F7FC",
+                                  border: "none",
+                                  padding: "15px",
+                                }}
+                                type="date"
+                                onChange={(e) =>
+                                  setOrderData({
+                                    ...orderData,
+                                    end_date: e.target.value,
+                                  })
+                                }
+                              />
+                            </InputGroup>
+                          </Form.Group>
+
+                          <Form.Group>
+                            <Button
+                              className="btn-post"
+                              onClick={postNewOrder}
+                              type="submit"
                             >
-                              s/d
-                            </InputGroup.Text>
-                            <Form.Control
-                              required
-                              className="input form-custom"
-                              style={{
-                                backgroundColor: "#F5F7FC",
-                                border: "none",
-                                padding: "15px",
-                              }}
-                              type="date"
-                              onChange={(e) =>
-                                setOrderData({
-                                  ...orderData,
-                                  end_date: e.target.value,
-                                })
-                              }
-                            />
-                          </InputGroup>
-                        </Form.Group>
-                      </Card.Body>
-                      <Card.Footer>
-                        <Button
-                          className="btn-post"
-                          onClick={postNewOrder}
-                          type="submit"
-                        >
-                          <div className="d-flex gap-2">
-                            Ajukan
-                            <FiSend className="fs-5" />
-                          </div>
-                        </Button>
-                      </Card.Footer>
-                    </Form>
+                              <div className="d-flex gap-2">
+                                Ajukan
+                                <FiSend className="fs-5" />
+                              </div>
+                            </Button>
+                          </Form.Group>
+                        </Form>
+                      </Container>
+                    </Card.Body>
                   </Card>
                 </Col>
               </Row>
             </main>
+
             <Row>
               <Col>
                 <Footer />

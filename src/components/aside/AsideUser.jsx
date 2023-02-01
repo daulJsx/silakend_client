@@ -39,7 +39,7 @@ export const AsideUser = () => {
 
         <AsideMenu
           icon={<HiOutlineClipboardList />}
-          title="Data Pengajuan Saya"
+          title="Data Pengajuan"
           link="/user/pengajuan-saya"
         />
 

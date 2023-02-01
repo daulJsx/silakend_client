@@ -64,7 +64,7 @@ export const CreateRole = () => {
               const { msg } = response.data;
               navigate(-1);
               swal({
-                title: msg,
+                text: msg,
                 icon: "success",
                 button: false,
                 timer: 2000,

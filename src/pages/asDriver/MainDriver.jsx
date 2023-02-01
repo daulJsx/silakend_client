@@ -1,5 +1,8 @@
 import React from "react";
 
+// Push notify
+import Push from "push.js";
+
 // Cookies JS
 import Cookies from "js-cookie";
 
@@ -39,6 +42,23 @@ import { TbSteeringWheel } from "react-icons/tb";
 import { FaInfo } from "react-icons/fa";
 
 export const MainDriver = () => {
+  // Listener
+  // useEffect(() => {
+  //   window.Echo.channel("vehicleusage").listen("VehicleUsageUpdate", (e) => {
+  //     Push.create("Info Data Peminjaman", {
+  //       body: e.vehicleUsage,
+  //       icon: "/polman.ico",
+  //       timeout: 4000,
+  //       onClick: function () {
+  //         window.focus();
+  //         this.close();
+  //       },
+  //     });
+  //     // Setelah tampil, refetch data
+  //     FetchVehicleUsages();
+  //   });
+  // }, []);
+
   // Get access token
   const token = Cookies.get("token");
 
@@ -125,10 +145,7 @@ export const MainDriver = () => {
                           <Row>
                             <Col>
                               {ordersData.length === 0 ? (
-                                <Alert
-                                  className="alert__customPrimary"
-                                  style={{ border: "none" }}
-                                >
+                                <Alert className="alert__customPrimary">
                                   <p>Belum ada tugas masuk.</p>
                                 </Alert>
                               ) : (
@@ -146,16 +163,45 @@ export const MainDriver = () => {
                                   </thead>
                                   <tbody>
                                     {ordersData.map((orders) => {
-                                      return orders.status !== "DONE" ? (
+                                      const startDate = new Date(
+                                        orders.start_date
+                                      );
+                                      const endDate = new Date(orders.end_date);
+
+                                      // Date formatter
+                                      const startOptions = {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                      };
+                                      const endOptions = {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                      };
+
+                                      const formattedStartDate =
+                                        startDate.toLocaleDateString(
+                                          "id-ID",
+                                          startOptions
+                                        );
+                                      const formattedEndDate =
+                                        endDate.toLocaleDateString(
+                                          "id-ID",
+                                          endOptions
+                                        );
+                                      return orders.status !== "DONE" &&
+                                        orders.driver.name ===
+                                          auth().user_name ? (
                                         <tr key={orders.usage_id}>
                                           <td>{(index += 1)}</td>
                                           <td>{orders.user.name}</td>
                                           <td>{orders.destination}</td>
                                           <td>
-                                            {orders.start_date} s/d{" "}
-                                            {orders.end_date}
+                                            {formattedStartDate} -{" "}
+                                            {formattedEndDate}
                                           </td>
-                                          <td align="center">
+                                          <td>
                                             <Badge
                                               bg={
                                                 orders.status === "CANCELED" ||
@@ -188,7 +234,7 @@ export const MainDriver = () => {
                                             </Badge>
                                           </td>
 
-                                          <td align="center">
+                                          <td>
                                             <NavLink
                                               to={
                                                 "/driver/tugas-masuk/rincian-tugas"

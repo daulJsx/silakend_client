@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import FetchVehicleUsages from "../../consAPI/FetchVehicleUsages";
-
 // Cookies JS
 import Cookies from "js-cookie";
 
@@ -59,8 +57,6 @@ export const CancelVU = async (order) => {
                   button: false,
                   timer: 2000,
                 });
-
-                FetchVehicleUsages();
               });
           } catch (error) {
             if (error.response) {

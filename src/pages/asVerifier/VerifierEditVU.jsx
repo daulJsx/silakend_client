@@ -25,7 +25,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
-import { AsideUser } from "../../components/aside/AsideUser";
+import { AsideVerifier } from "../../components/aside/AsideVerifier";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
@@ -42,7 +42,7 @@ import { FiCheckCircle } from "react-icons/fi";
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
 
-export const UserEditVU = () => {
+export const VerifierEditVU = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -80,7 +80,6 @@ export const UserEditVU = () => {
   const [currentEndDate] = [orderToMap].map((ed) => ed.end_date);
 
   const body = {
-    user_id: auth().user_id,
     ucategory_id: newCategory === "" ? currentUCatId : newCategory,
     usage_description: newDesc === "" ? currentUDesc : newDesc,
     personel_count:
@@ -108,8 +107,7 @@ export const UserEditVU = () => {
       dangerMode: true,
     }).then(async (willDelete) => {
       if (willDelete) {
-        body.status = "WAITING";
-
+        body.status = "APPROVED";
         try {
           await axios
             .put(
@@ -214,7 +212,7 @@ export const UserEditVU = () => {
   };
 
   return token ? (
-    auth().user_level === 5 ? (
+    auth().user_level === 3 ? (
       usageId ? (
         <Container fluid>
           <Row>
@@ -223,7 +221,7 @@ export const UserEditVU = () => {
               xs="auto"
               className="sidebar d-none d-lg-block d-flex min-vh-100 px-4"
             >
-              <AsideUser />
+              <AsideVerifier />
             </Col>
             {/* SIDEBAR */}
 
@@ -253,7 +251,7 @@ export const UserEditVU = () => {
                           <Row className="gap-3 mt-4">
                             <Col>
                               <h3 className="main__title">
-                                Data Pengajuan Anda
+                                Pengajuan Peminjaman Kendaraan Dinas Anda
                               </h3>
 
                               <Breadcrumb className="breadcrumb__item mt-3">
@@ -478,7 +476,7 @@ export const UserEditVU = () => {
           </Row>
         </Container>
       ) : (
-        <Navigate to="/user/pengajuan-saya" />
+        <Navigate to="/verifier/pengajuan-saya" />
       )
     ) : (
       SecuringPage()

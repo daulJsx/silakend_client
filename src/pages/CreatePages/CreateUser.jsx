@@ -93,7 +93,7 @@ export const CreateUser = () => {
         const { status } = response;
         status === 200
           ? swal({
-              title: msg,
+              text: msg,
               icon: "success",
               button: false,
               timer: 2000,

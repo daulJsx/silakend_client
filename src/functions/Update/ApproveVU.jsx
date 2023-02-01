@@ -1,6 +1,4 @@
-import React from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 // Cookies JS
 import Cookies from "js-cookie";
@@ -8,7 +6,7 @@ import Cookies from "js-cookie";
 // React Notification
 import swal from "sweetalert";
 
-export const ApproveVU = async (order) => {
+export const ApproveVU = async (order, navigate) => {
   let {
     ucategory_id,
     destination,
@@ -18,8 +16,6 @@ export const ApproveVU = async (order) => {
     usage_description,
     usage_id,
   } = order;
-
-  const navigate = useNavigate();
 
   // Get access token
   const token = Cookies.get("token");

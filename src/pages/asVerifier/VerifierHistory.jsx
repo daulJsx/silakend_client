@@ -98,7 +98,7 @@ export const VerifierHistory = () => {
                           <Row className="gap-3 mt-4 me-3">
                             <Col>
                               <h3 className="main__title">
-                                Pengajuan Peminjaman Kendaraan Dinas Anda
+                                Riwayat Peminjaman Kendaraan Dinas
                               </h3>
                               <Breadcrumb className="breadcrumb__item mt-3">
                                 <Breadcrumb.Item className="breadcrumb__item">
@@ -124,6 +124,7 @@ export const VerifierHistory = () => {
                                 <thead>
                                   <tr>
                                     <th>No</th>
+                                    <th> PEMINJAM</th>
                                     <th>KATEGORI PEMINJAMAN</th>
                                     <th>DESTINASI</th>
                                     <th>WAKTU PINJAM</th>

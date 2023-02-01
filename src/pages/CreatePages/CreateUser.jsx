@@ -210,7 +210,7 @@ export const CreateUser = () => {
                     placement={placement}
                     name={placement}
                     bc={<FaArrowLeft />}
-                    parentLink={"/data-pengguna"}
+                    parentLink={-1}
                   />
                 ))}
               </Col>
@@ -233,7 +233,7 @@ export const CreateUser = () => {
                               >
                                 <div className="d-flex justify-content-center align-items-center gap-2">
                                   <NavLink
-                                    to={"/data-pengguna"}
+                                    to={-1}
                                     className="d-flex justify-content-center align-items-center text-muted gap-2"
                                   >
                                     <TbUsers className="fs-5" />

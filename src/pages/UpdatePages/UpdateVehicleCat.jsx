@@ -128,7 +128,7 @@ export const UpdateVehicleCat = () => {
                       placement={placement}
                       name={placement}
                       bc={<FaArrowLeft />}
-                      parentLink={"/kategori-kendaraan"}
+                      parentLink={-1}
                     />
                   ))}
                 </Col>
@@ -150,7 +150,7 @@ export const UpdateVehicleCat = () => {
                                 <Breadcrumb.Item className="breadcrumb__item">
                                   <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
                                     <NavLink
-                                      to={"/kategori-kendaraan"}
+                                      to={-1}
                                       className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
                                       <RiCarWashingLine className="fs-5" />

@@ -28,6 +28,7 @@ import { Footer } from "../../components/footer/Footer";
 import { FiClock } from "react-icons/fi";
 import { FaInfo } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
+import { AiFillEdit } from "react-icons/ai";
 
 // Functions
 import { GetOrderId } from "../../functions/GetOrderId";
@@ -129,6 +130,9 @@ export const VehicleUsageHistory = () => {
                                     <th>WAKTU PINJAM</th>
                                     <th>STATUS</th>
                                     <th>RINCIAN</th>
+                                    {auth().user_level === 1 ? (
+                                      <th>EDIT</th>
+                                    ) : null}
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -166,6 +170,26 @@ export const VehicleUsageHistory = () => {
                                             </NavLink>
                                           </>
                                         </td>
+                                        {auth().user_level === 1 ? (
+                                          <td>
+                                            {orders.status !== "CANCELED" ? (
+                                              <NavLink
+                                                to={
+                                                  "/pengajuan-peminjaman/edit-data-pengajuan"
+                                                }
+                                              >
+                                                <Button
+                                                  onClick={() =>
+                                                    GetOrderId(orders)
+                                                  }
+                                                  className="btn-warning btn-edit position-relative"
+                                                >
+                                                  <AiFillEdit className="fs-6" />
+                                                </Button>
+                                              </NavLink>
+                                            ) : null}
+                                          </td>
+                                        ) : null}
                                       </tr>
                                     ) : null;
                                   })}

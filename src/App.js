@@ -32,6 +32,9 @@ import { UpdateOrder } from "./pages/UpdatePages/UpdateOrder";
 import { VehicleUsageDetail } from "./pages/Details/VehicleUsageDetail";
 import { VehicleUsageHistory } from "./pages/Main/VehicleUsageHistory";
 import { VUHistoryDetail } from "./pages/Details/VUHistoryDetail";
+import { SelfVU } from "./pages/Main/SelfVU";
+import { UpdateSelfVU } from "./pages/UpdatePages/UpdateSelfVU";
+import { UpdateVUAdmin } from "./pages/UpdatePages/UpdateVUAdmin";
 
 import { Vehicles } from "./pages/Main/Vehicles";
 import { CreateVehicle } from "./pages/CreatePages/CreateVehicle";
@@ -134,6 +137,11 @@ function App() {
               path="/kategori-peminjaman/edit-kategori-peminjaman"
               element={<UpdateUsageCategories />}
             />
+            <Route
+              path="/pengajuan-saya/edit-pengajuan"
+              element={<UpdateSelfVU />}
+            />
+
             {/*----- END ORDER CATEGORIES PAGES---- */}
 
             {/*----- START ORDER PAGES---- */}
@@ -142,6 +150,7 @@ function App() {
               path="/pengajuan-peminjaman"
               element={<VehicleUsages />}
             />
+            <Route exact path="/pengajuan-saya" element={<SelfVU />} />
             <Route
               path="/pengajuan-peminjaman/buat-pengajuan"
               element={<CreateOrder />}
@@ -162,6 +171,10 @@ function App() {
             <Route
               path="/riwayat-peminjaman/rincian-peminjaman"
               element={<VUHistoryDetail />}
+            />
+            <Route
+              path="/pengajuan-peminjaman/edit-data-pengajuan"
+              element={<UpdateVUAdmin />}
             />
             {/*----- END ORDER PAGES---- */}
 

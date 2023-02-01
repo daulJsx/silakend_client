@@ -1,27 +1,16 @@
 // React Notification
 import swal from "sweetalert";
 
-// For checking user have done in authentication
-import { useAuthUser } from "react-auth-kit";
-
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const SecuringPage = () => {
-  const auth = useAuthUser();
+  const redirectTo = useNavigate();
 
   swal({
     title: "Maaf!",
     text: "Anda tidak memiliki akses ke halaman ini",
-    icon: "warning",
-  });
-
-  return auth().user_level === 5 ? (
-    <Navigate to="/user/pengajuan-saya" />
-  ) : auth().user_level === 4 ? (
-    <Navigate to="/driver/tugas-masuk" />
-  ) : auth().user_level === 3 ? (
-    <Navigate to="/verifier/pengajuan-pegawai" />
-  ) : (
-    <Navigate to="/" />
-  );
+    icon: "error",
+    button: false,
+    timer: 3000,
+  }).then(redirectTo(-1));
 };

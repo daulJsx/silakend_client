@@ -117,7 +117,7 @@ export const CreateRole = () => {
                     placement={placement}
                     name={placement}
                     bc={<FaArrowLeft />}
-                    parentLink={"/data-peran"}
+                    parentLink={-1}
                   />
                 ))}
               </Col>
@@ -137,7 +137,7 @@ export const CreateRole = () => {
                               <Breadcrumb.Item className="breadcrumb__item">
                                 <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
                                   <NavLink
-                                    to={"/data-peran"}
+                                    to={-1}
                                     className="d-flex justify-content-center align-items-center text-muted gap-2"
                                   >
                                     <CgUserList className="fs-5" />

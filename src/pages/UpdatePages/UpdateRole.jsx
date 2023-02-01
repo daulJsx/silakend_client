@@ -141,7 +141,7 @@ export const UpdateRole = () => {
                       name={placement}
                       bc={<FaArrowLeft />}
                       title={"Edit Peran Pengguna"}
-                      parentLink={"/data-peran"}
+                      parentLink={-1}
                     />
                   ))}
                 </Col>
@@ -161,7 +161,7 @@ export const UpdateRole = () => {
                                 <Breadcrumb.Item className="breadcrumb__item">
                                   <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
                                     <NavLink
-                                      to={"/data-peran"}
+                                      to={-1}
                                       className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
                                       <CgUserList className="fs-5" />

@@ -130,7 +130,7 @@ export const UpdateUsageCategories = () => {
                       name={placement}
                       bc={<FaArrowLeft />}
                       title={"Edit Kategori Peminjaman"}
-                      parentLink={"/kategori-peminjaman"}
+                      parentLink={"-1"}
                     />
                   ))}
                 </Col>
@@ -155,7 +155,7 @@ export const UpdateUsageCategories = () => {
                                 >
                                   <div className="d-flex justify-content-center align-items-center gap-2">
                                     <NavLink
-                                      to={"/kategori-peminjaman"}
+                                      to={"-1"}
                                       className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
                                       <HiOutlineClipboardList className="fs-5" />

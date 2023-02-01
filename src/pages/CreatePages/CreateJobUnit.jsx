@@ -116,7 +116,7 @@ export const CreateJobUnit = () => {
                     placement={placement}
                     name={placement}
                     bc={<FaArrowLeft />}
-                    parentLink={"/unit-kerja"}
+                    parentLink={-1}
                   />
                 ))}
               </Col>
@@ -136,7 +136,7 @@ export const CreateJobUnit = () => {
                               <Breadcrumb.Item className="breadcrumb__item">
                                 <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
                                   <NavLink
-                                    to={"/unit-kerja"}
+                                    to={-1}
                                     className="d-flex justify-content-center align-items-center text-muted gap-2"
                                   >
                                     <RiCommunityLine className="fs-5" />

@@ -259,8 +259,7 @@ export const UpdateUser = () => {
                       placement={placement}
                       name={placement}
                       bc={<FaArrowLeft />}
-                      parentLink={"/data-pengguna"}
-                      title={"Edit Data Pengguna"}
+                      parentLink={-1}
                     />
                   ))}
                 </Col>
@@ -280,7 +279,7 @@ export const UpdateUser = () => {
                                 <Breadcrumb.Item className="breadcrumb__item">
                                   <div className="d-flex justify-content-center align-items-center gap-2">
                                     <NavLink
-                                      to={"/data-pengguna"}
+                                      to={-1}
                                       className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
                                       <TbUsers className="fs-5" />

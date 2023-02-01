@@ -144,7 +144,7 @@ button.btn-post:hover {
 }
 
 .btn__primary {
-  background: #4f55da;
+  background: #0d8be4;
   color: #f8f6f2;
   border-radius: var(--borderRadius);
   padding: 10px;
@@ -175,7 +175,7 @@ button.btn-post:hover {
 
 .btn__primary:hover {
   background: #eff0ff;
-  color: #4f55da;
+  color: #0d8be4;
   box-shadow: none;
   border: none;
 }

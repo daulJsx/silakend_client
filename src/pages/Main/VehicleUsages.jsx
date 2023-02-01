@@ -131,16 +131,14 @@ export const VehicleUsages = () => {
                               </Breadcrumb>
                             </Col>
                             <Col md={2}>
-                              {auth().user_level === 1 ? (
-                                <NavLink
-                                  to={"/pengajuan-peminjaman/buat-pengajuan"}
-                                >
-                                  <Button className="btn btn-add d-flex gap-1 align-items-center justify-content-center">
-                                    Tambah
-                                    <HiPlusSm className="fs-3" />
-                                  </Button>
-                                </NavLink>
-                              ) : null}
+                              <NavLink
+                                to={"/pengajuan-peminjaman/buat-pengajuan"}
+                              >
+                                <Button className="btn btn-add d-flex gap-1 align-items-center justify-content-center">
+                                  Tambah
+                                  <HiPlusSm className="fs-3" />
+                                </Button>
+                              </NavLink>
                             </Col>
                           </Row>
                         </Container>
@@ -159,7 +157,6 @@ export const VehicleUsages = () => {
                                     <th>peminjam</th>
                                     <th>waktu pinjam</th>
                                     <th>destinasi</th>
-                                    <th>kategori</th>
                                     <th>status</th>
                                     <th>aksi</th>
                                     <th>rincian</th>
@@ -167,17 +164,42 @@ export const VehicleUsages = () => {
                                 </thead>
                                 <tbody>
                                   {ordersData?.map((orders, index) => {
+                                    const startDate = new Date(
+                                      orders.start_date
+                                    );
+                                    const endDate = new Date(orders.end_date);
+
+                                    // Date formatter
+                                    const startOptions = {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                    };
+                                    const endOptions = {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                    };
+
+                                    const formattedStartDate =
+                                      startDate.toLocaleDateString(
+                                        "id-ID",
+                                        startOptions
+                                      );
+                                    const formattedEndDate =
+                                      endDate.toLocaleDateString(
+                                        "id-ID",
+                                        endOptions
+                                      );
                                     return orders.status !== "DONE" ? (
                                       <tr key={orders.usage_id}>
                                         <td>{index + 1}</td>
                                         <td>{orders.user.name}</td>
                                         <td>
-                                          {orders.start_date} s/d{" "}
-                                          {orders.end_date}
+                                          {formattedStartDate} -{" "}
+                                          {formattedEndDate}
                                         </td>
                                         <td>{orders.destination}</td>
-                                        <td>{orders.category.name}</td>
-
                                         <td>
                                           <Badge
                                             bg={
@@ -211,11 +233,13 @@ export const VehicleUsages = () => {
                                           </Badge>
                                         </td>
 
-                                        <td align="center">
+                                        <td>
                                           {orders.status !== "CANCELED" ? (
                                             <NavLink
                                               to={
-                                                "/pengajuan-peminjaman/edit-pengajuan"
+                                                auth().user_level === 1
+                                                  ? "/pengajuan-peminjaman/edit-data-pengajuan"
+                                                  : "/pengajuan-peminjaman/edit-pengajuan"
                                               }
                                             >
                                               <Button
@@ -241,7 +265,7 @@ export const VehicleUsages = () => {
                                           ) : null}
                                         </td>
 
-                                        <td align="center">
+                                        <td>
                                           <>
                                             <NavLink
                                               to={

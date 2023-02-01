@@ -140,7 +140,7 @@ export const VehicleMaintenancesDetail = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaArrowLeft />}
-                        parentLink={"/perbaikan-kendaraan"}
+                        parentLink={-1}
                       />
                     ))}
                   </Col>
@@ -181,7 +181,7 @@ export const VehicleMaintenancesDetail = () => {
                                   <Breadcrumb.Item className="breadcrumb__item">
                                     <div className="d-flex justify-content-center align-items-center gap-2">
                                       <NavLink
-                                        to={"/perbaikan-kendaraan"}
+                                        to={-1}
                                         className="d-flex justify-content-center align-items-center text-muted gap-2"
                                       >
                                         <BiCog className="fs-5" />

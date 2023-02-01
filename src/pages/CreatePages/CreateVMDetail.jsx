@@ -130,10 +130,7 @@ export const CreateVMDetail = () => {
                       placement={placement}
                       name={placement}
                       bc={<FaArrowLeft />}
-                      title={"Tambah Data Rincian Perbaikan Kendaraan"}
-                      parentLink={
-                        "/perbaikan-kendaraan/rincian-perbaikan-kendaraan"
-                      }
+                      parentLink={-1}
                     />
                   ))}
                 </Col>
@@ -158,9 +155,7 @@ export const CreateVMDetail = () => {
                                 >
                                   <div className="d-flex justify-content-center align-items-center gap-2">
                                     <NavLink
-                                      to={
-                                        "/perbaikan-kendaraan/rincian-perbaikan-kendaraan"
-                                      }
+                                      to={-1}
                                       className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
                                       <FiList className="fs-5" />

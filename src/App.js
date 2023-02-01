@@ -79,6 +79,7 @@ import { VerifierHistory } from "./pages/asVerifier/VerifierHistory";
 import { VerifierCreateVU } from "./pages/asVerifier/VerifierCreateVU";
 import { VerifierSelfVU } from "./pages/asVerifier/VerifierSelfVU";
 import { EmpVUDetail } from "./pages/asVerifier/EmpVUDetail";
+import { VerifierEditVU } from "./pages/asVerifier/VerifierEditVU";
 
 // ---------------------- USER AS DRIVER -----------------------
 import { MainDriver } from "./pages/asDriver/MainDriver";
@@ -288,7 +289,7 @@ function App() {
             {/*------------------------------- END USER AS ADMIN PAGES-------------------------------- */}
 
             {/*----- START AUTH PAGES---- */}
-            <Route path="/silakend-login" element={<Login />} />
+            <Route exact path="/silakend-login" element={<Login />} />
 
             {/*----- END AUTH PAGES---- */}
 
@@ -312,12 +313,18 @@ function App() {
               element={<EmpVUDetail />}
             />
             <Route
+              exact
               path="/verifier/riwayat-pengajuan"
               element={<VerifierHistory />}
             />
             <Route
+              exact
               path="/verifier/buat-pengajuan"
               element={<VerifierCreateVU />}
+            />
+            <Route
+              path="/verifier/pengajuan-saya/edit-pengajuan"
+              element={<VerifierEditVU />}
             />
 
             {/*------------------------------- END USER AS VERIFIER PAGES-------------------------------- */}
@@ -338,7 +345,11 @@ function App() {
 
             {/*------------------------------- START USER AS USER PAGES-------------------------------- */}
             <Route exact path="/user/pengajuan-saya" element={<MainUser />} />
-            <Route path="/user/buat-pengajuan" element={<UserCreateVU />} />
+            <Route
+              exact
+              path="/user/buat-pengajuan"
+              element={<UserCreateVU />}
+            />
             <Route
               path="/user/pengajuan-saya/rincian-pengajuan"
               element={<UserVUDetail />}
@@ -347,7 +358,11 @@ function App() {
               path="/user/pengajuan-saya/edit-pengajuan"
               element={<UserEditVU />}
             />
-            <Route path="/user/riwayat-pengajuan" element={<UserHistory />} />
+            <Route
+              exact
+              path="/user/riwayat-pengajuan"
+              element={<UserHistory />}
+            />
             {/*------------------------------- END USER AS USER PAGES-------------------------------- */}
           </Routes>
         </Router>

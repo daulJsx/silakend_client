@@ -1,5 +1,4 @@
 import axios from "axios";
-import { redirect } from "react-router-dom";
 
 // Cookies JS
 import Cookies from "js-cookie";
@@ -7,21 +6,8 @@ import Cookies from "js-cookie";
 // React Notification
 import swal from "sweetalert";
 
-export const DoneVU = async (order) => {
-  let {
-    vehicle_id,
-    driver_id,
-    ucategory_id,
-    destination,
-    start_date,
-    end_date,
-    personel_count,
-    usage_description,
-    usage_id,
-    user_id,
-    distance_count_in,
-    distance_count_out,
-  } = order;
+export const DoneVU = async (order, navigate) => {
+  let { usage_id, distance_count_out } = order;
 
   // Get access token
   const token = Cookies.get("token");
@@ -64,9 +50,9 @@ export const DoneVU = async (order) => {
                 config
               )
               .then((response) => {
-                redirect("/driver/riwayat-tugas");
+                navigate(-1);
                 swal({
-                  title: "Berhasil!",
+                  title: "Tugas Diselesaikan",
                   text: response.data.msg,
                   icon: "success",
                   button: "Tutup",

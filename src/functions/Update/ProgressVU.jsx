@@ -1,5 +1,4 @@
 import axios from "axios";
-import { redirect } from "react-router-dom";
 
 // Cookies JS
 import Cookies from "js-cookie";
@@ -7,16 +6,8 @@ import Cookies from "js-cookie";
 // React Notification
 import swal from "sweetalert";
 
-export const ProgressVU = async (order) => {
-  let {
-    ucategory_id,
-    destination,
-    start_date,
-    end_date,
-    personel_count,
-    usage_description,
-    usage_id,
-  } = order;
+export const ProgressVU = async (order, navigate) => {
+  let { usage_id } = order;
 
   // Get access token
   const token = Cookies.get("token");
@@ -60,8 +51,9 @@ export const ProgressVU = async (order) => {
                 config
               )
               .then((response) => {
-                redirect(-1);
+                navigate(-1);
                 swal({
+                  title: "Keberangkatan Dikonfirmasi",
                   text: response.data.msg,
                   icon: "success",
                   button: false,

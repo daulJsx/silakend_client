@@ -8,7 +8,7 @@ import axios from "axios";
 
 // For checking user have done in authentication
 import { useAuthUser } from "react-auth-kit";
-import { Navigate, NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
 
 // Functions
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
@@ -38,7 +38,7 @@ import swal from "sweetalert";
 export const TaskInfo = () => {
   // Get access token
   const token = Cookies.get("token");
-
+  const navigate = useNavigate();
   const auth = useAuthUser();
 
   // Initialize newest maintenance id
@@ -127,8 +127,7 @@ export const TaskInfo = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaArrowLeft />}
-                        title={"Rincian Tugas"}
-                        parentLink={"/driver/tugas-masuk"}
+                        parentLink={-1}
                       />
                     ))}
                   </Col>
@@ -175,275 +174,271 @@ export const TaskInfo = () => {
                           >
                             <ListGroup as="ol" variant="flush" className="mb-2">
                               {vUDetail !== null
-                                ? vUDetail.map((userOrder, index) => (
-                                    <>
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            PEMINJAM
+                                ? vUDetail.map((vu, index) => {
+                                    const startDate = new Date(vu.start_date);
+                                    const endDate = new Date(vu.end_date);
+
+                                    // Date formatter
+                                    const startOptions = {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                    };
+                                    const endOptions = {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                    };
+
+                                    const formattedStartDate =
+                                      startDate.toLocaleDateString(
+                                        "id-ID",
+                                        startOptions
+                                      );
+                                    const formattedEndDate =
+                                      endDate.toLocaleDateString(
+                                        "id-ID",
+                                        endOptions
+                                      );
+                                    return (
+                                      <>
+                                        <ListGroup.Item
+                                          key={index}
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              KATEGORI PEMINJAMAN
+                                            </div>
+                                            {vu.category !== null
+                                              ? vu.category.name
+                                              : null}
                                           </div>
+                                        </ListGroup.Item>
 
-                                          {userOrder.user
-                                            ? userOrder.user.name
-                                            : null}
-                                        </div>
-                                      </ListGroup.Item>
-
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            KEPERLUAN
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              PEMINJAM
+                                            </div>
+                                            {vu.user.name}
                                           </div>
-                                          {userOrder.usage_description}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            KATEGORI PEMINJAMAN
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              DESKRIPSI PEMINJAMAN
+                                            </div>
+                                            {vu.usage_description}
                                           </div>
-                                          {userOrder.category.name}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            JUMLAH PERSONIL
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              JUMLAH PERSONIL
+                                            </div>
+                                            {vu.personel_count} Orang
                                           </div>
-                                          {userOrder.personel_count} Orang
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            DESTINASI
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              DESTINASI
+                                            </div>
+                                            {vu.destination}
                                           </div>
-                                          {userOrder.destination}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            TANGGAL PEMINJAMAN
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              WAKTU PEMINJAMAN
+                                            </div>
+                                            {formattedStartDate} -{" "}
+                                            {formattedEndDate}
                                           </div>
-                                          {userOrder.start_date} s/d{" "}
-                                          {userOrder.end_date}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            PENGEMUDI
+                                        <ListGroup.Item
+                                          as="li"
+                                          variant={
+                                            vu.status === "CANCELED" ||
+                                            vu.status === "REJECTED"
+                                              ? "danger"
+                                              : vu.status === "WAITING"
+                                              ? "warning"
+                                              : vu.status === "READY"
+                                              ? "primary"
+                                              : vu.status === "APPROVED"
+                                              ? "info"
+                                              : vu.status === "PROGRESS"
+                                              ? "secondary"
+                                              : "success"
+                                          }
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              STATUS
+                                            </div>
+                                            {vu.status === "CANCELED"
+                                              ? `Dibatalkan peminjam karena ${vu.status_description}`
+                                              : vu.status === "REJECTED"
+                                              ? `Ditolak karena ${vu.status_description}`
+                                              : vu.status === "WAITING"
+                                              ? "Diajukan"
+                                              : vu.status === "READY"
+                                              ? "Siap Berangkat"
+                                              : vu.status === "APPROVED"
+                                              ? "Disetujui"
+                                              : vu.status === "PROGRESS"
+                                              ? "Berlangsung"
+                                              : "Selesai"}
                                           </div>
-                                          {userOrder.driver ? (
-                                            userOrder.driver.name
-                                          ) : (
-                                            <p className="list__title">
-                                              Belum ada pengemudi yang
-                                              ditugaskan
-                                            </p>
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            KENDARAAN
-                                          </div>
-                                          {userOrder.vehicle ? (
-                                            userOrder.vehicle.name
-                                          ) : (
-                                            <p className="list__title">
-                                              Belum ada kendaraan yang
-                                              ditugaskan
-                                            </p>
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
-
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            WAKTU BERANGKAT
-                                          </div>
-                                          {userOrder.depart_date &&
-                                          userOrder.depart_time ? (
-                                            <>
-                                              {userOrder.depart_date} PUKUL{" "}
-                                              {userOrder.depart_time}
-                                            </>
-                                          ) : (
-                                            <p className="list__title">
-                                              Waktu berangkat belum ditentukan
-                                            </p>
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
-
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            WAKTU PULANG
-                                          </div>
-                                          {userOrder.arrive_date &&
-                                          userOrder.arrive_time ? (
-                                            <>
-                                              {userOrder.arrive_date} PUKUL{" "}
-                                              {userOrder.arrive_time}
-                                            </>
-                                          ) : (
-                                            <p className="list__title">
-                                              Waktu pulang belum ditentukan
-                                            </p>
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
-
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            ODOMETER
-                                          </div>
-                                          {userOrder.distance_count_out &&
-                                          userOrder.distance_count_in ? (
-                                            <>
-                                              {" "}
-                                              <div>
-                                                Jumlah Kilometer Pergi :{" "}
-                                                {userOrder.distance_count_out.toLocaleString(
-                                                  "id-ID"
-                                                )}{" "}
-                                                KM
-                                              </div>
-                                              <div>
-                                                Jumlah Kilometer Pulang :{" "}
-                                                {userOrder.distance_count_in
-                                                  ? userOrder.distance_count_in.toLocaleString(
-                                                      "id-ID"
-                                                    )
-                                                  : null}{" "}
-                                                KM
-                                              </div>
-                                            </>
-                                          ) : (
-                                            <p className="list__title">
-                                              Odometer belum dimasukkan dalam
-                                              pengajuan ini
-                                            </p>
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
-
-                                      <ListGroup.Item
-                                        as="li"
-                                        variant={
-                                          userOrder.status === "CANCELED" ||
-                                          userOrder.status === "REJECTED"
-                                            ? "danger"
-                                            : userOrder.status === "WAITING"
-                                            ? "warning"
-                                            : userOrder.status === "READY"
-                                            ? "primary"
-                                            : userOrder.status === "APPROVED"
-                                            ? "info"
-                                            : userOrder.status === "PROGRESS"
-                                            ? "secondary"
-                                            : "success"
-                                        }
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            STATUS
-                                          </div>
-                                          {userOrder.status === "CANCELED"
-                                            ? `Dibatalkan peminjam karena ${userOrder.status_description}`
-                                            : userOrder.status === "REJECTED"
-                                            ? `Ditolak karena ${userOrder.status_description}`
-                                            : userOrder.status === "WAITING"
-                                            ? "Diajukan"
-                                            : userOrder.status === "READY"
-                                            ? "Siap Berangkat"
-                                            : userOrder.status === "APPROVED"
-                                            ? "Disetujui"
-                                            : userOrder.status === "PROGRESS"
-                                            ? "Berlangsung"
-                                            : "Selesai"}
-                                        </div>
-                                      </ListGroup.Item>
-
-                                      {userOrder.status === "READY" ? (
-                                        <Row>
-                                          <Col md={6}>
-                                            <Button
-                                              onClick={() =>
-                                                ProgressVU(userOrder)
-                                              }
-                                              className="btn__primary mt-4"
+                                        {vu.vehicle && vu.driver ? (
+                                          <>
+                                            <ListGroup.Item
+                                              as="li"
+                                              className="d-flex justify-content-between align-items-start position-relative"
                                             >
-                                              <div className="d-flex gap-2">
-                                                Konfirmasi Keberangkatan
-                                                <FiCheckCircle className="fs-4" />
+                                              <div className="ms-2 me-auto">
+                                                <div className="list__title">
+                                                  PENGEMUDI
+                                                </div>
+                                                {vu.driver.name}
                                               </div>
-                                            </Button>
-                                          </Col>
-                                        </Row>
-                                      ) : userOrder.status === "PROGRESS" ? (
-                                        <Row>
-                                          <Col md={2}>
-                                            <Button
-                                              onClick={() => DoneVU(userOrder)}
-                                              className="btn__primary"
+                                            </ListGroup.Item>
+
+                                            <ListGroup.Item
+                                              as="li"
+                                              className="d-flex justify-content-between align-items-start"
                                             >
-                                              <div className="d-flex gap-2">
-                                                Selesaikan
-                                                <FiCheckCircle className="fs-4" />
+                                              <div className="ms-2 me-auto">
+                                                <div className="list__title">
+                                                  KENDARAAN
+                                                </div>
+                                                {vu.vehicle.name}
                                               </div>
-                                            </Button>
-                                          </Col>
-                                        </Row>
-                                      ) : null}
-                                    </>
-                                  ))
+                                            </ListGroup.Item>
+                                          </>
+                                        ) : null}
+
+                                        {vu.depart_date && vu.depart_time ? (
+                                          <ListGroup.Item
+                                            as="li"
+                                            className="d-flex justify-content-between align-items-start"
+                                          >
+                                            <div className="ms-2 me-auto">
+                                              <div className="list__title">
+                                                WAKTU BERANGKAT
+                                              </div>
+                                              {vu.depart_date} PUKUL{" "}
+                                              {vu.depart_time}
+                                            </div>
+                                          </ListGroup.Item>
+                                        ) : null}
+
+                                        {vu.distance_count_out &&
+                                        vu.distance_count_in ? (
+                                          <>
+                                            <ListGroup.Item
+                                              as="li"
+                                              className="d-flex justify-content-between align-items-start"
+                                            >
+                                              <div className="ms-2 me-auto">
+                                                <div className="list__title">
+                                                  ODOMETER PERGI
+                                                </div>
+                                                {vu.distance_count_out}
+                                              </div>
+                                            </ListGroup.Item>
+
+                                            <ListGroup.Item
+                                              as="li"
+                                              className="d-flex justify-content-between align-items-start"
+                                            >
+                                              <div className="ms-2 me-auto">
+                                                <div className="list__title">
+                                                  ODOMETER PULANG
+                                                </div>
+                                                {vu.distance_count_in}
+                                              </div>
+                                            </ListGroup.Item>
+                                          </>
+                                        ) : null}
+
+                                        {vu.arrive_date && vu.arrive_time ? (
+                                          <ListGroup.Item
+                                            as="li"
+                                            className="d-flex justify-content-between align-items-start"
+                                          >
+                                            <div className="ms-2 me-auto">
+                                              <div className="list__title">
+                                                WAKTU PULANG
+                                              </div>
+                                              {vu.arrive_date} PUKUL{" "}
+                                              {vu.arrive_time}
+                                            </div>
+                                          </ListGroup.Item>
+                                        ) : null}
+
+                                        {vu.status === "READY" ? (
+                                          <Row>
+                                            <Col md={6}>
+                                              <Button
+                                                onClick={() =>
+                                                  ProgressVU(vu, navigate)
+                                                }
+                                                className="btn__primary mt-4"
+                                              >
+                                                <div className="d-flex gap-2">
+                                                  Konfirmasi Keberangkatan
+                                                  <FiCheckCircle className="fs-4" />
+                                                </div>
+                                              </Button>
+                                            </Col>
+                                          </Row>
+                                        ) : vu.status === "PROGRESS" ? (
+                                          <Row>
+                                            <Col md={2}>
+                                              <Button
+                                                onClick={() =>
+                                                  DoneVU(vu, navigate)
+                                                }
+                                                className="btn__primary mt-4"
+                                              >
+                                                <div className="d-flex gap-2">
+                                                  Selesaikan
+                                                  <FiCheckCircle className="fs-4" />
+                                                </div>
+                                              </Button>
+                                            </Col>
+                                          </Row>
+                                        ) : null}
+                                      </>
+                                    );
+                                  })
                                 : null}
                             </ListGroup>
                           </Container>

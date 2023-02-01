@@ -137,10 +137,10 @@ button.btn-post:hover {
 .alert__customPrimary {
   border: none;
   border-radius: var(--borderRadius);
-  background: #4f55da;
+  background: #0d8be4;
   color: #f8f6f2;
   font-size: 16px;
-  box-shadow: rgba(80, 102, 225, 0.45) 0px 2px 8px 0px;
+  box-shadow: rgba(80, 138, 225, 0.45) 0px 2px 8px 0px;
 }
 
 .btn__primary {

@@ -123,7 +123,7 @@ export const VUHistoryDetail = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaArrowLeft />}
-                        parentLink={"/riwayat-peminjaman"}
+                        parentLink={-1}
                       />
                     ))}
                   </Col>
@@ -145,7 +145,7 @@ export const VUHistoryDetail = () => {
                                   <Breadcrumb.Item className="breadcrumb__item">
                                     <div className="d-flex justify-content-center align-items-center gap-2">
                                       <NavLink
-                                        to={"/riwayat-peminjaman"}
+                                        to={-1}
                                         className="d-flex justify-content-center align-items-center text-muted gap-2"
                                       >
                                         <FiClock className="fs-5" />

@@ -157,8 +157,7 @@ export const UpdateVehicle = () => {
                       placement={placement}
                       name={placement}
                       bc={<FaArrowLeft />}
-                      title={"Tambah Data Kendaraan Dinas"}
-                      parentLink={"/data-kendaraan"}
+                      parentLink={-1}
                     />
                   ))}
                 </Col>
@@ -178,7 +177,7 @@ export const UpdateVehicle = () => {
                                 <Breadcrumb.Item className="breadcrumb__item">
                                   <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
                                     <NavLink
-                                      to={"/data-kendaraan"}
+                                      to={-1}
                                       className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
                                       <RiCarLine className="fs-5" />

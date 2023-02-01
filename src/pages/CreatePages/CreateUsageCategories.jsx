@@ -120,7 +120,7 @@ export const CreateUsageCategories = () => {
                     name={placement}
                     bc={<FaArrowLeft />}
                     title={"Tambah Kategori Peminjaman"}
-                    parentLink={"/kategori-peminjaman"}
+                    parentLink={-1}
                   />
                 ))}
               </Col>
@@ -140,7 +140,7 @@ export const CreateUsageCategories = () => {
                               <Breadcrumb.Item className="breadcrumb__item">
                                 <div className="d-flex justify-content-center align-items-center gap-2">
                                   <NavLink
-                                    to={"/kategori-peminjaman"}
+                                    to={-1}
                                     className="d-flex justify-content-center align-items-center text-muted gap-2"
                                   >
                                     <HiOutlineClipboardList className="fs-5" />

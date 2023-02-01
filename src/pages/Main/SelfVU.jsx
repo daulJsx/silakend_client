@@ -16,12 +16,11 @@ import FetchVehicleUsages from "../../consAPI/FetchVehicleUsages";
 import { useAuthUser } from "react-auth-kit";
 
 // Functions
-import { SecuringPage } from "../../functions/Securing/SecuringPage";
 import { GetOrderId } from "../../functions/GetOrderId";
+import { SecuringPage } from "../../functions/Securing/SecuringPage";
 
 // Navigating
-import { NavLink } from "react-router-dom";
-import { Navigate } from "react-router-dom";
+import { NavLink, Navigate } from "react-router-dom";
 
 // Bootstrap components
 import { Container, Row, Col } from "react-bootstrap";
@@ -32,17 +31,18 @@ import Badge from "react-bootstrap/Badge";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
-import { AsideVerifier } from "../../components/aside/AsideVerifier";
+import { Aside } from "../../components/aside/Aside";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
 
 // icons
 import { FiChevronRight } from "react-icons/fi";
-import { HiOutlineClipboardList } from "react-icons/hi";
 import { FaInfo } from "react-icons/fa";
 import { AiFillEdit } from "react-icons/ai";
+import { MdAssignmentInd } from "react-icons/md";
+import { HiPlusSm } from "react-icons/hi";
 
-export const VerifierSelfVU = () => {
+export const SelfVU = () => {
   // Listener
   // useEffect(() => {
   //   window.Echo.channel("vehicleusage").listen("VehicleUsageUpdate", (e) => {
@@ -76,7 +76,7 @@ export const VerifierSelfVU = () => {
   let index = 0;
 
   return token ? (
-    auth().user_level === 3 ? (
+    auth().user_level === 1 || auth().user_level === 2 ? (
       isError ? (
         <div>{error.message}</div>
       ) : isLoading ? (
@@ -93,7 +93,7 @@ export const VerifierSelfVU = () => {
           <Row>
             {/* SIDEBAR */}
             <Col xs="auto" className="d-none d-lg-block d-flex min-vh-100 px-4">
-              <AsideVerifier />
+              <Aside />
             </Col>
             {/* SIDEBAR */}
 
@@ -106,7 +106,7 @@ export const VerifierSelfVU = () => {
                       key={idx}
                       placement={placement}
                       name={placement}
-                      bc={<HiOutlineClipboardList />}
+                      bc={<MdAssignmentInd />}
                     />
                   ))}
                 </Col>
@@ -127,12 +127,22 @@ export const VerifierSelfVU = () => {
                               <Breadcrumb className="breadcrumb__item mt-3">
                                 <Breadcrumb.Item className="breadcrumb__item">
                                   <div className="d-flex color-primary justify-content-center align-items-center gap-2 breadcrumb__text">
-                                    <HiOutlineClipboardList className="fs-5" />
+                                    <MdAssignmentInd className="fs-5" />
                                     Data
                                     <FiChevronRight className="fs-6 breadcrumb__divider" />
                                   </div>
                                 </Breadcrumb.Item>
                               </Breadcrumb>
+                            </Col>
+                            <Col md={2}>
+                              <NavLink
+                                to={"/pengajuan-peminjaman/buat-pengajuan"}
+                              >
+                                <Button className="btn btn-add d-flex gap-1 align-items-center justify-content-center">
+                                  Tambah
+                                  <HiPlusSm className="fs-3" />
+                                </Button>
+                              </NavLink>
                             </Col>
                           </Row>
                         </Container>
@@ -186,7 +196,7 @@ export const VerifierSelfVU = () => {
                                         endOptions
                                       );
                                     return orders.status !== "DONE" &&
-                                      orders.user.name === auth().user_name ? (
+                                      orders.user_id === auth().user_id ? (
                                       <tr key={orders.usage_id}>
                                         <td>{(index += 1)}</td>
                                         <td>{orders.category.name}</td>
@@ -229,10 +239,10 @@ export const VerifierSelfVU = () => {
                                         </td>
 
                                         <td>
-                                          {orders.status === "APPROVED" ? (
+                                          {orders.status === "READY" ? (
                                             <NavLink
                                               to={
-                                                "/verifier/pengajuan-saya/edit-pengajuan"
+                                                "/pengajuan-saya/edit-pengajuan"
                                               }
                                             >
                                               <Button
@@ -250,14 +260,15 @@ export const VerifierSelfVU = () => {
                                         <td>
                                           <NavLink
                                             to={
-                                              "/verifier/pengajuan-saya/rincian-pengajuan"
+                                              "/pengajuan-peminjaman/rincian-pengajuan"
                                             }
                                           >
                                             <Button
                                               onClick={() => GetOrderId(orders)}
                                               className="btn btn-detail position-relative"
                                             >
-                                              {orders.status === "READY" ? (
+                                              {orders.status === "PROGRESS" ||
+                                              orders.status === "DONE" ? (
                                                 <Badge
                                                   className="position-absolute top-0 start-100 translate-middle rounded-pill"
                                                   bg="danger"

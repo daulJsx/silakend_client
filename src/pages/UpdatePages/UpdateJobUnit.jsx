@@ -141,8 +141,7 @@ export const UpdateJobUnit = () => {
                       placement={placement}
                       name={placement}
                       bc={<FaArrowLeft />}
-                      title={"Edit Data Unit Kerja"}
-                      parentLink={"/unit-kerja"}
+                      parentLink={-1}
                     />
                   ))}
                 </Col>
@@ -162,7 +161,7 @@ export const UpdateJobUnit = () => {
                                 <Breadcrumb.Item className="breadcrumb__item">
                                   <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
                                     <NavLink
-                                      to={"/unit-kerja"}
+                                      to={-1}
                                       className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
                                       <RiCommunityLine className="fs-5" />

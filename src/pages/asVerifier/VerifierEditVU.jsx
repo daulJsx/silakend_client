@@ -12,6 +12,7 @@ import FetchUsageCat from "../../consAPI/FetchUsageCat";
 
 // Functions
 import { SecuringPage } from "../../functions/Securing/SecuringPage";
+import { CancelVU } from "../../functions/Update/CancelVU";
 
 // Navigating
 import { useNavigate, Navigate, NavLink } from "react-router-dom";
@@ -80,6 +81,7 @@ export const VerifierEditVU = () => {
   const [currentEndDate] = [orderToMap].map((ed) => ed.end_date);
 
   const body = {
+    usage_id: usageId,
     ucategory_id: newCategory === "" ? currentUCatId : newCategory,
     usage_description: newDesc === "" ? currentUDesc : newDesc,
     personel_count:
@@ -141,72 +143,6 @@ export const VerifierEditVU = () => {
         }
       } else {
         swal("Aksi dibatalkan");
-      }
-    });
-  };
-
-  const CancelVU = async (e) => {
-    e.preventDefault();
-    swal({
-      title: "Batalkan Pengajuan?",
-      text: "Klik ok untuk melanjutkan aksi ini",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then(async (willDelete) => {
-      if (willDelete) {
-        swal({
-          icon: "info",
-          text: "Jelaskan mengapa anda membatalkan pengajuan ini",
-          buttons: true,
-          dangerMode: true,
-          content: {
-            element: "input",
-          },
-        }).then(async (status_description) => {
-          if (status_description) {
-            body.status_description = status_description;
-            body.status = "CANCELED";
-
-            try {
-              await axios
-                .put(
-                  `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
-                  body,
-                  config
-                )
-                .then((response) => {
-                  const { msg } = response.data;
-                  navigate(-1);
-                  swal({
-                    text: msg,
-                    icon: "success",
-                    button: false,
-                    timer: 3000,
-                  });
-                });
-            } catch (error) {
-              if (error.response) {
-                const { message, msg } = error.response.data;
-                if (message) {
-                  swal("Ups!", message, "error");
-                } else {
-                  swal("Ups!", msg, "error");
-                }
-              } else {
-                swal("Ups!", "Something went wrong", "error");
-              }
-            }
-          } else {
-            swal({
-              text: "Pengajuan peminjaman kendaraan tidak dibatalkan",
-            });
-          }
-        });
-      } else {
-        swal({
-          text: "Aksi dibatalkan",
-        });
       }
     });
   };
@@ -444,10 +380,12 @@ export const VerifierEditVU = () => {
                                           <FiCheckCircle className="fs-4" />
                                         </div>
                                       </Button>
-                                      {orderToUpdate.status === "WAITING" ? (
+                                      {orderToUpdate.status === "APPROVED" ? (
                                         <Button
                                           className="btn__danger"
-                                          onClick={CancelVU}
+                                          onClick={() =>
+                                            CancelVU(body, navigate)
+                                          }
                                         >
                                           <div className="d-flex gap-2">
                                             Batalkan Pengajuan

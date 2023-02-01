@@ -26,6 +26,7 @@ import { CgUserList } from "react-icons/cg";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { RiCarWashingLine } from "react-icons/ri";
 import { FiClock } from "react-icons/fi";
+import { MdAssignmentInd } from "react-icons/md";
 
 // assets
 import polmanLogo from "./../../assets/polman.webp";
@@ -49,6 +50,12 @@ export const Aside = () => {
           icon={<HiOutlineClipboardList />}
           title="Kategori Peminjaman"
           link="/kategori-peminjaman"
+        />
+
+        <AsideMenu
+          icon={<MdAssignmentInd />}
+          title="Pengajuan Anda"
+          link="/pengajuan-saya"
         />
 
         <AsideMenu

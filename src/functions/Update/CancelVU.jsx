@@ -6,8 +6,16 @@ import Cookies from "js-cookie";
 // React Notification
 import swal from "sweetalert";
 
-export const CancelVU = async (order) => {
-  let { usage_id } = order;
+export const CancelVU = async (order, navigate) => {
+  let {
+    usage_id,
+    ucategory_id,
+    destination,
+    start_date,
+    end_date,
+    personel_count,
+    usage_description,
+  } = order;
 
   // Get access token
   const token = Cookies.get("token");
@@ -17,8 +25,12 @@ export const CancelVU = async (order) => {
   };
 
   const body = {
-    distance_count_out: distance_count_out,
-    distance_count_in: "",
+    ucategory_id: ucategory_id,
+    destination: destination,
+    start_date: start_date,
+    end_date: end_date,
+    usage_description: usage_description,
+    personel_count: personel_count,
     status: "",
     status_description: "",
   };
@@ -43,6 +55,7 @@ export const CancelVU = async (order) => {
         if (status_description) {
           body.status_description = status_description;
           body.status = "CANCELED";
+
           try {
             await axios
               .put(
@@ -51,6 +64,7 @@ export const CancelVU = async (order) => {
                 config
               )
               .then((response) => {
+                navigate(-1);
                 swal({
                   text: response.data.msg,
                   icon: "success",

@@ -123,7 +123,7 @@ export const VehicleUsageDetail = () => {
                         placement={placement}
                         name={placement}
                         bc={<FaArrowLeft />}
-                        parentLink={"/pengajuan-peminjaman"}
+                        parentLink={-1}
                       />
                     ))}
                   </Col>
@@ -145,7 +145,7 @@ export const VehicleUsageDetail = () => {
                                   <Breadcrumb.Item className="breadcrumb__item">
                                     <div className="d-flex justify-content-center align-items-center gap-2">
                                       <NavLink
-                                        to={"/pengajuan-peminjaman"}
+                                        to={-1}
                                         className="d-flex justify-content-center align-items-center text-muted gap-2"
                                       >
                                         <HiOutlineClipboardCopy className="fs-5" />
@@ -171,241 +171,280 @@ export const VehicleUsageDetail = () => {
                           >
                             <ListGroup as="ol" variant="flush" className="mb-2">
                               {vUsageToMap !== ""
-                                ? vUsageToMap.map((currentUsage) => (
-                                    <>
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            PEMINJAM
-                                          </div>
+                                ? vUsageToMap.map((currentUsage) => {
+                                    const startDate = new Date(
+                                      currentUsage.start_date
+                                    );
+                                    const endDate = new Date(
+                                      currentUsage.end_date
+                                    );
 
-                                          {currentUsage.user.name}
-                                        </div>
-                                      </ListGroup.Item>
+                                    // Date formatter
+                                    const startOptions = {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                    };
+                                    const endOptions = {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                    };
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            KEPERLUAN
-                                          </div>
-                                          {currentUsage.usage_description}
-                                        </div>
-                                      </ListGroup.Item>
+                                    const formattedStartDate =
+                                      startDate.toLocaleDateString(
+                                        "id-ID",
+                                        startOptions
+                                      );
+                                    const formattedEndDate =
+                                      endDate.toLocaleDateString(
+                                        "id-ID",
+                                        endOptions
+                                      );
+                                    return (
+                                      <>
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              PEMINJAM
+                                            </div>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            KATEGORI PEMINJAMAN
+                                            {currentUsage.user.name}
                                           </div>
-                                          {currentUsage.category.name}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            JUMLAH PERSONIL
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              KEPERLUAN
+                                            </div>
+                                            {currentUsage.usage_description}
                                           </div>
-                                          {currentUsage.personel_count} Orang
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            DESTINASI
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              KATEGORI PEMINJAMAN
+                                            </div>
+                                            {currentUsage.category.name}
                                           </div>
-                                          {currentUsage.destination}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            TANGGAL PEMINJAMAN
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              JUMLAH PERSONIL
+                                            </div>
+                                            {currentUsage.personel_count} Orang
                                           </div>
-                                          {currentUsage.start_date} s/d{" "}
-                                          {currentUsage.end_date}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            PENGEMUDI
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              DESTINASI
+                                            </div>
+                                            {currentUsage.destination}
                                           </div>
-                                          {currentUsage.driver ? (
-                                            currentUsage.driver.name
-                                          ) : (
-                                            <p className="list__title">
-                                              Belum ada pengemudi yang
-                                              ditugaskan
-                                            </p>
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            KENDARAAN
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              TANGGAL PEMINJAMAN
+                                            </div>
+                                            {formattedStartDate} -{" "}
+                                            {formattedEndDate}
                                           </div>
-                                          {currentUsage.vehicle ? (
-                                            currentUsage.vehicle.name
-                                          ) : (
-                                            <p className="list__title">
-                                              Belum ada kendaraan yang
-                                              ditugaskan
-                                            </p>
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            WAKTU BERANGKAT
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              PENGEMUDI
+                                            </div>
+                                            {currentUsage.driver ? (
+                                              currentUsage.driver.name
+                                            ) : (
+                                              <p className="list__title">
+                                                Belum ada pengemudi yang
+                                                ditugaskan
+                                              </p>
+                                            )}
                                           </div>
-                                          {currentUsage.depart_date &&
-                                          currentUsage.depart_time ? (
-                                            <>
-                                              {currentUsage.depart_date} PUKUL{" "}
-                                              {currentUsage.depart_time}
-                                            </>
-                                          ) : (
-                                            <p className="list__title">
-                                              Waktu berangkat belum ditentukan
-                                            </p>
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            WAKTU PULANG
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              KENDARAAN
+                                            </div>
+                                            {currentUsage.vehicle ? (
+                                              currentUsage.vehicle.name
+                                            ) : (
+                                              <p className="list__title">
+                                                Belum ada kendaraan yang
+                                                ditugaskan
+                                              </p>
+                                            )}
                                           </div>
-                                          {currentUsage.arrive_date &&
-                                          currentUsage.arrive_time ? (
-                                            <>
-                                              {currentUsage.arrive_date} PUKUL{" "}
-                                              {currentUsage.arrive_time}
-                                            </>
-                                          ) : (
-                                            <p className="list__title">
-                                              Waktu pulang belum ditentukan
-                                            </p>
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            ODOMETER
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              WAKTU BERANGKAT
+                                            </div>
+                                            {currentUsage.depart_date &&
+                                            currentUsage.depart_time ? (
+                                              <>
+                                                {currentUsage.depart_date} PUKUL{" "}
+                                                {currentUsage.depart_time}
+                                              </>
+                                            ) : (
+                                              <p className="list__title">
+                                                Waktu berangkat belum ditentukan
+                                              </p>
+                                            )}
                                           </div>
-                                          {currentUsage.distance_count_out &&
-                                          currentUsage.distance_count_in ? (
-                                            <>
-                                              {" "}
-                                              <div>
-                                                Jumlah Kilometer Pergi :{" "}
-                                                {currentUsage.distance_count_out.toLocaleString(
-                                                  "id-ID"
-                                                )}{" "}
-                                                KM
-                                              </div>
-                                              <div>
-                                                Jumlah Kilometer Pulang :{" "}
-                                                {currentUsage.distance_count_in
-                                                  ? currentUsage.distance_count_in.toLocaleString(
-                                                      "id-ID"
-                                                    )
-                                                  : null}{" "}
-                                                KM
-                                              </div>
-                                            </>
-                                          ) : (
-                                            <p className="list__title">
-                                              Odometer belum dimasukkan dalam
-                                              pengajuan ini
-                                            </p>
-                                          )}
-                                        </div>
-                                      </ListGroup.Item>
+                                        </ListGroup.Item>
 
-                                      <ListGroup.Item
-                                        as="li"
-                                        variant={
-                                          currentUsage.status === "CANCELED" ||
-                                          currentUsage.status === "REJECTED"
-                                            ? "danger"
-                                            : currentUsage.status === "WAITING"
-                                            ? "warning"
-                                            : currentUsage.status === "READY"
-                                            ? "primary"
-                                            : currentUsage.status === "APPROVED"
-                                            ? "info"
-                                            : currentUsage.status === "PROGRESS"
-                                            ? "secondary"
-                                            : "success"
-                                        }
-                                        className="d-flex justify-content-between align-items-start"
-                                      >
-                                        <div className="ms-2 me-auto">
-                                          <div className="list__title">
-                                            STATUS
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              WAKTU PULANG
+                                            </div>
+                                            {currentUsage.arrive_date &&
+                                            currentUsage.arrive_time ? (
+                                              <>
+                                                {currentUsage.arrive_date} PUKUL{" "}
+                                                {currentUsage.arrive_time}
+                                              </>
+                                            ) : (
+                                              <p className="list__title">
+                                                Waktu pulang belum ditentukan
+                                              </p>
+                                            )}
                                           </div>
-                                          {currentUsage.status === "CANCELED"
-                                            ? `Dibatalkan peminjam karena ${currentUsage.status_description}`
-                                            : currentUsage.status === "REJECTED"
-                                            ? `Ditolak karena ${currentUsage.status_description}`
-                                            : currentUsage.status === "WAITING"
-                                            ? "Diajukan"
-                                            : currentUsage.status === "READY"
-                                            ? "Siap Berangkat"
-                                            : currentUsage.status === "APPROVED"
-                                            ? "Disetujui"
-                                            : currentUsage.status === "PROGRESS"
-                                            ? "Berlangsung"
-                                            : "Selesai"}
-                                        </div>
-                                      </ListGroup.Item>
-                                    </>
-                                  ))
+                                        </ListGroup.Item>
+
+                                        <ListGroup.Item
+                                          as="li"
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              ODOMETER
+                                            </div>
+                                            {currentUsage.distance_count_out &&
+                                            currentUsage.distance_count_in ? (
+                                              <>
+                                                {" "}
+                                                <div>
+                                                  Jumlah Kilometer Pergi :{" "}
+                                                  {currentUsage.distance_count_out.toLocaleString(
+                                                    "id-ID"
+                                                  )}{" "}
+                                                  KM
+                                                </div>
+                                                <div>
+                                                  Jumlah Kilometer Pulang :{" "}
+                                                  {currentUsage.distance_count_in
+                                                    ? currentUsage.distance_count_in.toLocaleString(
+                                                        "id-ID"
+                                                      )
+                                                    : null}{" "}
+                                                  KM
+                                                </div>
+                                              </>
+                                            ) : (
+                                              <p className="list__title">
+                                                Odometer belum dimasukkan dalam
+                                                pengajuan ini
+                                              </p>
+                                            )}
+                                          </div>
+                                        </ListGroup.Item>
+
+                                        <ListGroup.Item
+                                          as="li"
+                                          variant={
+                                            currentUsage.status ===
+                                              "CANCELED" ||
+                                            currentUsage.status === "REJECTED"
+                                              ? "danger"
+                                              : currentUsage.status ===
+                                                "WAITING"
+                                              ? "warning"
+                                              : currentUsage.status === "READY"
+                                              ? "primary"
+                                              : currentUsage.status ===
+                                                "APPROVED"
+                                              ? "info"
+                                              : currentUsage.status ===
+                                                "PROGRESS"
+                                              ? "secondary"
+                                              : "success"
+                                          }
+                                          className="d-flex justify-content-between align-items-start"
+                                        >
+                                          <div className="ms-2 me-auto">
+                                            <div className="list__title">
+                                              STATUS
+                                            </div>
+                                            {currentUsage.status === "CANCELED"
+                                              ? `Dibatalkan peminjam karena ${currentUsage.status_description}`
+                                              : currentUsage.status ===
+                                                "REJECTED"
+                                              ? `Ditolak karena ${currentUsage.status_description}`
+                                              : currentUsage.status ===
+                                                "WAITING"
+                                              ? "Diajukan"
+                                              : currentUsage.status === "READY"
+                                              ? "Siap Berangkat"
+                                              : currentUsage.status ===
+                                                "APPROVED"
+                                              ? "Disetujui"
+                                              : currentUsage.status ===
+                                                "PROGRESS"
+                                              ? "Berlangsung"
+                                              : "Selesai"}
+                                          </div>
+                                        </ListGroup.Item>
+                                      </>
+                                    );
+                                  })
                                 : null}
                             </ListGroup>
                           </Container>

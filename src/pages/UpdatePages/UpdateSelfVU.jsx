@@ -48,9 +48,9 @@ import { FiXCircle } from "react-icons/fi";
 import { FiCheckCircle } from "react-icons/fi";
 import { HiOutlineClipboardCopy, HiOutlineClipboardList } from "react-icons/hi";
 import { FiChevronRight } from "react-icons/fi";
-import { FcFinePrint } from "react-icons/fc";
+import { MdAssignmentInd } from "react-icons/md";
 
-export const UpdateOrder = () => {
+export const UpdateSelfVU = () => {
   // Get access token
   const token = Cookies.get("token");
 
@@ -280,7 +280,7 @@ export const UpdateOrder = () => {
                           <Row className="gap-3 mt-4">
                             <Col>
                               <h3 className="main__title">
-                                Pengajuan Peminjaman Kendaraan Dinas
+                                Pengajuan Peminjaman Kendaraan Dinas Anda
                               </h3>
                               <Breadcrumb className="breadcrumb__item mt-3">
                                 <Breadcrumb.Item className="breadcrumb__item">
@@ -289,7 +289,7 @@ export const UpdateOrder = () => {
                                       to={-1}
                                       className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
-                                      <HiOutlineClipboardCopy className="fs-5" />
+                                      <MdAssignmentInd className="fs-5" />
                                       Data
                                     </NavLink>
 
@@ -350,62 +350,14 @@ export const UpdateOrder = () => {
                                   <Col>
                                     <Form>
                                       <>
-                                        {auth().user_level === 1 ? (
-                                          <Form.Group className="mb-3">
-                                            <Form.Label>Peminjam</Form.Label>
-                                            <Form.Select
-                                              required
-                                              style={{
-                                                backgroundColor: "#F5F7FC",
-                                                border: "none",
-                                                padding: "17px",
-                                              }}
-                                              aria-label="Default select example"
-                                              onChange={(e) =>
-                                                setUserId(e.target.value)
-                                              }
-                                            >
-                                              <option
-                                                value={orderToUpdate.user_id}
-                                              >
-                                                {orderToUpdate.user.name}
-                                              </option>
-                                            </Form.Select>
-                                          </Form.Group>
-                                        ) : (
-                                          <Form.Group className="mb-3">
-                                            <Form.Label>Peminjam</Form.Label>
-                                            <Form.Select
-                                              required
-                                              disabled
-                                              style={{
-                                                backgroundColor: "#ced4da",
-                                                border: "none",
-                                                padding: "17px",
-                                              }}
-                                              aria-label="Default select example"
-                                              onChange={(e) =>
-                                                setUserId(e.target.value)
-                                              }
-                                            >
-                                              <option
-                                                value={orderToUpdate.user_id}
-                                              >
-                                                {orderToUpdate.user.name}
-                                              </option>
-                                            </Form.Select>
-                                          </Form.Group>
-                                        )}
-
                                         <Form.Group className="mb-3">
                                           <Form.Label>
                                             Kategori Peminjaman
                                           </Form.Label>
                                           <Form.Select
                                             required
-                                            disabled
                                             style={{
-                                              backgroundColor: "#ced4da",
+                                              backgroundColor: "#F5F7FC",
                                               border: "none",
                                               padding: "17px",
                                             }}
@@ -443,11 +395,9 @@ export const UpdateOrder = () => {
                                             }
                                             as="textarea"
                                             rows={3}
-                                            disabled
                                             style={{
-                                              backgroundColor: "#ced4da",
+                                              backgroundColor: "#F5F7FC",
                                               border: "none",
-                                              padding: "17px",
                                             }}
                                           />
                                         </Form.Group>
@@ -461,11 +411,10 @@ export const UpdateOrder = () => {
                                               value={
                                                 orderToUpdate.personel_count
                                               }
-                                              disabled
                                               style={{
-                                                backgroundColor: "#ced4da",
+                                                backgroundColor: "#F5F7FC",
                                                 border: "none",
-                                                padding: "17px",
+                                                padding: "15px",
                                               }}
                                               type="number"
                                               aria-describedby="basic-addon2"
@@ -487,11 +436,10 @@ export const UpdateOrder = () => {
                                             value={orderToUpdate.destination}
                                             required
                                             className="input form-custom"
-                                            disabled
                                             style={{
-                                              backgroundColor: "#ced4da",
+                                              backgroundColor: "#F5F7FC",
                                               border: "none",
-                                              padding: "17px",
+                                              padding: "15px",
                                             }}
                                             type="text"
                                           />
@@ -812,7 +760,7 @@ export const UpdateOrder = () => {
           </Row>
         </Container>
       ) : (
-        <Navigate to="/pengajuan-peminjaman" />
+        <Navigate to={-1} />
       )
     ) : (
       SecuringPage()

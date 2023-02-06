@@ -23,6 +23,7 @@ import Badge from "react-bootstrap/Badge";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
+import MUIDataTable from "mui-datatables";
 import { Aside } from "../../components/aside/Aside";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
@@ -71,6 +72,158 @@ export const VehicleUsages = () => {
   // Get access token
   const token = Cookies.get("token");
 
+  const columns = [
+    {
+      name: "No",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <div>{tableMeta.rowIndex + 1}</div>;
+        },
+      },
+    },
+    {
+      name: "peminjam",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return ordersData[tableMeta.rowIndex]["user"]["name"];
+        },
+      },
+    },
+    {
+      name: "Waktu Pinjam",
+      options: {
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const orders = ordersData[tableMeta.rowIndex];
+          const startDate = new Date(orders.start_date);
+          const endDate = new Date(orders.end_date);
+
+          const startOptions = {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+          const endOptions = {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+
+          const formattedStartDate = startDate.toLocaleDateString(
+            "id-ID",
+            startOptions
+          );
+          const formattedEndDate = endDate.toLocaleDateString(
+            "id-ID",
+            endOptions
+          );
+
+          return (
+            <>
+              {formattedStartDate} - {formattedEndDate}
+            </>
+          );
+        },
+      },
+    },
+    {
+      name: "destinasi",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return ordersData[tableMeta.rowIndex]["destination"];
+        },
+      },
+    },
+    {
+      name: "status",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          let bgColor = "";
+          let text = "";
+
+          if (value === "CANCELED") {
+            bgColor = "danger";
+            text = "Batal";
+          } else if (value === "REJECTED") {
+            bgColor = "danger";
+            text = "Ditolak";
+          } else if (value === "WAITING") {
+            bgColor = "warning";
+            text = "Diajukan";
+          } else if (value === "READY") {
+            bgColor = "primary";
+            text = "Siap berangkat";
+          } else if (value === "APPROVED") {
+            bgColor = "info";
+            text = "Disetujui";
+          } else if (value === "PROGRESS") {
+            bgColor = "secondary";
+            text = "Berlangsung";
+          } else {
+            bgColor = "success";
+            text = "Selesai";
+          }
+
+          return <Badge bg={bgColor}>{text}</Badge>;
+        },
+      },
+    },
+    {
+      name: "aksi",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const order = ordersData[tableMeta.rowIndex];
+          if (order.status !== "DONE") {
+            return (
+              <NavLink to={"/pengajuan-peminjaman/edit-data-pengajuan"}>
+                <Button
+                  onClick={() => GetOrderId(order)}
+                  className="btn-warning btn-edit position-relative"
+                >
+                  <AiFillEdit className="fs-6" />
+                </Button>
+              </NavLink>
+            );
+          }
+          return null;
+        },
+      },
+    },
+    {
+      name: "rincian",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const order = ordersData[tableMeta.rowIndex];
+          return (
+            <NavLink to={"/pengajuan-peminjaman/rincian-pengajuan"}>
+              <Button
+                onClick={() => GetOrderId(order)}
+                className="btn-primary btn-detail"
+              >
+                <FaInfo className="fs-6" />
+              </Button>
+            </NavLink>
+          );
+        },
+      },
+    },
+  ];
+
+  const options = {
+    filterType: "dropdown",
+    responsive: "scrollMaxHeight",
+    selectableRows: "none",
+    viewColumns: false,
+  };
+
   return token ? (
     auth().user_level === 1 || auth().user_level === 2 ? (
       isError ? (
@@ -109,7 +262,7 @@ export const VehicleUsages = () => {
               <main className="px-2 min-vh-100 mt-4">
                 <Row>
                   <Col>
-                    <Card className="shadow rounded bg__primary">
+                    <Card className="bg__primary">
                       <Card.Header>
                         <Container>
                           <Row className="gap-3 mt-4 me-3">
@@ -144,10 +297,7 @@ export const VehicleUsages = () => {
                         </Container>
                       </Card.Header>
                       <Card.Body className="p-4">
-                        <Container
-                          className="p-4"
-                          style={{ background: "#fff", borderRadius: "10px" }}
-                        >
+                        {/* <Container className="p-4">
                           <Row>
                             <Col>
                               <Table hover responsive>
@@ -290,7 +440,12 @@ export const VehicleUsages = () => {
                               </Table>
                             </Col>
                           </Row>
-                        </Container>
+                        </Container> */}
+                        <MUIDataTable
+                          data={ordersData}
+                          columns={columns}
+                          options={options}
+                        />
                       </Card.Body>
                     </Card>
                   </Col>

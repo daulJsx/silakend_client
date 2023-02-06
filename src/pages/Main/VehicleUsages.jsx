@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Component } from "react";
 
 // Push notify
 import Push from "push.js";
@@ -24,6 +24,7 @@ import Breadcrumb from "react-bootstrap/Breadcrumb";
 
 // Components
 import MUIDataTable from "mui-datatables";
+import { createTheme, ThemeProvider, useTheme } from "@mui/material/styles";
 import { Aside } from "../../components/aside/Aside";
 import { NavTop } from "../../components/navtop/NavTop";
 import { Footer } from "../../components/footer/Footer";
@@ -77,6 +78,7 @@ export const VehicleUsages = () => {
       name: "No",
       options: {
         filter: false,
+        sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return <div>{tableMeta.rowIndex + 1}</div>;
         },
@@ -95,6 +97,8 @@ export const VehicleUsages = () => {
     {
       name: "Waktu Pinjam",
       options: {
+        sort: false,
+        filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const orders = ordersData[tableMeta.rowIndex];
           const startDate = new Date(orders.start_date);
@@ -132,7 +136,7 @@ export const VehicleUsages = () => {
       name: "destinasi",
       options: {
         filter: true,
-        sort: true,
+        sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return ordersData[tableMeta.rowIndex]["destination"];
         },
@@ -178,6 +182,7 @@ export const VehicleUsages = () => {
       name: "aksi",
       options: {
         filter: false,
+        sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const order = ordersData[tableMeta.rowIndex];
           if (order.status !== "DONE") {
@@ -200,6 +205,7 @@ export const VehicleUsages = () => {
       name: "rincian",
       options: {
         filter: false,
+        sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const order = ordersData[tableMeta.rowIndex];
           return (
@@ -218,11 +224,28 @@ export const VehicleUsages = () => {
   ];
 
   const options = {
-    filterType: "dropdown",
-    responsive: "scrollMaxHeight",
     selectableRows: "none",
     viewColumns: false,
+    responsive: "standard",
   };
+
+  const theme = useTheme();
+
+  const getMuiTheme = () =>
+    createTheme({
+      components: {
+        MUIDataTable: {
+          styleOverrides: {
+            root: {
+              borderRadius: "35px",
+              backgroundColor: "#F5F7FC",
+            },
+          },
+        },
+      },
+    });
+
+  const muiTheme = getMuiTheme(theme);
 
   return token ? (
     auth().user_level === 1 || auth().user_level === 2 ? (
@@ -259,10 +282,10 @@ export const VehicleUsages = () => {
               </Row>
               {/* NAVBAR */}
 
-              <main className="px-2 min-vh-100 mt-4">
+              <main className="min-vh-100 mt-4">
                 <Row>
                   <Col>
-                    <Card className="bg__primary">
+                    <Card className="bg__primary" style={{ boxShadow: "none" }}>
                       <Card.Header>
                         <Container>
                           <Row className="gap-3 mt-4 me-3">
@@ -441,11 +464,14 @@ export const VehicleUsages = () => {
                             </Col>
                           </Row>
                         </Container> */}
-                        <MUIDataTable
-                          data={ordersData}
-                          columns={columns}
-                          options={options}
-                        />
+                        <ThemeProvider theme={muiTheme}>
+                          <MUIDataTable
+                            className="datatableStyle"
+                            data={ordersData}
+                            columns={columns}
+                            options={options}
+                          />
+                        </ThemeProvider>
                       </Card.Body>
                     </Card>
                   </Col>

@@ -271,10 +271,10 @@ export const UpdateOrder = () => {
               </Row>
               {/* NAVBAR */}
 
-              <main className="px-2 min-vh-100 mt-4">
+              <main className="min-vh-100 mt-4">
                 <Row>
                   <Col>
-                    <Card className="shadow rounded bg__primary">
+                    <Card className="bg__primary" style={{ boxShadow: "none" }}>
                       <Card.Header>
                         <Container>
                           <Row className="gap-3 mt-4">
@@ -309,7 +309,7 @@ export const UpdateOrder = () => {
                         {orderToMap
                           ? [orderToMap]?.map((orderToUpdate) => (
                               <Container
-                                className="p-4 position-relative"
+                                className="p-4 position-relative card__content"
                                 style={{
                                   background: "#fff",
                                   borderRadius: "10px",

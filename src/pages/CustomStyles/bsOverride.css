@@ -2,6 +2,10 @@
   border: none;
 }
 
+.card__content {
+  box-shadow: rgba(0, 0, 0, 0.196) 0px 2px 8px 0px;
+}
+
 .bg__primary {
   background: var(--bg-primary);
 }

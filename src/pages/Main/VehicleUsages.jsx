@@ -186,16 +186,32 @@ export const VehicleUsages = () => {
         customBodyRender: (value, tableMeta, updateValue) => {
           const order = ordersData[tableMeta.rowIndex];
           if (order.status !== "DONE") {
-            return (
-              <NavLink to={"/pengajuan-peminjaman/edit-data-pengajuan"}>
+            return order.status !== "CANCELED" ? (
+              <NavLink
+                to={
+                  auth().user_level === 1
+                    ? "/pengajuan-peminjaman/edit-data-pengajuan"
+                    : "/pengajuan-peminjaman/edit-pengajuan"
+                }
+              >
                 <Button
                   onClick={() => GetOrderId(order)}
                   className="btn-warning btn-edit position-relative"
                 >
+                  {order.vehicle ||
+                  order.driver ||
+                  order.status === "REJECTED" ? null : (
+                    <Badge
+                      className="position-absolute top-0 start-100 translate-middle rounded-pill"
+                      bg="danger"
+                    >
+                      !
+                    </Badge>
+                  )}
                   <AiFillEdit className="fs-6" />
                 </Button>
               </NavLink>
-            );
+            ) : null;
           }
           return null;
         },

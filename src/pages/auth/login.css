@@ -37,8 +37,8 @@ button.btn-submit {
     #2681e2,
     #388af8
   );
-  box-shadow: 1px 1px 50px #0966a83e, -1px -1px 50px #0966a83e;
-  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.196) 0px 2px 8px 0px;
+  border-radius: 10px;
   border: none;
 }
 

@@ -70,7 +70,7 @@ export const CreateVM = () => {
       try {
         await axios
           .post(
-            "https://silakend-server.xyz/api/vehiclemaintenances",
+            "http://silakend-server-realtime.test/api/vehiclemaintenances",
             vehicleMData,
             config
           )

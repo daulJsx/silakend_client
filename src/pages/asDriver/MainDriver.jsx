@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
 
-// Push notify
-import Push from "push.js";
-
 // Cookies JS
 import Cookies from "js-cookie";
 
@@ -40,25 +37,24 @@ import { Footer } from "../../components/footer/Footer";
 import { FiChevronRight } from "react-icons/fi";
 import { TbSteeringWheel } from "react-icons/tb";
 import { FaInfo } from "react-icons/fa";
+import Push from "push.js";
 
 export const MainDriver = () => {
-  // Listener
-  // useEffect(() => {
-  //   window.Echo.channel("vehicleusage").listen("VehicleUsageUpdate", (e) => {
-  //     Push.create("Info Data Peminjaman", {
-  //       body: e.vehicleUsage,
-  //       icon: "/polman.ico",
-  //       timeout: 4000,
-  //       onClick: function () {
-  //         window.focus();
-  //         this.close();
-  //       },
-  //     });
-  //     // Setelah tampil, refetch data
-  //     FetchVehicleUsages();
-  //   });
-  // }, []);
-
+  useEffect(() => {
+    window.Echo.channel("vehicleusage").listen("VehicleUsageUpdate", (e) => {
+      Push.create("Info Data Peminjaman", {
+        body: e.vehicleUsage,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
+      });
+      // Setelah tampil, refetch data
+      FetchVehicleUsages();
+    });
+  }, []);
   // Get access token
   const token = Cookies.get("token");
 

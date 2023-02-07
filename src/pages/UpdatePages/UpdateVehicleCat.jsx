@@ -66,7 +66,7 @@ export const UpdateVehicleCat = () => {
       try {
         await axios
           .put(
-            `https://silakend-server.xyz/api/vehiclecategories/${vCatId}`,
+            `http://silakend-server-realtime.test/api/vehiclecategories/${vCatId}`,
             curVCat,
             config
           )

@@ -24,7 +24,7 @@ export async function DeleteJobUnit(unitId) {
     if (willDelete) {
       try {
         await axios
-          .delete(`https://silakend-server.xyz/api/jobunits/${unitId}`, config)
+          .delete(`http://silakend-server-realtime.test/api/jobunits/${unitId}`, config)
           .then((response) => {
             const { msg } = response.data;
             swal({

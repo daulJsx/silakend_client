@@ -39,21 +39,21 @@ import { FaTrashAlt } from "react-icons/fa";
 import { FiChevronRight } from "react-icons/fi";
 
 export const UsageCategories = () => {
-  // useEffect(() => {
-  //   window.Echo.channel("usagecategory").listen("UsageCategoryUpdate", (e) => {
-  //     Push.create("Info Data Kategori Peminjaman", {
-  //       body: e.usageCategory,
-  //       icon: "/polman.ico",
-  //       timeout: 4000,
-  //       onClick: function () {
-  //         window.focus();
-  //         this.close();
-  //       },
-  //     });
-  //     // Setelah tampil, refetch data
-  //     FetchUsageCat();
-  //   });
-  // }, []);
+  useEffect(() => {
+    window.Echo.channel("usagecategory").listen("UsageCategoryUpdate", (e) => {
+      Push.create("Usage Category Updated", {
+        body: e.usageCategory,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
+      });
+      // Setelah tampil, refetch data
+      FetchUsageCat();
+    });
+  }, []);
 
   const auth = useAuthUser();
 

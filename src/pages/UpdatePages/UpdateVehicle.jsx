@@ -99,7 +99,7 @@ export const UpdateVehicle = () => {
         try {
           await axios
             .put(
-              `https://silakend-server.xyz/api/vehicles/${vehicleId}`,
+              `http://silakend-server-realtime.test/api/vehicles/${vehicleId}`,
               body,
               config
             )

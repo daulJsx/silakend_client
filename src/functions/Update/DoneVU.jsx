@@ -20,7 +20,6 @@ export const DoneVU = async (order, navigate) => {
     distance_count_out: distance_count_out,
     distance_count_in: "",
     status: "",
-    status_description: "",
   };
 
   swal({
@@ -46,7 +45,7 @@ export const DoneVU = async (order, navigate) => {
           try {
             await axios
               .put(
-                `https://silakend-server.xyz/api/vehicleusages/${usage_id}`,
+                `http://silakend-server-realtime.test/api/vehicleusages/${usage_id}`,
                 body,
                 config
               )

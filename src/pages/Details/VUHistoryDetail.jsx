@@ -60,7 +60,7 @@ export const VUHistoryDetail = () => {
       try {
         await axios
           .get(
-            `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
+            `http://silakend-server-realtime.test/api/vehicleusages/${usageId}`,
             config
           )
           .then((response) => {

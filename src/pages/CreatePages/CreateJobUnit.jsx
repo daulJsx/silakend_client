@@ -57,7 +57,7 @@ export const CreateJobUnit = () => {
     if (newJobUnit.name !== "" && newJobUnit.unit_account !== "") {
       try {
         await axios
-          .post("https://silakend-server.xyz/api/jobunits", newJobUnit, config)
+          .post("http://silakend-server-realtime.test/api/jobunits", newJobUnit, config)
           .then((response) => {
             if (response.status === 200) {
               const { msg } = response.data;

@@ -14,7 +14,7 @@ async function FetchUsageCat() {
     };
 
     const response = await axios.get(
-      "https://silakend-server.xyz/api/usagecategories",
+      "http://silakend-server-realtime.test/api/usagecategories",
       config
     );
 

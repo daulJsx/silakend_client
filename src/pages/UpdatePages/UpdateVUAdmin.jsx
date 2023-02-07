@@ -152,7 +152,7 @@ export const UpdateVUAdmin = () => {
         try {
           await axios
             .put(
-              `https://silakend-server.xyz/api/vehicleusages/${usageId}`,
+              `http://silakend-server-realtime.test/api/vehicleusages/${usageId}`,
               body,
               config
             )

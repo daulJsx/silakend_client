@@ -18,7 +18,7 @@ async function fetchRoles() {
     };
 
     const response = await axios.get(
-      "https://silakend-server.xyz/api/roles",
+      "http://silakend-server-realtime.test/api/roles",
       config
     );
 

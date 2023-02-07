@@ -82,7 +82,7 @@ export const UpdateRole = () => {
         try {
           await axios
             .put(
-              `https://silakend-server.xyz/api/roles/${roleId}`,
+              `http://silakend-server-realtime.test/api/roles/${roleId}`,
               updateRole,
               config
             )

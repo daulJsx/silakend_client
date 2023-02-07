@@ -83,7 +83,7 @@ export const UpdateJobUnit = () => {
         try {
           await axios
             .put(
-              `https://silakend-server.xyz/api/jobunits/${unitId}`,
+              `http://silakend-server-realtime.test/api/jobunits/${unitId}`,
               updateJUnit,
               config
             )

@@ -62,7 +62,7 @@ export const UserDetail = () => {
     async function fetchCurrentUser() {
       try {
         await axios
-          .get(`https://silakend-server.xyz/api/users/${currentUserId}`, config)
+          .get(`http://silakend-server-realtime.test/api/users/${currentUserId}`, config)
           .then((response) => {
             if (response.status === 200) {
               setIsLoading(false);

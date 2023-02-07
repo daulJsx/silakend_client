@@ -98,7 +98,7 @@ export const UpdateVM = () => {
         try {
           await axios
             .put(
-              `https://silakend-server.xyz/api/vehiclemaintenances/${maintenanceId}`,
+              `http://silakend-server-realtime.test/api/vehiclemaintenances/${maintenanceId}`,
               vehicleMData,
               config
             )

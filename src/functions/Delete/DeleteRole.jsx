@@ -24,7 +24,7 @@ export async function DeleteRole(roleId) {
     if (willDelete) {
       try {
         await axios
-          .delete(`https://silakend-server.xyz/api/roles/${roleId}`, config)
+          .delete(`http://silakend-server-realtime.test/api/roles/${roleId}`, config)
           .then((response) => {
             const { msg } = response.data;
             swal({

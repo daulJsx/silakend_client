@@ -17,7 +17,7 @@ async function FetchUsers(limit) {
     };
 
     const response = await axios.get(
-      `https://silakend-server.xyz/api/users?limit=${limit}`,
+      `http://silakend-server-realtime.test/api/users?limit=${limit}`,
       config,
       config
     );

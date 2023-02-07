@@ -25,7 +25,7 @@ export async function DeleteUsageCat(usageCatId) {
       try {
         await axios
           .delete(
-            `https://silakend-server.xyz/api/usagecategories/${usageCatId}`,
+            `http://silakend-server-realtime.test/api/usagecategories/${usageCatId}`,
             config
           )
           .then((response) => {

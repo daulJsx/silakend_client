@@ -46,7 +46,7 @@ export const ApproveVU = async (order, navigate) => {
       try {
         await axios
           .put(
-            `https://silakend-server.xyz/api/vehicleusages/${usage_id}`,
+            `http://silakend-server-realtime.test/api/vehicleusages/${usage_id}`,
             body,
             config
           )

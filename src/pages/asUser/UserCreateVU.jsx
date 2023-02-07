@@ -89,7 +89,7 @@ export const UserCreateVU = () => {
         try {
           await axios
             .post(
-              "https://silakend-server.xyz/api/vehicleusages",
+              "http://silakend-server-realtime.test/api/vehicleusages",
               orderData,
               config
             )

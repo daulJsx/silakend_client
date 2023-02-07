@@ -19,7 +19,7 @@ export const LogOut = async () => {
 
   try {
     await axios
-      .post("https://silakend-server.xyz/api/auth/logout", body, config)
+      .post("http://silakend-server-realtime.test/api/auth/logout", body, config)
       .then((response) => {
         if (response.status === 200) {
           swal({

@@ -47,7 +47,7 @@ export const VehicleUsages = () => {
   //Listener
   useEffect(() => {
     window.Echo.channel("vehicleusage").listen("VehicleUsageUpdate", (e) => {
-      Push.create("Info Data Peminjaman", {
+      Push.create("Vehicle Usage Updated", {
         body: e.vehicleUsage,
         icon: "/polman.ico",
         timeout: 4000,

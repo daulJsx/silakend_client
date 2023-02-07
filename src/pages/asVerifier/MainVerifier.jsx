@@ -45,21 +45,21 @@ import { Toaster } from "react-hot-toast";
 
 export const MainVerifier = () => {
   // Listener
-  // useEffect(() => {
-  //   window.Echo.channel("vehicleusage").listen("VehicleUsageUpdate", (e) => {
-  //     Push.create("Info Data Peminjaman", {
-  //       body: e.vehicleUsage,
-  //       icon: "/polman.ico",
-  //       timeout: 4000,
-  //       onClick: function () {
-  //         window.focus();
-  //         this.close();
-  //       },
-  //     });
-  //     // Setelah tampil, refetch data
-  //     FetchVehicleUsages();
-  //   });
-  // }, []);
+  useEffect(() => {
+    window.Echo.channel("vehicleusage").listen("VehicleUsageUpdate", (e) => {
+      Push.create("Vehicle Usage Updated", {
+        body: e.vehicleUsage,
+        icon: "/polman.ico",
+        timeout: 4000,
+        onClick: function () {
+          window.focus();
+          this.close();
+        },
+      });
+      // Setelah tampil, refetch data
+      FetchVehicleUsages();
+    });
+  }, []);
 
   // Get access token
   const token = Cookies.get("token");

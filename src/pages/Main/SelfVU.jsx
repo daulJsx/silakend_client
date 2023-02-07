@@ -242,7 +242,9 @@ export const SelfVU = () => {
                                           {orders.status === "READY" ? (
                                             <NavLink
                                               to={
-                                                "/pengajuan-saya/edit-pengajuan"
+                                                auth().user_level === 1
+                                                  ? "/pengajuan-peminjaman/edit-data-pengajuan"
+                                                  : "/pengajuan-saya/edit-pengajuan"
                                               }
                                             >
                                               <Button

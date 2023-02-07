@@ -169,10 +169,10 @@ export const CreateOrder = () => {
             </Row>
             {/* NAVBAR */}
 
-            <main className="px-2 min-vh-100 mt-4">
+            <main className="min-vh-100 mt-4">
               <Row>
                 <Col>
-                  <Card className="shadow rounded bg__primary">
+                  <Card className="bg__primary" style={{ boxShadow: "none" }}>
                     <Card.Header>
                       <Container>
                         <Row className="gap-3 mt-4">
@@ -208,7 +208,7 @@ export const CreateOrder = () => {
 
                     <Card.Body className="p-4">
                       <Container
-                        className="p-5"
+                        className="p-5 card__content"
                         style={{ background: "#fff", borderRadius: "10px" }}
                       >
                         <Row>
@@ -523,9 +523,9 @@ export const CreateOrder = () => {
                               ) : null}
 
                               {auth().user_level === 1 ? (
-                                <Form.Group>
-                                  <Form.Label>Status</Form.Label>
-                                  <InputGroup className="mb-3">
+                                <>
+                                  <Form.Group className="mb-3">
+                                    <Form.Label>Status</Form.Label>
                                     <Form.Select
                                       required
                                       style={{
@@ -554,14 +554,10 @@ export const CreateOrder = () => {
                                       <option value="WAITING">Diajukan</option>
                                       <option value="CANCEL">Batal</option>
                                     </Form.Select>
-                                    <InputGroup.Text
-                                      style={{
-                                        border: "none",
-                                      }}
-                                      id="basic-addon2"
-                                    >
-                                      Keterangan
-                                    </InputGroup.Text>
+                                  </Form.Group>
+
+                                  <Form.Group className="mb-4">
+                                    <Form.Label>Keterangan</Form.Label>
                                     <Form.Control
                                       required
                                       as="textarea"
@@ -577,8 +573,8 @@ export const CreateOrder = () => {
                                         })
                                       }
                                     />
-                                  </InputGroup>
-                                </Form.Group>
+                                  </Form.Group>
+                                </>
                               ) : null}
 
                               <Form.Group>

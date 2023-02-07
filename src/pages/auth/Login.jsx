@@ -59,7 +59,7 @@ export const Login = (props) => {
             text: "Selamat Datang " + user_name,
             icon: "success",
             buttons: false,
-            timer: 2000,
+            timer: 3000,
           });
 
           // Perform RBAC logic
@@ -75,16 +75,21 @@ export const Login = (props) => {
         }
       } catch (error) {
         if (error.response) {
-          const { message, msg } = error.response.data;
+          const { message } = error.response.data;
           if (message) {
             swal("Ups!", message, "error", { button: false, timer: 2000 });
           } else {
-            swal("Ups!", msg, "error", { button: false, timer: 2000 });
+            swal({
+              text: "NIP atau password salah",
+              icon: "error",
+              buttons: false,
+              timer: 3000,
+            });
           }
         } else {
           swal("Ups!", "Something went wrong", "error", {
             button: false,
-            timer: 2000,
+            timer: 3000,
           });
         }
       }

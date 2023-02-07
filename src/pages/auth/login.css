@@ -29,28 +29,10 @@ label.label {
 }
 
 button.btn-submit {
-  background-image: linear-gradient(
-    to bottom,
-    #0963a2,
-    #0c6db7,
-    #1777cd,
-    #2681e2,
-    #388af8
-  );
-  box-shadow: rgba(0, 0, 0, 0.196) 0px 2px 8px 0px;
+  background: #0d8be4;
+  box-shadow: rgba(80, 102, 225, 0.537) 0px 2px 8px 0px;
   border-radius: 10px;
   border: none;
-}
-
-button.btn-submit:hover {
-  background-image: linear-gradient(
-    to bottom,
-    #084a79,
-    #0b5e9e,
-    #166dba,
-    #2479d4,
-    #3380e3
-  );
 }
 
 .eye-icon {

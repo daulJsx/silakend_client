@@ -57,7 +57,7 @@ export const CreateUsageCategories = () => {
       try {
         await axios
           .post(
-            "https://silakend-server.xyz/api/usagecategories",
+            "https://708c-180-244-139-240.ap.ngrok.io/api/usagecategories",
             newUsageCat,
             config
           )
@@ -120,7 +120,7 @@ export const CreateUsageCategories = () => {
                     name={placement}
                     bc={<FaArrowLeft />}
                     title={"Tambah Kategori Peminjaman"}
-                    parentLink={-1}
+                    parentLink={"/kategori-peminjaman"}
                   />
                 ))}
               </Col>
@@ -140,7 +140,7 @@ export const CreateUsageCategories = () => {
                               <Breadcrumb.Item className="breadcrumb__item">
                                 <div className="d-flex justify-content-center align-items-center gap-2">
                                   <NavLink
-                                    to={-1}
+                                    to={"/kategori-peminjaman"}
                                     className="d-flex justify-content-center align-items-center text-muted gap-2"
                                   >
                                     <HiOutlineClipboardList className="fs-5" />

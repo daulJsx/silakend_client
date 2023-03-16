@@ -24,7 +24,7 @@ export async function DeleteVehicleCat(vCatId) {
       try {
         await axios
           .delete(
-            `https://silakend-server.xyz/api/vehiclecategories/${vCatId}`,
+            `https://708c-180-244-139-240.ap.ngrok.io/api/vehiclecategories/${vCatId}`,
             config
           )
           .then((response) => {

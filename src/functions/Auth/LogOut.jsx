@@ -19,7 +19,11 @@ export const LogOut = async () => {
 
   try {
     await axios
-      .post("https://silakend-server.xyz/api/auth/logout", body, config)
+      .post(
+        "https://708c-180-244-139-240.ap.ngrok.io/api/auth/logout",
+        body,
+        config
+      )
       .then((response) => {
         if (response.status === 200) {
           swal({

@@ -38,7 +38,7 @@ export const Login = (props) => {
     if (loginForm.nip !== "" && loginForm.password !== "") {
       try {
         const response = await axios.post(
-          "https://silakend-server.xyz/api/auth/login",
+          "https://708c-180-244-139-240.ap.ngrok.io/api/auth/login",
           loginForm
         );
         const { access_token, user_name, user_level } = response.data.content;

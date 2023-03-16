@@ -25,7 +25,7 @@ export async function DeleteVM(VMId) {
       try {
         await axios
           .delete(
-            `https://silakend-server.xyz/api/vehiclemaintenances/${VMId}`,
+            `https://708c-180-244-139-240.ap.ngrok.io/api/vehiclemaintenances/${VMId}`,
             config
           )
           .then((response) => {

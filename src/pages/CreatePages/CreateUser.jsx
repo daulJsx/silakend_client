@@ -85,7 +85,7 @@ export const CreateUser = () => {
     ) {
       try {
         const response = await axios.post(
-          "https://silakend-server.xyz/api/users",
+          "https://708c-180-244-139-240.ap.ngrok.io/api/users",
           newUser,
           config
         );
@@ -210,7 +210,7 @@ export const CreateUser = () => {
                     placement={placement}
                     name={placement}
                     bc={<FaArrowLeft />}
-                    parentLink={-1}
+                    parentLink={"/data-pengguna"}
                   />
                 ))}
               </Col>
@@ -233,7 +233,7 @@ export const CreateUser = () => {
                               >
                                 <div className="d-flex justify-content-center align-items-center gap-2">
                                   <NavLink
-                                    to={-1}
+                                    to={"/data-pengguna"}
                                     className="d-flex justify-content-center align-items-center text-muted gap-2"
                                   >
                                     <TbUsers className="fs-5" />

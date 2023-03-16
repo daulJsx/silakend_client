@@ -58,7 +58,10 @@ export const VehicleDetail = () => {
     async function fetchData() {
       try {
         await axios
-          .get(`https://silakend-server.xyz/api/vehicles/${vehicleId}`, config)
+          .get(
+            `https://708c-180-244-139-240.ap.ngrok.io/api/vehicles/${vehicleId}`,
+            config
+          )
           .then((response) => {
             if (response.status === 200) {
               setIsLoading(false);

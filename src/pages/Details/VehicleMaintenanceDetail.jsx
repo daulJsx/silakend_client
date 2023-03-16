@@ -65,7 +65,7 @@ export const VehicleMaintenancesDetail = () => {
       try {
         await axios
           .get(
-            `https://silakend-server.xyz/api/maintenancedetails/${maintenanceId}`,
+            `https://708c-180-244-139-240.ap.ngrok.io/api/maintenancedetails/${maintenanceId}`,
             config
           )
           .then((response) => {
@@ -160,7 +160,7 @@ export const VehicleMaintenancesDetail = () => {
                             "/perbaikan-kendaraan/rincian-perbaikan-kendaraan/tambah-rincian"
                           }
                         >
-                          <Button className="btn__primary" size="sm">
+                          <Button className="btn-light" size="sm">
                             Tambah Rincian <FaPlus />
                           </Button>
                         </NavLink>

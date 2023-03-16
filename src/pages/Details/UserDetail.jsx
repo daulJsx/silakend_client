@@ -62,7 +62,10 @@ export const UserDetail = () => {
     async function fetchCurrentUser() {
       try {
         await axios
-          .get(`https://silakend-server.xyz/api/users/${currentUserId}`, config)
+          .get(
+            `https://708c-180-244-139-240.ap.ngrok.io/api/users/${currentUserId}`,
+            config
+          )
           .then((response) => {
             if (response.status === 200) {
               setIsLoading(false);

@@ -57,11 +57,15 @@ export const CreateJobUnit = () => {
     if (newJobUnit.name !== "" && newJobUnit.unit_account !== "") {
       try {
         await axios
-          .post("https://silakend-server.xyz/api/jobunits", newJobUnit, config)
+          .post(
+            "https://708c-180-244-139-240.ap.ngrok.io/api/jobunits",
+            newJobUnit,
+            config
+          )
           .then((response) => {
             if (response.status === 200) {
               const { msg } = response.data;
-              navigate(-1);
+              navigate("/unit-kerja");
               swal({
                 text: msg,
                 icon: "success",
@@ -116,7 +120,7 @@ export const CreateJobUnit = () => {
                     placement={placement}
                     name={placement}
                     bc={<FaArrowLeft />}
-                    parentLink={-1}
+                    parentLink={"/unit-kerja"}
                   />
                 ))}
               </Col>
@@ -136,7 +140,7 @@ export const CreateJobUnit = () => {
                               <Breadcrumb.Item className="breadcrumb__item">
                                 <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
                                   <NavLink
-                                    to={-1}
+                                    to={"/unit-kerja"}
                                     className="d-flex justify-content-center align-items-center text-muted gap-2"
                                   >
                                     <RiCommunityLine className="fs-5" />

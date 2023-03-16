@@ -24,7 +24,10 @@ export async function DeleteUser(userId) {
     if (willDelete) {
       try {
         await axios
-          .delete(`https://silakend-server.xyz/api/users/${userId}`, config)
+          .delete(
+            `https://708c-180-244-139-240.ap.ngrok.io/api/users/${userId}`,
+            config
+          )
           .then((response) => {
             const { msg } = response.data;
             swal({

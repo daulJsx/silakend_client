@@ -18,7 +18,7 @@ async function FetchVM() {
     };
 
     const response = await axios.get(
-      "https://silakend-server.xyz/api/vehiclemaintenances",
+      "https://708c-180-244-139-240.ap.ngrok.io/api/vehiclemaintenances",
       config
     );
 

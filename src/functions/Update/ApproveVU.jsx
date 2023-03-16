@@ -46,7 +46,7 @@ export const ApproveVU = async (order, navigate) => {
       try {
         await axios
           .put(
-            `https://silakend-server.xyz/api/vehicleusages/${usage_id}`,
+            `https://708c-180-244-139-240.ap.ngrok.io/api/vehicleusages/${usage_id}`,
             body,
             config
           )

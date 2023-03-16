@@ -24,7 +24,10 @@ export async function DeleteJobUnit(unitId) {
     if (willDelete) {
       try {
         await axios
-          .delete(`https://silakend-server.xyz/api/jobunits/${unitId}`, config)
+          .delete(
+            `https://708c-180-244-139-240.ap.ngrok.io/api/jobunits/${unitId}`,
+            config
+          )
           .then((response) => {
             const { msg } = response.data;
             swal({

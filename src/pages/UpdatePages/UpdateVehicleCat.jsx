@@ -66,14 +66,14 @@ export const UpdateVehicleCat = () => {
       try {
         await axios
           .put(
-            `https://silakend-server.xyz/api/vehiclecategories/${vCatId}`,
+            `https://708c-180-244-139-240.ap.ngrok.io/api/vehiclecategories/${vCatId}`,
             curVCat,
             config
           )
           .then((response) => {
             if (response.status === 200) {
               const { msg } = response.data;
-              navigate(-1);
+              navigate("/kategori-kendaraan");
               swal({
                 text: msg,
                 icon: "success",
@@ -128,7 +128,7 @@ export const UpdateVehicleCat = () => {
                       placement={placement}
                       name={placement}
                       bc={<FaArrowLeft />}
-                      parentLink={-1}
+                      parentLink={"/kategori-kendaraan"}
                     />
                   ))}
                 </Col>
@@ -150,7 +150,7 @@ export const UpdateVehicleCat = () => {
                                 <Breadcrumb.Item className="breadcrumb__item">
                                   <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
                                     <NavLink
-                                      to={-1}
+                                      to={"/kategori-kendaraan"}
                                       className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
                                       <RiCarWashingLine className="fs-5" />

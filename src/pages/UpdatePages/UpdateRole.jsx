@@ -82,14 +82,14 @@ export const UpdateRole = () => {
         try {
           await axios
             .put(
-              `https://silakend-server.xyz/api/roles/${roleId}`,
+              `https://708c-180-244-139-240.ap.ngrok.io/api/roles/${roleId}`,
               updateRole,
               config
             )
             .then((response) => {
               if (response.status === 200) {
                 const { msg } = response.data;
-                navigate(-1);
+                navigate("/data-peran");
                 swal({
                   title: msg,
                   icon: "success",
@@ -141,7 +141,7 @@ export const UpdateRole = () => {
                       name={placement}
                       bc={<FaArrowLeft />}
                       title={"Edit Peran Pengguna"}
-                      parentLink={-1}
+                      parentLink={"/data-peran"}
                     />
                   ))}
                 </Col>
@@ -161,7 +161,7 @@ export const UpdateRole = () => {
                                 <Breadcrumb.Item className="breadcrumb__item">
                                   <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
                                     <NavLink
-                                      to={-1}
+                                      to={"/data-peran"}
                                       className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
                                       <CgUserList className="fs-5" />

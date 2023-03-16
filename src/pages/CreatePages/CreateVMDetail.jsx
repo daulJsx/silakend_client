@@ -72,7 +72,7 @@ export const CreateVMDetail = () => {
       try {
         await axios
           .post(
-            "https://silakend-server.xyz/api/vehiclemaintenancedetails",
+            "https://708c-180-244-139-240.ap.ngrok.io/api/vehiclemaintenancedetails",
             newVehicleMDetail,
             config
           )

@@ -75,11 +75,15 @@ export const CreateVehicle = () => {
     ) {
       try {
         await axios
-          .post("https://silakend-server.xyz/api/vehicles", vehicleData, config)
+          .post(
+            "https://708c-180-244-139-240.ap.ngrok.io/api/vehicles",
+            vehicleData,
+            config
+          )
           .then((response) => {
             if (response.status === 200) {
               const { msg } = response.data;
-              navigate(-1);
+              navigate("/data-kendaraan");
               swal({
                 text: msg,
                 icon: "success",
@@ -134,7 +138,7 @@ export const CreateVehicle = () => {
                     placement={placement}
                     name={placement}
                     bc={<FaArrowLeft />}
-                    parentLink={-1}
+                    parentLink={"/data-kendaraan"}
                   />
                 ))}
               </Col>
@@ -154,7 +158,7 @@ export const CreateVehicle = () => {
                               <Breadcrumb.Item className="breadcrumb__item">
                                 <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
                                   <NavLink
-                                    to={-1}
+                                    to={"/data-kendaraan"}
                                     className="d-flex justify-content-center align-items-center text-muted gap-2"
                                   >
                                     <RiCarLine className="fs-5" />

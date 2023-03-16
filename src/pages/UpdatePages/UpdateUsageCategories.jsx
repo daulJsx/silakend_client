@@ -67,7 +67,7 @@ export const UpdateUsageCategories = () => {
       try {
         await axios
           .put(
-            `https://silakend-server.xyz/api/usagecategories/${uCatId}`,
+            `https://708c-180-244-139-240.ap.ngrok.io/api/usagecategories/${uCatId}`,
             curUsageCat,
             config
           )
@@ -130,7 +130,7 @@ export const UpdateUsageCategories = () => {
                       name={placement}
                       bc={<FaArrowLeft />}
                       title={"Edit Kategori Peminjaman"}
-                      parentLink={"-1"}
+                      parentLink={"/kategori-peminjaman"}
                     />
                   ))}
                 </Col>
@@ -155,7 +155,7 @@ export const UpdateUsageCategories = () => {
                                 >
                                   <div className="d-flex justify-content-center align-items-center gap-2">
                                     <NavLink
-                                      to={"-1"}
+                                      to={"/kategori-peminjaman"}
                                       className="d-flex justify-content-center align-items-center text-muted gap-2"
                                     >
                                       <HiOutlineClipboardList className="fs-5" />

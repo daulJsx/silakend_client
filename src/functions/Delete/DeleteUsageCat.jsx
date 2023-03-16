@@ -25,7 +25,7 @@ export async function DeleteUsageCat(usageCatId) {
       try {
         await axios
           .delete(
-            `https://silakend-server.xyz/api/usagecategories/${usageCatId}`,
+            `https://708c-180-244-139-240.ap.ngrok.io/api/usagecategories/${usageCatId}`,
             config
           )
           .then((response) => {

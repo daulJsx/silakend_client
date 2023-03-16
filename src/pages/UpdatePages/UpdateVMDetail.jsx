@@ -98,7 +98,7 @@ export const UpdateVMDetail = () => {
         try {
           await axios
             .put(
-              `https://silakend-server.xyz/api/vehiclemaintenancedetails/${detailId}`,
+              `https://708c-180-244-139-240.ap.ngrok.io/api/vehiclemaintenancedetails/${detailId}`,
               currentVehicleMDetail,
               config
             )

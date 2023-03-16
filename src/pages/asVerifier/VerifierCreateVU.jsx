@@ -84,7 +84,7 @@ export const VerifierCreateVU = () => {
       try {
         await axios
           .post(
-            "https://silakend-server.xyz/api/vehicleusages",
+            "https://708c-180-244-139-240.ap.ngrok.io/api/vehicleusages",
             orderData,
             config
           )

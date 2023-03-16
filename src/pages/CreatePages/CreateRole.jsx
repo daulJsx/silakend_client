@@ -58,11 +58,15 @@ export const CreateRole = () => {
     if (newRole.name !== "" || newRole.level !== "") {
       try {
         await axios
-          .post("https://silakend-server.xyz/api/roles", newRole, config)
+          .post(
+            "https://708c-180-244-139-240.ap.ngrok.io/api/roles",
+            newRole,
+            config
+          )
           .then((response) => {
             if (response.status === 200) {
               const { msg } = response.data;
-              navigate(-1);
+              navigate("/data-peran");
               swal({
                 text: msg,
                 icon: "success",
@@ -117,7 +121,7 @@ export const CreateRole = () => {
                     placement={placement}
                     name={placement}
                     bc={<FaArrowLeft />}
-                    parentLink={-1}
+                    parentLink={"/data-peran"}
                   />
                 ))}
               </Col>
@@ -137,7 +141,7 @@ export const CreateRole = () => {
                               <Breadcrumb.Item className="breadcrumb__item">
                                 <div className="d-flex text-muted justify-content-center align-items-center gap-2 breadcrumb__text">
                                   <NavLink
-                                    to={-1}
+                                    to={"/data-peran"}
                                     className="d-flex justify-content-center align-items-center text-muted gap-2"
                                   >
                                     <CgUserList className="fs-5" />

@@ -17,7 +17,7 @@ async function FetchVehicles() {
     };
 
     const response = await axios.get(
-      "https://silakend-server.xyz/api/vehicles",
+      "https://708c-180-244-139-240.ap.ngrok.io/api/vehicles",
       config
     );
 
